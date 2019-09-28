@@ -1,0 +1,6 @@
+{
+  "restart": {
+    "exclude": ["bot.js"],
+    "include": ["watch.json"]
+  }
+}
