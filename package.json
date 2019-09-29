@@ -1,21 +1,17 @@
 {
-  "name": "Test",
-  "description": "Test",
-  "version": "0.0.0",
+  "name": "constance",
+  "version": "1.0.0",
+  "description": "",
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js"
   },
+  "author": "JasperLorelai",
+  "license": "ISC",
   "dependencies": {
-    "discord.js": "github:discordjs/discord.js",
-    "express": "^4.16.4",
-    "js-yaml": "^3.13.1",
-    "node-fetch": "^2.6.0",
-    "node-opus": "^0.3.2",
-    "request": "^2.88.0",
-    "simple-youtube-api": "^5.2.1",
-    "ytdl-core": "^0.29.7",
-    "rcon": "^1.0.3",
-    "promise-ftp": "^1.3.5"
+    "@keyv/sqlite": "^2.0.1",
+    "discord.js": "discordjs/discord.js",
+    "keyv": "^3.1.0",
+    "node-fetch": "latest"
   }
 }
