@@ -50,7 +50,7 @@ client.on("message", async message => {
         const member = message.member;
         const isAuthor = member.id === config.author;
         const isAdmin = member.hasPermission("ADMINISTRATOR");
-        // TODO: Add a command to add/remove mods in order for this to work.
+        // TODO: Make it check for both roles and players in the mod DB.
         const isMod = isAdmin;
         let pass = false;
         switch(perm) {
@@ -69,7 +69,7 @@ client.on("message", async message => {
                 break;
         }
         if(!pass) {
-            await message.channel.send(message.author,await config.embed(client,"No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + perm + "`"));
+            await message.channel.send(message.author,await config.embed(client,"No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + perm + "`", "f00"));
             return;
         }
         // Run command if all required args are specified.

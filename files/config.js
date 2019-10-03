@@ -30,8 +30,8 @@ module.exports = {
     async embed(client, title, description, color) {
         const embed = await this.getBaseEmbed(client);
         if(color) embed.setColor(color);
-        embed.setTitle(title);
-        embed.setDescription(description);
+        if(title) embed.setTitle(title);
+        if(description) embed.setDescription(description);
         return embed;
     },
     getEmbed(message) {
@@ -52,7 +52,7 @@ module.exports = {
             if(i === text.lastIndexOf(separator, i+2048)) split[split.length-1] = text.substring(i, i+2048);
         }
         // Setup
-        const embed = await this.getEmbed(message);
+        const embed = this.getEmbed(message);
         let index = 0;
         await message.edit(embed.setDescription(split[0]).addField("Pages","Page: " + (index+1), true));
         await message.react("◀");
@@ -77,5 +77,32 @@ module.exports = {
             await message.reactions.removeAll();
             await message.react("❤");
         });
+    },
+    findRole(find, guild) {
+        const roles = guild.roles.array();
+        roles.shift();
+        for(let r of roles) {
+            // noinspection EqualityComparisonWithCoercionJS
+            if(
+                find == r.id ||
+                find.substring(3,find.length-1) == r.id ||
+                find.toLowerCase() == r.name.toLowerCase() ||
+                r.name.toLowerCase().includes(find.toLowerCase())
+            ) return r;
+        }
+        return null;
+    },
+    findGuildMember(find, guild) {
+        for(let m of guild.members) {
+            // noinspection EqualityComparisonWithCoercionJS
+            if(
+                find == m[1].id ||
+                find == m[1].user.username ||
+                find.substring(2,find.length-1) == m[1].id ||
+                find.substring(3,find.length-1) == m[1].id ||
+                m[1].user.username.toLowerCase().includes(find.toLowerCase())
+            ) return m[1];
+        }
+        return null;
     }
 };
