@@ -14,12 +14,15 @@ module.exports = {
     },
     async getBaseEmbed(client) {
         const user = this.getAuthor(client).user;
-        const image = await this.fetch(user.displayAvatarURL());
         return new this.discord.MessageEmbed()
             .setColor(this.baseEmbedColor)
+            // Converting user profile picture to buffer instead of using the source
+            // URL of it so when the user changes their profile picture, it will still work fine.
+            // TODO: Consider doing the above for the embed function itself
+            //  whenever a parameter for images is added.
             .attachFiles([{
                 name: "user-icon.png",
-                attachment: image
+                attachment: await (await this.fetch(user.displayAvatarURL())).buffer()
             }])
             .setFooter("Bot made by: " + user.username, "attachment://user-icon.png")
             .setTimestamp(new Date());

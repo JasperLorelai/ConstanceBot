@@ -9,9 +9,6 @@ const client = new Discord.Client();
 client.commands = new Discord.Collection();
 client.keyv = new Keyv("sqlite://db.sqlite");
 
-// Setting some extra variables
-let author;
-
 // Grabbing commands from files and setting them
 for(let f of fs.readdirSync('./commands').filter(file => file.endsWith('.js'))) {
     if(f.startsWith("#")) continue;
@@ -26,17 +23,15 @@ client.keyv.on("error", err => console.error("Keyv connection error:", err));
 client.on("ready", async () => {
     console.log("Reafy!");
     await client.user.setPresence({activity:{name:" ",type:"WATCHING"}});
-    author = client.users.resolve(config.author);
 });
 
 client.on("message", async message => {
     // Store whatever prefix is found.
     let prefix = config.globalPrefix;
     if(!message.content.startsWith(prefix)) {
-        // Ignore DMs that aren't commands. (this will make DM channels later on)
+        // Ignore DMs that aren't commands. TODO: (this should make DM channels)
         if(!message.guild) return;
         prefix = await client.keyv.get("prefix." + message.guild.id);
-        // Stop if message doesn't start with a prefix at all.
         if(!message.content.startsWith(prefix)) return null;
     }
     const args = message.content.slice(prefix.length).split(/ +/);
@@ -46,14 +41,40 @@ client.on("message", async message => {
     // "cmd not found, try using ?commands to find your command"
     if(!command) return;
     try {
-        const {guildOnly, params, execute} = command;
+        const {guildOnly, params, execute, perm} = command;
         if(guildOnly && message.channel.type !== "text") {
             await message.reply("Can't execute that command inside DMs.");
             return;
         }
-        // TODO: "Process permissions before executing.
+        // Process permissions prior to execution.
+        const member = message.member;
+        const isAuthor = member.id === config.author;
+        const isAdmin = member.hasPermission("ADMINISTRATOR");
+        // TODO: Add a command to add/remove mods in order for this to work.
+        const isMod = isAdmin;
+        let pass = false;
+        switch(perm) {
+            case "author":
+                pass = isAuthor;
+                break;
+            case "admin":
+                pass = isAuthor ? true : isAdmin;
+                break;
+            case "mod":
+                pass = isAuthor ? true : (isAdmin ? true : isMod);
+                break;
+            case null:
+            default:
+                pass = true;
+                break;
+        }
+        if(!pass) {
+            await message.channel.send(message.author,await config.embed(client,"No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + perm + "`"));
+            return;
+        }
+        // Run command if all required args are specified.
         if(!params || args.length >= params.filter(p => p.startsWith("[")).length) execute(message, args);
-        // Execute help command for command if args aren't sufficient for its required parameters.
+        // Execute help command for command if not.
         else client.commands.get("help").execute(message, [commandName]);
     } catch(e) {
         console.error(e);

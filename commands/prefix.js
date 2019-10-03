@@ -3,7 +3,6 @@ module.exports = {
     description: "Change command prefix of this server.",
     guildOnly: true,
     params: ["[prefix]"],
-    keyv: true,
     perm: "admin",
     async execute(message, args) {
         const fun = require(process.env.INIT_CWD + "\\files\\config.js");

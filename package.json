@@ -12,6 +12,6 @@
     "@keyv/sqlite": "^2.0.1",
     "discord.js": "discordjs/discord.js",
     "keyv": "^3.1.0",
-    "node-fetch": "latest"
+    "node-fetch": "^2.6.0"
   }
 }
