@@ -3,7 +3,7 @@ module.exports = {
     discord: require("discord.js"),
     fetch: require("node-fetch"),
     // Properties
-    token: "NTc5NzU5OTU4NTU2NjcyMDEx.XY-HQA.XOChzBf1IZPMkwUjENzNs_1jJhc",
+    token: "NTc5NzU5OTU4NTU2NjcyMDEx.XZcc5A.TDZBLpHFRSwLGRAr74BA0LIn_jA",
     globalPrefix: "&",
     baseEmbedColor: "009dff",
     mainDiscord: "575376952517591041",
@@ -12,23 +12,15 @@ module.exports = {
     getAuthor(client) {
         return client.guilds.resolve(this.mainDiscord).members.resolve(this.author);
     },
-    async getBaseEmbed(client) {
+    getBaseEmbed(client) {
         const user = this.getAuthor(client).user;
         return new this.discord.MessageEmbed()
             .setColor(this.baseEmbedColor)
-            // Converting user profile picture to buffer instead of using the source
-            // URL of it so when the user changes their profile picture, it will still work fine.
-            // TODO: Consider doing the above for the embed function itself
-            //  whenever a parameter for images is added.
-            .attachFiles([{
-                name: "user-icon.png",
-                attachment: await (await this.fetch(user.displayAvatarURL())).buffer()
-            }])
-            .setFooter("Bot made by: " + user.username, "attachment://user-icon.png")
+            .setFooter("Bot made by: " + user.username, user.displayAvatarURL())
             .setTimestamp(new Date());
     },
-    async embed(client, title, description, color) {
-        const embed = await this.getBaseEmbed(client);
+    embed(client, title, description, color) {
+        const embed = this.getBaseEmbed(client);
         if(color) embed.setColor(color);
         if(title) embed.setTitle(title);
         if(description) embed.setDescription(description);

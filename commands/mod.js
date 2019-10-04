@@ -14,7 +14,7 @@ module.exports = {
             const users = await keyv.get("mod.users." + id);
             return ("**Current mods:**\n- **users:** " + (users ? users.map(u => "<@" + u + ">").join(", ") : "*empty*") + "\n- **roles:** " + (roles ? roles.map(r => "<@&" + r + ">").join(", ") : "*empty*"));
         }
-        message.channel.send("", await fun.embed(message.client, "Configure Server Mods", (await getList()) + "\n\n" + instr)).then(async msg => {
+        message.channel.send(fun.embed(message.client, "Configure Server Mods", (await getList()) + "\n\n" + instr)).then(async msg => {
             await msg.react("➕");
             await msg.react("➖");
             const coll = msg.createReactionCollector((r,u) => u.id !== message.client.user.id,{time:90000});
@@ -23,7 +23,7 @@ module.exports = {
                     await r.users.remove(u);
                     return;
                 }
-                const msgInput = await msg.channel.send(await fun.embed(message.client, null, "Please specify a role or a user. Timeout of this prompt is **10s**.", "0"));
+                const msgInput = await msg.channel.send(fun.embed(message.client, null, "Please specify a role or a user. Timeout of this prompt is **10s**.", "0"));
                 const collMod = msg.channel.createMessageCollector(m => m.author.id == message.author.id, {time:10000});
                 collMod.on("collect", async m => {
                     let find = fun.findRole(m.content, m.guild);
@@ -39,7 +39,7 @@ module.exports = {
                         switch(r.emoji.toString()) {
                             case "➕":
                                 if(old && old.includes(found[1])) {
-                                    m.channel.send(await fun.embed(m.client, null, "Role or User is already in the list!", "f00")).then(exists => {
+                                    m.channel.send(fun.embed(m.client, null, "Role or User is already in the list!", "f00")).then(exists => {
                                         exists.delete({timeout:3000});
                                         collMod.stop();
                                     });
@@ -55,12 +55,12 @@ module.exports = {
                                 break;
                         }
                     }
-                    else m.channel.send(await fun.embed(m.client, null, "Role or User not found!", "f00")).then(notFound => notFound.delete({timeout:3000}));
+                    else m.channel.send(fun.embed(m.client, null, "Role or User not found!", "f00")).then(notFound => notFound.delete({timeout:3000}));
                     collMod.stop();
                     await m.delete();
                 });
                 collMod.on("end", async () => {
-                    await msg.edit("", await fun.embed(message.client, "Configure Server Mods", (await getList()) + "\n\n" + instr));
+                    await msg.edit(fun.embed(message.client, "Configure Server Mods", (await getList()) + "\n\n" + instr));
                     await msgInput.delete();
                     await r.users.remove(u);
                 });
@@ -68,7 +68,7 @@ module.exports = {
             coll.on("end", async () => {
                 if(msg.deleted) return;
                 await msg.reactions.removeAll();
-                await msg.edit("", await fun.embed(message.client, "Configure Server Mods", (await getList()) + "\n\nPrompt timed out."));
+                await msg.edit(fun.embed(message.client, "Configure Server Mods", (await getList()) + "\n\nPrompt timed out."));
             });
         });
     }

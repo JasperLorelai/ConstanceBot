@@ -8,6 +8,6 @@ module.exports = {
             (c.params ? " " + c.params.join(" ") : "") + "` " +
             (c.perm && c.perm === "author" ? " - Required permissions: **Bot Author**" : "")
         ).join("\n");
-        await message.channel.send(message.author.toString(), await fun.embed(message.client, "DM Command List", text));
+        await message.channel.send(message.author.toString(), fun.embed(message.client, "DM Command List", text));
     },
 };

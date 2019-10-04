@@ -28,10 +28,12 @@ client.on("ready", async () => {
 client.on("message", async message => {
     // Store whatever prefix is found.
     let prefix = config.globalPrefix;
+    console.log("|" + prefix + "|");    
     if(!message.content.startsWith(prefix)) {
         // Ignore DMs that aren't commands. TODO: (this should make DM channels)
         if(!message.guild) return;
         prefix = await client.keyv.get("prefix." + message.guild.id);
+        console.log("|" + prefix + "|");
         if(!message.content.startsWith(prefix)) return null;
     }
     const args = message.content.slice(prefix.length).split(/ +/);
@@ -50,8 +52,27 @@ client.on("message", async message => {
         const member = message.member;
         const isAuthor = member.id === config.author;
         const isAdmin = member.hasPermission("ADMINISTRATOR");
-        // TODO: Make it check for both roles and players in the mod DB.
-        const isMod = isAdmin;
+        // Different approach for mods.
+        let isMod = false;
+        const modRoles = await client.keyv.get("mod.roles." + message.guild.id);
+        if(modRoles) {
+            for(let r of modRoles) {
+                if(member.roles.has(r)) {
+                    isMod = true;
+                    break;
+                }
+            }
+        }
+        const modUsers = await client.keyv.get("mod.users." + message.guild.id);
+        if(!isMod && modUsers) {
+            for(let u of modUsers) {
+                // noinspection EqualityComparisonWithCoercionJS
+                if(member.id == u) {
+                    isMod = true;
+                    break;
+                }
+            }
+        }
         let pass = false;
         switch(perm) {
             case "author":
@@ -69,7 +90,7 @@ client.on("message", async message => {
                 break;
         }
         if(!pass) {
-            await message.channel.send(message.author,await config.embed(client,"No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + perm + "`", "f00"));
+            await message.channel.send(message.author, config.embed(client,"No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + perm + "`", "f00"));
             return;
         }
         // Run command if all required args are specified.
