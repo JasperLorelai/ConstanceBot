@@ -5,9 +5,9 @@ module.exports = {
     async execute(message) {
         const fun = require(process.env.INIT_CWD + "\\files\\config.js");
         const text = message.client.commands.filter(c => !c.guildOnly).map(c => "- `" + c.name +
-            (c.params ? " " + c.params.all.join(" ") : "") + "` " +
+            (c.params ? " " + c.params.join(" ") : "") + "` " +
             (c.perm && c.perm === "author" ? " - Required permissions: **Bot Author**" : "")
         ).join("\n");
-        await message.channel.send(message.author.toString(), fun.embed(message.client, "DM Command List", text));
+        await message.channel.send(message.author.toString(), await fun.embed(message.client, "DM Command List", text));
     },
 };
