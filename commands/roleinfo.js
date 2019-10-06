@@ -19,7 +19,11 @@ module.exports = {
             "\n**Hoistable:** " + role.hoist +
             "\n**Mentionable:** " + role.mentionable +
             "\n**Menitoned:** " + role.toString() +
-            "\n**Color:** " + role.hexColor;
-        await message.channel.send(fun.embed(message.client, "Role information of input: `" + args.join(" ") + "`", desc));
+            "\n**Color:** `" + role.hexColor + "`";
+        const canvas = fun.canvas.createCanvas(64, 64);
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = role.hexColor;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        await message.channel.send(fun.embed(message.client, "Role information of input: `" + args.join(" ") + "`", desc).attachFiles([{attachment:canvas.toBuffer(), name:"bg.png"}]).setImage("attachment://bg.png"));
     }
 };

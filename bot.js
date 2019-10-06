@@ -3,6 +3,7 @@ const Discord = require("discord.js");
 const Keyv = require("keyv");
 const fs = require("fs");
 const config = require("./files/config.js");
+const handleMsg = require("./files/handleMsg.js");
 
 // Creating classes and collections
 const client = new Discord.Client();
@@ -28,7 +29,6 @@ client.on("ready", async () => {
     console.log("Reafy!");
     await client.user.setPresence({activity:{name:" ",type:"WATCHING"}});
 });
-
 client.on("message", async message => {
     let prefix = config.globalPrefix;
     if(!message.content.startsWith(prefix)) {
@@ -36,7 +36,11 @@ client.on("message", async message => {
         if(!message.guild) return;
         // Store whatever prefix is found.
         prefix = await client.keyv.get("prefix." + message.guild.id);
-        if(!message.content.startsWith(prefix)) return null;
+        if(!message.content.startsWith(prefix)) {
+            // Non command handlers.
+            handleMsg(message);
+            return;
+        }
     }
     const args = message.content.slice(prefix.length).split(/ +/);
     const commandName = args.shift().toLowerCase();
