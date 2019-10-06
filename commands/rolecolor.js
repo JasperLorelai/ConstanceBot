@@ -14,7 +14,7 @@ module.exports = {
             return null;
         }
         let color = fun.colorToHex(args.join("").replace(/\s/g,""));
-        if(!(color || color.startsWith("#"))) {
+        if(!color) {
             await message.channel.send(fun.embed(message.client, "Role Color", "Invalid color! The only color types supported are hex, 'rgb(r,g,b)' and 'hsl(h,s,l)'.", "ff0000"));
             return null;
         }
@@ -40,34 +40,8 @@ module.exports = {
         fun.fetch.default(message.author.displayAvatarURL({format:"png"}) + "?size=40").then(y => y.buffer()).then(async b => {
             fun.fs.writeFileSync(process.env.INIT_CWD + "\\images\\rolecolor.png", b);
             ctx.drawImage(await fun.canvas.loadImage(process.env.INIT_CWD + "\\images\\rolecolor.png"), canvas.width*.05, canvas.height*.25);
-            message.channel.send(fun.embed(message.client,"Role Color","React with:\n✅ - to confirm changes.\n❌ - deny changes.","fcba03").attachFiles([{attachment:canvas.toBuffer(), name:"bg.png"}]).setImage("attachment://bg.png")).then(async msg => {
-                await msg.react("❌");
-                await msg.react("✅");
-                const coll = msg.createReactionCollector((r,u) => u.id !== msg.client.user.id, {time:30000});
-                coll.on("collect", async (r,u) => {
-                    await r.users.remove(u);
-                    if(message.author.id !== u.id) return;
-                    const embed = fun.getEmbed(msg);
-                    switch (r.emoji.toString()) {
-                        case "❌":
-                            await msg.edit(embed.setColor("ff0004"));
-                            coll.stop("denied");
-                            break;
-                        case "✅":
-                            role.setColor(color);
-                            await msg.edit(embed.setColor("04ff00").setDescription("Role color updated!"));
-                            coll.stop("accepted");
-                            break;
-                    }
-                });
-                coll.on("end", async (c,reason) => {
-                    if(msg.deleted) return;
-                    const embed = fun.getEmbed(msg);
-                    if(!["denied","accepted"].includes(reason)) embed.setColor("666666");
-                    if(reason !== "accepted") embed.setDescription("");
-                    await msg.edit(embed.setTitle("Role Color Preview"));
-                    await msg.reactions.removeAll();
-                });
+            message.channel.send(fun.embed(message.client,"Role Color").attachFiles([{attachment:canvas.toBuffer(), name:"bg.png"}]).setImage("attachment://bg.png")).then(async msg => {
+                await fun.handleChange(msg, message.author, role, null, role => role.setColor(color), {denied:"",accepted:"Role color updated!",newTitle:"Role Color Preview"});
             });
         });
     }

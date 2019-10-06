@@ -72,21 +72,16 @@ module.exports = {
             await message.react("❤");
         });
     },
-    /*
     findGuildMember(find, guild) {
-        for(let m of guild.members) {
-            // noinspection EqualityComparisonWithCoercionJS
-            if(
-                find == m[1].id ||
-                find == m[1].user.username ||
-                find.substring(2,find.length-1) == m[1].id ||
-                find.substring(3,find.length-1) == m[1].id ||
-                m[1].user.username.toLowerCase().includes(find.toLowerCase())
-            ) return m[1];
-        }
-        return null;
+        // noinspection EqualityComparisonWithCoercionJS
+        return guild.members.find(m =>
+            find == m.id ||
+            find == m.user.username ||
+            find.substring(2,find.length-1) == m.id ||
+            find.substring(3,find.length-1) == m.id ||
+            m.user.username.toLowerCase().includes(find.toLowerCase())
+        );
     },
-    */
     findRole(find, guild) {
         // noinspection EqualityComparisonWithCoercionJS
         return guild.roles.find(r =>
@@ -100,6 +95,11 @@ module.exports = {
         try {if(JSON.parse(json) && typeof JSON.parse(json) == "object") return true}
         catch(e) {}
         return false;
+    },
+    isRegex(regex) {
+        try {new RegExp(regex)}
+        catch(e) {return false}
+        return true;
     },
     colorToHex(color) {
         let final = color.match(/([0-9]*(\.[0-9]*)?(?:[%|°])?)+/g).filter(e => e);
@@ -141,11 +141,53 @@ module.exports = {
             };
             return toHex(r) + toHex(g) + toHex(b);
         }
+        if(color.startsWith("#")) return color.substr(1);
         return null;
     },
     getTextWidth(text, font) {
         let ctx = this.canvas.createCanvas(0,0).getContext("2d");
         ctx.font = font;
         return ctx.measureText(text).width;
-    }
+    },
+    async handleChange(msg, author, modify, denied, accepted, config) {
+        if(!denied) denied = () => {};
+        if(!accepted) accepted = () => {};
+        let embed = this.getEmbed(msg);
+        await msg.edit(embed.setColor("fcba03").setDescription((embed.description ? embed.description : "") + "\n\n**React with:\n✅ - to confirm changes.\n❌ - deny changes.**"));
+        await msg.react("❌");
+        await msg.react("✅");
+        const coll = msg.createReactionCollector((r,u) => u.id !== msg.client.user.id, {time:30000});
+        coll.on("collect", async (r,u) => {
+            await r.users.remove(u);
+            if(author.id !== u.id) return;
+            embed = this.getEmbed(msg);
+            switch (r.emoji.toString()) {
+                case "❌":
+                    denied(modify);
+                    if(config.denied) embed.setDescription(config.denied);
+                    await msg.edit(embed.setColor("ff0004"));
+                    coll.stop("denied");
+                    break;
+                case "✅":
+                    accepted(modify);
+                    if(config.accepted) embed.setDescription(config.accepted);
+                    await msg.edit(embed.setColor("04ff00"));
+                    coll.stop("accepted");
+                    break;
+            }
+        });
+        coll.on("end", async (c,reason) => {
+            if(msg.deleted) return;
+            const embed = this.getEmbed(msg);
+            if(!["denied","accepted"].includes(reason)) embed.setColor("666666").setDescription("Timed out.");
+            if(reason === "denied" && !config.denied) embed.setDescription("");
+            if(reason === "accepted" && !config.accepted) embed.setDescription("");
+            if(config.newTitle) embed.setTitle(config.newTitle);
+            await msg.edit(embed);
+            await msg.reactions.removeAll();
+        });
+    },
+    collTtl(coll,created) {
+        return coll.options.time - (new Date().getTime()-created);
+    },
 };
