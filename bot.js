@@ -17,6 +17,10 @@ for(let f of fs.readdirSync('./commands').filter(file => file.endsWith('.js'))) 
 }
 
 // Listeners
+const express = require("express");
+const app = express();
+app.get("/", (request, response) => response.sendStatus(200));
+app.listen(process.env.PORT);
 client.login(config.token).catch(e => console.log(e));
 client.keyv.on("error", err => console.error("Keyv connection error:", err));
 
@@ -26,14 +30,12 @@ client.on("ready", async () => {
 });
 
 client.on("message", async message => {
-    // Store whatever prefix is found.
     let prefix = config.globalPrefix;
-    console.log("|" + prefix + "|");    
     if(!message.content.startsWith(prefix)) {
         // Ignore DMs that aren't commands. TODO: (this should make DM channels)
         if(!message.guild) return;
+        // Store whatever prefix is found.
         prefix = await client.keyv.get("prefix." + message.guild.id);
-        console.log("|" + prefix + "|");
         if(!message.content.startsWith(prefix)) return null;
     }
     const args = message.content.slice(prefix.length).split(/ +/);
@@ -90,7 +92,7 @@ client.on("message", async message => {
                 break;
         }
         if(!pass) {
-            await message.channel.send(message.author, config.embed(client,"No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + perm + "`", "f00"));
+            await message.channel.send(message.author, config.embed(client,"No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + perm + "`", "ff0000"));
             return;
         }
         // Run command if all required args are specified.

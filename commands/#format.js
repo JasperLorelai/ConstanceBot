@@ -12,6 +12,6 @@ module.exports = {
     execute(message, args) {
         // Storage for main functions. Rarely needed.
         // noinspection JSUnusedLocalSymbols
-        const fun = require(process.env.INIT_CWD + "\\files\\config.js");
+        const fun = require("../files/config");
     }
 };

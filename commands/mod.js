@@ -5,7 +5,7 @@ module.exports = {
     perm: "admin",
     aliases: ["mods"],
     async execute(message) {
-        const fun = require(process.env.INIT_CWD + "\\files\\config.js");
+        const fun = require("../files/config");
         const keyv = message.client.keyv;
         const id =  message.guild.id;
         const instr = "**React with:**\n➕ - to add Mods.\n➖ - to remove Mods.";

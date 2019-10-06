@@ -3,7 +3,7 @@ module.exports = {
     description: "Lists of all guild roles.",
     guildOnly: true,
     async execute(message) {
-        const fun = require(process.env.INIT_CWD + "\\files\\config.js");
+        const fun = require("../files/config");
         let roles = message.guild.roles.array();
         roles.shift();
         const text = roles.map(r => r.toString() + " - `<@&" + r + ">` **(" + r.members.size + ")**").join("\n");

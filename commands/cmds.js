@@ -3,7 +3,7 @@ module.exports = {
     description: "Lists of all bot commands.",
     aliases: ["commands"],
     async execute(message) {
-        const fun = require(process.env.INIT_CWD + "\\files\\config.js");
+        const fun = require("../files/config");
         let perm;
         const text = message.client.commands.map(c => {
             perm = c.perm;

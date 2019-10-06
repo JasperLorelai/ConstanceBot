@@ -3,7 +3,7 @@ module.exports = {
     description: "Lists of all commands that can be executed in DMs.",
     aliases: ["dmcommands"],
     async execute(message) {
-        const fun = require(process.env.INIT_CWD + "\\files\\config.js");
+        const fun = require("../files/config");
         const text = message.client.commands.filter(c => !c.guildOnly).map(c => "- `" + c.name +
             (c.params ? " " + c.params.join(" ") : "") + "` " +
             (c.perm && c.perm === "author" ? " - Required permissions: **Bot Author**" : "")
