@@ -84,7 +84,7 @@ module.exports = {
     },
     findRole(find, guild) {
         // noinspection EqualityComparisonWithCoercionJS
-        return guild.roles.find(r =>
+        return guild.roles.filter(r => r.id !== guild.id).find(r =>
             find == r.id ||
             find.substring(3,find.length-1) == r.id ||
             find.toLowerCase() == r.name.toLowerCase() ||
@@ -190,4 +190,11 @@ module.exports = {
     collTtl(coll,created) {
         return coll.options.time - (new Date().getTime()-created);
     },
+    getRoleByPerm(member, perm) {
+        return member.roles.array()
+            .filter(r => r.id !== member.guild.id)
+            .sort((a,b) => b.position - a.position)
+            // Find highest admin, otherwise highest with said permission.
+            .find(r => r.permissions.has("ADMINISTRATOR") || (r.permissions.has(perm) || null));
+    }
 };

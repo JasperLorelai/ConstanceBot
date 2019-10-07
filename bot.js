@@ -38,7 +38,7 @@ client.on("message", async message => {
         prefix = await client.keyv.get("prefix." + message.guild.id);
         if(!message.content.startsWith(prefix)) {
             // Non command handlers.
-            handleMsg(message);
+            await handleMsg(message);
             return;
         }
     }
