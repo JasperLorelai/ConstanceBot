@@ -1,7 +1,7 @@
 // noinspection JSUnusedLocalSymbols
 module.exports = {
     name: "purge",
-    description: "Clear messages in text channel. It map the latest specified amount of messages to delete for which you can apply filters like RegEx or by user.",
+    description: "Clear messages in text channel. It maps the latest specified amount of messages to delete. You can apply a filter for a specific user.",
     aliases: ["clean","clear","delete"],
     params: ["[number]"],
     guildOnly: true,
@@ -17,11 +17,9 @@ module.exports = {
         num = over ? 50 : num;
         let messages = await message.channel.messages.fetch({limit:num+1});
         messages.delete(message.id);
-        const msg = await message.channel.send(fun.embed(message.client,"Channel Purge","**Messages found:** " + (over ? "limited to `50`" : "`" + num + "`") + "\n\n**React with:\n🗑 - to delete currently selected.\n😃 - to apply user filter.\n📰 - to apply RegEx filter.**","fcba03"));
+        const msg = await message.channel.send(fun.embed(message.client,"Channel Purge","**Messages found:** " + (over ? "limited to `50`" : "`" + num + "`") + "\n\n**React with:\n🗑 - to delete currently selected.\n😃 - to apply user filter.**","fcba03"));
         await msg.react("🗑");
         await msg.react("😃");
-        // TODO: Finish regex.
-        //await msg.react("📰");
         const created = new Date().getTime();
         const coll = msg.createReactionCollector((r,u) => u.id !== msg.client.user.id, {time:30000});
         coll.on("collect", async (r,u) => {
@@ -73,9 +71,6 @@ module.exports = {
                         coll.stop("chosen");
                         if(reason === "found") await handleDeletePrompt(message,messages.filter(m => m.author.id === member.id));
                     });
-                    break;
-                case "📰":
-                    coll.stop("chosen");
                     break;
             }
         });

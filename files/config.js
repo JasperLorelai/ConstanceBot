@@ -8,11 +8,24 @@ module.exports = {
     token: "NTc5NzU5OTU4NTU2NjcyMDEx.XZcc5A.TDZBLpHFRSwLGRAr74BA0LIn_jA",
     globalPrefix: "&",
     baseEmbedColor: "009dff",
-    mainDiscord: "575376952517591041",
-    author: "192710597106728960",
+    users: {
+        author: "192710597106728960"
+    },
+    guilds: {
+        mainGuild: "575376952517591041"
+    },
+    channels: {
+        botLogs: "575738387307298831"
+    },
+    categories: {
+        dmChannels: "632697494865707008"
+    },
     // Functions
+    getMainGuild(client) {
+        return client.guilds.resolve(this.guilds.mainGuild);
+    },
     getAuthor(client) {
-        return client.guilds.resolve(this.mainDiscord).members.resolve(this.author);
+        return this.getMainGuild(client).members.resolve(this.users.author);
     },
     getBaseEmbed(client) {
         const user = this.getAuthor(client).user;

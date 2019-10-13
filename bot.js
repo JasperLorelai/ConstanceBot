@@ -18,10 +18,6 @@ for(let f of fs.readdirSync('./commands').filter(file => file.endsWith('.js'))) 
 }
 
 // Listeners
-const express = require("express");
-const app = express();
-app.get("/", (request, response) => response.sendStatus(200));
-app.listen(process.env.PORT);
 client.login(config.token).catch(e => console.log(e));
 client.keyv.on("error", err => console.error("Keyv connection error:", err));
 
@@ -32,13 +28,16 @@ client.on("ready", async () => {
 client.on("message", async message => {
     let prefix = config.globalPrefix;
     if(!message.content.startsWith(prefix)) {
-        // Ignore DMs that aren't commands. TODO: (this should make DM channels)
-        if(!message.guild) return;
+        if(!message.guild) {
+            // Non command handlers.
+            await handleMsg(config, message);
+            return;
+        }
         // Store whatever prefix is found.
         prefix = await client.keyv.get("prefix." + message.guild.id);
         if(!message.content.startsWith(prefix)) {
             // Non command handlers.
-            await handleMsg(message);
+            await handleMsg(config, message);
             return;
         }
     }
@@ -56,7 +55,7 @@ client.on("message", async message => {
         }
         // Process permissions prior to execution.
         const member = message.member;
-        const isAuthor = member.id === config.author;
+        const isAuthor = member.id === config.users.author;
         const isAdmin = member.hasPermission("ADMINISTRATOR");
         // Different approach for mods.
         let isMod = false;
