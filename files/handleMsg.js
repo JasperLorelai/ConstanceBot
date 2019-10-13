@@ -37,7 +37,7 @@ module.exports = async message => {
     // Handle responses.
     for(let r of await keyv.get("responses." + message.guild.id) || []) {
         // Quite the effort to construct a regex from string.
-        // To do: Look into improvement.
+        // TODO: Look into improvement.
         let regex = r.trigger;
         if(regex.match(/\/([a-zA-Z])/g)) regex = [regex.substr(1,regex.lastIndexOf("/")-1),regex.substr(regex.lastIndexOf("/")+1)];
         else regex = [regex,null];
