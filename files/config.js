@@ -21,6 +21,23 @@ module.exports = {
         dmChannels: "632697494865707008"
     },
     // Functions
+    modlogs: {
+        async get(guild, user) {
+            if(!user) return await this.keyv.get("modlogs." + guild) || [];
+            else return null;
+        },
+        async add(type, guild, keyv, user, mod, reason, time) {
+            const logs = await keyv.get("modlogs." + guild) || [];
+            logs.push({
+                type: type,
+                user: user,
+                mod: mod,
+                reason: reason || null,
+                time: time || new Date().getTime()
+            });
+            await keyv.set("modlogs." + guild, logs);
+        }
+    },
     getMainGuild(client) {
         return client.guilds.resolve(this.guilds.mainGuild);
     },

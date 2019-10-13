@@ -7,6 +7,7 @@ module.exports = {
     async execute(message, args) {
         // noinspection JSUnusedLocalSymbols
         const config = require("../files/config");
+        console.log(args.join(" "));
         eval(args.join(" "));
         await message.react("❌");
         const coll = message.createReactionCollector((r,u) => u.id !== message.client.user.id, {time:10000});

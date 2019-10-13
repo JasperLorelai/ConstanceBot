@@ -5,6 +5,7 @@ module.exports = async (config, message) => {
     if(!message.guild) {
         // noinspection EqualityComparisonWithCoercionJS
         if(channel.name == client.user.me) return;
+        // noinspection EqualityComparisonWithCoercionJS
         let channel = main.channels.filter(c => c.name == author.id).array()[0];
         if(!channel) channel = await main.channels.create(author.id,{topic:author.username,parent:config.categories.dmChannels});
         const webhook = await channel.createWebhook(author.username, {avatar:author.displayAvatarURL()});
@@ -25,8 +26,6 @@ module.exports = async (config, message) => {
         // noinspection EqualityComparisonWithCoercionJS
         if(channel.name == client.user.me) return;
         const user = client.users.resolve(channel.name);
-        console.log(channel.name);
-        console.log(user);
         if(user) await user.send(config.isJSON(content) ? JSON.parse(content) : content);
         else {
             channel.delete();
