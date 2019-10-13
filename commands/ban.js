@@ -30,7 +30,6 @@ module.exports = {
             await r.users.remove(u);
             if(u.id !== author.id) return null;
             let days = 0;
-            // TODO: Add purge by day.
             switch (r.emoji.toString()) {
                 case "❌":
                     days = 0;
