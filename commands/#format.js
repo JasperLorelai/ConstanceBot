@@ -9,9 +9,5 @@ module.exports = {
     // Permission required. Options: "author", "admin", "mod"
     perm: "author",
     // "args" is unneccessary if "params" is empty or has no required parameters.
-    execute(message, args) {
-        // Storage for main functions. Rarely needed.
-        // noinspection JSUnusedLocalSymbols
-        const fun = require("../files/config");
-    }
+    execute(message, args) {}
 };

@@ -1,14 +1,20 @@
 // Importing libraries and functions
 const Discord = require("discord.js");
 const Keyv = require("keyv");
-const fs = require("fs");
-const config = require("./files/config.js");
 const handleMsg = require("./files/handleMsg.js");
 
 // Creating classes and collections
 const client = new Discord.Client();
+client.fs = require("fs");
 client.commands = new Discord.Collection();
+client.emoji = require("./files/emoji.js");
+client.config = require("./files/config.js");
 client.keyv = new Keyv("sqlite://db.sqlite");
+client.fetch = require("node-fetch");
+client.canvas = require("canvas");
+
+// Initialising variables
+const {config, keyv, fs} = client;
 
 // Grabbing commands from files and setting them
 for(let f of fs.readdirSync('./commands').filter(file => file.endsWith('.js'))) {
@@ -19,7 +25,7 @@ for(let f of fs.readdirSync('./commands').filter(file => file.endsWith('.js'))) 
 
 // Listeners
 client.login(config.token).catch(e => console.log(e));
-client.keyv.on("error", err => console.error("Keyv connection error:", err));
+keyv.on("error", err => console.error("Keyv connection error:", err));
 
 client.on("ready", async () => {
     console.log("Reafy!");
@@ -30,14 +36,14 @@ client.on("message", async message => {
     if(!message.content.startsWith(prefix)) {
         if(!message.guild) {
             // Non command handlers.
-            await handleMsg(config, message);
+            await handleMsg(message);
             return;
         }
         // Store whatever prefix is found.
-        prefix = await client.keyv.get("prefix." + message.guild.id);
+        prefix = await keyv.get("prefix." + message.guild.id);
         if(!message.content.startsWith(prefix)) {
             // Non command handlers.
-            await handleMsg(config, message);
+            await handleMsg(message);
             return;
         }
     }
@@ -59,7 +65,7 @@ client.on("message", async message => {
         const isAdmin = member.hasPermission("ADMINISTRATOR");
         // Different approach for mods.
         let isMod = false;
-        const modRoles = await client.keyv.get("mod.roles." + message.guild.id);
+        const modRoles = await keyv.get("mod.roles." + message.guild.id);
         if(modRoles) {
             for(let r of modRoles) {
                 if(member.roles.has(r)) {
@@ -68,7 +74,7 @@ client.on("message", async message => {
                 }
             }
         }
-        const modUsers = await client.keyv.get("mod.users." + message.guild.id);
+        const modUsers = await keyv.get("mod.users." + message.guild.id);
         if(!isMod && modUsers) {
             for(let u of modUsers) {
                 // noinspection EqualityComparisonWithCoercionJS

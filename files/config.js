@@ -1,9 +1,5 @@
 module.exports = {
-    // Libraries
     discord: require("discord.js"),
-    fetch: require("node-fetch"),
-    canvas: require("canvas"),
-    fs: require("fs"),
     // Properties
     token: "NTc5NzU5OTU4NTU2NjcyMDEx.XZcc5A.TDZBLpHFRSwLGRAr74BA0LIn_jA",
     globalPrefix: "&",
@@ -23,11 +19,13 @@ module.exports = {
     // Functions
     modlogs: {
         async get(guild, user) {
-            if(!user) return await this.keyv.get("modlogs." + guild) || [];
+            // TODO: Add per user.
+            if(!user) return await guild.client.keyv.get("modlogs." + guild.id) || [];
             else return null;
         },
-        async add(type, guild, keyv, user, mod, reason, time) {
-            const logs = await keyv.get("modlogs." + guild) || [];
+        async add(type, guild, user, mod, reason, time) {
+            const keyv = guild.client.keyv;
+            const logs = await keyv.get("modlogs." + guild.id) || [];
             logs.push({
                 type: type,
                 user: user,
@@ -35,7 +33,7 @@ module.exports = {
                 reason: reason || null,
                 time: time || new Date().getTime()
             });
-            await keyv.set("modlogs." + guild, logs);
+            await keyv.set("modlogs." + guild.id, logs);
         }
     },
     getMainGuild(client) {
@@ -174,8 +172,8 @@ module.exports = {
         if(color.startsWith("#")) return color.substr(1);
         return null;
     },
-    getTextWidth(text, font) {
-        let ctx = this.canvas.createCanvas(0,0).getContext("2d");
+    getTextWidth(client, text, font) {
+        let ctx = client.canvas.createCanvas(0,0).getContext("2d");
         ctx.font = font;
         return ctx.measureText(text).width;
     },

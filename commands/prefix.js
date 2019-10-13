@@ -5,8 +5,8 @@ module.exports = {
     params: ["[prefix]"],
     perm: "admin",
     async execute(message, args) {
-        const fun = require("../files/config");
-        await message.client.keyv.set("prefix." + message.guild.id, args[0]);
-        await message.channel.send(fun.embed(message.client, "Command Prefix", "**Prefix set to:** " + args[0], null));
+        const {client, channel, guild} = message;
+        await client.keyv.set("prefix." + guild.id, args[0]);
+        await channel.send(client.config.embed(client, "Command Prefix", "**Prefix set to:** " + args[0], null));
     },
 };

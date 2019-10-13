@@ -6,13 +6,14 @@ module.exports = {
     guildOnly: true,
     perm: "mod",
     async execute(message, args) {
-        const fun = require("../files/config");
-        const member = fun.findGuildMember(args.shift(), message.guild);
+        const {client, channel, guild} = message;
+        const config = client.config;
+        const member = config.findGuildMember(args.shift(), guild);
         if(!member) {
-            await message.channel.send(fun.embed(message.client, "Set Nick", "User not found in this guild!", "ff0000"));
+            await channel.send(config.embed(client, "Set Nick", "User not found in this guild!", "ff0000"));
             return null;
         }
         await member.setNickname(args.join(" "));
-        await message.channel.send(fun.embed(message.client,"Set Nick","Nick for user " + member.toString() + " was changed to: **" + args.join(" ") + "**"));
+        await channel.send(config.embed(client,"Set Nick","Nick for user " + member.toString() + " was changed to: **" + args.join(" ") + "**"));
     }
 };

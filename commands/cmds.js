@@ -3,9 +3,10 @@ module.exports = {
     description: "Lists of all bot commands.",
     aliases: ["commands"],
     async execute(message) {
-        const fun = require("../files/config");
+        const {client, guild, channel, author} = message;
+        const {commands, config} = client;
         let perm;
-        const text = message.client.commands.map(c => {
+        const text = commands.map(c => {
             perm = c.perm;
             if(perm === "author") perm = "**Bot Author**";
             if(perm === "admin") perm = "**Server Administrator**";
@@ -13,7 +14,7 @@ module.exports = {
             return "- `" + c.name +
                 (c.params ? " " + c.params.join(" ") : "") + "` " +
                 (perm ? " - Required permissions: " + perm : "")
-        }).join("\n") + (!message.guild ? "\n\nUse the `dmcmds` command to only list commands that can be executed in DMs." : "");
-        await message.channel.send(message.author.toString(), fun.embed(message.client, "Command List", text));
+        }).join("\n") + (!guild ? "\n\nUse the `dmcmds` command to only list commands that can be executed in DMs." : "");
+        await channel.send(author.toString(), config.embed(client, "Command List", text));
     },
 };

@@ -5,20 +5,21 @@ module.exports = {
     guildOnly: true,
     perm: "admin",
     async execute(message, args) {
-        const fun = require("../files/config");
-        const member = fun.findGuildMember(args.shift(), message.guild);
+        const {client, guild, channel} = message;
+        const {config} = client;
+        const member = config.findGuildMember(args.shift(), guild);
         if(!member) {
-            await message.channel.send(fun.embed(message.client,"Role Management","User not found!","ff0000"));
+            await channel.send(config.embed(client,"Role Management","User not found!","ff0000"));
             return;
         }
         if(!member.manageable) {
-            await message.channel.send(fun.embed(message.client,"Role Management","User is lower in the permission hierarchy than the bot!","ff0000"));
+            await channel.send(config.embed(client,"Role Management","User is lower in the permission hierarchy than the bot!","ff0000"));
             return;
         }
         let text = "Log:";
         let role;
         for(let r of args.join(" ").split(",").map(r => r.trim())) {
-            role = fun.findRole(r,message.guild);
+            role = config.findRole(r,guild);
             if(!role) {
                 text += "\n**`?`** `" + r + "` not found";
                 continue;
@@ -27,7 +28,7 @@ module.exports = {
                 text += "\n**`?`** " + role.toString() + " managed externally";
                 continue;
             }
-            const compare = fun.getRoleByPerm(member, "MANAGE_ROLES");
+            const compare = config.getRoleByPerm(member, "MANAGE_ROLES");
             if(compare && role.comparePositionTo(compare) > 0) {
                 text += "\n**`?`** " + role.toString() + " was higher in the permission hierarchy";
                 continue;
@@ -41,6 +42,6 @@ module.exports = {
                 member.roles.add(role);
             }
         }
-        await message.channel.send(fun.embed(message.client,"Role Management",text));
+        await channel.send(config.embed(client,"Role Management",text));
     }
 };

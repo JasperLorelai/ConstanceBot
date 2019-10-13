@@ -6,10 +6,11 @@ module.exports = {
     guildOnly: true,
     perm: "admin",
     async execute(message, args) {
-        const fun = require("../files/config");
-        const role = await message.guild.roles.create({data:{name:args.join(" ")}});
-        message.channel.send(fun.embed(message.client,"Role Creator","**Created role:** " + args.join(" "))).then(async msg => {
-            await fun.handleChange(msg, message.author, role, role => role.delete(),null, {denied:"Role deleted!",accepted:"Role created!",newTitle:""});
+        const {client, guild, channel, author} = message;
+        const {config} = client;
+        const role = await guild.roles.create({data:{name:args.join(" ")}});
+        channel.send(config.embed(client,"Role Creator","**Created role:** " + args.join(" "))).then(async msg => {
+            await config.handleChange(msg, author, role, role => role.delete(),null, {denied:"Role deleted!",accepted:"Role created!",newTitle:""});
         });
     }
 };

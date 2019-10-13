@@ -6,13 +6,14 @@ module.exports = {
     guildOnly: true,
     perm: "admin",
     async execute(message, args) {
-        const fun = require("../files/config");
-        const role = fun.findRole(args.join(" "), message.guild);
+        const {client, guild, channel} = message;
+        const {config} = client;
+        const role = config.findRole(args.join(" "), guild);
         if (!role) {
-            await message.channel.send(fun.embed(message.client, "Role Deleter", "Role could not be found.", "ff0000"));
+            await channel.send(config.embed(client, "Role Deleter", "Role could not be found.", "ff0000"));
             return null;
         }
-        await message.channel.send(fun.embed(message.client,"Role Deleter","Role **" + role.name + "** was successfully deleted."));
+        await channel.send(config.embed(client,"Role Deleter","Role **" + role.name + "** was successfully deleted."));
         role.delete();
     }
 };
