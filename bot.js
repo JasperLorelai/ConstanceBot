@@ -31,19 +31,19 @@ client.on("ready", async () => {
     console.log("Reafy!");
     await client.user.setPresence({activity:{name:" ",type:"WATCHING"}});
 });
+
 client.on("message", async message => {
-    const {content, guild, channel, member, author} = message;
+    const {content, member, author} = message;
     const {commands} = client;
-    const {roles} = guild;
     let prefix = config.globalPrefix;
     if(!content.startsWith(prefix)) {
-        if(!guild) {
+        if(!message.guild) {
             // Non command handlers.
             await handleMsg(message);
             return;
         }
         // Store whatever prefix is found.
-        prefix = await keyv.get("prefix." + guild.id);
+        prefix = await keyv.get("prefix." + message.guild.id);
         if(!content.startsWith(prefix)) {
             // Non command handlers.
             await handleMsg(message);
@@ -58,25 +58,25 @@ client.on("message", async message => {
     if(!command) return;
     try {
         const {guildOnly, params, execute, perm} = command;
-        if(guildOnly && channel.type !== "text") {
+        if(guildOnly && message.channel.type !== "text") {
             await message.reply("Can't execute that command inside DMs.");
             return;
         }
         // Process permissions prior to execution.
-        const isAuthor = member.id === config.users.author;
-        const isAdmin = member.hasPermission("ADMINISTRATOR");
+        const isAuthor = author.id === config.users.author;
+        const isAdmin = member ? member.hasPermission("ADMINISTRATOR") : false;
         // Different approach for mods.
         let isMod = false;
-        const modRoles = await keyv.get("mod.roles." + guild.id);
+        const modRoles = message.guild ? await keyv.get("mod.roles." + message.guild.id) : [];
         if(modRoles) {
             for(let r of modRoles) {
-                if(roles.has(r)) {
+                if(message.guild.roles.has(r)) {
                     isMod = true;
                     break;
                 }
             }
         }
-        const modUsers = await keyv.get("mod.users." + guild.id);
+        const modUsers = message.guild ? await keyv.get("mod.users." + message.guild.id) : [];
         if(!isMod && modUsers) {
             for(let u of modUsers) {
                 // noinspection EqualityComparisonWithCoercionJS
@@ -103,7 +103,7 @@ client.on("message", async message => {
                 break;
         }
         if(!pass) {
-            await channel.send(author, config.embed(client,"No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + perm + "`", "ff0000"));
+            await message.channel.send(author, config.embed(client,"No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + perm + "`", "ff0000"));
             return;
         }
         // Run command if all required args are specified.

@@ -1,11 +1,11 @@
 module.exports = async message => {
-    const {client, guild, author, content, channel} = message;
+    const {client, author, content} = message;
     const {config, keyv} = client;
     const main = config.getMainGuild(client);
     // Redirect messages to it's respective DM channel.
-    if(!guild) {
+    if(!message.guild) {
         // noinspection EqualityComparisonWithCoercionJS
-        if(channel.name == client.user.me) return;
+        if(message.channel.name == client.user.me) return;
         // noinspection EqualityComparisonWithCoercionJS
         let channel = main.channels.filter(c => c.name == author.id).array()[0];
         if(!channel) channel = await main.channels.create(author.id,{topic:author.username,parent:config.categories.dmChannels});
@@ -23,26 +23,26 @@ module.exports = async message => {
     }
     // DM messages from the DM channels.
     // noinspection EqualityComparisonWithCoercionJS
-    if(channel.parent == config.categories.dmChannels) {
+    if(message.channel.parent.id == config.categories.dmChannels) {
         // noinspection EqualityComparisonWithCoercionJS
-        if(channel.name == client.user.me) return;
-        const user = client.users.resolve(channel.name);
+        if(message.channel.name == client.user.me) return;
+        const user = client.users.resolve(message.channel.name);
         if(user) await user.send(config.isJSON(content) ? JSON.parse(content) : content);
         else {
-            channel.delete();
-            main.channels.resolve(config.channels.botLogs).send(author.toString(),config.embed(client,"DM Channel Deleted","User you tried to DM could not be found. (`" + channel.name + "`)","ff0000"));
+            await message.channel.delete();
+            main.channels.resolve(config.channels.botLogs).send(author.toString(),config.embed(client,"DM Channel Deleted","User you tried to DM could not be found. (`" + message.channel.name + "`)","ff0000"));
         }
         return;
     }
     // Handle responses.
-    for(let r of await keyv.get("responses." + guild.id) || []) {
+    for(let r of await keyv.get("responses." + message.guild.id) || []) {
         // Quite the effort to construct a regex from string.
         // TODO: Look into improvement.
         let regex = r.trigger;
         if(regex.match(/\/([a-zA-Z])/g)) regex = [regex.substr(1,regex.lastIndexOf("/")-1),regex.substr(regex.lastIndexOf("/")+1)];
         else regex = [regex,null];
         if(content.match(new RegExp(regex[0], regex[1]))) {
-            await channel.send(r.reply);
+            await message.channel.send(r.reply);
             return;
         }
     }

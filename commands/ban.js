@@ -17,14 +17,6 @@ module.exports = {
             return;
         }
         const msg = await channel.send(config.embed(client,"Ban Member", "Purge messages of how many days?"));
-        await msg.react("❌");
-        await msg.react(emoji["1"]);
-        await msg.react(emoji["2"]);
-        await msg.react(emoji["3"]);
-        await msg.react(emoji["4"]);
-        await msg.react(emoji["5"]);
-        await msg.react(emoji["6"]);
-        await msg.react(emoji["7"]);
         const coll = msg.createReactionCollector((r,u) => u.id !== msg.client.user.id, {time:10000});
         coll.on("collect", async (r,u) => {
             await r.users.remove(u);
@@ -65,5 +57,15 @@ module.exports = {
         coll.on("end", async () => {
             await msg.delete();
         });
+        try {
+            await msg.react("❌");
+            await msg.react(emoji["1"]);
+            await msg.react(emoji["2"]);
+            await msg.react(emoji["3"]);
+            await msg.react(emoji["4"]);
+            await msg.react(emoji["5"]);
+            await msg.react(emoji["6"]);
+            await msg.react(emoji["7"]);
+        } catch (e) {}
     }
 };

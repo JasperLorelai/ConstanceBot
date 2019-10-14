@@ -110,6 +110,16 @@ module.exports = {
             m.user.username.toLowerCase().includes(find.toLowerCase())
         );
     },
+    findUser(client, find) {
+        // noinspection EqualityComparisonWithCoercionJS
+        return client.users.find(u =>
+            find == u.id ||
+            find == u.username ||
+            find.substring(2,find.length-1) == u.id ||
+            find.substring(3,find.length-1) == u.id ||
+            u.username.toLowerCase().includes(find.toLowerCase())
+        );
+    },
     findRole(find, guild) {
         // noinspection EqualityComparisonWithCoercionJS
         return guild.roles.filter(r => r.id !== guild.id).find(r =>
