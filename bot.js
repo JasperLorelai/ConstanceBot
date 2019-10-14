@@ -32,49 +32,51 @@ client.on("ready", async () => {
     await client.user.setPresence({activity:{name:" ",type:"WATCHING"}});
 });
 client.on("message", async message => {
+    const {content, guild, channel, member, author} = message;
+    const {commands} = client;
+    const {roles} = guild;
     let prefix = config.globalPrefix;
-    if(!message.content.startsWith(prefix)) {
-        if(!message.guild) {
+    if(!content.startsWith(prefix)) {
+        if(!guild) {
             // Non command handlers.
             await handleMsg(message);
             return;
         }
         // Store whatever prefix is found.
-        prefix = await keyv.get("prefix." + message.guild.id);
-        if(!message.content.startsWith(prefix)) {
+        prefix = await keyv.get("prefix." + guild.id);
+        if(!content.startsWith(prefix)) {
             // Non command handlers.
             await handleMsg(message);
             return;
         }
     }
-    const args = message.content.slice(prefix.length).split(/ +/);
+    const args = content.slice(prefix.length).split(/ +/);
     const commandName = args.shift().toLowerCase();
     // Execute commands
-    const command = client.commands.get(commandName) || client.commands.find(cmd => cmd["aliases"] && cmd["aliases"].includes(commandName));
+    const command = commands.get(commandName) || commands.find(cmd => cmd["aliases"] && cmd["aliases"].includes(commandName));
     // "cmd not found, try using ?commands to find your command"
     if(!command) return;
     try {
         const {guildOnly, params, execute, perm} = command;
-        if(guildOnly && message.channel.type !== "text") {
+        if(guildOnly && channel.type !== "text") {
             await message.reply("Can't execute that command inside DMs.");
             return;
         }
         // Process permissions prior to execution.
-        const member = message.member;
         const isAuthor = member.id === config.users.author;
         const isAdmin = member.hasPermission("ADMINISTRATOR");
         // Different approach for mods.
         let isMod = false;
-        const modRoles = await keyv.get("mod.roles." + message.guild.id);
+        const modRoles = await keyv.get("mod.roles." + guild.id);
         if(modRoles) {
             for(let r of modRoles) {
-                if(member.roles.has(r)) {
+                if(roles.has(r)) {
                     isMod = true;
                     break;
                 }
             }
         }
-        const modUsers = await keyv.get("mod.users." + message.guild.id);
+        const modUsers = await keyv.get("mod.users." + guild.id);
         if(!isMod && modUsers) {
             for(let u of modUsers) {
                 // noinspection EqualityComparisonWithCoercionJS
@@ -101,13 +103,13 @@ client.on("message", async message => {
                 break;
         }
         if(!pass) {
-            await message.channel.send(message.author, config.embed(client,"No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + perm + "`", "ff0000"));
+            await channel.send(author, config.embed(client,"No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + perm + "`", "ff0000"));
             return;
         }
         // Run command if all required args are specified.
         if(!params || args.length >= params.filter(p => p.startsWith("[")).length) execute(message, args);
         // Execute help command for command if not.
-        else client.commands.get("help").execute(message, [commandName]);
+        else commands.get("help").execute(message, [commandName]);
     } catch(e) {
         console.error(e);
         await message.reply("Error during command execution. (error sent to console)");

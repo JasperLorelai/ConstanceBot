@@ -1,9 +1,9 @@
 module.exports = async message => {
-    const {client, author, content, channel} = message;
+    const {client, guild, author, content, channel} = message;
     const {config, keyv} = client;
     const main = config.getMainGuild(client);
     // Redirect messages to it's respective DM channel.
-    if(!message.guild) {
+    if(!guild) {
         // noinspection EqualityComparisonWithCoercionJS
         if(channel.name == client.user.me) return;
         // noinspection EqualityComparisonWithCoercionJS
@@ -35,7 +35,7 @@ module.exports = async message => {
         return;
     }
     // Handle responses.
-    for(let r of await keyv.get("responses." + message.guild.id) || []) {
+    for(let r of await keyv.get("responses." + guild.id) || []) {
         // Quite the effort to construct a regex from string.
         // TODO: Look into improvement.
         let regex = r.trigger;
