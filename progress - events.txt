@@ -1,0 +1,15 @@
+Voice-Text Handler
+Emit Message On MsgUpdate
+Announcer for Join/Leave
+Reaction Handler:
+  Add:
+  - Staff Applications
+  - To Do List
+  - Rule Accept
+  - Suggestions Upvote/Downvote
+  - Suggestion Accept/Deny
+  - Role Toggle
+  - Bug Reports
+  Remove:
+  - Role Toggle
+  - Suggestions Upvote/Downvote

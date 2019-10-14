@@ -16,6 +16,11 @@ client.canvas = require("canvas");
 // Initialising variables
 const {config, keyv, fs} = client;
 
+// Creating some base methods
+String.prototype.toFormalCase = function() {
+  return this.charAt(0).toUpperCase() + this.substr(1).toLowerCase();
+};
+
 // Grabbing commands from files and setting them
 for(let f of fs.readdirSync('./commands').filter(file => file.endsWith('.js'))) {
     if(f.startsWith("#")) continue;

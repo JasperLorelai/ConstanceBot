@@ -1,0 +1,43 @@
+help - Done
+say - Done
+prefix - Done
+responses - Done
+welcome - Logged
+roles - Done
+roleinfo - Done
+rolecolor - Done
+setnick - Done
+role - Done
+rolename - Skipped
+purge - Dome
+kick - Done
+ban - Done
+unban - Skipped
+members - Done
+avatar - Done
+eval - Done
+mods - Done
+userinfo - Done
+serverinfo - Done
+banlist
+channelinfo
+quirks
+taken
+server
+namemc
+ship
+pickle
+tts
+edit
+warn
+clearwarn
+warns
+mute
+unmute
+suggest
+poll
+link
+construct
+trellobuild
+rosterbuild
+solved
