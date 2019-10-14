@@ -16,6 +16,11 @@ module.exports = {
     categories: {
         dmChannels: "632697494865707008"
     },
+    trello: {
+        quirks: {
+            roster: "uEL55Rqn"
+        }
+    },
     // Functions
     modlogs: {
         async get(guild, user) {

@@ -18,7 +18,7 @@ module.exports = {
         }
         args.shift();
         await channel.send(config.embed(client,"Kicked Member","**" + member.user.username + "** has been kicked from the server by user: " + author.toString() + (args[0] ? "\n**For reason:** " + args.join(" ") : "")));
-        await member.kick(member.user.username + " has been kicked from the server by user: " + author.username + (args[0] ? "\nFor reason: " + args.join(" ") : ""));
+        await member.kick(member.user.username + " has been kicked from the server by user: " + author.username + (args[0] ? "(reason: " + args.join(" ") + ")" : ""));
         message.delete();
         await config.modlogs.add("kick", guild, member.id, author.id, (args[0] ? args.join(" ") : null));
     }

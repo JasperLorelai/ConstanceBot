@@ -19,8 +19,8 @@ eval - Done
 mods - Done
 userinfo - Done
 serverinfo - Done
-banlist
-channelinfo
+banlist - Done
+channelinfo - Skipped
 quirks
 taken
 server
