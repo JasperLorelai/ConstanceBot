@@ -9,16 +9,17 @@ module.exports = {
     async execute(message, args) {
         const {channel, client, author, guild} = message;
         const {config} = client;
+        const {red, yellow} = config.color;
         let num = parseInt(args[0]);
         if(!num || num < 1) {
-            await channel.send(config.embed(client,"Channel Purge","Parameter `number` is not a number or is less than 1!","ff0000"));
+            await channel.send(config.embed("Channel Purge","Parameter `number` is not a number or is less than 1!",red));
             return;
         }
         const over = num > 50;
         num = over ? 50 : num;
         let messages = await channel.messages.fetch({limit:num+1});
         messages.delete(message.id);
-        const msg = await channel.send(config.embed(client,"Channel Purge","**Messages found:** " + (over ? "limited to `50`" : "`" + num + "`") + "\n\n**React with:\n🗑 - to delete currently selected.\n😃 - to apply user filter.**","fcba03"));
+        const msg = await channel.send(config.embed("Channel Purge","**Messages found:** " + (over ? "limited to `50`" : "`" + num + "`") + "\n\n**React with:\n🗑 - to delete currently selected.\n😃 - to apply user filter.**",yellow));
         await msg.react("🗑");
         await msg.react("😃");
         const created = new Date().getTime();
@@ -27,7 +28,7 @@ module.exports = {
             await r.users.remove(u);
             if(u.id !== author.id) return null;
             async function handleDeletePrompt(message,messages) {
-                const msg = await message.channel.send(config.embed(message.client,"Delete Confirmation","**Messages found by filter:** `" + messages.size + "`\n\n**React with:\n❌ - to cancel delete.\n✅ - to confirm delete.**","fcba03"));
+                const msg = await message.channel.send(config.embed("Delete Confirmation","**Messages found by filter:** `" + messages.size + "`\n\n**React with:\n❌ - to cancel delete.\n✅ - to confirm delete.**",yellow));
                 await msg.react("❌");
                 await msg.react("✅");
                 const coll = msg.createReactionCollector((r,u) => u.id !== message.client.user.id, {time: 10000});
@@ -54,14 +55,14 @@ module.exports = {
                     await handleDeletePrompt(message,messages);
                     break;
                 case "😃":
-                    const msgUser = await msg.channel.send(config.embed(client,"Channel Purge - By User","Please specify a user who's messages would be deleted.","fcba03"));
+                    const msgUser = await msg.channel.send(config.embed("Channel Purge - By User","Please specify a user who's messages would be deleted.",yellow));
                     const collUser = msgUser.channel.createMessageCollector(m => m.author.id === author.id, {time:config.collTtl(coll,created)});
                     let member;
                     collUser.on("collect", mUser => {
                         member = config.findGuildMember(mUser.content,guild);
                         mUser.delete();
                         if(!member) {
-                            msg.channel.send(config.embed(client,"Channel Purge - By User","User not found!","ff0000")).then(tempMsg => {
+                            msg.channel.send(config.embed("Channel Purge - By User","User not found!",red)).then(tempMsg => {
                                 tempMsg.delete({timeout:3000});
                             });
                         }

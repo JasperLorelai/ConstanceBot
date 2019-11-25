@@ -7,13 +7,14 @@ module.exports = {
     async execute(message, args) {
         const {client, guild, channel} = message;
         const {config} = client;
+        const {red} = config.color;
         const member = config.findGuildMember(args.shift(), guild);
         if(!member) {
-            await channel.send(config.embed(client,"Role Management","User not found!","ff0000"));
+            await channel.send(config.embed("Role Management","User not found!",red));
             return;
         }
         if(!member.manageable) {
-            await channel.send(config.embed(client,"Role Management","User is lower in the permission hierarchy than the bot!","ff0000"));
+            await channel.send(config.embed("Role Management","User is lower in the permission hierarchy than the bot!",red));
             return;
         }
         let text = "Log:";
@@ -42,6 +43,6 @@ module.exports = {
                 member.roles.add(role);
             }
         }
-        await channel.send(config.embed(client,"Role Management",text));
+        await channel.send(config.embed("Role Management",text));
     }
 };

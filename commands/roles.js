@@ -8,7 +8,7 @@ module.exports = {
         let roles = guild.roles.array();
         roles.shift(); // Skip @everyone
         const text = roles.map(r => r.toString() + " - `<@&" + r + ">` **(" + r.members.size + ")**").join("\n");
-        const msg = await channel.send(config.embed(client, "Guild Roles", (text.length >= 2048 ? "" : text)));
+        const msg = await channel.send(config.embed("Guild Roles", (text.length >= 2048 ? "" : text)));
         if(text.length >= 2048) await config.handlePrompt(msg, text);
     }
 };

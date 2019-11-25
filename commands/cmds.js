@@ -15,6 +15,6 @@ module.exports = {
                 (c.params ? " " + c.params.join(" ") : "") + "` " +
                 (perm ? " - Required permissions: " + perm : "")
         }).join("\n") + (!guild ? "\n\nUse the `dmcmds` command to only list commands that can be executed in DMs." : "");
-        await channel.send(author.toString(), config.embed(client, "Command List", text));
+        await channel.send(author.toString(), config.embed( "Command List", text));
     },
 };

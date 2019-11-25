@@ -10,10 +10,10 @@ module.exports = {
         const {config} = client;
         const role = config.findRole(args.join(" "), guild);
         if (!role) {
-            await channel.send(config.embed(client, "Role Deleter", "Role could not be found.", "ff0000"));
+            await channel.send(config.embed("Role Deleter", "Role could not be found.", config.color.red));
             return null;
         }
-        await channel.send(config.embed(client,"Role Deleter","Role **" + role.name + "** was successfully deleted."));
+        await channel.send(config.embed("Role Deleter","Role **" + role.name + "** was successfully deleted."));
         role.delete();
     }
 };

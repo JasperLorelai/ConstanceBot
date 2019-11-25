@@ -10,10 +10,10 @@ module.exports = {
         const config = client.config;
         const member = config.findGuildMember(args.shift(), guild);
         if(!member) {
-            await channel.send(config.embed(client, "Set Nick", "User not found in this guild!", "ff0000"));
+            await channel.send(config.embed("Set Nick", "User not found in this guild!", config.color.red));
             return null;
         }
         await member.setNickname(args.join(" "));
-        await channel.send(config.embed(client,"Set Nick","Nick for user " + member.toString() + " was changed to: **" + args.join(" ") + "**"));
+        await channel.send(config.embed("Set Nick","Nick for user " + member.toString() + " was changed to: **" + args.join(" ") + "**"));
     }
 };

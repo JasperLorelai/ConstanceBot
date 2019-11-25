@@ -9,7 +9,7 @@ module.exports = {
         const {config} = client;
         let member = args[0] ? config.findGuildMember(args.join(" "), guild) : message.member;
         if(!member) {
-            await channel.send(config.embed(client,"User Info", "User not found!", "ff0000"));
+            await channel.send(config.embed("User Info", "User not found!", config.color.red));
             return;
         }
         const activity = member.presence && member.presence.activity ? member.presence.activity : null;
@@ -25,6 +25,6 @@ module.exports = {
             "\n**Status:** " + member.presence.status +
             (activity ? "\n**Presence:** " + (activity.type ? activity.type.toFormalCase() + " " : "")  + activity.name : "") +
             "\n**Roles (" + roles.size + ")**: " + roles.map(r => r.toString()).join(", ");
-        await channel.send(config.embed(client, "User info for: " + user.username, desc).setThumbnail(user.displayAvatarURL({format:"png"})));
+        await channel.send(config.embed("User info for: " + user.username, desc).setThumbnail(user.displayAvatarURL({format:"png"})));
     }
 };

@@ -5,6 +5,11 @@ module.exports = {
     globalPrefix: "&",
     baseEmbedColor: "009dff",
     defaultIP: "mhaprodigy.uk",
+    color: {
+        green: "04ff00",
+        yellow: "fcba03",
+        red: "f00"
+    },
     users: {
         author: "192710597106728960"
     },
@@ -43,21 +48,24 @@ module.exports = {
             await keyv.set("modlogs." + guild.id, logs);
         }
     },
-    getMainGuild(client) {
-        return client.guilds.resolve(this.guilds.mainGuild);
+    getClient() {
+        return require("../bot");
     },
-    getAuthor(client) {
-        return this.getMainGuild(client).members.resolve(this.users.author);
+    getMainGuild() {
+        return this.getClient().guilds.resolve(this.guilds.mainGuild);
     },
-    getBaseEmbed(client) {
-        const user = this.getAuthor(client).user;
+    getAuthor() {
+        return this.getMainGuild().members.resolve(this.users.author);
+    },
+    getBaseEmbed() {
+        const user = this.getAuthor().user;
         return new this.discord.MessageEmbed()
             .setColor(this.baseEmbedColor)
             .setFooter("Bot made by: " + user.username, user.displayAvatarURL())
             .setTimestamp(new Date());
     },
-    embed(client, title, description, color) {
-        const embed = this.getBaseEmbed(client);
+    embed(title, description, color) {
+        const embed = this.getBaseEmbed();
         if(color) {
             const col = this.colorToHex(color);
             embed.setColor(col ? col : color);
@@ -117,9 +125,9 @@ module.exports = {
             m.user.username.toLowerCase().includes(find.toLowerCase())
         );
     },
-    findUser(client, find) {
+    findUser(find) {
         // noinspection EqualityComparisonWithCoercionJS
-        return client.users.find(u =>
+        return this.getClient().users.find(u =>
             find == u.id ||
             find == u.username ||
             find.substring(2,find.length-1) == u.id ||
@@ -189,8 +197,8 @@ module.exports = {
         if(color.startsWith("#")) return color.substr(1);
         return null;
     },
-    getTextWidth(client, text, font) {
-        let ctx = client.canvas.createCanvas(0,0).getContext("2d");
+    getTextWidth(text, font) {
+        let ctx = this.getClient().canvas.createCanvas(0,0).getContext("2d");
         ctx.font = font;
         return ctx.measureText(text).width;
     },
@@ -198,7 +206,7 @@ module.exports = {
         if(!denied) denied = () => {};
         if(!accepted) accepted = () => {};
         let embed = this.getEmbed(msg);
-        await msg.edit(embed.setColor("fcba03").setDescription((embed.description ? embed.description : "") + "\n\n**React with:\n✅ - to confirm changes.\n❌ - deny changes.**"));
+        await msg.edit(embed.setColor(config.color.yellow).setDescription((embed.description ? embed.description : "") + "\n\n**React with:\n✅ - to confirm changes.\n❌ - deny changes.**"));
         await msg.react("❌");
         await msg.react("✅");
         const coll = msg.createReactionCollector((r,u) => u.id !== msg.client.user.id, {time:30000});
@@ -210,13 +218,13 @@ module.exports = {
                 case "❌":
                     denied(modify);
                     if(config.denied) embed.setDescription(config.denied);
-                    await msg.edit(embed.setColor("ff0004"));
+                    await msg.edit(embed.setColor(this.color.red));
                     coll.stop("denied");
                     break;
                 case "✅":
                     accepted(modify);
                     if(config.accepted) embed.setDescription(config.accepted);
-                    await msg.edit(embed.setColor("04ff00"));
+                    await msg.edit(embed.setColor(this.color.green));
                     coll.stop("accepted");
                     break;
             }

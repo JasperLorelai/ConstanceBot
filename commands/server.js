@@ -6,6 +6,7 @@ module.exports = {
     async execute(message, args) {
         const {client, channel} = message;
         const config = client.config;
+        const {red, green} = config.color;
         const server = JSON.parse(await client.fetch("https://api.mcsrvstat.us/2/" + (args[0] ? args[0] : config.defaultIP)).then(y => y.text()));
         let text = "";
         if(server.debug && server.debug.ping) {
@@ -27,7 +28,7 @@ module.exports = {
             if(server.mods) text += "\n**Mods (" + server.mods.raw.length + "):** " + server.mods.names.join("**,** ");
         }
         else text = "**Server was not found.**";
-        const embed = config.embed(client, "Minecraft Server Info", (text.length >= 2048 ? "" : text)).setColor(server.online ? "04ff00" : "ff0000");
+        const embed = config.embed("Minecraft Server Info", (text.length >= 2048 ? "" : text)).setColor(server.online ? green : red);
         if(server.icon) embed.attachFiles([{
             attachment: Buffer.from(server.icon.replace(/\\/g,"").replace("data:image/png;base64,","").replace("==",""),"base64"),
             name: "bg.png"

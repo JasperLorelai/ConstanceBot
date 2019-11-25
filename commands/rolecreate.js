@@ -9,7 +9,7 @@ module.exports = {
         const {client, guild, channel, author} = message;
         const {config} = client;
         const role = await guild.roles.create({data:{name:args.join(" ")}});
-        channel.send(config.embed(client,"Role Creator","**Created role:** " + args.join(" "))).then(async msg => {
+        channel.send(config.embed("Role Creator","**Created role:** " + args.join(" "))).then(async msg => {
             await config.handleChange(msg, author, role, role => role.delete(),null, {denied:"Role deleted!",accepted:"Role created!",newTitle:""});
         });
     }

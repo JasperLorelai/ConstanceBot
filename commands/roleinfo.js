@@ -9,7 +9,7 @@ module.exports = {
         const {config} = client;
         let role = config.findRole(args.join(" "), guild);
         if(!role) {
-            await channel.send(config.embed(client,"Role Info", "Role not found!", "ff0000"));
+            await channel.send(config.embed("Role Info", "Role not found!", config.color.red));
             return;
         }
         const desc = "**Role Position:** " + role.position +
@@ -25,6 +25,6 @@ module.exports = {
         const ctx = canvas.getContext("2d");
         ctx.fillStyle = role.hexColor;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        await channel.send(config.embed(client, "Role information of input: `" + args.join(" ") + "`", desc).attachFiles([{attachment:canvas.toBuffer(), name:"bg.png"}]).setImage("attachment://bg.png"));
+        await channel.send(config.embed("Role information of input: `" + args.join(" ") + "`", desc).attachFiles([{attachment:canvas.toBuffer(), name:"bg.png"}]).setImage("attachment://bg.png"));
     }
 };

@@ -23,6 +23,6 @@ module.exports = {
             (guild.partnered ? "\n**Partnered:** " + guild.partnered : "") +
             "\n**Text Channels (" + tc.length + "):** " + tc.join(", ") +
             "\n**Voice Channels (" + vc.length + "):** " + vc.join(", ");
-        await channel.send(config.embed(client, "Guild Info", desc).setThumbnail(guild.iconURL()));
+        await channel.send(config.embed("Guild Info", desc).setThumbnail(guild.iconURL()));
     }
 };

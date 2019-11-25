@@ -1,7 +1,7 @@
 module.exports = async message => {
-    const {client, author, content} = message;
+    const {client, author, content, channel, guild} = message;
     const {config, keyv} = client;
-    const main = config.getMainGuild(client);
+    const main = config.getMainGuild();
     // Redirect messages to it's respective DM channel.
     if(!message.guild) {
         // noinspection EqualityComparisonWithCoercionJS
@@ -30,8 +30,14 @@ module.exports = async message => {
         if(user) await user.send(config.isJSON(content) ? JSON.parse(content) : content);
         else {
             await message.channel.delete();
-            main.channels.resolve(config.channels.botLogs).send(author.toString(),config.embed(client,"DM Channel Deleted","User you tried to DM could not be found. (`" + message.channel.name + "`)","ff0000"));
+            main.channels.resolve(config.channels.botLogs).send(author.toString(),config.embed("DM Channel Deleted","User you tried to DM could not be found. (`" + message.channel.name + "`)",config.color.red));
         }
+        return;
+    }
+    // Prefix query.
+    if(message.content === "<@" + client.user.id + ">" || message.content === "<!@" + client.user.id + ">") {
+        const prefix = await keyv.get("prefix." + guild.id);
+        await channel.send(config.embed("Guild Prefix", "My prefix is: **" + (prefix ? prefix : config.globalPrefix) + "**"));
         return;
     }
     // Handle responses.

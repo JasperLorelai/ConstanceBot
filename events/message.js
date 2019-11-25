@@ -70,7 +70,7 @@ client.on("message", async message => {
                 break;
         }
         if(!pass) {
-            await message.channel.send(author, config.embed(client,"No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + perm + "`", "ff0000"));
+            await message.channel.send(author, config.embed("No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + perm + "`", config.color.red));
             return;
         }
         // Run command if all required args are specified.
