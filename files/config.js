@@ -4,6 +4,7 @@ module.exports = {
     token: "NTc5NzU5OTU4NTU2NjcyMDEx.XZcc5A.TDZBLpHFRSwLGRAr74BA0LIn_jA",
     globalPrefix: "&",
     baseEmbedColor: "009dff",
+    defaultIP: "mhaprodigy.uk",
     users: {
         author: "192710597106728960"
     },
@@ -17,6 +18,7 @@ module.exports = {
         dmChannels: "632697494865707008"
     },
     trello: {
+        characters: "9qhuraUB",
         quirks: {
             roster: "uEL55Rqn"
         }
@@ -81,7 +83,7 @@ module.exports = {
         // Setup
         const embed = this.getEmbed(message);
         let index = 0;
-        await message.edit(embed.setDescription(split[0]).addField("Pages","Page: " + (index+1), true));
+        await message.edit(embed.setDescription(split[0]).addField("Pages","Page: " + (index+1) + "**/**" + split.length, true));
         await message.react("◀");
         await message.react("▶");
         // Collector events
@@ -96,7 +98,7 @@ module.exports = {
                 index--;
                 if(index < 0) index = split.length-1;
             }
-            await message.edit(embed.setDescription(split[index]).spliceField(0,1,"Pages","Page: " + (index+1), true));
+            await message.edit(embed.setDescription(split[index]).spliceField(0,1,"Pages","Page: " + (index+1) + "**/**" + split.length, true));
             await r.users.remove(u);
         });
         coll.on("end", async () => {

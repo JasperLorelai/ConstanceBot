@@ -21,14 +21,14 @@ userinfo - Done
 serverinfo - Done
 banlist - Done
 channelinfo - Skipped
-quirks
-taken
-server
-namemc
+server - Done
+quirks - Done
+taken - Done
+namemc - Skipped
+edit - Skipped
 ship
 pickle
 tts
-edit
 warn
 clearwarn
 warns

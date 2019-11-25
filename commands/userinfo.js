@@ -23,7 +23,7 @@ module.exports = {
             "\n**Registered at:** " + user.createdAt.toLocaleString() +
             (member.nickname ? "\n**Nickname:** " + member.nickname : "") +
             "\n**Status:** " + member.presence.status +
-            (activity ? "\n**Presence:** " + activity.type.toFormalCase() + " " + activity.name : "") +
+            (activity ? "\n**Presence:** " + (activity.type ? activity.type.toFormalCase() + " " : "")  + activity.name : "") +
             "\n**Roles (" + roles.size + ")**: " + roles.map(r => r.toString()).join(", ");
         await channel.send(config.embed(client, "User info for: " + user.username, desc).setThumbnail(user.displayAvatarURL({format:"png"})));
     }
