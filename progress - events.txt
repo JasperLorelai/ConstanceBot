@@ -1,5 +1,5 @@
+Emit Message On MsgUpdate - Done
 Voice-Text Handler
-Emit Message On MsgUpdate
 Announcer for Join/Leave
 Reaction Handler:
   Add:
