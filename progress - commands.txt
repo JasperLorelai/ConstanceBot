@@ -26,12 +26,12 @@ quirks - Done
 taken - Done
 namemc - Skipped
 edit - Skipped
-ship
-pickle
-tts
+tts - Skipped ###
 warn
 clearwarn
 warns
+ship
+pickle
 mute
 unmute
 suggest

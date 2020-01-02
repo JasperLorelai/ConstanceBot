@@ -17,15 +17,15 @@ module.exports = {
                 if(server.hostname) text += "`" + server.hostname + "` **(**`" + ip + "`**)**";
                 else text += "`" + ip + "`";
             }
-            if(server.players && server.players.list) {
-                let {online, max, list} = server.players;
+            if(server["players"] && server["players"].list) {
+                let {online, max, list} = server["players"];
                 text += "\n**Players (**" + online + "/" + max + "**):** " + list.join("**,** ");
             }
             if(server.version) text += "\n**Version:** " + server.version;
-            if(server.software) text += "\n**Software:** " + server.software;
+            if(server["software"]) text += "\n**Software:** " + server["software"];
             if(server.map) text += "\n**Map:** " + server.map;
             if(server.plugins) text += "\n**Plugins (" + server.plugins.raw.length + "):** " + server.plugins.raw.join("**,** ");
-            if(server.mods) text += "\n**Mods (" + server.mods.raw.length + "):** " + server.mods.names.join("**,** ");
+            if(server["mods"]) text += "\n**Mods (" + server["mods"].raw.length + "):** " + server["mods"].names.join("**,** ");
         }
         else text = "**Server was not found.**";
         const embed = config.embed("Minecraft Server Info", (text.length >= 2048 ? "" : text)).setColor(server.online ? green : red);

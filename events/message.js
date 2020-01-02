@@ -30,7 +30,7 @@ client.on("message", async message => {
             return;
         }
         // Process permissions prior to execution.
-        const isAuthor = author.id === config.users.author;
+        const isAuthor = author.id === config.author.id;
         const isAdmin = member ? member.hasPermission("ADMINISTRATOR") : false;
         // Different approach for mods.
         let isMod = false;

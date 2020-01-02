@@ -8,10 +8,7 @@ module.exports = {
     color: {
         green: "04ff00",
         yellow: "fcba03",
-        red: "f00"
-    },
-    users: {
-        author: "192710597106728960"
+        red: "ff0000"
     },
     guilds: {
         mainGuild: "575376952517591041"
@@ -54,11 +51,8 @@ module.exports = {
     getMainGuild() {
         return this.getClient().guilds.resolve(this.guilds.mainGuild);
     },
-    getAuthor() {
-        return this.getMainGuild().members.resolve(this.users.author);
-    },
     getBaseEmbed() {
-        const user = this.getAuthor().user;
+        const user = this.author.user;
         return new this.discord.MessageEmbed()
             .setColor(this.baseEmbedColor)
             .setFooter("Bot made by: " + user.username, user.displayAvatarURL())
