@@ -27,6 +27,7 @@ taken - Done
 namemc - Skipped
 edit - Skipped
 tts - Skipped ###
+poll - Done
 warn
 clearwarn
 warns
@@ -35,7 +36,6 @@ pickle
 mute
 unmute
 suggest
-poll
 link
 construct
 trellobuild

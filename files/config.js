@@ -3,12 +3,13 @@ module.exports = {
     // Properties
     token: "NTc5NzU5OTU4NTU2NjcyMDEx.XZcc5A.TDZBLpHFRSwLGRAr74BA0LIn_jA",
     globalPrefix: "&",
-    baseEmbedColor: "009dff",
     defaultIP: "mhaprodigy.uk",
     color: {
         green: "04ff00",
         yellow: "fcba03",
-        red: "ff0000"
+        red: "ff0000",
+        gray: "5c5c5c",
+        base: "009dff"
     },
     guilds: {
         mainGuild: "575376952517591041"
@@ -54,7 +55,7 @@ module.exports = {
     getBaseEmbed() {
         const user = this.author.user;
         return new this.discord.MessageEmbed()
-            .setColor(this.baseEmbedColor)
+            .setColor(this.color.base)
             .setFooter("Bot made by: " + user.username, user.displayAvatarURL())
             .setTimestamp(new Date());
     },
@@ -138,6 +139,15 @@ module.exports = {
             r.name.toLowerCase().includes(find.toLowerCase())
         );
     },
+    findChannel(find, guild) {
+        // noinspection EqualityComparisonWithCoercionJS
+        return guild.channels.filter(c => c.id !== guild.id).find(c =>
+            find == c.id ||
+            find.substring(3,find.length-1) == c.id ||
+            find.toLowerCase() == c.name.toLowerCase() ||
+            c.name.toLowerCase().includes(find.toLowerCase())
+        );
+    },
     isJSON(json) {
         try {if(JSON.parse(json) && typeof JSON.parse(json) == "object") return true}
         catch(e) {}
@@ -196,11 +206,11 @@ module.exports = {
         ctx.font = font;
         return ctx.measureText(text).width;
     },
-    async handleChange(msg, author, modify, denied, accepted, config) {
+    async handleChange(msg, author, modify, denied, accepted, options) {
         if(!denied) denied = () => {};
         if(!accepted) accepted = () => {};
         let embed = this.getEmbed(msg);
-        await msg.edit(embed.setColor(config.color.yellow).setDescription((embed.description ? embed.description : "") + "\n\n**React with:\n✅ - to confirm changes.\n❌ - deny changes.**"));
+        await msg.edit(embed.setColor(this.color.yellow).setDescription((embed.description ? embed.description : "") + "\n\n**React with:\n✅ - to confirm changes.\n❌ - deny changes.**"));
         await msg.react("❌");
         await msg.react("✅");
         const coll = msg.createReactionCollector((r,u) => u.id !== msg.client.user.id, {time:30000});
@@ -211,13 +221,13 @@ module.exports = {
             switch (r.emoji.toString()) {
                 case "❌":
                     denied(modify);
-                    if(config.denied) embed.setDescription(config.denied);
+                    if(options.denied) embed.setDescription(options.denied);
                     await msg.edit(embed.setColor(this.color.red));
                     coll.stop("denied");
                     break;
                 case "✅":
                     accepted(modify);
-                    if(config.accepted) embed.setDescription(config.accepted);
+                    if(options.accepted) embed.setDescription(options.accepted);
                     await msg.edit(embed.setColor(this.color.green));
                     coll.stop("accepted");
                     break;
@@ -227,9 +237,9 @@ module.exports = {
             if(msg.deleted) return;
             const embed = this.getEmbed(msg);
             if(!["denied","accepted"].includes(reason)) embed.setColor("666666").setDescription("Timed out.");
-            if(reason === "denied" && !config.denied) embed.setDescription("");
-            if(reason === "accepted" && !config.accepted) embed.setDescription("");
-            if(config.newTitle) embed.setTitle(config.newTitle);
+            if(reason === "denied" && !options.denied) embed.setDescription("");
+            if(reason === "accepted" && !options.accepted) embed.setDescription("");
+            if(options.newTitle) embed.setTitle(options.newTitle);
             await msg.edit(embed);
             await msg.reactions.removeAll();
         });
@@ -243,5 +253,8 @@ module.exports = {
             .sort((a,b) => b.position - a.position)
             // Find highest admin, otherwise highest with said permission.
             .find(r => r.permissions.has("ADMINISTRATOR") || (r.permissions.has(perm) || null));
+    },
+    getEmoji(str) {
+        return str.match(/(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|[\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|[\ud83c[\ude32-\ude3a]|[\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])/g);
     }
 };

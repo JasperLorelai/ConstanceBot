@@ -5,8 +5,6 @@ module.exports = async message => {
     // Redirect messages to it's respective DM channel.
     if(!message.guild) {
         // noinspection EqualityComparisonWithCoercionJS
-        if(message.channel.name == client.user.me) return;
-        // noinspection EqualityComparisonWithCoercionJS
         let channel = main.channels.filter(c => c.name == author.id).array()[0];
         if(!channel) channel = await main.channels.create(author.id,{topic:author.username,parent:config.categories.dmChannels});
         const webhook = await channel.createWebhook(author.username, {avatar:author.displayAvatarURL()});
@@ -35,7 +33,7 @@ module.exports = async message => {
         return;
     }
     // Prefix query.
-    if(message.content === "<@" + client.user.id + ">" || message.content === "<!@" + client.user.id + ">") {
+    if(message.mentions && message.mentions.users && message.mentions.users.has(client.user.id)) {
         const prefix = await keyv.get("prefix." + guild.id);
         await channel.send(config.embed("Guild Prefix", "My prefix is: **" + (prefix ? prefix : config.globalPrefix) + "**"));
         return;
