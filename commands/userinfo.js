@@ -8,14 +8,14 @@ module.exports = {
         const {client, guild, channel, author} = message;
         const {config} = client;
         let member = args[0] ? config.findGuildMember(args.join(" "), guild) : message.member;
-        if (!member) {
+        if(!member) {
             await channel.send(author.toString(), config.embed("User Info", "User not found!", config.color.red));
             return;
         }
         const activity = member.presence && member.presence.activity ? member.presence.activity : null;
         const {user} = member;
         let roles = member.roles;
-        if (roles) roles = roles.filter(r => r.id !== guild.id).map(r => r.toString());
+        if(roles) roles = roles.filter(r => r.id !== guild.id).map(r => r.toString());
         const desc =
             (user.bot ? "**Is BOT:** true" : "") +
             "\n**Mention:** " + member.toString() +

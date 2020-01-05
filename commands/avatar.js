@@ -8,7 +8,7 @@ module.exports = {
         const {config, emoji} = client;
         const {red, yellow} = config.color;
         const user = args[0] ? config.findUser(args[0]) : author;
-        if (!user) {
+        if(!user) {
             await channel.send(author.toString(), config.embed("Avatar", "User not found!", red));
             return null;
         }
@@ -28,8 +28,8 @@ module.exports = {
         let size = 128;
         coll.on("collect", (r, u) => {
             r.users.remove(u);
-            if (u.id !== author.id) return;
-            switch (r.emoji.toString()) {
+            if(u.id !== author.id) return;
+            switch(r.emoji.toString()) {
                 case emoji["1"]:
                     size = 128;
                     break;

@@ -10,6 +10,6 @@ module.exports = {
         const {config} = client;
         const text = (await message.guild.fetchBans()).map(b => "**" + b.user.username + "** `" + b.user.id + "`: " + b.reason).join("\n\n");
         const msg = await channel.send(config.embed("Guild Bans", (text.length >= 2048 ? "" : text)));
-        if (text.length >= 2048) await config.handlePrompt(msg, text);
+        if(text.length >= 2048) await config.handlePrompt(msg, text);
     }
 };

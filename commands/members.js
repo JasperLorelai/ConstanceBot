@@ -7,12 +7,12 @@ module.exports = {
         const {client, guild, channel} = message;
         const {config} = client;
         const role = config.findRole(args[0], guild);
-        if (!role) {
+        if(!role) {
             await channel.send(config.embed("Role Members", "Role not found!", config.color.red));
             return;
         }
         const text = guild.members.filter(m => m.roles.has(role.id)).map(m => "<@" + m.id + ">").join(", ");
         const msg = await channel.send(config.embed("Role Members: " + role.name, (text.length >= 2048 ? "" : text)));
-        if (text.length >= 2048) await config.handlePrompt(msg, text);
+        if(text.length >= 2048) await config.handlePrompt(msg, text);
     }
 };

@@ -61,27 +61,27 @@ module.exports = {
     },
     embed(title, description, color) {
         const embed = this.getBaseEmbed();
-        if (color) {
+        if(color) {
             const col = this.colorToHex(color);
             embed.setColor(col ? col : color);
         }
-        if (title) embed.setTitle(title);
-        if (description) embed.setDescription(description);
+        if(title) embed.setTitle(title);
+        if(description) embed.setDescription(description);
         return embed;
     },
     getEmbed(message) {
-        if (message.embeds.length < 1) return;
+        if(message.embeds.length < 1) return;
         const embed = new this.discord.MessageEmbed(message.embeds.filter(e => e.type === "rich")[0]);
-        if (embed.image) embed.image.url = "attachment://" + embed.image.url.substr(embed.image.url.lastIndexOf("/") + 1);
+        if(embed.image) embed.image.url = "attachment://" + embed.image.url.substr(embed.image.url.lastIndexOf("/") + 1);
         return embed;
     },
     async handlePrompt(message, text, ttl, separator) {
         // Splitting text into pages
-        if (!separator) separator = "\n";
+        if(!separator) separator = "\n";
         let split = [];
-        for (let i = 0; i <= text.length; i += text.lastIndexOf(separator, i + 2048)) {
+        for(let i = 0; i <= text.length; i += text.lastIndexOf(separator, i + 2048)) {
             split.push(text.substring(i, text.lastIndexOf(separator, i + 2048)));
-            if (i === text.lastIndexOf(separator, i + 2048)) split[split.length - 1] = text.substring(i, i + 2048);
+            if(i === text.lastIndexOf(separator, i + 2048)) split[split.length - 1] = text.substring(i, i + 2048);
         }
         // Setup
         const embed = this.getEmbed(message);
@@ -93,13 +93,13 @@ module.exports = {
         const coll = message.createReactionCollector((r, u) => u.id !== message.client.user.id, {time: ttl ? ttl : 90000});
         coll.on("collect", async (r, u) => {
             let emoji = r.emoji.toString();
-            if (emoji === "▶") {
+            if(emoji === "▶") {
                 index++;
-                if (index >= split.length) index = 0;
+                if(index >= split.length) index = 0;
             }
-            if (emoji === "◀") {
+            if(emoji === "◀") {
                 index--;
-                if (index < 0) index = split.length - 1;
+                if(index < 0) index = split.length - 1;
             }
             await message.edit(embed.setDescription(split[index]).spliceField(0, 1, "Pages", "Page: " + (index + 1) + "**/**" + split.length, true));
             await r.users.remove(u);
@@ -150,45 +150,55 @@ module.exports = {
     },
     isJSON(json) {
         try {
-            if (typeof JSON.parse(json) == "object") return true
-        } catch (e) {
+            if(typeof JSON.parse(json) == "object") return true
+        } catch(e) {
         }
         return false;
     },
     isRegex(regex) {
         try {
             new RegExp(regex)
-        } catch (e) {
+        } catch(e) {
             return false
         }
         return true;
     },
     colorToHex(color) {
         let final = color.match(/([0-9]*(\.[0-9]*)?(?:[%|°])?)+/g).filter(e => e);
-        if (color.startsWith("rgb(")) return final.map(c => {
-            if (c.endsWith("%")) return Math.round(c.substr(0, c.length - 1) / 100 * 255);
-            else {
-                const str = (+c).toString(16);
-                return str.length === 1 ? "0" + str : str;
-            }
-        }).join("");
-        if (color.startsWith("hsl(")) {
+        if(color.startsWith("rgb(")) {
+            return final.map(c => {
+                if(c.endsWith("%")) {
+                    return Math.round(c.substr(0, c.length - 1) / 100 * 255);
+                }
+                else {
+                    const str = (+c).toString(16);
+                    return str.length === 1 ? "0" + str : str;
+                }
+            }).join("");
+        }
+        if(color.startsWith("hsl(")) {
             final = final.map(e => {
-                if (e.endsWith("°") || e.endsWith("%")) return e.substr(0, e.length - 1);
-                else return e;
+                if(e.endsWith("°") || e.endsWith("%")) {
+                    return e.substr(0, e.length - 1);
+                }
+                else {
+                    return e;
+                }
             });
             const h = parseInt(final[0]) / 360;
             const s = parseInt(final[1]) / 100;
             const l = parseInt(final[2]) / 100;
             let r, g, b;
-            if (s === 0) r = g = b = l; // Achromatic.
+            if(s === 0) {
+                r = g = b = l;
+            }// Achromatic.
             else {
                 const hue2rgb = (p, q, t) => {
-                    if (t < 0) t += 1;
-                    if (t > 1) t -= 1;
-                    if (t < 1 / 6) return p + (q - p) * 6 * t;
-                    if (t < 1 / 2) return q;
-                    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+                    if(t < 0) t += 1;
+                    if(t > 1) t -= 1;
+                    if(t < 1 / 6) return p + (q - p) * 6 * t;
+                    if(t < 1 / 2) return q;
+                    if(t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
                     return p;
                 };
                 const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
@@ -203,7 +213,7 @@ module.exports = {
             };
             return toHex(r) + toHex(g) + toHex(b);
         }
-        if (color.startsWith("#")) return color.substr(1);
+        if(color.startsWith("#")) return color.substr(1);
         return null;
     },
     getTextWidth(text, font) {
@@ -212,10 +222,14 @@ module.exports = {
         return ctx.measureText(text).width;
     },
     async handleChange(msg, author, modify, denied, accepted, options) {
-        if (!denied) denied = () => {
-        };
-        if (!accepted) accepted = () => {
-        };
+        if(!denied) {
+            denied = () => {
+            };
+        }
+        if(!accepted) {
+            accepted = () => {
+            };
+        }
         let embed = this.getEmbed(msg);
         await msg.edit(embed.setColor(this.color.yellow).setDescription((embed.description ? embed.description : "") + "\n\n**React with:\n✅ - to confirm changes.\n❌ - deny changes.**"));
         await msg.react("❌");
@@ -223,30 +237,30 @@ module.exports = {
         const coll = msg.createReactionCollector((r, u) => u.id !== msg.client.user.id, {time: 30000});
         coll.on("collect", async (r, u) => {
             await r.users.remove(u);
-            if (author.id !== u.id) return;
+            if(author.id !== u.id) return;
             embed = this.getEmbed(msg);
-            switch (r.emoji.toString()) {
+            switch(r.emoji.toString()) {
                 case "❌":
                     denied(modify);
-                    if (options.denied) embed.setDescription(options.denied);
+                    if(options.denied) embed.setDescription(options.denied);
                     await msg.edit(embed.setColor(this.color.red));
                     coll.stop("denied");
                     break;
                 case "✅":
                     accepted(modify);
-                    if (options.accepted) embed.setDescription(options.accepted);
+                    if(options.accepted) embed.setDescription(options.accepted);
                     await msg.edit(embed.setColor(this.color.green));
                     coll.stop("accepted");
                     break;
             }
         });
         coll.on("end", async (c, reason) => {
-            if (msg.deleted) return;
+            if(msg.deleted) return;
             const embed = this.getEmbed(msg);
-            if (!["denied", "accepted"].includes(reason)) embed.setColor("666666").setDescription("Timed out.");
-            if (reason === "denied" && !options.denied) embed.setDescription("");
-            if (reason === "accepted" && !options.accepted) embed.setDescription("");
-            if (options.newTitle) embed.setTitle(options.newTitle);
+            if(!["denied", "accepted"].includes(reason)) embed.setColor("666666").setDescription("Timed out.");
+            if(reason === "denied" && !options.denied) embed.setDescription("");
+            if(reason === "accepted" && !options.accepted) embed.setDescription("");
+            if(options.newTitle) embed.setTitle(options.newTitle);
             await msg.edit(embed);
             await msg.reactions.removeAll();
         });

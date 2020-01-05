@@ -11,12 +11,12 @@ module.exports = {
         const {config} = client;
         const {red} = config.color;
         const role = config.findRole(args.shift(), guild);
-        if (!role) {
+        if(!role) {
             await channel.send(author.toString(), config.embed(client, "Role Color", "Role not found!", red));
             return null;
         }
         let color = config.colorToHex(args.join("").replace(/\s/g, ""));
-        if (!color) {
+        if(!color) {
             await channel.send(author.toString(), config.embed(client, "Role Color", "Invalid color! The only color types supported are hex, 'rgb(r,g,b)' and 'hsl(h,s,l)'.", red));
             return null;
         }

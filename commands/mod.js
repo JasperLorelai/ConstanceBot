@@ -11,12 +11,12 @@ module.exports = {
 
         async function getList() {
             let db = await keyv.get("guilds");
-            if (!db) db = {};
-            if (!db[guild.id]) db[guild.id] = {};
-            if (!db[guild.id].mods) db[guild.id].mods = {};
+            if(!db) db = {};
+            if(!db[guild.id]) db[guild.id] = {};
+            if(!db[guild.id].mods) db[guild.id].mods = {};
             const mods = db[guild.id].mods;
             let [roles, users] = [null, null];
-            if (mods) {
+            if(mods) {
                 users = mods.users || null;
                 roles = mods.roles || null;
             }
@@ -29,33 +29,35 @@ module.exports = {
         const collector = msg.createReactionCollector((r, u) => u.id !== client.user.id, {time: 90000});
         collector.on("collect", async (r, u) => {
             await r.users.remove(u);
-            if (!["➕", "➖"].includes(r.emoji.toString())) return;
-            if (u.id !== author.id) return;
+            if(!["➕", "➖"].includes(r.emoji.toString())) return;
+            if(u.id !== author.id) return;
             const msgInput = await msg.channel.send(author.toString(), config.embed("Configure Server Mods", "Please specify a role or a user. Timeout of this prompt is **10s**.", config.color.yellow));
             const collMod = msg.channel.createMessageCollector(m => m.author.id === author.id, {time: 10000});
             collMod.on("collect", async m => {
                 let find = config.findRole(m.content, m.guild);
                 let found;
-                if (find) found = ["roles", find.id];
+                if(find) {
+                    found = ["roles", find.id];
+                }
                 else {
                     find = config.findGuildMember(m.content, m.guild);
-                    if (find) found = ["users", find.id];
+                    if(find) found = ["users", find.id];
                 }
-                if (!found) {
+                if(!found) {
                     m.channel.send(author.toString(), config.embed(null, "Role or User not found!", config.color.red)).then(notFound => notFound.delete({timeout: 3000}));
                     collMod.stop();
                     await m.delete();
                     return;
                 }
                 let db = await keyv.get("guilds");
-                if (!db) db = {};
-                if (!db[guild.id]) db[guild.id] = {};
-                if (!db[guild.id].mods) db[guild.id].mods = {};
-                if (!db[guild.id].mods[found[0]]) db[guild.id].mods[found[0]] = [];
+                if(!db) db = {};
+                if(!db[guild.id]) db[guild.id] = {};
+                if(!db[guild.id].mods) db[guild.id].mods = {};
+                if(!db[guild.id].mods[found[0]]) db[guild.id].mods[found[0]] = [];
                 let mods = db[guild.id].mods[found[0]];
-                switch (r.emoji.toString()) {
+                switch(r.emoji.toString()) {
                     case "➕":
-                        if (mods.includes(found[1])) {
+                        if(mods.includes(found[1])) {
                             collMod.stop();
                             break;
                         }
@@ -79,7 +81,7 @@ module.exports = {
             });
         });
         collector.on("end", async () => {
-            if (msg.deleted) return;
+            if(msg.deleted) return;
             await msg.reactions.removeAll();
             await msg.edit(author.toString(), config.embed("Configure Server Mods", await getList() + "\n\nPrompt timed out."));
         });

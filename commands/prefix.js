@@ -8,10 +8,10 @@ module.exports = {
         const {client, channel, guild, author} = message;
         const {keyv} = client;
         let db = await keyv.get("guilds");
-        if (!db) db = {};
-        if (!db[guild.id]) db[guild.id] = {};
+        if(!db) db = {};
+        if(!db[guild.id]) db[guild.id] = {};
         db[guild.id].prefix = args[0];
         await keyv.set("guilds", db);
         await channel.send(author.toString(), client.config.embed("Command Prefix", "**Prefix set to:** " + args[0], null));
-    },
+    }
 };

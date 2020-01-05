@@ -10,5 +10,5 @@ module.exports = {
             (c.perm && c.perm === "author" ? " (**Bot Author**)" : "")
         ).join("\n");
         await channel.send(author.toString(), config.embed("DM Command List", text));
-    },
+    }
 };

@@ -9,7 +9,7 @@ module.exports = {
         const {client, channel, guild, author} = message;
         const config = client.config;
         const member = config.findGuildMember(args.shift(), guild);
-        if (!member) {
+        if(!member) {
             await channel.send(author.toString(), config.embed("Set Nick", "User not found in this guild!", config.color.red));
             return null;
         }

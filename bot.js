@@ -21,31 +21,31 @@ client.login(config.token).catch(e => console.log(e));
 module.exports = client;
 
 // Grabbing handlers
-for (let f of fs.readdirSync("./commands").filter(file => file.endsWith(".js") && !file.startsWith("#"))) {
+for(let f of fs.readdirSync("./commands").filter(file => file.endsWith(".js") && !file.startsWith("#"))) {
     const command = require("./commands/" + f);
     client.commands.set(command.name, command);
 }
 client.removeAllListeners();
-for (let event of fs.readdirSync("./events").filter(file => file.endsWith(".js") && !file.startsWith("#"))) {
+for(let event of fs.readdirSync("./events").filter(file => file.endsWith(".js") && !file.startsWith("#"))) {
     require("./events/" + event);
 }
 keyv.on("error", err => console.error("Keyv connection error:", err));
 
 
 // Creating some base methods
-String.prototype.toFormalCase = function () {
+String.prototype.toFormalCase = function() {
     return this.charAt(0).toUpperCase() + this.substr(1).toLowerCase();
 };
-String.prototype.mkdRemoveRuler = function () {
+String.prototype.mkdRemoveRuler = function() {
     return this.split("\n").filter(l => l !== "---")
 };
-String.prototype.mkdHeadersToNormal = function () {
+String.prototype.mkdHeadersToNormal = function() {
     let splits = this.split("\n");
-    for (let i = 0; i < splits.length; i++) {
-        if (splits[i].startsWith("######") || splits[i].startsWith("#####") || splits[i].startsWith("####") || splits[i].startsWith("###") || splits[i].startsWith("##")) {
+    for(let i = 0; i < splits.length; i++) {
+        if(splits[i].startsWith("######") || splits[i].startsWith("#####") || splits[i].startsWith("####") || splits[i].startsWith("###") || splits[i].startsWith("##")) {
             splits[i] = splits[i].replace(/#{3,6}\s?/g, "**") + "**";
         }
-        if (splits[i].startsWith("#")) splits[i] = "__**" + splits[i].substr(1) + "**__";
+        if(splits[i].startsWith("#")) splits[i] = "__**" + splits[i].substr(1) + "**__";
     }
     return splits.join("\n");
 };
