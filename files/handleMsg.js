@@ -2,51 +2,54 @@ module.exports = async message => {
     const {client, author, content, channel, guild} = message;
     const {config, keyv} = client;
     const main = config.getMainGuild();
+    let db = await keyv.get("guilds");
+    if (!db) db = db[guild.id];
     // Redirect messages to it's respective DM channel.
-    if(!message.guild) {
+    if (!message.guild) {
+        if (author.id === client.user.id) return;
         // noinspection EqualityComparisonWithCoercionJS
         let channel = main.channels.filter(c => c.name == author.id).array()[0];
-        if(!channel) channel = await main.channels.create(author.id,{topic:author.username,parent:config.categories.dmChannels});
-        const webhook = await channel.createWebhook(author.username, {avatar:author.displayAvatarURL()});
-        if(config.isJSON(content)) {
+        if (!channel) channel = await main.channels.create(author.id, {
+            topic: author.username,
+            parent: config.categories.dmChannels
+        });
+        const webhook = await channel.createWebhook(author.username, {avatar: author.displayAvatarURL()});
+        if (config.isJSON(content)) {
             const embed = JSON.parse(content);
             let final = {};
-            if(!embed.embed) final.embeds = [embed];
+            if (!embed.embed) final.embeds = [embed];
             else final.embeds = [embed.embed];
-            await webhook.send("",final);
-        }
-        else await webhook.send(content);
+            await webhook.send("", final);
+        } else await webhook.send(content);
         await webhook.delete();
         return;
     }
     // DM messages from the DM channels.
     // noinspection EqualityComparisonWithCoercionJS
-    if(message.channel.parent.id == config.categories.dmChannels) {
+    if (message.channel.parent.id == config.categories.dmChannels) {
         // noinspection EqualityComparisonWithCoercionJS
-        if(message.channel.name == client.user.me) return;
+        if (message.channel.name == client.user.id) return;
         const user = client.users.resolve(message.channel.name);
-        if(user) await user.send(config.isJSON(content) ? JSON.parse(content) : content);
+        if (user) await user.send(config.isJSON(content) ? JSON.parse(content) : content);
         else {
             await message.channel.delete();
-            main.channels.resolve(config.channels.botLogs).send(author.toString(),config.embed("DM Channel Deleted","User you tried to DM could not be found. (`" + message.channel.name + "`)",config.color.red));
+            main.channels.resolve(config.channels.botLogs).send(author.toString(), config.embed("DM Channel Deleted", "User you tried to DM could not be found. (`" + message.channel.name + "`)", config.color.red));
         }
         return;
     }
     // Prefix query.
-    if(message.mentions && message.mentions.users && message.mentions.users.has(client.user.id)) {
-        const prefix = await keyv.get("prefix." + guild.id);
-        await channel.send(config.embed("Guild Prefix", "My prefix is: **" + (prefix ? prefix : config.globalPrefix) + "**"));
+    if (message.mentions && message.mentions.users && message.mentions.users.has(client.user.id)) {
+        await channel.send(config.embed("Guild Prefix", "My prefix is: **" + (db.prefix || config.globalPrefix) + "**"));
         return;
     }
     // Handle responses.
-    for(let r of await keyv.get("responses." + message.guild.id) || []) {
-        // Quite the effort to construct a regex from string.
-        // TODO: Look into improvement.
-        let regex = r.trigger;
-        if(regex.match(/\/([a-zA-Z])/g)) regex = [regex.substr(1,regex.lastIndexOf("/")-1),regex.substr(regex.lastIndexOf("/")+1)];
-        else regex = [regex,null];
-        if(content.match(new RegExp(regex[0], regex[1]))) {
-            await message.channel.send(r.reply);
+    if (db.responses) {
+        for (let r of db.responses) {
+            let trigger = r.trigger;
+            if (!/^\/.*\/[a-zA-Z]*$/g.test(trigger)) trigger = "/" + trigger + "/";
+            const [ignore, regex, flags] = /\/(.*)\/([\w]*)/g.exec(trigger);
+            if (!new RegExp(regex, flags).test(content)) continue;
+            await channel.send(r.reply);
             return;
         }
     }

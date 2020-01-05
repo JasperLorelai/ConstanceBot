@@ -8,27 +8,27 @@ module.exports = {
         const {config, emoji} = client;
         const {red, yellow} = config.color;
         const user = args[0] ? config.findUser(args[0]) : author;
-        if(!user) {
-            await channel.send(config.embed("Avatar", "User not found!", red));
+        if (!user) {
+            await channel.send(author.toString(), config.embed("Avatar", "User not found!", red));
             return null;
         }
-        const msg = await channel.send(config.embed("**" + user.username + "**'s Avatar","Pick avatar size:\n" +
+        const msg = await channel.send(author.toString(), config.embed("**" + user.username + "**'s Avatar", "Pick avatar size:\n" +
             emoji["1"] + " - `128`\n" +
             emoji["2"] + " - `256`\n" +
             emoji["3"] + " - `512`\n" +
             emoji["4"] + " - `1024`\n" +
             emoji["5"] + " - `2048`",
-        yellow));
+            yellow));
         await msg.react(emoji["1"]);
         await msg.react(emoji["2"]);
         await msg.react(emoji["3"]);
         await msg.react(emoji["4"]);
         await msg.react(emoji["5"]);
-        const coll = msg.createReactionCollector((r,u) => u.id !== client.user.id,{time:15000});
+        const coll = msg.createReactionCollector((r, u) => u.id !== client.user.id, {time: 15000});
         let size = 128;
-        coll.on("collect", (r,u) => {
+        coll.on("collect", (r, u) => {
             r.users.remove(u);
-            if(u.id !== author.id) return;
+            if (u.id !== author.id) return;
             switch (r.emoji.toString()) {
                 case emoji["1"]:
                     size = 128;
@@ -50,8 +50,13 @@ module.exports = {
         });
         coll.on("end", async () => {
             await msg.delete();
-            await channel.send(config.embed("**" + user.username + "**'s Avatar")
-                .attachFiles([{attachment:await client.fetch(user.displayAvatarURL({format:"png",size:size})).then(y => y.buffer()),name:"avatar.png"}])
+            await channel.send(author.toString(), config.embed("**" + user.username + "**'s Avatar")
+                .attachFiles([{
+                    attachment: await client.fetch(user.displayAvatarURL({
+                        format: "png",
+                        size: size
+                    })).then(y => y.buffer()), name: "avatar.png"
+                }])
                 .setImage("attachment://avatar.png")
             );
         });
