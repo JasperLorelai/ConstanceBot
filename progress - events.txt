@@ -1,6 +1,6 @@
 Emit Message On MsgUpdate - Done
+Announcer for Join/Leave - Done
 Voice-Text Handler
-Announcer for Join/Leave
 Reaction Handler:
   Add:
   - Staff Applications

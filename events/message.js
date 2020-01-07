@@ -6,11 +6,12 @@ client.on("message", async message => {
     let realPrefix = null;
     let mods = null;
     if(db && guild) {
-        if(!db[guild.id]) return;
-        if(!db[guild.id].prefix) return;
-        realPrefix = db[guild.id].prefix;
-        if(!db[guild.id].mods) return;
-        mods = db[guild.id].mods;
+        if(db[guild.id]) {
+            if(db[guild.id].prefix) {
+                realPrefix = db[guild.id].prefix;
+                if(db[guild.id].mods) mods = db[guild.id].mods;
+            }
+        }
     }
 
     let prefix = config.globalPrefix;

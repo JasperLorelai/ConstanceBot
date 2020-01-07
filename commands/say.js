@@ -20,5 +20,5 @@ module.exports = {
         msg = config.isJSON(msg) ? JSON.parse(msg) : msg;
         await ch.send(msg);
         await message.delete();
-    },
+    }
 };

@@ -15,7 +15,8 @@ module.exports = {
         mainGuild: "575376952517591041"
     },
     channels: {
-        botLogs: "575738387307298831"
+        botLogs: "575738387307298831",
+        welcome: "663965845508325386"
     },
     categories: {
         dmChannels: "632697494865707008"

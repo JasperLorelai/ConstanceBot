@@ -27,5 +27,5 @@ module.exports = {
         channel.send(author.toString(), config.embed("Command Help For: " + args[0], text)).then(async m => {
             if(!command) await m.delete({timeout: 5000});
         });
-    },
+    }
 };
