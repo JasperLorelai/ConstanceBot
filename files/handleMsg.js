@@ -1,55 +1,47 @@
 module.exports = async message => {
-    const {client, author, content, channel, guild} = message;
+    const {client, author, content, channel, guild, mentions} = message;
     const {config, keyv} = client;
     const main = config.getMainGuild();
     let db = await keyv.get("guilds");
-    if(!db) db = db[guild.id];
-    // Redirect messages to it's respective DM channel.
-    if(!message.guild) {
+    db = db ? db[guild.id] : {};
+    // DM Channel messages.
+    if(!guild) {
+        // Ignore bot.
         if(author.id === client.user.id) return;
+
+        // Redirect messages to it's respective DM channel.
         // noinspection EqualityComparisonWithCoercionJS
-        let channel = main.channels.filter(c => c.name == author.id).array()[0];
-        if(!channel) {
-            channel = await main.channels.create(author.id, {
-                topic: author.username,
-                parent: config.categories.dmChannels
+        let dmchannel = main.channels.filter(c => c.name == author.id).array()[0];
+        if(!dmchannel) {
+            dmchannel = await main.channels.create(author.id, {
+                topic: author.username, parent: config.categories.dmChannels
             });
         }
-        const webhook = await channel.createWebhook(author.username, {avatar: author.displayAvatarURL()});
+        const webhook = await dmchannel.createWebhook(author.username, {avatar: author.displayAvatarURL()});
         if(config.isJSON(content)) {
             const embed = JSON.parse(content);
             let final = {};
-            if(!embed.embed) {
-                final.embeds = [embed];
-            }
-            else {
-                final.embeds = [embed.embed];
-            }
+            if(!embed.embed) final.embeds = [embed]; else final.embeds = [embed.embed];
             await webhook.send("", final);
         }
-        else {
-            await webhook.send(content);
-        }
+        else await webhook.send(content);
         await webhook.delete();
         return;
     }
     // DM messages from the DM channels.
     // noinspection EqualityComparisonWithCoercionJS
-    if(message.channel.parent.id == config.categories.dmChannels) {
+    if(channel.parent && channel.parent.id == config.categories.dmChannels) {
         // noinspection EqualityComparisonWithCoercionJS
-        if(message.channel.name == client.user.id) return;
-        const user = client.users.resolve(message.channel.name);
-        if(user) {
-            await user.send(config.isJSON(content) ? JSON.parse(content) : content);
-        }
-        else {
-            await message.channel.delete();
-            main.channels.resolve(config.channels.botLogs).send(author.toString(), config.embed("DM Channel Deleted", "User you tried to DM could not be found. (`" + message.channel.name + "`)", config.color.red));
+        if(channel.name == client.user.id) return;
+        const user = client.users.resolve(channel.name);
+        if(user) await user.send(config.isJSON(content) ? JSON.parse(content) : content); else {
+            await channel.delete();
+            config.botLog().send(author.toString(), config.embed("DM Channel Deleted", "User you tried to DM could not be found. (`" + channel.name + "`)", config.color.red));
         }
         return;
     }
     // Prefix query.
-    if(message.mentions && message.mentions.users && message.mentions.users.has(client.user.id)) {
+    if(mentions && mentions.users && mentions.users.has(client.user.id)) {
         await channel.send(config.embed("Guild Prefix", "My prefix is: **" + (db.prefix || config.globalPrefix) + "**"));
         return;
     }

@@ -1,11 +1,8 @@
 // noinspection JSUnusedLocalSymbols
 module.exports = {
     name: "quirks",
-    description: "Sends the official list of quirks with hyperlinks that lead to their cards.",// If a quirk is
-                                                                                               // specified, it will
-                                                                                               // display information
-                                                                                               // about that specific
-                                                                                               // quirk.",
+    description: "Sends the official list of quirks with hyperlinks that lead to their cards.",
+    // If a quirk is specified, it will display information about that specific quirk."
     //aliases: ["quirk"],
     //params: ["(quirk)"],
     async execute(message, args) {

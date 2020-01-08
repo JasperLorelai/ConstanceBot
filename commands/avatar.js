@@ -12,13 +12,7 @@ module.exports = {
             await channel.send(author.toString(), config.embed("Avatar", "User not found!", red));
             return null;
         }
-        const msg = await channel.send(author.toString(), config.embed("**" + user.username + "**'s Avatar", "Pick avatar size:\n" +
-            emoji["1"] + " - `128`\n" +
-            emoji["2"] + " - `256`\n" +
-            emoji["3"] + " - `512`\n" +
-            emoji["4"] + " - `1024`\n" +
-            emoji["5"] + " - `2048`",
-            yellow));
+        const msg = await channel.send(author.toString(), config.embed("**" + user.username + "**'s Avatar", "Pick avatar size:\n" + emoji["1"] + " - `128`\n" + emoji["2"] + " - `256`\n" + emoji["3"] + " - `512`\n" + emoji["4"] + " - `1024`\n" + emoji["5"] + " - `2048`", yellow));
         await msg.react(emoji["1"]);
         await msg.react(emoji["2"]);
         await msg.react(emoji["3"]);
@@ -53,12 +47,10 @@ module.exports = {
             await channel.send(author.toString(), config.embed("**" + user.username + "**'s Avatar")
                 .attachFiles([{
                     attachment: await client.fetch(user.displayAvatarURL({
-                        format: "png",
-                        size: size
+                        format: "png", size: size
                     })).then(y => y.buffer()), name: "avatar.png"
                 }])
-                .setImage("attachment://avatar.png")
-            );
+                .setImage("attachment://avatar.png"));
         });
     }
 };

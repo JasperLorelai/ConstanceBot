@@ -46,9 +46,7 @@ module.exports = {
                             break;
                     }
                 });
-                coll.on("end", async () => {
-                    await msg.delete();
-                });
+                coll.on("end", async () => await msg.delete());
             }
 
             switch(r.emoji.toString()) {
@@ -68,9 +66,7 @@ module.exports = {
                                 tempMsg.delete({timeout: 3000});
                             });
                         }
-                        else {
-                            collUser.stop("found");
-                        }
+                        else collUser.stop("found");
                     });
                     collUser.on("end", async (c, reason) => {
                         await msgUser.delete();

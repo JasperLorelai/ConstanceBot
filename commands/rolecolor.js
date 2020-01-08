@@ -43,13 +43,10 @@ module.exports = {
             client.fs.writeFileSync(process.env.INIT_CWD + "\\images\\rolecolor.png", b);
             ctx.drawImage(await client.canvas.loadImage(process.env.INIT_CWD + "\\images\\rolecolor.png"), canvas.width * .05, canvas.height * .25);
             channel.send(author.toString(), config.embed("Role Color").attachFiles([{
-                attachment: canvas.toBuffer(),
-                name: "bg.png"
+                attachment: canvas.toBuffer(), name: "bg.png"
             }]).setImage("attachment://bg.png")).then(async msg => {
                 await config.handleChange(msg, author, role, null, role => role.setColor(color), {
-                    denied: "",
-                    accepted: "Role color updated!",
-                    newTitle: "Role Color Preview"
+                    denied: "", accepted: "Role color updated!", newTitle: "Role Color Preview"
                 });
             });
         });

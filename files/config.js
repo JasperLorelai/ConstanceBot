@@ -3,29 +3,70 @@ module.exports = {
     // Properties
     token: "NTc5NzU5OTU4NTU2NjcyMDEx.XZcc5A.TDZBLpHFRSwLGRAr74BA0LIn_jA",
     globalPrefix: "&",
-    defaultIP: "mhaprodigy.uk",
+    defaultIP: "play.mhaprodigy.uk",
     color: {
         green: "04ff00",
         yellow: "fcba03",
         red: "ff0000",
         gray: "5c5c5c",
-        base: "009dff"
+        base: "009dff",
+        logs: {
+            messageUpdate: "6200ff",
+            guildMemberAdd: "00b33e",
+            guildMemberRemove: "a80027"
+        }
+    },
+    roles: {
+        unverified: "421219080008368128",
+        verified: "419654978022539285"
     },
     guilds: {
-        mainGuild: "575376952517591041"
+        mainGuild: "575376952517591041",
+        mhapGuild: "419628763102314527"
     },
     channels: {
         botLogs: "575738387307298831",
-        welcome: "663965845508325386"
+        // TODO: Change this to MHAP.
+        welcome: "663965845508325386",
+        globalLogs: "663988507542421504",
+        logs: {
+            "575376952517591041": "575738387307298831",
+            "406825495502782486": "663981081409749002"
+        }
     },
     categories: {
         dmChannels: "632697494865707008"
+    },
+    messages: {
+        // TODO: Change this for MHAP.
+        rules: "664017502245879818"
     },
     trello: {
         characters: "9qhuraUB",
         quirks: {
             roster: "uEL55Rqn"
         }
+    },
+    botLog() {
+        return this.getMainGuild().channels.resolve(this.channels.botLogs);
+    },
+    log(guild, funct) {
+        if(!guild) return;
+        const channelID = this.channels.logs[guild.id];
+
+        // TODO: Remove this. This is just temporary global logs to help find conflicts.
+        this.getMainGuild().channels.resolve(this.channels.globalLogs).send("`" + guild.id + ": " + channelID + "` **" + guild.name + "**", funct(new this.discord.MessageEmbed().setTimestamp(new Date())));
+
+        // No log channel defined.
+        if(!channelID) return;
+        const channel = guild.channels.resolve(channelID);
+
+        // Defined doesn't exist.
+        if(!channel) {
+            this.botLog().send(this.author.toString(), this.embed("Log Channel Exception", "Guild `" + guild.id + "` **(" + guild.name + ")** has an invalid logs channel defined. (`" + channelID + "`)", this.color.red));
+            return;
+        }
+        channel.send(funct(new this.discord.MessageEmbed().setTimestamp(new Date())));
     },
     // Functions
     //modlogs: {
@@ -47,6 +88,9 @@ module.exports = {
     //await keyv.set("modlogs." + guild.id, logs);
     //}
     //},
+    getJoinPosition(member) {
+        return member.guild.members.sort((a, b) => a.joinedAt - b.joinedAt).array().findIndex(m => m.id === member.id);
+    },
     getClient() {
         return require("../bot");
     },
@@ -54,10 +98,9 @@ module.exports = {
         return this.getClient().guilds.resolve(this.guilds.mainGuild);
     },
     getBaseEmbed() {
-        const user = this.author.user;
         return new this.discord.MessageEmbed()
             .setColor(this.color.base)
-            .setFooter("Bot made by: " + user.username, user.displayAvatarURL())
+            .setFooter("Bot made by: " + this.author.username, this.author.displayAvatarURL())
             .setTimestamp(new Date());
     },
     embed(title, description, color) {
@@ -113,65 +156,33 @@ module.exports = {
     },
     findGuildMember(find, guild) {
         // noinspection EqualityComparisonWithCoercionJS
-        return guild.members.find(m =>
-            find == m.id ||
-            find == m.user.username ||
-            find.substring(2, find.length - 1) == m.id ||
-            find.substring(3, find.length - 1) == m.id ||
-            m.user.username.toLowerCase().includes(find.toLowerCase())
-        );
+        return guild.members.find(m => find == m.id || find == m.user.username || find.substring(2, find.length - 1) == m.id || find.substring(3, find.length - 1) == m.id || m.user.username.toLowerCase().includes(find.toLowerCase()));
     },
     findUser(find) {
         // noinspection EqualityComparisonWithCoercionJS
-        return this.getClient().users.find(u =>
-            find == u.id ||
-            find == u.username ||
-            find.substring(2, find.length - 1) == u.id ||
-            find.substring(3, find.length - 1) == u.id ||
-            u.username.toLowerCase().includes(find.toLowerCase())
-        );
+        return getClient().users.find(u => find == u.id || find == u.username || find.substring(2, find.length - 1) == u.id || find.substring(3, find.length - 1) == u.id || u.username.toLowerCase().includes(find.toLowerCase()));
     },
     findRole(find, guild) {
         // noinspection EqualityComparisonWithCoercionJS
-        return guild.roles.filter(r => r.id !== guild.id).find(r =>
-            find == r.id ||
-            find.substring(3, find.length - 1) == r.id ||
-            find.toLowerCase() == r.name.toLowerCase() ||
-            r.name.toLowerCase().includes(find.toLowerCase())
-        );
+        return guild.roles.filter(r => r.id !== guild.id).find(r => find == r.id || find.substring(3, find.length - 1) == r.id || find.toLowerCase() == r.name.toLowerCase() || r.name.toLowerCase().includes(find.toLowerCase()));
     },
     findChannel(find, guild) {
         // noinspection EqualityComparisonWithCoercionJS
-        return guild.channels.filter(c => c.id !== guild.id).find(c =>
-            find == c.id ||
-            find.substring(3, find.length - 1) == c.id ||
-            find.toLowerCase() == c.name.toLowerCase() ||
-            c.name.toLowerCase().includes(find.toLowerCase())
-        );
+        return guild.channels.filter(c => c.id !== guild.id).find(c => find == c.id || find.substring(3, find.length - 1) == c.id || find.toLowerCase() == c.name.toLowerCase() || c.name.toLowerCase().includes(find.toLowerCase()));
     },
     isJSON(json) {
-        try {
-            if(typeof JSON.parse(json) == "object") return true
-        } catch(e) {
-        }
+        try {if(typeof JSON.parse(json) == "object") return true} catch(e) {}
         return false;
     },
     isRegex(regex) {
-        try {
-            new RegExp(regex)
-        } catch(e) {
-            return false
-        }
+        try {new RegExp(regex)} catch(e) {return false}
         return true;
     },
     colorToHex(color) {
         let final = color.match(/([0-9]*(\.[0-9]*)?(?:[%|°])?)+/g).filter(e => e);
         if(color.startsWith("rgb(")) {
             return final.map(c => {
-                if(c.endsWith("%")) {
-                    return Math.round(c.substr(0, c.length - 1) / 100 * 255);
-                }
-                else {
+                if(c.endsWith("%")) return Math.round(c.substr(0, c.length - 1) / 100 * 255); else {
                     const str = (+c).toString(16);
                     return str.length === 1 ? "0" + str : str;
                 }
@@ -179,12 +190,7 @@ module.exports = {
         }
         if(color.startsWith("hsl(")) {
             final = final.map(e => {
-                if(e.endsWith("°") || e.endsWith("%")) {
-                    return e.substr(0, e.length - 1);
-                }
-                else {
-                    return e;
-                }
+                if(e.endsWith("°") || e.endsWith("%")) return e.substr(0, e.length - 1); else return e;
             });
             const h = parseInt(final[0]) / 360;
             const s = parseInt(final[1]) / 100;
@@ -223,34 +229,28 @@ module.exports = {
         return ctx.measureText(text).width;
     },
     async handleChange(msg, author, modify, denied, accepted, options) {
-        if(!denied) {
-            denied = () => {
-            };
-        }
-        if(!accepted) {
-            accepted = () => {
-            };
-        }
+        if(!denied) denied = () => {};
+        if(!accepted) accepted = () => {};
         let embed = this.getEmbed(msg);
-        await msg.edit(embed.setColor(this.color.yellow).setDescription((embed.description ? embed.description : "") + "\n\n**React with:\n✅ - to confirm changes.\n❌ - deny changes.**"));
+        await msg.edit(embed.setColor(color.yellow).setDescription((embed.description ? embed.description : "") + "\n\n**React with:\n✅ - to confirm changes.\n❌ - deny changes.**"));
         await msg.react("❌");
         await msg.react("✅");
         const coll = msg.createReactionCollector((r, u) => u.id !== msg.client.user.id, {time: 30000});
         coll.on("collect", async (r, u) => {
             await r.users.remove(u);
             if(author.id !== u.id) return;
-            embed = this.getEmbed(msg);
+            embed = getEmbed(msg);
             switch(r.emoji.toString()) {
                 case "❌":
                     denied(modify);
                     if(options.denied) embed.setDescription(options.denied);
-                    await msg.edit(embed.setColor(this.color.red));
+                    await msg.edit(embed.setColor(color.red));
                     coll.stop("denied");
                     break;
                 case "✅":
                     accepted(modify);
                     if(options.accepted) embed.setDescription(options.accepted);
-                    await msg.edit(embed.setColor(this.color.green));
+                    await msg.edit(embed.setColor(color.green));
                     coll.stop("accepted");
                     break;
             }

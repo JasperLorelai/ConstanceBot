@@ -5,13 +5,9 @@ client.on("message", async message => {
     let db = guild ? await keyv.get("guilds") : null;
     let realPrefix = null;
     let mods = null;
-    if(db && guild) {
-        if(db[guild.id]) {
-            if(db[guild.id].prefix) {
-                realPrefix = db[guild.id].prefix;
-                if(db[guild.id].mods) mods = db[guild.id].mods;
-            }
-        }
+    if(db && guild && db[guild.id] && db[guild.id].prefix) {
+        realPrefix = db[guild.id].prefix;
+        if(db[guild.id].mods) mods = db[guild.id].mods;
     }
 
     let prefix = config.globalPrefix;
@@ -86,14 +82,11 @@ client.on("message", async message => {
             return;
         }
         // Run command if all required args are specified.
-        if(!params || args.length >= params.filter(p => p.startsWith("[")).length) {
-            execute(message, args);
-        }// Execute help command for command if not.
-        else {
-            commands.get("help").execute(message, [commandName]);
-        }
+        if(!params || args.length >= params.filter(p => p.startsWith("[")).length) execute(message, args);
+        // Execute help command for command if not.
+        else commands.get("help").execute(message, [commandName]);
     } catch(e) {
+        await message.reply(author.toString(), config.embed("Error", "Exception during command execution. Full error log was sent to console.", config.color.red));
         console.error(e);
-        await message.reply("Error during command execution. (error sent to console)");
     }
 });

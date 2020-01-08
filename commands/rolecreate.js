@@ -11,9 +11,7 @@ module.exports = {
         const role = await guild.roles.create({data: {name: args.join(" ")}});
         channel.send(author.toString(), config.embed("Role Creator", "**Created role:** " + args.join(" "))).then(async msg => {
             await config.handleChange(msg, author, role, role => role.delete(), null, {
-                denied: "Role deleted!",
-                accepted: "Role created!",
-                newTitle: ""
+                denied: "Role deleted!", accepted: "Role created!", newTitle: ""
             });
         });
     }

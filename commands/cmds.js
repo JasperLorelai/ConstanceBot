@@ -11,9 +11,7 @@ module.exports = {
             if(perm === "author") perm = "**Bot Author**";
             if(perm === "admin") perm = "**Server Administrator**";
             if(perm === "mod") perm = "**Server Moderator**";
-            return "\* `" + c.name +
-                (c.params ? " " + c.params.join(" ") : "") + "` " +
-                (perm ? " (" + perm + ")" : "")
+            return "\* `" + c.name + (c.params ? " " + c.params.join(" ") : "") + "` " + (perm ? " (" + perm + ")" : "")
         }).join("\n") + (!guild ? "\n\nUse the `dmcmds` command to only list commands that can be executed in DMs." : "");
         await channel.send(author.toString(), config.embed("Command List", text));
     }

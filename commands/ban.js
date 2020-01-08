@@ -59,9 +59,7 @@ module.exports = {
             // TODO: Look into modlogs.
             //await config.modlogs.add("ban", guild, member.id, author.id, (args[0] ? args.join(" ") : null));
         });
-        coll.on("end", async () => {
-            await msg.delete();
-        });
+        coll.on("end", async () => await msg.delete());
         try {
             await msg.react("❌");
             await msg.react(emoji["1"]);

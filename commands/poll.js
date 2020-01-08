@@ -9,14 +9,7 @@ module.exports = {
         let db;
 
         function getHelp(poll) {
-            return "React with:" +
-                "\n💬 - Set text." +
-                "\n➕ - Add react option." +
-                "\n🚫 - Reset reactions." +
-                "\n💟 - Ping everyone with the Polls role. (`" + poll.rolePing + "`)" +
-                "\n" + client.emoji["1"] + " - Unique reactions only. (`" + poll.unique + "`)" +
-                "\n✅ - Send poll." +
-                "\n❌ - Cancel poll.";
+            return "React with:" + "\n💬 - Set text." + "\n➕ - Add react option." + "\n🚫 - Reset reactions." + "\n💟 - Ping everyone with the Polls role. (`" + poll.rolePing + "`)" + "\n" + client.emoji["1"] + " - Unique reactions only. (`" + poll.unique + "`)" + "\n✅ - Send poll." + "\n❌ - Cancel poll.";
         }
 
         async function refresh(msg, poll) {
@@ -47,12 +40,8 @@ module.exports = {
 
             const embed = config.embed("Poll Creator", poll.text, config.color.yellow).addField("Help", getHelp(poll));
             if(poll.emoji && poll.emoji.length > 0) embed.addField("Emoji", poll.emoji.join(", "));
-            if(!msg) {
-                msg = await channel.send(embed);
-            }
-            else {
-                await msg.edit(embed);
-            }
+            if(!msg) msg = await channel.send(embed);
+            else await msg.edit(embed);
 
             await msg.react("💬");
             await msg.react("➕");
@@ -91,12 +80,7 @@ module.exports = {
                             if(emoji[0]) {
                                 poll.emoji = emoji;
                                 const embed = config.getEmbed(msg);
-                                if(embed.fields.length > 1) {
-                                    embed.fields[1].value = emoji.join(", ");
-                                }
-                                else {
-                                    embed.addField("Emoji", emoji.join(", "));
-                                }
+                                if(embed.fields.length > 1) embed.fields[1].value = emoji.join(", "); else embed.addField("Emoji", emoji.join(", "));
                                 msg.edit(embed);
                                 msgColl.stop();
                             }
@@ -197,8 +181,6 @@ module.exports = {
                 if(reason !== "end") await msg.edit(config.embed("Poll Drafts - Terminated.", "Timeout.", config.color.red));
             });
         }
-        else {
-            await newPoll(msg);
-        }
+        else await newPoll(msg);
     }
 };

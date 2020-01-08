@@ -14,19 +14,8 @@ module.exports = {
         }
         const activity = member.presence && member.presence.activity ? member.presence.activity : null;
         const {user} = member;
-        let roles = member.roles;
-        if(roles) roles = roles.filter(r => r.id !== guild.id).map(r => r.toString());
-        const desc =
-            (user.bot ? "**Is BOT:** true" : "") +
-            "\n**Mention:** " + member.toString() +
-            "\n**ID:** `<@" + member.id + ">`" +
-            "\n**Joined at:** " + member.joinedAt.toLocaleString() +
-            "\n**Join Position:** " + guild.members.sort((a, b) => a.joinedAt - b.joinedAt).array().findIndex(m => m.id === member.id) +
-            "\n**Registered at:** " + user.createdAt.toLocaleString() +
-            (member.nickname ? "\n**Nickname:** " + member.nickname : "") +
-            "\n**Status:** " + member.presence.status.toFormalCase() +
-            (activity ? "\n**Presence:** " + activity.name : "") +
-            "\n**Roles (" + roles.length + ")**: " + roles.join(", ");
+        const roles = member.roles ? member.roles.filter(r => r.id !== guild.id) : null;
+        const desc = (user.bot ? "**Is BOT:** true" : "") + "\n**Mention:** " + member.toString() + "\n**ID:** `<@" + member.id + ">`" + "\n**Joined at:** `" + member.joinedAt.toLocaleString() + "`" + "\n**Join Position:** " + config.getJoinPosition(member) + "\n**Registered at:** `" + user.createdAt.toLocaleString() + "`" + (member.nickname ? "\n**Nickname:** " + member.nickname : "") + "\n**Status:** " + member.presence.status.toFormalCase() + (activity ? "\n**Presence:** " + activity.name : "") + (roles ? "\n**Roles (" + roles.size + "):** " + roles.array().join(", ") : "");
         await channel.send(author.toString(), config.embed("User info for: " + user.username, desc).setThumbnail(user.displayAvatarURL({format: "png"})));
     }
 };

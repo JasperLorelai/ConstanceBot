@@ -16,7 +16,6 @@ client.handleMsg = require("./files/handleMsg.js");
 // Initialising variables
 const {config, keyv, fs} = client;
 
-
 client.login(config.token).catch(e => console.log(e));
 module.exports = client;
 
@@ -30,7 +29,6 @@ for(let event of fs.readdirSync("./events").filter(file => file.endsWith(".js") 
     require("./events/" + event);
 }
 keyv.on("error", err => console.error("Keyv connection error:", err));
-
 
 // Creating some base methods
 String.prototype.toFormalCase = function() {

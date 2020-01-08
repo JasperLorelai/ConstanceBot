@@ -58,9 +58,7 @@ module.exports = {
                                 tempMsg.delete({timeout: 3000});
                             });
                         });
-                        collReply.on("end", async () => {
-                            await msgReply.delete();
-                        });
+                        collReply.on("end", async () => await msgReply.delete());
                     });
                     collTrigger.on("end", async () => {
                         await msgTrigger.delete();

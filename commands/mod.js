@@ -36,10 +36,7 @@ module.exports = {
             collMod.on("collect", async m => {
                 let find = config.findRole(m.content, m.guild);
                 let found;
-                if(find) {
-                    found = ["roles", find.id];
-                }
-                else {
+                if(find) found = ["roles", find.id]; else {
                     find = config.findGuildMember(m.content, m.guild);
                     if(find) found = ["users", find.id];
                 }
