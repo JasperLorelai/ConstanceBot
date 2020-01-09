@@ -45,10 +45,18 @@ module.exports = {
         rules: "664017502245879818"
     },
     trello: {
-        characters: "9qhuraUB",
-        quirks: {
-            roster: "uEL55Rqn"
+        key: "21008e4383cece1d9366d9132a8343fb",
+        token: "805f0bdd4a00c438573231c405741766b27c716430b6ca13f53e7ab50bb745bd",
+        boards: {
+            mhap: "YBbW2ZTP"
+        },
+        cards: {
+            quirksRoster: "uEL55Rqn",
+            characters: "9qhuraUB"
         }
+    },
+    getTrello() {
+        return "?key=" + this.trello.key + "&token=" + this.trello.token;
     },
     botLog() {
         return this.getMainGuild().channels.resolve(this.channels.botLogs);
@@ -74,7 +82,7 @@ module.exports = {
     // Functions
     //modlogs: {
     //async get(guild, user) {
-    // TODO: Add per user.
+    // TO-DO: Add per user.
     //if(!user) return await guild.client.keyv.get("modlogs." + guild.id) || [];
     //else return null;
     //},

@@ -10,10 +10,11 @@ module.exports = async message => {
 
         // Handle Welcomer for MHAP.
         if(db && db[config.guilds.mhapGuild] && db[config.guilds.mhapGuild].welcomer && db[config.guilds.mhapGuild].welcomer[author.id] && (content.toLowerCase().includes("yes") || content.toLowerCase().includes("no"))) {
+            // TODO: Remove supression.
+            // noinspection JSUnusedLocalSymbols
             function processRole(role) {
                 if(content.toLowerCase().includes("yes")) {
-                    // TODO: Remove log and comment.
-                    console.log("added " + role);
+                    // TODO: Remove comment.
                     //client.guilds.resolve(config.guilds.mhapGuild).members.resolve(author.id).roles.add(config.roles[role]);
                     embed.setColor(config.color.green).setDescription("Role added.");
                 }

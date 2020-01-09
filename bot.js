@@ -41,7 +41,7 @@ String.prototype.mkdHeadersToNormal = function() {
     let splits = this.split("\n");
     for(let i = 0; i < splits.length; i++) {
         if(splits[i].startsWith("######") || splits[i].startsWith("#####") || splits[i].startsWith("####") || splits[i].startsWith("###") || splits[i].startsWith("##")) {
-            splits[i] = splits[i].replace(/#{3,6}\s?/g, "**") + "**";
+            splits[i] = splits[i].replace(/#{2,6}\s?/g, "**") + "**";
         }
         if(splits[i].startsWith("#")) splits[i] = "__**" + splits[i].substr(1) + "**__";
     }

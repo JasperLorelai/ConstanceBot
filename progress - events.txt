@@ -5,7 +5,7 @@ Reaction Handler:
   Add:
   - Staff Applications
   - To Do List
-  - Rule Accept
+  - Rule Accept - Done
   - Suggestions Upvote/Downvote
   - Suggestion Accept/Deny
   - Role Toggle

@@ -5,9 +5,11 @@ client.on("messageReactionAdd", async (r, u) => {
     // Rule accept.
     if(r.message.id !== config.messages.rules) return;
     if(r.emoji.toString() !== "✅") return;
-    // TODO: Prevent repetative rule-accepting.
-    // TODO: Remove comment.
-    //await guild.members.resolve(u.id).roles.add(config.roles.verified);
+    const member = await guild.members.resolve(u.id);
+    if(member.roles.has(config.roles.verified)) return;
+    // TODO: Remove comments.
+    //await member.roles.remove(config.roles.unverified);
+    //await member.roles.add(config.roles.verified);
     // TODO: Remove comment mid statement.
     await channel.send(config.embed("User " + u.username + " has accepted the rules!", u.toString() + " has accepted the rules and became a member of ***" + guild.name + "***! Count of people who accepted rules: **" + /*guild.roles.resolve(config.roles.verified).members.size + "/"*/ +guild.memberCount + "**."));
     await u.send(config.embed("Welcome!", "Welcome to **" + guild.name + "**, a Minecraft server based on the **Boku No Hero Academia** manga and anime. The server is not modded. All of our content is made with the help of plugins and our wonderful content creators!\n\n" + "**IP:** " + config.defaultIP + "\n" + "**Version:** Release 1.13.2\n" + "**Discord Invite:** http://discord.mhaprodigy.uk/\n"));
