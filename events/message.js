@@ -19,7 +19,8 @@ client.on("message", async message => {
         }
         // Store whatever prefix is found.
         prefix = realPrefix;
-        if(!(prefix || content.startsWith(prefix))) {
+
+        if(!(prefix && content.startsWith(prefix))) {
             // Non command handlers.
             await handleMsg(message);
             return;
@@ -42,7 +43,7 @@ client.on("message", async message => {
         const isAdmin = member ? member.hasPermission("ADMINISTRATOR") : false;
         // Different approach for mods.
         let isMod = false;
-        const modRoles = mods ? mods.roles : null;
+        const modRoles = mods ? mods["roles"] : null;
         if(modRoles) {
             for(let r of modRoles) {
                 if(message.guild.roles.has(r)) {
@@ -51,7 +52,7 @@ client.on("message", async message => {
                 }
             }
         }
-        const modUsers = mods ? mods.users : null;
+        const modUsers = mods ? mods["users"] : null;
         if(!isMod && modUsers) {
             for(let u of modUsers) {
                 // noinspection EqualityComparisonWithCoercionJS

@@ -5,7 +5,7 @@ module.exports = {
     params: ["[role]"],
     guildOnly: true,
     async execute(message, args) {
-        const {client, guild, channel} = message;
+        const {client, guild, channel, author} = message;
         const {config} = client;
         let role = config.findRole(args.join(" "), guild);
         if(!role) {

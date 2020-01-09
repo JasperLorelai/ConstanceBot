@@ -18,7 +18,10 @@ module.exports = {
     },
     roles: {
         unverified: "421219080008368128",
-        verified: "419654978022539285"
+        verified: "419654978022539285",
+        polls: "",
+        events: "",
+        changelog: ""
     },
     guilds: {
         mainGuild: "575376952517591041",
