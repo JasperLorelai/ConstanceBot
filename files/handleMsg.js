@@ -20,6 +20,7 @@ module.exports = async message => {
                 }
                 else embed.setColor(config.color.red).setDescription("Role dismissed.");
             }
+
             const msg = await channel.messages.fetch(db[config.guilds.mhapGuild].welcomer[author.id]);
             const embed = config.getEmbed(msg);
             let newMsg;

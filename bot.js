@@ -34,11 +34,8 @@ keyv.on("error", err => console.error("Keyv connection error:", err));
 String.prototype.toFormalCase = function() {
     return this.charAt(0).toUpperCase() + this.substr(1).toLowerCase();
 };
-String.prototype.mkdRemoveRuler = function() {
-    return this.split("\n").filter(l => l !== "---")
-};
-String.prototype.mkdHeadersToNormal = function() {
-    let splits = this.split("\n");
+String.prototype.discordMKD = function() {
+    let splits = this.split("\n").filter(l => l !== "---");
     for(let i = 0; i < splits.length; i++) {
         if(splits[i].startsWith("######") || splits[i].startsWith("#####") || splits[i].startsWith("####") || splits[i].startsWith("###") || splits[i].startsWith("##")) {
             splits[i] = splits[i].replace(/#{2,6}\s?/g, "**") + "**";
