@@ -3,27 +3,34 @@ const {config, keyv} = client;
 client.on("messageReactionAdd", async (r, u) => {
     const {guild, channel, embeds} = r.message;
 
-    if(guild && channel.parent && channel.parent.name === "Support Tickets" && !channel.name.includes("solved") && embeds && embeds.length && u.id !== client.user.id) {
+    if(guild && channel.parent && channel.parent.name === "Support Tickets" && embeds && embeds.length && u.id !== client.user.id) {
         const ticket = embeds.find(e => e.title === "Problem:");
         if(ticket) {
             await r.users.remove(u.id);
-            let pass = false;
-            // Is creator.
-            if(u.id === ticket.footer.text) pass = true;
-            // Isn't creator but has mod perms?
-            if(!pass) {
-                const member = guild.members.resolve(u.id);
-                if(member) pass = config.getPerms(member, "mod");
-            }
-            if(pass) {
-                await channel.send(config.embed("Closed", "This support ticket was closed by: " + u.toString(), config.color.red));
-                await channel.setName("solved-" + channel.name);
-                await r.message.reactions.removeAll();
-                await r.message.edit(ticket.fields.splice(1, 1));
-                setTimeout(async () => {
-                    // noinspection JSUnresolvedFunction
-                    await channel.overwritePermissions({permissionOverwrites: [{id: guild.id, deny: "VIEW_CHANNEL"}]});
-                }, 2000);
+            if(!channel.name.includes("solved")) {
+                let pass = false;
+                // Is creator.
+                if(u.id === ticket.footer.text) pass = true;
+                // Isn't creator but has mod perms?
+                if(!pass) {
+                    const member = guild.members.resolve(u.id);
+                    if(member) pass = config.getPerms(member, "mod");
+                }
+                if(pass) {
+                    await channel.send(config.embed("Closed", "This support ticket was closed by: " + u.toString(), config.color.red));
+                    await channel.setName("solved-" + channel.name);
+                    await r.message.reactions.removeAll();
+                    await r.message.edit(ticket.fields.splice(1, 1));
+                    setTimeout(async () => {
+                        // noinspection JSUnresolvedFunction
+                        await channel.overwritePermissions({
+                            permissionOverwrites: [{
+                                id: guild.id,
+                                deny: "VIEW_CHANNEL"
+                            }]
+                        });
+                    }, 2000);
+                }
             }
         }
     }

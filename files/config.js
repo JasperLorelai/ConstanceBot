@@ -1,6 +1,5 @@
 module.exports = {
     discord: require("discord.js"),
-    // Properties
     token: "NTc5NzU5OTU4NTU2NjcyMDEx.XZcc5A.TDZBLpHFRSwLGRAr74BA0LIn_jA",
     globalPrefix: "&",
     defaultIP: "play.mhaprodigy.uk",
@@ -78,7 +77,6 @@ module.exports = {
         // Let the dev make changes against this embed before sending.
         channel.send(funct(new this.discord.MessageEmbed().setTimestamp(new Date())));
     },
-    // Functions
     //modlogs: {
     //async get(guild, user) {
     // TO-DO: Add per user.

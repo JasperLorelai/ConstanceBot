@@ -1,26 +1,29 @@
 const client = require("../bot");
 client.on("messageUpdate", async (oldMessage, newMessage) => {
     const {config, keyv} = client;
-    const {guild, author, content, channel} = oldMessage;
+    const {guild, author, channel} = newMessage;
     // Check only if content changed.
-    if(oldMessage.content === newMessage.content) return;
+    if(oldMessage && oldMessage.content === newMessage.content) return;
 
     if(author.id !== client.user.id && !author.bot) {
         config.log(guild, embed => embed.setColor(config.color.logs.messageUpdate)
             .setAuthor("@" + author.username + "#" + author.discriminator, author.displayAvatarURL())
             .setTitle("Message Edited")
-            .setDescription(channel.toString() + " [\(Jump\)](" + oldMessage.url + ")")
-            .addField("Before", content, false)
+            .setDescription(channel.toString() + " [\(Jump\)](" + newMessage.url + ")")
+            .addField("Before", oldMessage ? oldMessage.content : "Error: The old content wasn't recorded because it was from a previous session of the bot.", false)
             .addField("Now", newMessage.content, false)
-            .setFooter("Message ID: " + oldMessage.id));
+            .setFooter("Message ID: " + newMessage.id));
     }
+
+    // Ignore raw events.
+    if(!oldMessage) return;
 
     let realprefix = null;
     let db = await keyv.get("guilds");
     if(guild && db && db[guild.id] && db[guild.id].prefix) realprefix = db[guild.id].prefix;
-    if(!content.startsWith(config.globalPrefix)) {
+    if(!oldMessage.content.startsWith(config.globalPrefix)) {
         if(!guild) return;
-        if(!(realprefix || content.startsWith(realprefix))) return;
+        if(!(realprefix || oldMessage.content.startsWith(realprefix))) return;
     }
     if(!newMessage.content.startsWith(config.globalPrefix)) {
         if(!newMessage.guild) return;

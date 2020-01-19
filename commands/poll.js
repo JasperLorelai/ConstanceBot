@@ -47,7 +47,7 @@ module.exports = {
             await msg.react("➕");
             await msg.react("🚫");
             await msg.react("💟");
-            await msg.react(client.emoji["1"]);
+            await msg.react(client.emojiFile["1"]);
             await msg.react("✅");
             await msg.react("❌");
             const created = new Date().getTime();
@@ -97,7 +97,7 @@ module.exports = {
                     case "💟":
                         poll.rolePing = !poll.rolePing;
                         break;
-                    case client.emoji["1"]:
+                    case client.emojiFile["1"]:
                         poll.unique = !poll.unique;
                         break;
                     case "✅":

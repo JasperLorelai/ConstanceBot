@@ -11,5 +11,5 @@ client.on("channelDelete", async channel => {
     config.log(guild, embed => embed.setColor(config.color.logs.channelDelete)
         .setFooter("Channel ID: " + channel.id)
         .setTitle("Channel Deleted")
-        .setDescription("**Name:** " + channel.name + "\n**Type: " + channel.type.toFormalCase() + (channel.parentID ? "\n**Parent ID:** " + channel.parentID : "") + "\n**By User:** " + log.executor.toString()));
+        .setDescription("**Name:** " + channel.name + "\n**Type:** " + channel.type.toFormalCase() + (channel.parentID ? "\n**Parent ID:** " + channel.parentID : "") + "\n**By User:** " + log.executor.toString()));
 });
