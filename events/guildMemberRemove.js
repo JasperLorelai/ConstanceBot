@@ -8,7 +8,7 @@ client.on("guildMemberRemove", async member => {
         .setTitle("User Left")
         .setAuthor("@" + user.username + "#" + user.discriminator, user.displayAvatarURL())
         .setFooter("Member ID: " + user.id)
-        .setDescription("**Mention:** " + member.toString() + "\n**Join Date:** `" + member.joinedAt.toLocaleString() + "`" + "\n**Join Position:** " + config.getJoinPosition(member) + (member.nickname ? "\n**Had Nickname:** " + member.nickname : "") + (roles ? "\n**Roles (" + roles.size + "):** " + roles.array().join(", ") : "")));
+        .setDescription("New member count: **" + guild.memberCount + "**\n\n**Mention:** " + member.toString() + "\n**Join Date:** `" + member.joinedAt.toLocaleString() + "`" + (member.nickname ? "\n**Had Nickname:** " + member.nickname : "") + (roles ? "\n**Roles (" + roles.size + "):** " + roles.array().join(", ") : "")));
 
     // Remove user from welcomer db.
     let db = await keyv.get("special");
@@ -16,8 +16,4 @@ client.on("guildMemberRemove", async member => {
         delete db.mhap.welcomer[u.id];
         await keyv.set("special", db);
     }
-
-    const channel = guild.channels.resolve(config.channels.welcome);
-    if(!channel) return;
-    channel.send(config.embed("User " + user.username + " has left!", "User " + member.toString() + " has left the Discord server.\nNew member count: **" + guild.memberCount + "**", config.color.red));
 });

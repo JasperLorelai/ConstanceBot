@@ -13,7 +13,8 @@ module.exports = {
         logs: {
             messageUpdate: "6200ff",
             guildMemberAdd: "00b33e",
-            guildMemberRemove: "a80027"
+            guildMemberRemove: "a80027",
+            channelDelete: "730000"
         }
     },
     roles: {
@@ -35,8 +36,6 @@ module.exports = {
     },
     channels: {
         botLogs: "575738387307298831",
-        // TODO: Change this to MHAP.
-        welcome: "663965845508325386",
         globalLogs: "663988507542421504",
         logs: {
             "575376952517591041": "575738387307298831",
@@ -70,19 +69,13 @@ module.exports = {
     log(guild, funct) {
         if(!guild) return;
         const channelID = this.channels.logs[guild.id];
+        const channel = channelID ? guild.channels.resolve(channelID) : guild.channels.find(c => c.name === "logs");
 
         // TODO: Remove this. This is just temporary global logs to help find conflicts.
-        if(guild.id !== "406825495502782486") this.getMainGuild().channels.resolve(this.channels.globalLogs).send("`" + guild.id + ": " + channelID + "` **" + guild.name + "**", funct(new this.discord.MessageEmbed().setTimestamp(new Date())));
+        if(guild.id !== "406825495502782486") this.getMainGuild().channels.resolve(this.channels.globalLogs).send("`" + guild.id + ": " + channel + "` **" + guild.name + "**", funct(new this.discord.MessageEmbed().setTimestamp(new Date())));
 
-        // No log channel defined.
-        if(!channelID) return;
-        const channel = guild.channels.resolve(channelID);
-
-        // Defined doesn't exist.
-        if(!channel) {
-            this.botLog().send(this.author.toString(), this.embed("Log Channel Exception", "Guild `" + guild.id + "` **(" + guild.name + ")** has an invalid logs channel defined. (`" + channelID + "`)", this.color.red));
-            return;
-        }
+        if(!channel) return;
+        // Let the dev make changes against this embed before sending.
         channel.send(funct(new this.discord.MessageEmbed().setTimestamp(new Date())));
     },
     // Functions

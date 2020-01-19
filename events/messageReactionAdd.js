@@ -36,7 +36,11 @@ client.on("messageReactionAdd", async (r, u) => {
         //await member.roles.remove(config.roles.unverified);
         //await member.roles.add(config.roles.verified);
         // TODO: Remove comment mid statement.
-        await channel.send(config.embed("User " + u.username + " has accepted the rules!", u.toString() + " has accepted the rules and became a member of ***" + guild.name + "***! Count of people who accepted rules: **" + /*guild.roles.resolve(config.roles.verified).members.size + "/"*/ +guild.memberCount + "**."));
+        config.log(guild, embed => embed.setColor(config.color.green)
+            .setTitle("User " + u.username + " has accepted the rules!")
+            .setFooter("Member ID: " + user.id)
+            .setThumbnail(user.displayAvatarURL())
+            .setDescription(u.toString() + " has accepted the rules and became a member of ***" + guild.name + "***! Count of people who accepted rules: **" + /*guild.roles.resolve(config.roles.verified).members.size + "/"*/ +guild.memberCount + "**."));
         await u.send(config.embed("Welcome!", "Welcome to **" + guild.name + "**, a Minecraft server based on the **Boku No Hero Academia** manga and anime. The server is not modded. All of our content is made with the help of plugins and our wonderful content creators!\n\n" + "**IP:** " + config.defaultIP + "\n" + "**Version:** Release 1.13.2\n" + "**Discord Invite:** http://mhaprodigy.uk/discord\n"));
         let db = await keyv.get("guilds");
         // Start of the welcomer process. Everything else is handled in "handleMsg.js".
