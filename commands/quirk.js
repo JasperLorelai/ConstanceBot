@@ -2,7 +2,6 @@
 module.exports = {
     name: "quirk",
     description: "Sends the official list of quirks with hyperlinks that lead to their cards.",
-    // TODO: If a quirk is specified, it will display information about that specific quirk.
     aliases: ["quirks"],
     params: ["(quirk)"],
     async execute(message, args) {

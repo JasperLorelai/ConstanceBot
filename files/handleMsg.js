@@ -46,8 +46,7 @@ module.exports = async message => {
         }
 
         // Redirect messages to it's respective DM channel.
-        // noinspection EqualityComparisonWithCoercionJS
-        let dmchannel = main.channels.filter(c => c.name == author.id).array()[0];
+        let dmchannel = main.channels.filter(c => c.name === author.id).array()[0];
         if(!dmchannel) {
             dmchannel = await main.channels.create(author.id, {
                 topic: author.username,
@@ -65,11 +64,10 @@ module.exports = async message => {
         await webhook.delete();
         return;
     }
+
     // DM messages from the DM channels.
-    // noinspection EqualityComparisonWithCoercionJS
-    if(channel.parent && channel.parent.id == config.categories.dmChannels) {
-        // noinspection EqualityComparisonWithCoercionJS
-        if(channel.name == client.user.id) return;
+    if(channel.parent && channel.parent.id === config.categories.dmChannels) {
+        if(channel.name === client.user.id) return;
         // Ignore webhooks - already redirected messages.
         if(message.webhookID) return;
         const user = client.users.resolve(channel.name);
@@ -79,13 +77,76 @@ module.exports = async message => {
         }
         return;
     }
+
     // Prefix query.
     if(mentions && mentions.users && mentions.users.has(client.user.id)) {
-        await channel.send(config.embed("Guild Prefix", "My prefix is: **" + (db.prefix || config.globalPrefix) + "**"));
+        // Ignore bot.
+        if(author.id === client.user.id) return;
+        await channel.send(config.embed("Guild Prefix", "My prefix is: **" + (db && guild && db[guild.id] && db[guild.id].prefix ? db[guild.id].prefix : config.globalPrefix) + "**"));
         return;
     }
+
+    // Handle raw forms.
+    if(message.webhookID && message.webhookID === config.webhooks.mainRedirect) {
+        let embed = config.getEmbed(message);
+        const user = client.users.resolve(embed.title);
+        const type = message.content;
+
+        async function handlePost(categoryTitle, channelName) {
+            let postsCategory = categories.find(c => c.name.toLowerCase() === categoryTitle.toLowerCase());
+            if(!postsCategory) {
+                postsCategory = await guild.channels.create(categoryTitle, {type: "category", position: 9999});
+                // TODO: Remove below and the comment.
+                await postsCategory.overwritePermissions({
+                    permissionOverwrites: [{
+                        id: guild.id,
+                        deny: ["VIEW_CHANNEL"]
+                    }]
+                });
+                //await suggestions.overwritePermissions(config.getOverwrites("default", guild));
+            }
+            const newPost = await guild.channels.create(channelName, {parent: postsCategory.id});
+            await newPost.setPosition(0);
+            const latestTicket = guild.channels.filter(c => c.parentID === postsCategory.id).find(c => c.position === 1);
+            await newPost.setName(newPost.name + "-" + (latestTicket ? parseInt(latestTicket.name.substr(latestTicket.name.lastIndexOf("-") + 1)) + 1 : 1));
+            return newPost;
+        }
+
+        const categories = guild.channels.filter(c => c.type === "category");
+        let msg;
+        switch(type) {
+            case "rawSupportTicket":
+                const ticket = await handlePost("Support Tickets", "ticket");
+                msg = await ticket.send(config.embed("Problem:", embed.description).setAuthor(user.tag, user.displayAvatarURL()).addField("React Actions", "❌ - Close support ticket. (`Server Mod` or OP)").setFooter(user.id));
+                await msg.react("❌");
+                const restriction = embed.fields[0].value;
+                if(restriction && restriction !== "EVERYONE!") {
+                    // TODO: Remove comment and statement below.
+                    //await ticket.updateOverwrite(config.roles.verified, {VIEW_CHANNEL: false});
+                    await ticket.updateOverwrite(guild.id, {SEND_MESSAGES: true});
+                    await ticket.updateOverwrite(user.id, {VIEW_CHANNEL: true});
+                    if(restriction === "Staff only.") {
+                        // TODO: Remove comment and statement below, collapse.
+                        //await ticket.updateOverwrite(config.roles.staff, {VIEW_CHANNEL: true});
+                        await ticket.updateOverwrite(guild.id, {SEND_MESSAGES: false});
+                    }
+                }
+                break;
+            case "rawSuggestion":
+                const suggestion = await handlePost("Suggestions", "suggestion");
+                msg = await suggestion.send(config.embed("They suggested:", embed.description).setAuthor(user.tag, user.displayAvatarURL()));
+                await msg.react("👍");
+                await msg.react("👎");
+                break;
+        }
+        message.delete();
+        return;
+    }
+
     // Handle responses.
     if(db && guild && db[guild.id] && db[guild.id].responses) {
+        // Ignore bot.
+        if(author.id === client.user.id) return;
         for(let r of db[guild.id].responses) {
             let trigger = r.trigger;
             if(!/^\/.*\/[a-zA-Z]*$/g.test(trigger)) trigger = "/" + trigger + "/";

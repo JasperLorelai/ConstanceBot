@@ -31,12 +31,10 @@ poll - Done
 warn
 clearwarn
 warns
-
-ship
-pickle
 mute
 unmute
-suggest
+ship
+pickle
 link
 construct
 trellobuild

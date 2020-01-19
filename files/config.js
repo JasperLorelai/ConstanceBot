@@ -19,6 +19,9 @@ module.exports = {
     roles: {
         unverified: "421219080008368128",
         verified: "419654978022539285",
+        muted: "419644724119601153",
+        bots: "419635738804748289",
+        // TODO: Add these from MHAP.
         polls: "",
         events: "",
         changelog: ""
@@ -26,6 +29,9 @@ module.exports = {
     guilds: {
         mainGuild: "575376952517591041",
         mhapGuild: "419628763102314527"
+    },
+    webhooks: {
+        mainRedirect: "668075261962485761"
     },
     channels: {
         botLogs: "575738387307298831",
@@ -66,7 +72,7 @@ module.exports = {
         const channelID = this.channels.logs[guild.id];
 
         // TODO: Remove this. This is just temporary global logs to help find conflicts.
-        this.getMainGuild().channels.resolve(this.channels.globalLogs).send("`" + guild.id + ": " + channelID + "` **" + guild.name + "**", funct(new this.discord.MessageEmbed().setTimestamp(new Date())));
+        if(guild.id !== "406825495502782486") this.getMainGuild().channels.resolve(this.channels.globalLogs).send("`" + guild.id + ": " + channelID + "` **" + guild.name + "**", funct(new this.discord.MessageEmbed().setTimestamp(new Date())));
 
         // No log channel defined.
         if(!channelID) return;
@@ -166,20 +172,16 @@ module.exports = {
         });
     },
     findGuildMember(find, guild) {
-        // noinspection EqualityComparisonWithCoercionJS
-        return guild.members.find(m => find == m.id || find == m.user.username || find.substring(2, find.length - 1) == m.id || find.substring(3, find.length - 1) == m.id || m.user.username.toLowerCase().includes(find.toLowerCase()));
+        return guild.members.find(m => find === m.id || find === m.user.username || find.substring(2, find.length - 1) === m.id || find.substring(3, find.length - 1) === m.id || m.user.username.toLowerCase().includes(find.toLowerCase()));
     },
     findUser(find) {
-        // noinspection EqualityComparisonWithCoercionJS
-        return getClient().users.find(u => find == u.id || find == u.username || find.substring(2, find.length - 1) == u.id || find.substring(3, find.length - 1) == u.id || u.username.toLowerCase().includes(find.toLowerCase()));
+        return getClient().users.find(u => find === u.id || find === u.username || find.substring(2, find.length - 1) === u.id || find.substring(3, find.length - 1) === u.id || u.username.toLowerCase().includes(find.toLowerCase()));
     },
     findRole(find, guild) {
-        // noinspection EqualityComparisonWithCoercionJS
-        return guild.roles.filter(r => r.id !== guild.id).find(r => find == r.id || find.substring(3, find.length - 1) == r.id || find.toLowerCase() == r.name.toLowerCase() || r.name.toLowerCase().includes(find.toLowerCase()));
+        return guild.roles.filter(r => r.id !== guild.id).find(r => find === r.id || find.substring(3, find.length - 1) === r.id || find.toLowerCase() === r.name.toLowerCase() || r.name.toLowerCase().includes(find.toLowerCase()));
     },
     findChannel(find, guild) {
-        // noinspection EqualityComparisonWithCoercionJS
-        return guild.channels.filter(c => c.id !== guild.id).find(c => find == c.id || find.substring(3, find.length - 1) == c.id || find.toLowerCase() == c.name.toLowerCase() || c.name.toLowerCase().includes(find.toLowerCase()));
+        return guild.channels.filter(c => c.id !== guild.id).find(c => find === c.id || find.substring(3, find.length - 1) === c.id || find.toLowerCase() === c.name.toLowerCase() || c.name.toLowerCase().includes(find.toLowerCase()));
     },
     isJSON(json) {
         try {if(typeof JSON.parse(json) == "object") return true} catch(e) {}
@@ -289,5 +291,61 @@ module.exports = {
     },
     getEmoji(str) {
         return str.match(/(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|[\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|[\ud83c[\ude32-\ude3a]|[\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])/g);
+    },
+    getOverwrites(type, guild) {
+        if(type === "default") {
+            return {
+                permissionOverwrites: [
+                    {id: guild.id, deny: ["VIEW_CHANNEL"]},
+                    {id: this.roles.verified, allow: ["VIEW_CHANNEL"]},
+                    {id: this.roles.bots, allow: ["VIEW_CHANNEL"]},
+                    {id: this.roles.muted, deny: ["SEND_MESSAGES"]}
+                ]
+            };
+        }
+    },
+    async getPerms(member, perm) {
+        const {guild} = member;
+        let db = guild ? await guild.client.keyv.get("guilds") : null;
+        let realPrefix = null;
+        let mods = null;
+        if(db && guild && db[guild.id] && db[guild.id].prefix) {
+            realPrefix = db[guild.id].prefix;
+            if(db[guild.id].mods) mods = db[guild.id].mods;
+        }
+        // Process permissions prior to execution.
+        const isAuthor = member.id === this.author.id;
+        const isAdmin = member ? member.hasPermission("ADMINISTRATOR") : false;
+        // Different approach for mods.
+        let isMod = false;
+        const modRoles = mods ? mods["roles"] : null;
+        if(modRoles) {
+            for(let r of modRoles) {
+                if(member.roles.has(r)) {
+                    isMod = true;
+                    break;
+                }
+            }
+        }
+        const modUsers = mods ? mods["users"] : null;
+        if(!isMod && modUsers) {
+            for(let u of modUsers) {
+                if(member.id === u) {
+                    isMod = true;
+                    break;
+                }
+            }
+        }
+        switch(perm) {
+            case "author":
+                return isAuthor;
+            case "admin":
+                return isAuthor || isAdmin;
+            case "mod":
+                return isAuthor || (isAdmin || isMod);
+            case null:
+            default:
+                return false;
+        }
     }
 };

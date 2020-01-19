@@ -3,13 +3,13 @@ Announcer for Join/Leave - Done
 Voice-Text Handler
 Reaction Handler:
   Add:
+  - Rule Accept - Done
+  - Suggestions Upvote/Downvote - Done
+  - Suggestion Accept/Deny
+  - Bug Reports - Done
   - Staff Applications
   - To Do List
-  - Rule Accept - Done
-  - Suggestions Upvote/Downvote
-  - Suggestion Accept/Deny
   - Role Toggle
-  - Bug Reports
   Remove:
+  - Suggestions Upvote/Downvote - Done
   - Role Toggle
-  - Suggestions Upvote/Downvote

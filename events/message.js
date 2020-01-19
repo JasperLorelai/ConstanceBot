@@ -1,27 +1,21 @@
 const client = require("../bot");
 client.on("message", async message => {
-    const {content, member, author, client, guild} = message;
-    const {commands, config, keyv, handleMsg} = client;
-    let db = guild ? await keyv.get("guilds") : null;
+    const {content, member, author, client, guild, channel} = message;
+    const {commands, config, handleMsg} = client;
     let realPrefix = null;
-    let mods = null;
-    if(db && guild && db[guild.id] && db[guild.id].prefix) {
-        realPrefix = db[guild.id].prefix;
-        if(db[guild.id].mods) mods = db[guild.id].mods;
-    }
-
     let prefix = config.globalPrefix;
+    if(guild) {
+        let db = await client["keyv"].get("guilds");
+        if(db && db[guild.id] && db[guild.id].prefix) realPrefix = db[guild.id].prefix;
+    }
     if(!content.startsWith(prefix)) {
-        if(!message.guild) {
-            // Non command handlers.
+        if(!guild) {
             await handleMsg(message);
             return;
         }
         // Store whatever prefix is found.
         prefix = realPrefix;
-
         if(!(prefix && content.startsWith(prefix))) {
-            // Non command handlers.
             await handleMsg(message);
             return;
         }
@@ -33,61 +27,20 @@ client.on("message", async message => {
     // "cmd not found, try using ?commands to find your command"
     if(!command) return;
     try {
-        const {guildOnly, params, execute, perm} = command;
-        if(guildOnly && message.channel.type !== "text") {
+        if(command.guildOnly && channel.type !== "text") {
             await message.reply("Can't execute that command inside DMs.");
             return;
         }
-        // Process permissions prior to execution.
-        const isAuthor = author.id === config.author.id;
-        const isAdmin = member ? member.hasPermission("ADMINISTRATOR") : false;
-        // Different approach for mods.
-        let isMod = false;
-        const modRoles = mods ? mods["roles"] : null;
-        if(modRoles) {
-            for(let r of modRoles) {
-                if(message.guild.roles.has(r)) {
-                    isMod = true;
-                    break;
-                }
-            }
-        }
-        const modUsers = mods ? mods["users"] : null;
-        if(!isMod && modUsers) {
-            for(let u of modUsers) {
-                // noinspection EqualityComparisonWithCoercionJS
-                if(member.id == u) {
-                    isMod = true;
-                    break;
-                }
-            }
-        }
-        let pass = false;
-        switch(perm) {
-            case "author":
-                pass = isAuthor;
-                break;
-            case "admin":
-                pass = isAuthor ? true : isAdmin;
-                break;
-            case "mod":
-                pass = isAuthor ? true : (isAdmin ? true : isMod);
-                break;
-            case null:
-            default:
-                pass = true;
-                break;
-        }
-        if(!pass) {
-            await message.channel.send(author, config.embed("No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + perm + "`", config.color.red));
+        if(!await config.getPerms(member, command.perm)) {
+            await channel.send(author.toString(), config.embed("No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + command.perm + "`", config.color.red));
             return;
         }
         // Run command if all required args are specified.
-        if(!params || args.length >= params.filter(p => p.startsWith("[")).length) execute(message, args);
+        if(!command.params || args.length >= command.params.filter(p => p.startsWith("[")).length) command.execute(message, args);
         // Execute help command for command if not.
         else commands.get("help").execute(message, [commandName]);
     } catch(e) {
-        await message.reply(author.toString(), config.embed("Error", "Exception during command execution. Full error log was sent to console.", config.color.red));
+        await channel.send(author.toString(), config.embed("Error", "Exception during command execution. Full error log was sent to console.", config.color.red));
         console.error(e);
     }
 });

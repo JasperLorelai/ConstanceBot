@@ -3,8 +3,7 @@ const {config} = client;
 client.on("guildMemberAdd", async member => {
     const {guild, user} = member;
 
-    // noinspection EqualityComparisonWithCoercionJS
-    if(guild.id == config.guilds.mhapGuild) await member.roles.add(config.roles.unverified);
+    if(guild.id === config.guilds.mhapGuild) await member.roles.add(config.roles.unverified);
 
     config.log(guild, embed => embed.setColor(config.color.logs.guildMemberAdd)
         .setTitle("User Joined")
