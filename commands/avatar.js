@@ -5,38 +5,38 @@ module.exports = {
     params: ["(user)"],
     async execute(message, args) {
         const {client, author, channel} = message;
-        const {config, emoji} = client;
+        const {config, emojiFile} = client;
         const {red, yellow} = config.color;
         const user = args[0] ? config.findUser(args[0]) : author;
         if(!user) {
             await channel.send(author.toString(), config.embed("Avatar", "User not found!", red));
             return null;
         }
-        const msg = await channel.send(author.toString(), config.embed("**" + user.username + "**'s Avatar", "Pick avatar size:\n" + emoji["1"] + " - `128`\n" + emoji["2"] + " - `256`\n" + emoji["3"] + " - `512`\n" + emoji["4"] + " - `1024`\n" + emoji["5"] + " - `2048`", yellow));
-        await msg.react(emoji["1"]);
-        await msg.react(emoji["2"]);
-        await msg.react(emoji["3"]);
-        await msg.react(emoji["4"]);
-        await msg.react(emoji["5"]);
+        const msg = await channel.send(author.toString(), config.embed("**" + user.username + "**'s Avatar", "Pick avatar size:\n" + emojiFile["1"] + " - `128`\n" + emojiFile["2"] + " - `256`\n" + emojiFile["3"] + " - `512`\n" + emojiFile["4"] + " - `1024`\n" + emojiFile["5"] + " - `2048`", yellow));
+        await msg.react(emojiFile["1"]);
+        await msg.react(emojiFile["2"]);
+        await msg.react(emojiFile["3"]);
+        await msg.react(emojiFile["4"]);
+        await msg.react(emojiFile["5"]);
         const coll = msg.createReactionCollector((r, u) => u.id !== client.user.id, {time: 15000});
         let size = 128;
         coll.on("collect", (r, u) => {
             r.users.remove(u);
             if(u.id !== author.id) return;
             switch(r.emoji.toString()) {
-                case emoji["1"]:
+                case emojiFile["1"]:
                     size = 128;
                     break;
-                case emoji["2"]:
+                case emojiFile["2"]:
                     size = 256;
                     break;
-                case emoji["3"]:
+                case emojiFile["3"]:
                     size = 512;
                     break;
-                case emoji["4"]:
+                case emojiFile["4"]:
                     size = 1024;
                     break;
-                case emoji["5"]:
+                case emojiFile["5"]:
                     size = 2048;
                     break;
             }

@@ -336,7 +336,7 @@ module.exports = {
                 return isAuthor || (isAdmin || isMod);
             case null:
             default:
-                return false;
+                return true;
         }
     }
 };

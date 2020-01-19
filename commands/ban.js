@@ -6,7 +6,7 @@ module.exports = {
     perm: "mod",
     async execute(message, args) {
         const {client, guild, channel, author} = message;
-        const {config, emoji} = client;
+        const {config, emojiFile} = client;
         const {red} = config.color;
         let member = config.findGuildMember(args[0], guild);
         if(!member) {
@@ -27,25 +27,25 @@ module.exports = {
                 case "❌":
                     days = 0;
                     break;
-                case emoji["1"]:
+                case emojiFile["1"]:
                     days = 1;
                     break;
-                case emoji["2"]:
+                case emojiFile["2"]:
                     days = 2;
                     break;
-                case emoji["3"]:
+                case emojiFile["3"]:
                     days = 3;
                     break;
-                case emoji["4"]:
+                case emojiFile["4"]:
                     days = 4;
                     break;
-                case emoji["5"]:
+                case emojiFile["5"]:
                     days = 5;
                     break;
-                case emoji["6"]:
+                case emojiFile["6"]:
                     days = 6;
                     break;
-                case emoji["7"]:
+                case emojiFile["7"]:
                     days = 7;
                     break;
             }
@@ -62,13 +62,13 @@ module.exports = {
         coll.on("end", async () => await msg.delete());
         try {
             await msg.react("❌");
-            await msg.react(emoji["1"]);
-            await msg.react(emoji["2"]);
-            await msg.react(emoji["3"]);
-            await msg.react(emoji["4"]);
-            await msg.react(emoji["5"]);
-            await msg.react(emoji["6"]);
-            await msg.react(emoji["7"]);
+            await msg.react(emojiFile["1"]);
+            await msg.react(emojiFile["2"]);
+            await msg.react(emojiFile["3"]);
+            await msg.react(emojiFile["4"]);
+            await msg.react(emojiFile["5"]);
+            await msg.react(emojiFile["6"]);
+            await msg.react(emojiFile["7"]);
         } catch(e) {
         }
     }
