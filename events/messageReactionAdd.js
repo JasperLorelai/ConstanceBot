@@ -1,13 +1,49 @@
 const client = require("../bot");
 const {config, keyv} = client;
 client.on("messageReactionAdd", async (r, u) => {
+    // Ignore if the event was handled externally.
+    if(r.message.deleted) return;
     const {guild, channel, embeds} = r.message;
 
-    if(guild && channel.parent && channel.parent.name === "Support Tickets" && embeds && embeds.length && u.id !== client.user.id) {
+    if(channel.id === config.channels.todolist) {
+        if(u.id === client.user.id) return;
+        if(!["❌","✅"].includes(r.emoji.toString())) return;
+        const embed = config.getEmbed(r.message);
+        await r.message.delete();
+        if(r.emoji.toString() === "❌") config.botLog().send(embed.setColor(config.color.red).setTitle("To Do List Item - Declined"));
+        if(r.emoji.toString() === "✅") config.botLog().send(embed.setColor(config.color.green).setTitle("To Do List Item - Completed"));
+    }
+
+    // Handle Suggestion admin reactions.
+    if(guild && channel["parent"] && channel["parent"].name === "Suggestions" && embeds && embeds.length) {
+        if(u.id === client.user.id) return;
+        const suggestion = embeds.find(e => e.title === "They suggested:");
+        const member = guild.members.resolve(u.id);
+        const pass = member ? await config.getPerms(member, "mod") : false;
+        if(suggestion && ["✅", "❌"].includes(r.emoji.toString()) && !["accepted", "denied"].includes(channel["name"]) && pass) {
+            await r.users.remove(u.id);
+            if(r.emoji.toString() === "✅") {
+                await r.message.edit(suggestion.setColor(config.color.green).setTitle("Accepted Suggestion:"));
+                // noinspection JSUnresolvedFunction
+                await channel.setName("accepted-" + channel["name"]);
+            }
+            if(r.emoji.toString() === "❌") {
+                await r.message.edit(suggestion.setColor(config.color.red).setTitle("Denied Suggestion:"));
+                // noinspection JSUnresolvedFunction
+                await channel.setName("denied-" + channel["name"]);
+            }
+            // noinspection JSUnresolvedFunction
+            await channel.overwritePermissions({permissionOverwrites: [{id: guild.id, deny: "SEND_MESSAGES"}]});
+        }
+    }
+
+    // Handle Support ticket closing.
+    if(guild && channel["parent"] && channel["parent"].name === "Support Tickets" && embeds && embeds.length) {
+        if(u.id === client.user.id) return;
         const ticket = embeds.find(e => e.title === "Problem:");
         if(ticket) {
             await r.users.remove(u.id);
-            if(!channel.name.includes("solved")) {
+            if(!channel["name"].includes("solved")) {
                 let pass = false;
                 // Is creator.
                 if(u.id === ticket.footer.text) pass = true;
@@ -18,17 +54,13 @@ client.on("messageReactionAdd", async (r, u) => {
                 }
                 if(pass) {
                     await channel.send(config.embed("Closed", "This support ticket was closed by: " + u.toString(), config.color.red));
-                    await channel.setName("solved-" + channel.name);
+                    // noinspection JSUnresolvedFunction
+                    await channel.setName("solved-" + channel["name"]);
                     await r.message.reactions.removeAll();
                     await r.message.edit(ticket.fields.splice(1, 1));
                     setTimeout(async () => {
                         // noinspection JSUnresolvedFunction
-                        await channel.overwritePermissions({
-                            permissionOverwrites: [{
-                                id: guild.id,
-                                deny: "VIEW_CHANNEL"
-                            }]
-                        });
+                        await channel.overwritePermissions({permissionOverwrites: [{id: guild.id, deny: "VIEW_CHANNEL"}]});
                     }, 2000);
                 }
             }
@@ -36,7 +68,8 @@ client.on("messageReactionAdd", async (r, u) => {
     }
 
     // Rule accept.
-    if(r.message.id === config.messages.rules && r.emoji.toString() === "✅" && u.id !== client.user.id) {
+    if(r.message.id === config.messages.rules && r.emoji.toString() === "✅") {
+        if(u.id === client.user.id) return;
         const member = await guild.members.resolve(u.id);
         if(member.roles.has(config.roles.verified)) return;
         // TODO: Remove comments.

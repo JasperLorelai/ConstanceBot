@@ -5,7 +5,7 @@ module.exports = {
     async execute(message) {
         const {client, channel, author} = message;
         const {commands, config} = client;
-        const text = commands.filter(c => !c.guildOnly).map(c => "\* `" + c.name + (c.params ? " " + c.params.join(" ") : "") + "` " + (c.perm && c.perm === "author" ? " (**Bot Author**)" : "")).join("\n");
+        const text = commands.filter(c => !c.guildOnly && !c.hide).map(c => "\* `" + c.name + (c.params ? " " + c.params.join(" ") : "") + "` " + (c.perm && c.perm === "author" ? " (**Bot Author**)" : "")).join("\n");
         await channel.send(author.toString(), config.embed("DM Command List", text));
     }
 };

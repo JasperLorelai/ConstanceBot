@@ -1,5 +1,7 @@
 const client = require("../bot");
 client.on("messageUpdate", async (oldMessage, newMessage) => {
+    // Ignore if the event was handled externally.
+    if(newMessage.deleted) return;
     const {config, keyv} = client;
     const {guild, author, channel} = newMessage;
     // Check only if content changed.

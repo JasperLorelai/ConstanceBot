@@ -44,3 +44,6 @@ String.prototype.discordMKD = function() {
     }
     return splits.join("\n");
 };
+Discord.MessageEmbed.prototype.setColorRandom = function() {
+    return this.setColor(Math.floor(Math.random()*16777215));
+};

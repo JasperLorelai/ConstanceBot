@@ -56,8 +56,6 @@ module.exports = {
                 reason: member.user.username + " has been banned from the server by user: " + author.username + (args[0] ? "(reason: " + args.join(" ") + ")" : "")
             });
             message.delete();
-            // TODO: Look into modlogs.
-            //await config.modlogs.add("ban", guild, member.id, author.id, (args[0] ? args.join(" ") : null));
         });
         coll.on("end", async () => await msg.delete());
         try {

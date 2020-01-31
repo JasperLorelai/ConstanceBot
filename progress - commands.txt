@@ -1,33 +1,3 @@
-help - Done
-say - Done
-prefix - Done
-responses - Done
-welcome - Logged
-roles - Done
-roleinfo - Done
-rolecolor - Done
-setnick - Done
-role - Done
-rolename - Skipped
-purge - Dome
-kick - Done
-ban - Done
-unban - Skipped
-members - Done
-avatar - Done
-eval - Done
-mods - Done
-userinfo - Done
-serverinfo - Done
-banlist - Done
-channelinfo - Skipped
-server - Done
-quirks - Done
-taken - Done
-namemc - Skipped
-edit - Skipped
-tts - Skipped ###
-poll - Done
 warn
 clearwarn
 warns
@@ -39,4 +9,3 @@ link
 construct
 trellobuild
 rosterbuild
-solved

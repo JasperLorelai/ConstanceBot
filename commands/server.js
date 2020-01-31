@@ -2,7 +2,7 @@ module.exports = {
     name: "server",
     description: "Displays info of a minecraft server.",
     aliases: ["ip"],
-    params: ["(optional)"],
+    params: ["(ip)"],
     async execute(message, args) {
         const {client, channel} = message;
         const config = client.config;

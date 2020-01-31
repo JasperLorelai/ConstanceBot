@@ -3,6 +3,8 @@ module.exports = async message => {
     const {config, keyv} = client;
     const main = config.getMainGuild();
     let db = await keyv.get("guilds");
+    // Ignore if it was handled externaly.
+    if(message.deleted) return;
     // DM Channel messages.
     if(!guild) {
         // Ignore bot.
@@ -65,6 +67,17 @@ module.exports = async message => {
         return;
     }
 
+    // Handle To-Do in main guild.
+    // TODO: Remove last condition after Zatanna is removed.
+    if(channel.id === config.channels.todolist) {
+        if(author.id === client.user.id || author.bot) return;
+        message.delete();
+        const msg = await channel.send(new config.discord.MessageEmbed().setDescription(content).setColorRandom().setAuthor(author.tag, author.displayAvatarURL()));
+        await msg.react("❌");
+        await msg.react("✅");
+        return;
+    }
+
     // DM messages from the DM channels.
     if(channel.parent && channel.parent.id === config.categories.dmChannels) {
         if(channel.name === client.user.id) return;
@@ -80,7 +93,6 @@ module.exports = async message => {
 
     // Prefix query.
     if(mentions && mentions.users && mentions.users.has(client.user.id)) {
-        // Ignore bot.
         if(author.id === client.user.id) return;
         await channel.send(config.embed("Guild Prefix", "My prefix is: **" + (db && guild && db[guild.id] && db[guild.id].prefix ? db[guild.id].prefix : config.globalPrefix) + "**"));
         return;
@@ -97,12 +109,7 @@ module.exports = async message => {
             if(!postsCategory) {
                 postsCategory = await guild.channels.create(categoryTitle, {type: "category", position: 9999});
                 // TODO: Remove below and the comment.
-                await postsCategory.overwritePermissions({
-                    permissionOverwrites: [{
-                        id: guild.id,
-                        deny: ["VIEW_CHANNEL"]
-                    }]
-                });
+                await postsCategory.overwritePermissions({permissionOverwrites: [{id: guild.id, deny: ["VIEW_CHANNEL"]}]});
                 //await suggestions.overwritePermissions(config.getOverwrites("default", guild));
             }
             const newPost = await guild.channels.create(channelName, {parent: postsCategory.id});
@@ -137,6 +144,8 @@ module.exports = async message => {
                 msg = await suggestion.send(config.embed("They suggested:", embed.description).setAuthor(user.tag, user.displayAvatarURL()));
                 await msg.react("👍");
                 await msg.react("👎");
+                await msg.react("✅");
+                await msg.react("❌");
                 break;
         }
         message.delete();
@@ -145,7 +154,6 @@ module.exports = async message => {
 
     // Handle responses.
     if(db && guild && db[guild.id] && db[guild.id].responses) {
-        // Ignore bot.
         if(author.id === client.user.id) return;
         for(let r of db[guild.id].responses) {
             let trigger = r.trigger;

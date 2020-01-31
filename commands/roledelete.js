@@ -1,8 +1,8 @@
 module.exports = {
-    name: "roledelte",
+    name: "roledelete",
     description: "Delete a role.",
     aliases: ["roledel", "delrole", "drole"],
-    params: ["[required]", "(optional)"],
+    params: ["[role]"],
     guildOnly: true,
     perm: "admin",
     async execute(message, args) {

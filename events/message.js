@@ -1,5 +1,7 @@
 const client = require("../bot");
 client.on("message", async message => {
+    // Ignore if the event was handled externally.
+    if(message.deleted) return;
     const {content, member, author, client, guild, channel} = message;
     const {commands, config, handleMsg} = client;
     let realPrefix = null;

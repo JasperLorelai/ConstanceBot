@@ -36,6 +36,7 @@ module.exports = {
     channels: {
         botLogs: "575738387307298831",
         globalLogs: "663988507542421504",
+        todolist: "575695022964473857",
         logs: {
             "575376952517591041": "575738387307298831",
             "406825495502782486": "663981081409749002"
@@ -77,25 +78,6 @@ module.exports = {
         // Let the dev make changes against this embed before sending.
         channel.send(funct(new this.discord.MessageEmbed().setTimestamp(new Date())));
     },
-    //modlogs: {
-    //async get(guild, user) {
-    // TO-DO: Add per user.
-    //if(!user) return await guild.client.keyv.get("modlogs." + guild.id) || [];
-    //else return null;
-    //},
-    //async add(type, guild, user, mod, reason, time) {
-    //const keyv = guild.client.keyv;
-    //const logs = await keyv.get("modlogs." + guild.id) || [];
-    //logs.push({
-    //type: type,
-    //user: user,
-    //mod: mod,
-    //reason: reason || null,
-    //time: time || new Date().getTime()
-    //});
-    //await keyv.set("modlogs." + guild.id, logs);
-    //}
-    //},
     getJoinPosition(member) {
         return member.guild.members.sort((a, b) => a.joinedAt - b.joinedAt).array().findIndex(m => m.id === member.id);
     },
@@ -166,7 +148,7 @@ module.exports = {
         return guild.members.find(m => find === m.id || find === m.user.username || find.substring(2, find.length - 1) === m.id || find.substring(3, find.length - 1) === m.id || m.user.username.toLowerCase().includes(find.toLowerCase()));
     },
     findUser(find) {
-        return getClient().users.find(u => find === u.id || find === u.username || find.substring(2, find.length - 1) === u.id || find.substring(3, find.length - 1) === u.id || u.username.toLowerCase().includes(find.toLowerCase()));
+        return this.getClient().users.find(u => find === u.id || find === u.username || find.substring(2, find.length - 1) === u.id || find.substring(3, find.length - 1) === u.id || u.username.toLowerCase().includes(find.toLowerCase()));
     },
     findRole(find, guild) {
         return guild.roles.filter(r => r.id !== guild.id).find(r => find === r.id || find.substring(3, find.length - 1) === r.id || find.toLowerCase() === r.name.toLowerCase() || r.name.toLowerCase().includes(find.toLowerCase()));
