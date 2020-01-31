@@ -107,35 +107,30 @@ module.exports = {
         if(message.embeds.length < 1) return;
         const embed = new this.discord.MessageEmbed(message.embeds.filter(e => e.type === "rich")[0]);
         if(embed.image) embed.image.url = "attachment://" + embed.image.url.substr(embed.image.url.lastIndexOf("/") + 1);
+        if(embed.thumbnail) embed.thumbnail.url = "attachment://" + embed.thumbnail.url.substr(embed.thumbnail.url.lastIndexOf("/") + 1);
         return embed;
     },
-    async handlePrompt(message, text, ttl, separator) {
-        // Splitting text into pages
-        if(!separator) separator = "\n";
-        let split = [];
-        for(let i = 0; i <= text.length; i += text.lastIndexOf(separator, i + 2048)) {
-            split.push(text.substring(i, text.lastIndexOf(separator, i + 2048)));
-            if(i === text.lastIndexOf(separator, i + 2048)) split[split.length - 1] = text.substring(i, i + 2048);
-        }
+    async handlePrompt(message, text, ttl) {
+        let splits = text.match(/(.|\n){1,2000}/g);
         // Setup
         const embed = this.getEmbed(message);
         let index = 0;
-        await message.edit(embed.setDescription(split[0]).addField("Pages", "Page: " + (index + 1) + "**/**" + split.length, true));
+        await message.edit(embed.setDescription(splits[0]).addField("Pages", "Page: " + (index + 1) + "**/**" + splits.length, true));
         await message.react("◀");
         await message.react("▶");
         // Collector events
-        const coll = message.createReactionCollector((r, u) => u.id !== message.client.user.id, {time: ttl ? ttl : 90000});
+        const coll = message.createReactionCollector((r, u) => u.id !== message.client.user.id, {time: ttl || 90000});
         coll.on("collect", async (r, u) => {
             let emoji = r.emoji.toString();
             if(emoji === "▶") {
                 index++;
-                if(index >= split.length) index = 0;
+                if(index >= splits.length) index = 0;
             }
             if(emoji === "◀") {
                 index--;
-                if(index < 0) index = split.length - 1;
+                if(index < 0) index = splits.length - 1;
             }
-            await message.edit(embed.setDescription(split[index]).spliceField(0, 1, "Pages", "Page: " + (index + 1) + "**/**" + split.length, true));
+            await message.edit(embed.setDescription(splits[index]).spliceField(0, 1, "Pages", "Page: " + (index + 1) + "**/**" + splits.length, true));
             await r.users.remove(u);
         });
         coll.on("end", async () => {
@@ -163,6 +158,45 @@ module.exports = {
     isRegex(regex) {
         try {new RegExp(regex)} catch(e) {return false}
         return true;
+    },
+    hexToRGB(h) {
+        let r = 0, g = 0, b = 0;
+        if (h.length === 4) {
+            r = "0x" + h[1] + h[1];
+            g = "0x" + h[2] + h[2];
+            b = "0x" + h[3] + h[3];
+        }
+        else if (h.length === 7) {
+            r = "0x" + h[1] + h[2];
+            g = "0x" + h[3] + h[4];
+            b = "0x" + h[5] + h[6];
+        }
+        return [r, g, b];
+    },
+    hexToHSL(hex) {
+        // Convert hex to RGB first
+        let [r, g, b] = this.hexToRGB(hex);
+        // Then to HSL
+        r /= 255;
+        g /= 255;
+        b /= 255;
+        let cmin = Math.min(r,g,b);
+        let cmax = Math.max(r,g,b);
+        let delta = cmax - cmin;
+        let h = 0;
+        let s = 0;
+        let l = 0;
+        if (delta === 0) h = 0;
+        else if (cmax === r) h = ((g - b) / delta) % 6;
+        else if (cmax === g) h = (b - r) / delta + 2;
+        else h = (r - g) / delta + 4;
+        h = Math.round(h * 60);
+        if (h < 0) h += 360;
+        l = (cmax + cmin) / 2;
+        s = delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+        s = + (s * 100).toFixed(1);
+        l = + (l * 100).toFixed(1);
+        return [h, s, l];
     },
     colorToHex(color) {
         let final = color.match(/([0-9]*(\.[0-9]*)?(?:[%|°])?)+/g).filter(e => e);

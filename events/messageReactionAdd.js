@@ -1,9 +1,9 @@
 const client = require("../bot");
 const {config, keyv} = client;
 client.on("messageReactionAdd", async (r, u) => {
+    const {guild, channel, embeds} = r.message;
     // Ignore if the event was handled externally.
     if(r.message.deleted) return;
-    const {guild, channel, embeds} = r.message;
 
     if(channel.id === config.channels.todolist) {
         if(u.id === client.user.id) return;

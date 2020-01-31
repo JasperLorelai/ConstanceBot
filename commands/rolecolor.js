@@ -9,15 +9,14 @@ module.exports = {
     async execute(message, args) {
         const {client, guild, channel, author} = message;
         const {config} = client;
-        const {red} = config.color;
         const role = config.findRole(args.shift(), guild);
         if(!role) {
-            await channel.send(author.toString(), config.embed(client, "Role Color", "Role not found!", red));
+            await channel.send(author.toString(), config.embed("Role Color", "Role not found!", config.color.red));
             return null;
         }
         let color = config.colorToHex(args.join("").replace(/\s/g, ""));
         if(!color) {
-            await channel.send(author.toString(), config.embed(client, "Role Color", "Invalid color! The only color types supported are hex, 'rgb(r,g,b)' and 'hsl(h,s,l)'.", red));
+            await channel.send(author.toString(), config.embed("Role Color", "Invalid color! The only color types supported are hex, 'rgb(r,g,b)' and 'hsl(h,s,l)'.", config.color.red));
             return null;
         }
         const canvas = client.canvas.createCanvas(380, 84);
