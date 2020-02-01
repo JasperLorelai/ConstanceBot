@@ -1,6 +1,5 @@
 module.exports = {
     discord: require("discord.js"),
-    token: "NTc5NzU5OTU4NTU2NjcyMDEx.XZcc5A.TDZBLpHFRSwLGRAr74BA0LIn_jA",
     globalPrefix: "&",
     defaultIP: "play.mhaprodigy.uk",
     ship: [

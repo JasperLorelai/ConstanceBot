@@ -14,9 +14,9 @@ client.canvas = require("canvas");
 client.handleMsg = require("./files/handleMsg.js");
 
 // Initialising variables
-const {config, keyv, fs} = client;
+const {keyv, fs} = client;
 
-client.login(config.token).catch(e => console.log(e));
+client.login(process.env.BOT_TOKEN).catch(e => console.log(e));
 module.exports = client;
 
 // Grabbing handlers
