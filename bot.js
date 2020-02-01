@@ -1,6 +1,8 @@
 // Importing libraries
 const Discord = require("discord.js");
 const Keyv = require("keyv");
+const express = require("express");
+const app = express();
 
 // Creating classes and collections
 const client = new Discord.Client();
@@ -12,6 +14,11 @@ client.keyv = new Keyv("sqlite://db.sqlite");
 client.fetch = require("node-fetch");
 client.canvas = require("canvas");
 client.handleMsg = require("./files/handleMsg.js");
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log("App running on port " + PORT);
+});
 
 // Initialising variables
 const {keyv, fs} = client;
