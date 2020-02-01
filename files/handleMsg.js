@@ -124,7 +124,7 @@ module.exports = async message => {
         switch(type) {
             case "rawSupportTicket":
                 const ticket = await handlePost("Support Tickets", "ticket");
-                msg = await ticket.send(config.embed("Problem:", embed.description).setAuthor(user.tag, user.displayAvatarURL()).addField("React Actions", "❌ - Close support ticket. (`Server Mod` or OP)").setFooter(user.id));
+                msg = await ticket.send(config.embed("Problem:", embed.description).setAuthor(user.tag, user.displayAvatarURL()).addField("React Actions", "❌ - Close support ticket. (`Server Admin` or OP)").setFooter(user.id));
                 await msg.react("❌");
                 const restriction = embed.fields[0].value;
                 if(restriction && restriction !== "EVERYONE!") {

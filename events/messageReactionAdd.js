@@ -50,19 +50,25 @@ client.on("messageReactionAdd", async (r, u) => {
                 // Isn't creator but has mod perms?
                 if(!pass) {
                     const member = guild.members.resolve(u.id);
-                    if(member) pass = config.getPerms(member, "mod");
+                    if(member) pass = await config.getPerms(member, "admin");
                 }
                 if(pass) {
-                    await channel.send(config.embed("Closed", "This support ticket was closed by: " + u.toString(), config.color.red));
+                    const msg = await channel.send(config.embed("Closed", "This support ticket was closed by: " + u.toString(), config.color.red).addField("React Actions", "❌ - Hide support ticket. (`Server Admin`)"));
+                    await msg.react("❌");
                     // noinspection JSUnresolvedFunction
                     await channel.setName("solved-" + channel["name"]);
                     await r.message.reactions.removeAll();
                     await r.message.edit(ticket.fields.splice(1, 1));
-                    setTimeout(async () => {
-                        // noinspection JSUnresolvedFunction
-                        await channel.overwritePermissions({permissionOverwrites: [{id: guild.id, deny: "VIEW_CHANNEL"}]});
-                    }, 2000);
                 }
+            }
+        }
+        const closedTicket = embeds.find(e => e.title === "Closed");
+        if(closedTicket) {
+            await r.users.remove(u.id);
+            const member = guild.members.resolve(u.id);
+            if(member && await config.getPerms(member, "admin")) {
+                // noinspection JSUnresolvedFunction
+                await channel.overwritePermissions({permissionOverwrites: [{id: guild.id, deny: "VIEW_CHANNEL"}]});
             }
         }
     }

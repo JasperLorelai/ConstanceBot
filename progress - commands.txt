@@ -3,8 +3,6 @@ clearwarn
 warns
 mute
 unmute
-ship
-pickle
 link
 construct
 trellobuild
