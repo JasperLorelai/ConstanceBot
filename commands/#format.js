@@ -8,8 +8,8 @@ module.exports = {
     guildOnly: false,
     // Permission required. Options: "author", "admin", "mod"
     perm: "author",
-    // "args" is unneccessary if "params" is empty or has no required parameters.
     hide: true,
+    // "args" is unneccessary if "params" is empty or has no required parameters.
     execute(message, args) {
     }
 };

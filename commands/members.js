@@ -12,7 +12,7 @@ module.exports = {
             return;
         }
         const text = guild.members.filter(m => m.roles.has(role.id)).map(m => "<@" + m.id + ">").join(", ");
-        const msg = await channel.send(config.embed("Role Members: " + role.name, (text.length >= 2048 ? "" : text)));
-        if(text.length >= 2048) await config.handlePrompt(msg, text);
+        const msg = await channel.send(config.embed("Role Members: " + role.name, (text.length >= 2000 ? "" : text)));
+        if(text.length >= 2000) await config.handlePrompt(msg, text);
     }
 };

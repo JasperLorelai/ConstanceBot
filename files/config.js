@@ -130,8 +130,22 @@ module.exports = {
         if(embed.thumbnail) embed.thumbnail.url = "attachment://" + embed.thumbnail.url.substr(embed.thumbnail.url.lastIndexOf("/") + 1);
         return embed;
     },
-    async handlePrompt(message, text, ttl) {
-        let splits = text.match(/(.|\n){1,2000}/g);
+    async handlePrompt(message, text, ttl, seperator) {
+        // Split text into segments based on the seperator.
+        let splits = [];
+        if(!seperator) seperator = " ";
+        let i = 0;
+        while(text.length) {
+            if(text.length < 2000) {
+                splits.push(text);
+                text = "";
+                break;
+            }
+            const end = text.lastIndexOf(seperator, i + 2000);
+            splits.push(text.substring(i, end));
+            text = text.substr(end);
+            i += end;
+        }
         // Setup
         const embed = this.getEmbed(message);
         let index = 0;

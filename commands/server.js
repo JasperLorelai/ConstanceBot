@@ -27,7 +27,7 @@ module.exports = {
             if(server["mods"]) text += "\n**Mods (" + server["mods"].raw.length + "):** " + server["mods"].names.join("**,** ");
         }
         else text = "**Server was not found.**";
-        const embed = config.embed("Minecraft Server Info", (text.length >= 2048 ? "" : text)).setColor(server.online ? green : red);
+        const embed = config.embed("Minecraft Server Info", (text.length >= 2000 ? "" : text)).setColor(server.online ? green : red);
         if(server.icon) {
             embed.attachFiles([{
                 attachment: Buffer.from(server.icon.replace(/\\/g, "").replace("data:image/png;base64,", "").replace("==", ""), "base64"),
@@ -35,6 +35,6 @@ module.exports = {
             }]).setThumbnail("attachment://bg.png");
         }
         const msg = await channel.send(embed);
-        if(text.length >= 2048) await config.handlePrompt(msg, text);
+        if(text.length >= 2000) await config.handlePrompt(msg, text);
     }
 };

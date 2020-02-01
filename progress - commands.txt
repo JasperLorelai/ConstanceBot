@@ -1,6 +1,3 @@
-warn
-clearwarn
-warns
 mute
 unmute
 link
