@@ -1,4 +1,5 @@
 // Importing libraries
+require("dotenv").config();
 const Discord = require("discord.js");
 const Keyv = require("keyv");
 const express = require("express");
@@ -35,7 +36,7 @@ client.removeAllListeners();
 for(let event of fs.readdirSync("./events").filter(file => file.endsWith(".js") && !file.startsWith("#"))) {
     require("./events/" + event);
 }
-keyv.on("error", err => console.error("Keyv connection error:", err));
+keyv.on("error", err => console.error("Keyv connection error:\n", err));
 
 // Creating some base methods
 String.prototype.toFormalCase = function() {

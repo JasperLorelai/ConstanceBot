@@ -40,10 +40,10 @@ module.exports = {
         verified: "419654978022539285",
         muted: "419644724119601153",
         bots: "419635738804748289",
-        // TODO: Add these from MHAP.
-        polls: "",
-        events: "",
-        changelog: ""
+        polls: "598335282357600286",
+        events: "598335388536274950",
+        changelog: "598335450242875392",
+        staff: "419964554139926559"
     },
     guilds: {
         mainGuild: "575376952517591041",
@@ -65,8 +65,7 @@ module.exports = {
         dmChannels: "632697494865707008"
     },
     messages: {
-        // TODO: Change this for MHAP.
-        rules: "664017502245879818"
+        rules: "550735939257892865"
     },
     trello: {
         key: "21008e4383cece1d9366d9132a8343fb",
@@ -334,14 +333,12 @@ module.exports = {
     },
     getOverwrites(type, guild) {
         if(type === "default") {
-            return {
-                permissionOverwrites: [
-                    {id: guild.id, deny: ["VIEW_CHANNEL"]},
-                    {id: this.roles.verified, allow: ["VIEW_CHANNEL"]},
-                    {id: this.roles.bots, allow: ["VIEW_CHANNEL"]},
-                    {id: this.roles.muted, deny: ["SEND_MESSAGES"]}
-                ]
-            };
+            return [
+                {id: guild.id, deny: ["VIEW_CHANNEL"]},
+                {id: this.roles.verified, allow: ["VIEW_CHANNEL"]},
+                {id: this.roles.bots, allow: ["VIEW_CHANNEL"]},
+                {id: this.roles.muted, deny: ["SEND_MESSAGES"]}
+            ];
         }
     },
     async getPerms(member, perm) {

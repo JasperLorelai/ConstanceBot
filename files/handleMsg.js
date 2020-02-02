@@ -12,12 +12,9 @@ module.exports = async message => {
 
         // Handle Welcomer for MHAP.
         if(db && db[config.guilds.mhapGuild] && db[config.guilds.mhapGuild].welcomer && db[config.guilds.mhapGuild].welcomer[author.id] && (content.toLowerCase().includes("yes") || content.toLowerCase().includes("no"))) {
-            // TODO: Remove supression.
-            // noinspection JSUnusedLocalSymbols
             function processRole(role) {
                 if(content.toLowerCase().includes("yes")) {
-                    // TODO: Remove comment.
-                    //client.guilds.resolve(config.guilds.mhapGuild).members.resolve(author.id).roles.add(config.roles[role]);
+                    client.guilds.resolve(config.guilds.mhapGuild).members.resolve(author.id).roles.add(config.roles[role]);
                     embed.setColor(config.color.green).setDescription("Role added.");
                 }
                 else embed.setColor(config.color.red).setDescription("Role dismissed.");
@@ -68,7 +65,6 @@ module.exports = async message => {
     }
 
     // Handle To-Do in main guild.
-    // TODO: Remove last condition after Zatanna is removed.
     if(channel.id === config.channels.todolist) {
         if(author.id === client.user.id || author.bot) return;
         message.delete();
@@ -107,10 +103,8 @@ module.exports = async message => {
         async function handlePost(categoryTitle, channelName) {
             let postsCategory = categories.find(c => c.name.toLowerCase() === categoryTitle.toLowerCase());
             if(!postsCategory) {
-                postsCategory = await guild.channels.create(categoryTitle, {type: "category", position: 9999});
-                // TODO: Remove below and the comment.
-                await postsCategory.overwritePermissions({permissionOverwrites: [{id: guild.id, deny: ["VIEW_CHANNEL"]}]});
-                //await suggestions.overwritePermissions(config.getOverwrites("default", guild));
+                // noinspection JSCheckFunctionSignatures
+                postsCategory = await guild.channels.create(categoryTitle, {type: "category", position: 9999, permissionOverwrites: config.getOverwrites("default", guild)});
             }
             const newPost = await guild.channels.create(channelName, {parent: postsCategory.id});
             await newPost.setPosition(0);
@@ -128,15 +122,9 @@ module.exports = async message => {
                 await msg.react("❌");
                 const restriction = embed.fields[0].value;
                 if(restriction && restriction !== "EVERYONE!") {
-                    // TODO: Remove comment and statement below.
-                    //await ticket.updateOverwrite(config.roles.verified, {VIEW_CHANNEL: false});
-                    await ticket.updateOverwrite(guild.id, {SEND_MESSAGES: true});
+                    await ticket.updateOverwrite(config.roles.verified, {VIEW_CHANNEL: false});
                     await ticket.updateOverwrite(user.id, {VIEW_CHANNEL: true});
-                    if(restriction === "Staff only.") {
-                        // TODO: Remove comment and statement below, collapse.
-                        //await ticket.updateOverwrite(config.roles.staff, {VIEW_CHANNEL: true});
-                        await ticket.updateOverwrite(guild.id, {SEND_MESSAGES: false});
-                    }
+                    if(restriction === "Staff only.") await ticket.updateOverwrite(config.roles.staff, {VIEW_CHANNEL: true});
                 }
                 break;
             case "rawSuggestion":
