@@ -87,8 +87,8 @@ module.exports = async message => {
         return;
     }
 
-    // Prefix query.
-    if(mentions && mentions.users && mentions.users.has(client.user.id)) {
+    // Clean prefix query.
+    if(mentions && mentions.users && mentions.users.has(client.user.id) && content.replace(config.discord.MessageMentions.USERS_PATTERN, "").trim() === "") {
         if(author.id === client.user.id) return;
         await channel.send(config.embed("Guild Prefix", "My prefix is: **" + (db && guild && db[guild.id] && db[guild.id].prefix ? db[guild.id].prefix : config.globalPrefix) + "**"));
         return;
@@ -99,12 +99,13 @@ module.exports = async message => {
         let embed = config.getEmbed(message);
         const user = client.users.resolve(embed.title);
         const type = message.content;
+        const guild = client.guilds.resolve(config.guilds.mhapGuild);
 
         async function handlePost(categoryTitle, channelName) {
             let postsCategory = categories.find(c => c.name.toLowerCase() === categoryTitle.toLowerCase());
             if(!postsCategory) {
                 // noinspection JSCheckFunctionSignatures
-                postsCategory = await guild.channels.create(categoryTitle, {type: "category", position: 9999, permissionOverwrites: config.getOverwrites("default", guild)});
+                postsCategory = await guild.channels.create(categoryTitle, {type: "category", position: 9999, permissionOverwrites: config.getOverwrites("default", guild.id)});
             }
             const newPost = await guild.channels.create(channelName, {parent: postsCategory.id});
             await newPost.setPosition(0);

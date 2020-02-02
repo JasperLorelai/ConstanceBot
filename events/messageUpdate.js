@@ -7,7 +7,11 @@ client.on("messageUpdate", async (oldMessage, newMessage) => {
     // Check only if content changed.
     if(oldMessage && oldMessage.content === newMessage.content) return;
 
-    if(author.id !== client.user.id && !author.bot) {
+    if(author.id !== client.user.id && !author.bot &&
+        // Handle blacklists.
+        (channel["parentID"] && ![config.categories.olympus, config.categories.archive].includes(channel["parentID"])) &&
+        ![config.channel.bot].includes(channel.id)
+    ) {
         config.log(guild, embed => embed.setColor(config.color.logs.messageUpdate)
             .setAuthor("@" + author.username + "#" + author.discriminator, author.displayAvatarURL())
             .setTitle("Message Edited")

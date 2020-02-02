@@ -22,5 +22,6 @@ module.exports = {
         db[guild.id].warns[member.id].push({date: new Date().toLocaleString(), mod: author.id, reason: reason});
         await keyv.set("guilds", db);
         channel.send(config.embed("Warn", "**User " + member.toString() + " has been warned by " + author.toString() + (reason ? " for:** " + reason : ".**")));
+        member.send(config.embed(guild.name + " - Warn", "**You have been warned by " + author.toString() + (reason ? " for:** " + reason : ".**"), config.color.red));
     }
 };
