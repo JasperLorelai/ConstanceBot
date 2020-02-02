@@ -1,3 +1,4 @@
+// noinspection JSUnusedGlobalSymbols
 module.exports = {
     discord: require("discord.js"),
     globalPrefix: "&",
@@ -44,7 +45,8 @@ module.exports = {
         polls: "598335282357600286",
         events: "598335388536274950",
         changelog: "598335450242875392",
-        staff: "419964554139926559"
+        staff: "419964554139926559",
+        nsfw: "435465339757789186"
     },
     guilds: {
         mainGuild: "575376952517591041",
@@ -75,7 +77,8 @@ module.exports = {
     },
     messages: {
         // MHAP
-        rules: "550735939257892865"
+        rules: "550735939257892865",
+        home: "673629257834037285"
     },
     trello: {
         key: "21008e4383cece1d9366d9132a8343fb",
@@ -351,6 +354,28 @@ module.exports = {
             ];
         }
         return [];
+    },
+    getHomeEmbed() {
+        return this.embed("My Hero Academia Prodigy - Information")
+            .addField("Basic Information",
+                "**IP:** `" + this.defaultIP + "`\n" +
+                "**Version:** Release 1.13.2\n" +
+                "**Discord Invite:** http://mhaprodigy.uk/discord\n" +
+                "**Trello Board:** http://mhaprodigy.uk/trello")
+            .addField("Forms",
+                "**Would you like suggest something?** [(Click here)](http://mhaprodigy.uk/suggest)\n" +
+                "**Need support?** [(Click here)](http://mhaprodigy.uk/support)")
+            .addField("Authentication","🔞 - **NSFW Authentication** - *This authentication is here to warn the recipient to not open the channel at the office or near young children because the channels it will reveal after accepting contain sexual or repulsive content.*\nReact with the displayed reaction to toggle access to the NSFW channel section.")
+            .addField("Toggle Pingable Roles",
+                "📦 - <@&" + this.roles.polls + "> - If you have this role, you will be pinged whenever a poll is up.\n" +
+                "📆 - <@&" + this.roles.events + "> - If you have this role, you will be pinged whenever an envent is announced.\n" +
+                "📰 - <@&" + this.roles.changelog + "> - If you have this role, you will be pinged whenever a changelog is released.\n")
+    },
+    async reactHomeEmbed(message) {
+        await message.react("🔞");
+        await message.react("📦");
+        await message.react("📆");
+        await message.react("📰");
     },
     async getPerms(member, perm) {
         const {guild} = member;

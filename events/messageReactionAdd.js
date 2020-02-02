@@ -69,6 +69,8 @@ client.on("messageReactionAdd", async (r, u) => {
             if(member && await config.getPerms(member, "admin")) {
                 // noinspection JSUnresolvedFunction
                 await channel.overwritePermissions({permissionOverwrites: [{id: guild.id, deny: "VIEW_CHANNEL"}]});
+                await r.message.reactions.removeAll();
+                await r.message.delete();
             }
         }
     }
@@ -82,10 +84,9 @@ client.on("messageReactionAdd", async (r, u) => {
         await member.roles.add(config.roles.verified);
         config.log(guild, embed => embed.setColor(config.color.green)
             .setTitle("User " + u.username + " has accepted the rules!")
-            .setFooter("Member ID: " + user.id)
-            .setThumbnail(user.displayAvatarURL())
+            .setFooter("Member ID: " + u.id)
+            .setThumbnail(u.displayAvatarURL())
             .setDescription(u.toString() + " has accepted the rules and became a member of ***" + guild.name + "***! Count of people who accepted rules: **" + guild.roles.resolve(config.roles.verified).members.size + "/" + guild.memberCount + "**."));
-        await u.send(config.embed("Welcome!", "Welcome to **" + guild.name + "**, a Minecraft server based on the **Boku No Hero Academia** manga and anime. The server is not modded. All of our content is made with the help of plugins and our wonderful content creators!\n\n" + "**IP:** " + config.defaultIP + "\n" + "**Version:** Release 1.13.2\n" + "**Discord Invite:** http://mhaprodigy.uk/discord\n"));
         let db = await keyv.get("guilds");
         // Start of the welcomer process. Everything else is handled in "handleMsg.js".
         if(!db) db = {};
@@ -95,5 +96,25 @@ client.on("messageReactionAdd", async (r, u) => {
         const msg = await u.send(config.embed("Roles - Poll (Stage 1)", "Would you like to be mentioned whenever we release a server poll?\nPlease reply with `yes` or `no`.", config.color.yellow));
         db[mhapGuild].welcomer[u.id] = msg.id;
         await keyv.set("guilds", db);
+    }
+
+    // Role toggles.
+    if(config.messages.home && r.message.id === config.messages.home) {
+        if(u.id === client.user.id) return;
+        const member = await guild.members.resolve(u.id);
+        switch(r.emoji.toString()) {
+            case "🔞":
+                member.roles.add(config.roles.nsfw);
+                break;
+            case "📦":
+                member.roles.add(config.roles.polls);
+                break;
+            case "📆":
+                member.roles.add(config.roles.events);
+                break;
+            case "📰":
+                member.roles.add(config.roles.changelog);
+                break;
+        }
     }
 });

@@ -10,7 +10,7 @@ client.on("messageUpdate", async (oldMessage, newMessage) => {
     if(author.id !== client.user.id && !author.bot &&
         // Handle blacklists.
         (channel["parentID"] && ![config.categories.olympus, config.categories.archive].includes(channel["parentID"])) &&
-        ![config.channel.bot].includes(channel.id)
+        ![config.channels.bot].includes(channel.id)
     ) {
         config.log(guild, embed => embed.setColor(config.color.logs.messageUpdate)
             .setAuthor("@" + author.username + "#" + author.discriminator, author.displayAvatarURL())

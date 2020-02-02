@@ -101,24 +101,24 @@ module.exports = async message => {
         const type = message.content;
         const guild = client.guilds.resolve(config.guilds.mhapGuild);
 
-        async function handlePost(categoryTitle, channelName) {
+        async function handlePost(categoryTitle, channelName, channelTopic) {
             let postsCategory = categories.find(c => c.name.toLowerCase() === categoryTitle.toLowerCase());
             if(!postsCategory) {
                 // noinspection JSCheckFunctionSignatures
-                postsCategory = await guild.channels.create(categoryTitle, {type: "category", position: 9999, permissionOverwrites: config.getOverwrites("default", guild.id)});
+                postsCategory = await guild.channels.create(categoryTitle, {type: "category", permissionOverwrites: config.getOverwrites("default", guild.id)});
+                await postsCategory.setPosition(client.channels.resolve(config.categories.olympus).position - 1);
             }
-            const newPost = await guild.channels.create(channelName, {parent: postsCategory.id});
-            await newPost.setPosition(0);
             const latestTicket = guild.channels.filter(c => c.parentID === postsCategory.id).find(c => c.position === 1);
-            await newPost.setName(newPost.name + "-" + (latestTicket ? parseInt(latestTicket.name.substr(latestTicket.name.lastIndexOf("-") + 1)) + 1 : 1));
-            return newPost;
+            channelName = channelName + "-" + (latestTicket ? parseInt(latestTicket.name.substr(latestTicket.name.lastIndexOf("-") + 1)) + 1 : 1);
+            const newTicket = await guild.channels.create(channelName, {permissionOverwrites: config.getOverwrites("default", guild.id), parent: postsCategory.id, topic: channelTopic || ""});
+            return await newTicket.setPosition(0);
         }
 
         const categories = guild.channels.filter(c => c.type === "category");
         let msg;
         switch(type) {
             case "rawSupportTicket":
-                const ticket = await handlePost("Support Tickets", "ticket");
+                const ticket = await handlePost("Support Tickets", "ticket", "Need support? Open a support ticket here: http://mhaprodigy.uk/support");
                 msg = await ticket.send(config.embed("Problem:", embed.description).setAuthor(user.tag, user.displayAvatarURL()).addField("React Actions", "❌ - Close support ticket. (`Server Admin` or OP)").setFooter(user.id));
                 await msg.react("❌");
                 const restriction = embed.fields[0].value;
@@ -127,9 +127,10 @@ module.exports = async message => {
                     await ticket.updateOverwrite(user.id, {VIEW_CHANNEL: true});
                     if(restriction === "Staff only.") await ticket.updateOverwrite(config.roles.staff, {VIEW_CHANNEL: true});
                 }
+
                 break;
             case "rawSuggestion":
-                const suggestion = await handlePost("Suggestions", "suggestion");
+                const suggestion = await handlePost("Suggestions", "suggestion", "Would you like to suggest something? Open a suggestion here: http://mhaprodigy.uk/suggest");
                 msg = await suggestion.send(config.embed("They suggested:", embed.description).setAuthor(user.tag, user.displayAvatarURL()));
                 await msg.react("👍");
                 await msg.react("👎");
