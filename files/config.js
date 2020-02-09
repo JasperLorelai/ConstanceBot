@@ -81,8 +81,6 @@ module.exports = {
         home: "673629257834037285"
     },
     trello: {
-        key: "21008e4383cece1d9366d9132a8343fb",
-        token: "805f0bdd4a00c438573231c405741766b27c716430b6ca13f53e7ab50bb745bd",
         boards: {
             mhap: "YBbW2ZTP"
         },
@@ -92,7 +90,7 @@ module.exports = {
         }
     },
     getTrello() {
-        return "?key=" + this.trello.key + "&token=" + this.trello.token;
+        return "?key=" + process.env.TRELLO_KEY + "&token=" + process.env.TRELLO_TOKEN;
     },
     botLog() {
         return this.getMainGuild().channels.resolve(this.channels.botLogs);
