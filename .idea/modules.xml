@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/constance.iml" filepath="$PROJECT_DIR$/.idea/constance.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/ConstanceBot.iml" filepath="$PROJECT_DIR$/.idea/ConstanceBot.iml" />
     </modules>
   </component>
 </project>

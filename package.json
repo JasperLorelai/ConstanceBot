@@ -4,7 +4,8 @@
   "description": "",
   "main": "bot.js",
   "scripts": {
-    "start": "node bot.js"
+    "start": "node bot.js",
+    "start2": "node server.js"
   },
   "author": "JasperLorelai",
   "license": "ISC",
