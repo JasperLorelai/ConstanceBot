@@ -1,4 +1,4 @@
-const client = require("../server");
+const client = require("../bot");
 client.on("raw", async event => {
     let channel, user, message;
     switch(event.t) {

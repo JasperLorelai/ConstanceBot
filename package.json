@@ -2,9 +2,9 @@
   "name": "constance",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "bot.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node bot.js"
   },
   "author": "JasperLorelai",
   "license": "ISC",

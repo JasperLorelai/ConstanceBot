@@ -1,4 +1,4 @@
-const client = require("../server");
+const client = require("../bot");
 const {util, config} = client;
 module.exports = async (request, response) => {
     if(!request.query.code) {

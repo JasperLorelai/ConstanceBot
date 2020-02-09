@@ -1,4 +1,4 @@
-const client = require("../server");
+const client = require("../bot");
 client.on("messageUpdate", async (oldMessage, newMessage) => {
     // Ignore if the event was handled externally.
     if(newMessage.deleted) return;
