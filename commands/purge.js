@@ -8,18 +8,18 @@ module.exports = {
     perm: "mod",
     async execute(message, args) {
         const {channel, client, author, guild} = message;
-        const {config} = client;
+        const {config, util} = client;
         const {red, yellow} = config.color;
         let num = parseInt(args[0]);
         if(!num || num < 1) {
-            await channel.send(author.toString(), config.embed("Channel Purge", "Parameter `number` is not a number or is less than 1!", red));
+            await channel.send(author.toString(), util.embed("Channel Purge", "Parameter `number` is not a number or is less than 1!", red));
             return;
         }
         const over = num > 50;
         num = over ? 50 : num;
         let messages = await channel.messages.fetch({limit: num + 1});
         messages.delete(message.id);
-        const msg = await channel.send(author.toString(), config.embed("Channel Purge", "**Messages found:** " + (over ? "limited to `50`" : "`" + num + "`") + "\n\n**React with:\n🗑 - to delete currently selected.\n😃 - to apply user filter.**", yellow));
+        const msg = await channel.send(author.toString(), util.embed("Channel Purge", "**Messages found:** " + (over ? "limited to `50`" : "`" + num + "`") + "\n\n**React with:\n🗑 - to delete currently selected.\n😃 - to apply user filter.**", yellow));
         await msg.react("🗑");
         await msg.react("😃");
         const created = new Date().getTime();
@@ -29,7 +29,7 @@ module.exports = {
             if(u.id !== author.id) return null;
 
             async function handleDeletePrompt(message, messages) {
-                const msg = await message.channel.send(author.toString(), config.embed("Delete Confirmation", "**Messages found by filter:** `" + messages.size + "`\n\n**React with:\n❌ - to cancel delete.\n✅ - to confirm delete.**", yellow));
+                const msg = await message.channel.send(author.toString(), util.embed("Delete Confirmation", "**Messages found by filter:** `" + messages.size + "`\n\n**React with:\n❌ - to cancel delete.\n✅ - to confirm delete.**", yellow));
                 await msg.react("❌");
                 await msg.react("✅");
                 const coll = msg.createReactionCollector((r, u) => u.id !== message.client.user.id, {time: 10000});
@@ -55,14 +55,14 @@ module.exports = {
                     await handleDeletePrompt(message, messages);
                     break;
                 case "😃":
-                    const msgUser = await msg.channel.send(author.toString(), config.embed("Channel Purge - By User", "Please specify a user who's messages would be deleted.", yellow));
-                    const collUser = msgUser.channel.createMessageCollector(m => m.author.id === author.id, {time: config.collTtl(coll, created)});
+                    const msgUser = await msg.channel.send(author.toString(), util.embed("Channel Purge - By User", "Please specify a user who's messages would be deleted.", yellow));
+                    const collUser = msgUser.channel.createMessageCollector(m => m.author.id === author.id, {time: util.collTtl(coll, created)});
                     let member;
                     collUser.on("collect", mUser => {
-                        member = config.findGuildMember(mUser.content, guild);
+                        member = util.findGuildMember(mUser.content, guild);
                         mUser.delete();
                         if(!member) {
-                            msg.channel.send(author.toString(), config.embed("Channel Purge - By User", "User not found!", red)).then(tempMsg => {
+                            msg.channel.send(author.toString(), util.embed("Channel Purge - By User", "User not found!", red)).then(tempMsg => {
                                 tempMsg.delete({timeout: 3000});
                             });
                         }
@@ -83,7 +83,7 @@ module.exports = {
             }
             else {
                 await msg.reactions.removeAll();
-                await msg.edit(config.getEmbed(msg).setDescription("**Messages found:** " + (over ? "limited to `50`" : "`" + num + "`") + "\n\n**Timed out.**").setColor("666666"));
+                await msg.edit(util.getEmbed(msg).setDescription("**Messages found:** " + (over ? "limited to `50`" : "`" + num + "`") + "\n\n**Timed out.**").setColor("666666"));
             }
         });
     }

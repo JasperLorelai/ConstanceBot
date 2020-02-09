@@ -5,14 +5,14 @@ module.exports = {
     params: ["(user)"],
     async execute(message, args) {
         const {client, author, channel} = message;
-        const {config, emojiFile} = client;
+        const {config, util, emojiFile} = client;
         const {red, yellow} = config.color;
-        const user = args[0] ? config.findUser(args[0]) : author;
+        const user = args[0] ? util.findUser(args[0]) : author;
         if(!user) {
-            await channel.send(author.toString(), config.embed("Avatar", "User not found!", red));
+            await channel.send(author.toString(), util.embed("Avatar", "User not found!", red));
             return null;
         }
-        const msg = await channel.send(author.toString(), config.embed("**" + user.username + "**'s Avatar", "Pick avatar size:\n" + emojiFile["1"] + " - `128`\n" + emojiFile["2"] + " - `256`\n" + emojiFile["3"] + " - `512`\n" + emojiFile["4"] + " - `1024`\n" + emojiFile["5"] + " - `2048`", yellow));
+        const msg = await channel.send(author.toString(), util.embed("**" + user.username + "**'s Avatar", "Pick avatar size:\n" + emojiFile["1"] + " - `128`\n" + emojiFile["2"] + " - `256`\n" + emojiFile["3"] + " - `512`\n" + emojiFile["4"] + " - `1024`\n" + emojiFile["5"] + " - `2048`", yellow));
         await msg.react(emojiFile["1"]);
         await msg.react(emojiFile["2"]);
         await msg.react(emojiFile["3"]);
@@ -44,7 +44,7 @@ module.exports = {
         });
         coll.on("end", async () => {
             if(!msg.deleted) await msg.delete();
-            await channel.send(author.toString(), config.embed("**" + user.username + "**'s Avatar")
+            await channel.send(author.toString(), util.embed("**" + user.username + "**'s Avatar")
                 .attachFiles([{
                     attachment: await client.fetch(user.displayAvatarURL({
                         format: "png", size: size

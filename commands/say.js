@@ -6,7 +6,7 @@ module.exports = {
     perm: "author",
     async execute(message, args) {
         const {client, channel} = message;
-        const {config} = client;
+        const {util} = client;
         // Check if the first argument is a channel id and set it as target.
         let ch = client.channels.resolve(args[0]);
         if(ch) args.shift();
@@ -14,7 +14,7 @@ module.exports = {
         else ch = channel;
         let msg = args.join(" ");
         if(msg.startsWith("`") && msg.endsWith("`")) msg = msg.replace(/`/g, "");
-        msg = config.isJSON(msg) ? JSON.parse(msg) : msg;
+        msg = util.isJSON(msg) ? JSON.parse(msg) : msg;
         await ch.send(msg);
         await message.delete();
     }

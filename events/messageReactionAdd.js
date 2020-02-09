@@ -1,5 +1,5 @@
 const client = require("../bot");
-const {config, keyv} = client;
+const {config, util, keyv} = client;
 client.on("messageReactionAdd", async (r, u) => {
     const {guild, channel, embeds} = r.message;
     // Ignore if the event was handled externally.
@@ -8,7 +8,7 @@ client.on("messageReactionAdd", async (r, u) => {
     // Handle To-Do list actions.
     if(channel.id === config.channels.todolist) {
         if(u.id === client.user.id) return;
-        const embed = config.getEmbed(r.message);
+        const embed = util.getEmbed(r.message);
         switch(r.emoji.toString()) {
             case "❌":
                 config.botLog().send(embed.setColor(config.color.red).setTitle("To Do List Item - Declined"));
@@ -29,7 +29,7 @@ client.on("messageReactionAdd", async (r, u) => {
         if(u.id === client.user.id) return;
         let suggestion = embeds.find(e => e.title === "They suggested:");
         const member = guild.members.resolve(u.id);
-        const pass = member ? await config.getPerms(member, "admin") : false;
+        const pass = member ? await util.getPerms(member, "admin") : false;
         if(suggestion && ["✅", "❌"].includes(r.emoji.toString()) && !["accepted", "denied"].includes(channel["name"]) && pass) {
             suggestion = suggestion.spliceField(0, 1)
                 .addField("👍", "Upvotes: " + r.message.reactions.resolve("👍").count--, true)
@@ -63,10 +63,10 @@ client.on("messageReactionAdd", async (r, u) => {
                 // Isn't creator but has mod perms?
                 if(!pass) {
                     const member = guild.members.resolve(u.id);
-                    if(member) pass = await config.getPerms(member, "admin");
+                    if(member) pass = await util.getPerms(member, "admin");
                 }
                 if(pass) {
-                    const msg = await channel.send(config.embed("Closed", "This support ticket was closed by: " + u.toString(), config.color.red).addField("React Actions", "❌ - Hide support ticket. (`Server Admin`)"));
+                    const msg = await channel.send(util.embed("Closed", "This support ticket was closed by: " + u.toString(), config.color.red).addField("React Actions", "❌ - Hide support ticket. (`Server Admin`)"));
                     await msg.react("❌");
                     // noinspection JSUnresolvedFunction
                     await channel.setName("solved-" + channel["name"]);
@@ -79,7 +79,7 @@ client.on("messageReactionAdd", async (r, u) => {
         if(closedTicket) {
             await r.users.remove(u.id);
             const member = guild.members.resolve(u.id);
-            if(member && await config.getPerms(member, "admin")) {
+            if(member && await util.getPerms(member, "admin")) {
                 // noinspection JSUnresolvedFunction
                 await channel.overwritePermissions({permissionOverwrites: [{id: guild.id, deny: "VIEW_CHANNEL"}]});
                 await r.message.reactions.removeAll();
@@ -95,7 +95,7 @@ client.on("messageReactionAdd", async (r, u) => {
         if(member.roles.has(config.roles.verified)) return;
         await member.roles.remove(config.roles.unverified);
         await member.roles.add(config.roles.verified);
-        config.log(guild, embed => embed.setColor(config.color.green)
+        util.log(guild, embed => embed.setColor(config.color.green)
             .setTitle("User " + u.username + " has accepted the rules!")
             .setFooter("Member ID: " + u.id)
             .setThumbnail(u.displayAvatarURL())
@@ -106,7 +106,7 @@ client.on("messageReactionAdd", async (r, u) => {
         const {mhapGuild} = config.guilds;
         if(!db[mhapGuild]) db[mhapGuild] = {};
         if(!db[mhapGuild].welcomer) db[mhapGuild].welcomer = {};
-        const msg = await u.send(config.embed("Roles - Poll (Stage 1)", "Would you like to be mentioned whenever we release a server poll?\nPlease reply with `yes` or `no`.", config.color.yellow));
+        const msg = await u.send(util.embed("Roles - Poll (Stage 1)", "Would you like to be mentioned whenever we release a server poll?\nPlease reply with `yes` or `no`.", config.color.yellow));
         db[mhapGuild].welcomer[u.id] = msg.id;
         await keyv.set("guilds", db);
     }

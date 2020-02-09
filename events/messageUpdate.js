@@ -2,7 +2,7 @@ const client = require("../bot");
 client.on("messageUpdate", async (oldMessage, newMessage) => {
     // Ignore if the event was handled externally.
     if(newMessage.deleted) return;
-    const {config, keyv} = client;
+    const {config, util, keyv} = client;
     const {guild, author, channel} = newMessage;
     // Check only if content changed.
     if(oldMessage && oldMessage.content === newMessage.content) return;
@@ -12,7 +12,7 @@ client.on("messageUpdate", async (oldMessage, newMessage) => {
         (channel["parentID"] && ![config.categories.olympus, config.categories.archive].includes(channel["parentID"])) &&
         ![config.channels.bot].includes(channel.id)
     ) {
-        config.log(guild, embed => embed.setColor(config.color.logs.messageUpdate)
+        util.log(guild, embed => embed.setColor(config.color.logs.messageUpdate)
             .setAuthor("@" + author.username + "#" + author.discriminator, author.displayAvatarURL())
             .setTitle("Message Edited")
             .setDescription(channel.toString() + " [\(Jump\)](" + newMessage.url + ")")

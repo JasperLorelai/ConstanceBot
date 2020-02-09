@@ -6,18 +6,18 @@ module.exports = {
     perm: "mod",
     async execute(message, args) {
         const {client, guild, channel, author} = message;
-        const {config, emojiFile} = client;
+        const {config, util, emojiFile} = client;
         const {red} = config.color;
-        let member = config.findGuildMember(args[0], guild);
+        let member = util.findGuildMember(args[0], guild);
         if(!member) {
-            await channel.send(author.toString(), config.embed("Ban Member", "User not found.", red));
+            await channel.send(author.toString(), util.embed("Ban Member", "User not found.", red));
             return;
         }
         if(!member.bannable) {
-            await channel.send(author.toString(), config.embed("Ban Member", "Cannot modify that user.", red));
+            await channel.send(author.toString(), util.embed("Ban Member", "Cannot modify that user.", red));
             return;
         }
-        const msg = await channel.send(author.toString(), config.embed("Ban Member", "Purge messages of how many days?"));
+        const msg = await channel.send(author.toString(), util.embed("Ban Member", "Purge messages of how many days?"));
         const coll = msg.createReactionCollector((r, u) => u.id !== msg.client.user.id, {time: 10000});
         coll.on("collect", async (r, u) => {
             await r.users.remove(u);
@@ -50,7 +50,7 @@ module.exports = {
                     break;
             }
             args.shift();
-            await channel.send(author.toString(), config.embed("Banned Member", "**" + member.user.username + "** has been banned from the server by user: " + author.toString() + (days ? "\n**Days:** " + days + ")" : "") + (args[0] ? "\n**For reason:** " + args.join(" ") : "")));
+            await channel.send(author.toString(), util.embed("Banned Member", "**" + member.user.username + "** has been banned from the server by user: " + author.toString() + (days ? "\n**Days:** " + days + ")" : "") + (args[0] ? "\n**For reason:** " + args.join(" ") : "")));
             await member.ban({
                 days: days,
                 reason: member.user.username + " has been banned from the server by user: " + author.username + (args[0] ? "(reason: " + args.join(" ") + ")" : "")

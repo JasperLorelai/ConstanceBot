@@ -3,7 +3,7 @@ client.on("message", async message => {
     // Ignore if the event was handled externally.
     if(message.deleted) return;
     const {content, member, author, client, guild, channel} = message;
-    const {commands, config, handleMsg} = client;
+    const {commands, config, util, handleMsg} = client;
     let realPrefix = null;
     let prefix = config.globalPrefix;
     if(guild) {
@@ -33,8 +33,8 @@ client.on("message", async message => {
             await message.reply("Can't execute that command inside DMs.");
             return;
         }
-        if(!await config.getPerms(member, command.perm)) {
-            await channel.send(author.toString(), config.embed("No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + command.perm + "`", config.color.red));
+        if(!await util.getPerms(member, command.perm)) {
+            await channel.send(author.toString(), util.embed("No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + command.perm + "`", config.color.red));
             return;
         }
         // Run command if all required args are specified.
@@ -42,7 +42,7 @@ client.on("message", async message => {
         // Execute help command for command if not.
         else commands.get("help").execute(message, [commandName]);
     } catch(e) {
-        await channel.send(author.toString(), config.embed("Error", "Exception during command execution. Full error log was sent to console.", config.color.red));
+        await channel.send(author.toString(), util.embed("Error", "Exception during command execution. Full error log was sent to console.", config.color.red));
         console.error(e);
     }
 });

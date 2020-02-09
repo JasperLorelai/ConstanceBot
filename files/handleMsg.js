@@ -1,6 +1,6 @@
 module.exports = async message => {
     const {client, author, content, channel, guild, mentions} = message;
-    const {config, keyv} = client;
+    const {config, util, keyv} = client;
     const main = config.getMainGuild();
     let db = await keyv.get("guilds");
     // Ignore if it was handled externaly.
@@ -21,17 +21,17 @@ module.exports = async message => {
             }
 
             const msg = await channel.messages.fetch(db[config.guilds.mhapGuild].welcomer[author.id]);
-            const embed = config.getEmbed(msg);
+            const embed = util.getEmbed(msg);
             let newMsg;
             switch(embed.title) {
                 case "Roles - Poll (Stage 1)":
                     processRole("polls");
-                    newMsg = await channel.send(config.embed("Roles - Events (Stage 2)", "Would you like to be mentioned whenever a server event is hosted?\nPlease reply with `yes` or `no`.", config.color.yellow));
+                    newMsg = await channel.send(util.embed("Roles - Events (Stage 2)", "Would you like to be mentioned whenever a server event is hosted?\nPlease reply with `yes` or `no`.", config.color.yellow));
                     db[config.guilds.mhapGuild].welcomer[author.id] = newMsg.id;
                     break;
                 case "Roles - Events (Stage 2)":
                     processRole("events");
-                    newMsg = await channel.send(config.embed("Roles - Changelog (Stage 3)", "Would you like to be mentioned whenever a changelog for our server is posted?\nPlease reply with `yes` or `no`.", config.color.yellow));
+                    newMsg = await channel.send(util.embed("Roles - Changelog (Stage 3)", "Would you like to be mentioned whenever a changelog for our server is posted?\nPlease reply with `yes` or `no`.", config.color.yellow));
                     db[config.guilds.mhapGuild].welcomer[author.id] = newMsg.id;
                     break;
                 case "Roles - Changelog (Stage 3)":
@@ -53,7 +53,7 @@ module.exports = async message => {
             });
         }
         const webhook = await dmchannel.createWebhook(author.username, {avatar: author.displayAvatarURL()});
-        if(config.isJSON(content)) {
+        if(util.isJSON(content)) {
             const embed = JSON.parse(content);
             let final = {};
             if(!embed.embed) final.embeds = [embed]; else final.embeds = [embed.embed];
@@ -81,9 +81,9 @@ module.exports = async message => {
         // Ignore webhooks - already redirected messages.
         if(message.webhookID) return;
         const user = client.users.resolve(channel.name);
-        if(user) await user.send(config.isJSON(content) ? JSON.parse(content) : content); else {
+        if(user) await user.send(util.isJSON(content) ? JSON.parse(content) : content); else {
             await channel.delete();
-            config.botLog().send(author.toString(), config.embed("DM Channel Deleted", "User you tried to DM could not be found. (`" + channel.name + "`)", config.color.red));
+            config.botLog().send(author.toString(), util.embed("DM Channel Deleted", "User you tried to DM could not be found. (`" + channel.name + "`)", config.color.red));
         }
         return;
     }
@@ -91,13 +91,13 @@ module.exports = async message => {
     // Clean prefix query.
     if(mentions && mentions.users && mentions.users.has(client.user.id) && content.replace(config.discord.MessageMentions.USERS_PATTERN, "").trim() === "") {
         if(author.id === client.user.id) return;
-        await channel.send(config.embed("Guild Prefix", "My prefix is: **" + (db && guild && db[guild.id] && db[guild.id].prefix ? db[guild.id].prefix : config.globalPrefix) + "**"));
+        await channel.send(util.embed("Guild Prefix", "My prefix is: **" + (db && guild && db[guild.id] && db[guild.id].prefix ? db[guild.id].prefix : config.globalPrefix) + "**"));
         return;
     }
 
     // Handle raw forms.
     if(message.webhookID && message.webhookID === config.webhooks.mainRedirect) {
-        let embed = config.getEmbed(message);
+        let embed = util.getEmbed(message);
         const user = client.users.resolve(embed.title);
         const type = message.content;
         const guild = client.guilds.resolve(config.guilds.mhapGuild);
@@ -120,7 +120,7 @@ module.exports = async message => {
         switch(type) {
             case "rawSupportTicket":
                 const ticket = await handlePost("Support Tickets", "ticket", "Need support? Open a support ticket here: http://mhaprodigy.uk/support");
-                msg = await ticket.send(config.embed("Problem:", embed.description).setAuthor(user.tag, user.displayAvatarURL()).addField("React Actions", "❌ - Close support ticket. (`Server Admin` or OP)").setFooter(user.id));
+                msg = await ticket.send(util.embed("Problem:", embed.description).setAuthor(user.tag, user.displayAvatarURL()).addField("React Actions", "❌ - Close support ticket. (`Server Admin` or OP)").setFooter(user.id));
                 await msg.react("❌");
                 const restriction = embed.fields[0].value;
                 if(restriction && restriction !== "EVERYONE!") {
@@ -135,7 +135,7 @@ module.exports = async message => {
                 break;
             case "rawSuggestion":
                 const suggestion = await handlePost("Suggestions", "suggestion", "Would you like to suggest something? Open a suggestion here: http://mhaprodigy.uk/suggest");
-                msg = await suggestion.send(config.embed("They suggested:", embed.description).setAuthor(user.tag, user.displayAvatarURL()).addField("React Actions", "❌ - Deny suggestion. (`Server Admin` or OP)\n✅ - Accept suggestion. (`Server Admin` or OP)"));
+                msg = await suggestion.send(util.embed("They suggested:", embed.description).setAuthor(user.tag, user.displayAvatarURL()).addField("React Actions", "❌ - Deny suggestion. (`Server Admin` or OP)\n✅ - Accept suggestion. (`Server Admin` or OP)"));
                 await msg.react("👍");
                 await msg.react("👎");
                 await msg.react("✅");

@@ -8,15 +8,15 @@ module.exports = {
     perm: "admin",
     async execute(message, args) {
         const {client, guild, channel, author} = message;
-        const {config} = client;
-        const role = config.findRole(args.shift(), guild);
+        const {config, util} = client;
+        const role = util.findRole(args.shift(), guild);
         if(!role) {
-            await channel.send(author.toString(), config.embed("Role Color", "Role not found!", config.color.red));
+            await channel.send(author.toString(), util.embed("Role Color", "Role not found!", config.color.red));
             return null;
         }
-        let color = config.colorToHex(args.join("").replace(/\s/g, ""));
+        let color = util.colorToHex(args.join("").replace(/\s/g, ""));
         if(!color) {
-            await channel.send(author.toString(), config.embed("Role Color", "Invalid color! The only color types supported are hex, 'rgb(r,g,b)' and 'hsl(h,s,l)'.", config.color.red));
+            await channel.send(author.toString(), util.embed("Role Color", "Invalid color! The only color types supported are hex, 'rgb(r,g,b)' and 'hsl(h,s,l)'.", config.color.red));
             return null;
         }
         const canvas = client.canvas.createCanvas(380, 84);
@@ -30,7 +30,7 @@ module.exports = {
         ctx.font = "11px Verdana";
         ctx.fillStyle = "#686f77";
         const date = new Date();
-        ctx.fillText("Today at " + date.getHours() + ":" + date.getMinutes(), canvas.width * .275 + config.getTextWidth(name, "11px Verdana"), canvas.height * .44);
+        ctx.fillText("Today at " + date.getHours() + ":" + date.getMinutes(), canvas.width * .275 + util.getTextWidth(name, "11px Verdana"), canvas.height * .44);
         ctx.font = "14px Verdana";
         ctx.fillStyle = "#adadad";
         ctx.fillText("I am a beautiful butterfly!", canvas.width * .21, canvas.height * .65);
@@ -41,10 +41,10 @@ module.exports = {
         client.fetch.default(author.displayAvatarURL({format: "png"}) + "?size=40").then(y => y.buffer()).then(async b => {
             client.fs.writeFileSync(process.env.INIT_CWD + "\\images\\rolecolor.png", b);
             ctx.drawImage(await client.canvas.loadImage(process.env.INIT_CWD + "\\images\\rolecolor.png"), canvas.width * .05, canvas.height * .25);
-            channel.send(author.toString(), config.embed("Role Color").attachFiles([{
+            channel.send(author.toString(), util.embed("Role Color").attachFiles([{
                 attachment: canvas.toBuffer(), name: "bg.png"
             }]).setImage("attachment://bg.png")).then(async msg => {
-                await config.handleChange(msg, author, role, null, role => role.setColor(color), {
+                await util.handleChange(msg, author, role, null, role => role.setColor(color), {
                     denied: "", accepted: "Role color updated!", newTitle: "Role Color Preview"
                 });
             });

@@ -12,6 +12,6 @@ module.exports = {
         if(!db[guild.id]) db[guild.id] = {};
         db[guild.id].prefix = args[0];
         await keyv.set("guilds", db);
-        await channel.send(author.toString(), client.config.embed("Command Prefix", "**Prefix set to:** " + args[0], null));
+        await channel.send(author.toString(), client.util.embed("Command Prefix", "**Prefix set to:** " + args[0]));
     }
 };

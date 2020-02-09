@@ -1,5 +1,5 @@
 const client = require("../bot");
-const {config} = client;
+const {config, util} = client;
 client.on("channelDelete", async channel => {
     // Ignore DM channels.
     if(channel.type === "dm") return;
@@ -9,7 +9,7 @@ client.on("channelDelete", async channel => {
     const log = logs.entries.first();
 
     if(!["FormCategoryEmpty"].includes(log.reason)) {
-        config.log(guild, embed => embed.setColor(config.color.logs.channelDelete)
+        util.log(guild, embed => embed.setColor(config.color.logs.channelDelete)
             .setFooter("Channel ID: `" + channel.id + "`")
             .setTitle("Channel Deleted")
             .setDescription("**Name:** `" + channel["name"] + "`\n**Type:** " + channel.type.toFormalCase() + (channel["parentID"] ? "\n**Parent ID:** " + channel["parentID"] : "") + "\n**By User:** " + log.executor.toString() + (log.reason ? "\n**Reason:** " + log.reason : "")));

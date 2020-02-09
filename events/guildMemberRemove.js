@@ -1,10 +1,10 @@
 const client = require("../bot");
-const {config, keyv} = client;
+const {config, util, keyv} = client;
 client.on("guildMemberRemove", async member => {
     const {guild, user} = member;
 
     const roles = member.roles ? member.roles.filter(r => r.id !== guild.id) : null;
-    config.log(guild, embed => embed.setColor(config.color.logs.guildMemberRemove)
+    util.log(guild, embed => embed.setColor(config.color.logs.guildMemberRemove)
         .setTitle("User Left")
         .setAuthor(user.tag, user.displayAvatarURL())
         .setFooter("Member ID: " + user.id)

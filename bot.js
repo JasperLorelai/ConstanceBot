@@ -11,6 +11,7 @@ client.fs = require("fs");
 client.commands = new Discord.Collection();
 client.emojiFile = require("./files/emoji.js");
 client.config = require("./files/config.js");
+client.util = require("./files/util.js");
 client.keyv = new Keyv(process.env.DATABASE);
 client.fetch = require("node-fetch");
 client.canvas = require("canvas");

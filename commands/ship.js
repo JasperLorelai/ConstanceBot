@@ -6,18 +6,18 @@ module.exports = {
     guildOnly: true,
     async execute(message, args) {
         const {client, channel, author} = message;
-        const {config} = client;
-        const target1 = config.findUser(args[0]);
+        const {config, util} = client;
+        const target1 = util.findUser(args[0]);
         if(!target1) {
-            channel.send(author.toString(), config.embed("Love Calculator", "User \"" + args[0] + "\" not found!", config.color.red));
+            channel.send(author.toString(), util.embed("Love Calculator", "User \"" + args[0] + "\" not found!", config.color.red));
             return;
         }
         let target2 = null;
         // If target2 was specified, check if they exist.
         if(args[1]) {
-            target2 = config.findUser(args[1]);
+            target2 = util.findUser(args[1]);
             if(!target2) {
-                channel.send(author.toString(), config.embed("Love Calculator", "User \"" + args[1] + "\" not found!", config.color.red));
+                channel.send(author.toString(), util.embed("Love Calculator", "User \"" + args[1] + "\" not found!", config.color.red));
                 return;
             }
         }
@@ -25,7 +25,7 @@ module.exports = {
 
         function ship(msg, embedToSend) {
             const c = author.toString();
-            const embed = config.getEmbed(msg);
+            const embed = util.getEmbed(msg);
             setTimeout(() => {
                 msg.edit(c, embed.setDescription("**.**"));
                 setTimeout(() => {
@@ -41,11 +41,11 @@ module.exports = {
         }
 
         if((!target2 && target1.id === author.id) || (target2 && target1.id === target2.id)) {
-            const msg = await channel.send(author.toString(), config.embed("Shipping...").setColorRandom());
+            const msg = await channel.send(author.toString(), util.embed("Shipping...").setColorRandom());
             const randomMsg = ["This soul is very poor.", "Missing parameter: ❤", "This heart is too cold to calculate.",
                 "Maybe a 🍔 could warm up this cold heart?", "I don't know.", "Blue?"];
             // Pick a random message to display.
-            ship(msg, config.embed("", randomMsg[Math.floor(Math.random()*randomMsg.length)]));
+            ship(msg, util.embed("", randomMsg[Math.floor(Math.random()*randomMsg.length)]));
             return;
         }
 
@@ -89,7 +89,7 @@ module.exports = {
             }
         }
 
-        const msg = await channel.send(author.toString(), config.embed("Shipping...", "I solemnly swear I am up to no good.").setColorRandom());
-        ship(msg, config.embed("", "Love between **" + target1.username + "** and **" + target2.username + "** is: ***" + temp + "***"));
+        const msg = await channel.send(author.toString(), util.embed("Shipping...", "I solemnly swear I am up to no good.").setColorRandom());
+        ship(msg, util.embed("", "Love between **" + target1.username + "** and **" + target2.username + "** is: ***" + temp + "***"));
     }
 };

@@ -7,13 +7,13 @@ module.exports = {
     perm: "admin",
     async execute(message, args) {
         const {client, guild, channel, author} = message;
-        const {config} = client;
-        const role = config.findRole(args.join(" "), guild);
+        const {config, util} = client;
+        const role = util.findRole(args.join(" "), guild);
         if(!role) {
-            await channel.send(author.toString(), config.embed("Role Deleter", "Role could not be found.", config.color.red));
+            await channel.send(author.toString(), util.embed("Role Deleter", "Role could not be found.", config.color.red));
             return null;
         }
-        await channel.send(author.toString(), config.embed("Role Deleter", "Role **" + role.name + "** was successfully deleted."));
+        await channel.send(author.toString(), util.embed("Role Deleter", "Role **" + role.name + "** was successfully deleted."));
         role.delete();
     }
 };

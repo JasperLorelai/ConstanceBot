@@ -6,7 +6,7 @@ module.exports = {
     aliases: ["mods"],
     async execute(message) {
         const {client, guild, channel, author} = message;
-        const {config, keyv} = client;
+        const {config, util, keyv} = client;
         const instr = "**React with:**\n➕ - to add Mods.\n➖ - to remove Mods.";
 
         async function getList() {
@@ -23,7 +23,7 @@ module.exports = {
             return ("**Current mods:**\n- **users:** " + (users ? users.map(u => "<@" + u + ">").join(", ") : "*empty*") + "\n- **roles:** " + (roles ? roles.map(r => "<@&" + r + ">").join(", ") : "*empty*"));
         }
 
-        const msg = await channel.send(author.toString(), config.embed("Server Mods", await getList() + "\n\n" + instr));
+        const msg = await channel.send(author.toString(), util.embed("Server Mods", await getList() + "\n\n" + instr));
         await msg.react("➕");
         await msg.react("➖");
         const collector = msg.createReactionCollector((r, u) => u.id !== client.user.id, {time: 90000});
@@ -31,17 +31,17 @@ module.exports = {
             await r.users.remove(u);
             if(!["➕", "➖"].includes(r.emoji.toString())) return;
             if(u.id !== author.id) return;
-            const msgInput = await msg.channel.send(author.toString(), config.embed("Configure Server Mods", "Please specify a role or a user. Timeout of this prompt is **10s**.", config.color.yellow));
+            const msgInput = await msg.channel.send(author.toString(), util.embed("Configure Server Mods", "Please specify a role or a user. Timeout of this prompt is **10s**.", config.color.yellow));
             const collMod = msg.channel.createMessageCollector(m => m.author.id === author.id, {time: 10000});
             collMod.on("collect", async m => {
-                let find = config.findRole(m.content, m.guild);
+                let find = util.findRole(m.content, m.guild);
                 let found;
                 if(find) found = ["roles", find.id]; else {
-                    find = config.findGuildMember(m.content, m.guild);
+                    find = util.findGuildMember(m.content, m.guild);
                     if(find) found = ["users", find.id];
                 }
                 if(!found) {
-                    m.channel.send(author.toString(), config.embed(null, "Role or User not found!", config.color.red)).then(notFound => notFound.delete({timeout: 3000}));
+                    m.channel.send(author.toString(), util.embed(null, "Role or User not found!", config.color.red)).then(notFound => notFound.delete({timeout: 3000}));
                     collMod.stop();
                     await m.delete();
                     return;
@@ -72,7 +72,7 @@ module.exports = {
                 await m.delete();
             });
             collMod.on("end", async () => {
-                await msg.edit(author.toString(), config.embed("Configure Server Mods", await getList() + "\n\n" + instr));
+                await msg.edit(author.toString(), util.embed("Configure Server Mods", await getList() + "\n\n" + instr));
                 await msgInput.delete();
                 await r.users.remove(u);
             });
@@ -80,7 +80,7 @@ module.exports = {
         collector.on("end", async () => {
             if(msg.deleted) return;
             await msg.reactions.removeAll();
-            await msg.edit(author.toString(), config.embed("Configure Server Mods", await getList() + "\n\nPrompt timed out."));
+            await msg.edit(author.toString(), util.embed("Configure Server Mods", await getList() + "\n\nPrompt timed out."));
         });
     }
 };

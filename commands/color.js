@@ -4,15 +4,15 @@ module.exports = {
     params: ["[color]"],
     async execute(message, args) {
         const {channel, author, client} = message;
-        const {config} = client;
-        let hex = config.colorToHex(args.join("").replace(/\s/g, ""));
+        const {config, util} = client;
+        let hex = util.colorToHex(args.join("").replace(/\s/g, ""));
         if(!hex) {
-            await channel.send(author.toString(), config.embed("Colors", "Invalid color! The only color types supported are hex, 'rgb(r,g,b)' and 'hsl(h,s,l)'.", config.color.red));
+            await channel.send(author.toString(), util.embed("Colors", "Invalid color! The only color types supported are hex, 'rgb(r,g,b)' and 'hsl(h,s,l)'.", config.color.red));
             return null;
         }
 
-        const rgb = config.hexToRGB(hex).map(h => (h / 255 * 100).toFixed(1) + "%").join(", ");
-        const [h, s, l] = config.hexToHSL(hex);
+        const rgb = util.hexToRGB(hex).map(h => (h / 255 * 100).toFixed(1) + "%").join(", ");
+        const [h, s, l] = util.hexToHSL(hex);
         const hsl = h + "°, " + s + "%, " + l + "%";
 
         const canvas = client.canvas.createCanvas(200, 200);
@@ -20,7 +20,7 @@ module.exports = {
         ctx.fillStyle = "#" + hex;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        channel.send(author.toString(), config.embed("Colors", "**Hex:** " + hex + "\n**RGB:** " + rgb + "\n**HSL:** " + hsl).attachFiles([{
+        channel.send(author.toString(), util.embed("Colors", "**Hex:** " + hex + "\n**RGB:** " + rgb + "\n**HSL:** " + hsl).attachFiles([{
             attachment: canvas.toBuffer(), name: "bg.png"
         }]).setImage("attachment://bg.png"));
     }
