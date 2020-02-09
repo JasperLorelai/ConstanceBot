@@ -71,6 +71,7 @@ module.exports = async message => {
         const msg = await channel.send(new config.discord.MessageEmbed().setDescription(content).setColorRandom().setAuthor(author.tag, author.displayAvatarURL()));
         await msg.react("❌");
         await msg.react("✅");
+        await msg.react("🗑");
         return;
     }
 
@@ -105,13 +106,13 @@ module.exports = async message => {
             let postsCategory = categories.find(c => c.name.toLowerCase() === categoryTitle.toLowerCase());
             if(!postsCategory) {
                 // noinspection JSCheckFunctionSignatures
-                postsCategory = await guild.channels.create(categoryTitle, {type: "category", permissionOverwrites: config.getOverwrites("default", guild.id)});
+                postsCategory = await guild.channels.create(categoryTitle, {type: "category", permissionOverwrites: config.getOverwrites("mhapDefault", guild.id)});
                 await postsCategory.setPosition(client.channels.resolve(config.categories.olympus).position - 1);
             }
-            const latestTicket = guild.channels.filter(c => c.parentID === postsCategory.id).find(c => c.position === 1);
-            channelName = channelName + "-" + (latestTicket ? parseInt(latestTicket.name.substr(latestTicket.name.lastIndexOf("-") + 1)) + 1 : 1);
-            const newTicket = await guild.channels.create(channelName, {permissionOverwrites: config.getOverwrites("default", guild.id), parent: postsCategory.id, topic: channelTopic || ""});
-            return await newTicket.setPosition(0);
+            const latestChannel = guild.channels.filter(c => c.parentID === postsCategory.id).find(c => c.position === 0);
+            channelName = channelName + "-" + (latestChannel ? (parseInt(latestChannel.name.substr(latestChannel.name.lastIndexOf("-") + 1)) + 1) : 1);
+            const newChannel = await guild.channels.create(channelName, {permissionOverwrites: config.getOverwrites("mhapDefault", guild.id), parent: postsCategory.id, topic: channelTopic || ""});
+            return await newChannel.setPosition(0);
         }
 
         const categories = guild.channels.filter(c => c.type === "category");
@@ -123,15 +124,18 @@ module.exports = async message => {
                 await msg.react("❌");
                 const restriction = embed.fields[0].value;
                 if(restriction && restriction !== "EVERYONE!") {
-                    await ticket.updateOverwrite(config.roles.verified, {VIEW_CHANNEL: false});
-                    await ticket.updateOverwrite(user.id, {VIEW_CHANNEL: true});
-                    if(restriction === "Staff only.") await ticket.updateOverwrite(config.roles.staff, {VIEW_CHANNEL: true});
+                    let permissions = [
+                        {id: guild.id, deny: ["VIEW_CHANNEL"]},
+                        {id: config.roles.muted, deny: ["SEND_MESSAGES"]},
+                        {id: user.id, allow: ["VIEW_CHANNEL"]}
+                    ];
+                    if(restriction === "Staff only.") permissions.push({id: config.roles.staff, allow: ["VIEW_CHANNEL"]});
+                    await ticket.overwritePermissions({permissionOverwrites: permissions});
                 }
-
                 break;
             case "rawSuggestion":
                 const suggestion = await handlePost("Suggestions", "suggestion", "Would you like to suggest something? Open a suggestion here: http://mhaprodigy.uk/suggest");
-                msg = await suggestion.send(config.embed("They suggested:", embed.description).setAuthor(user.tag, user.displayAvatarURL()));
+                msg = await suggestion.send(config.embed("They suggested:", embed.description).setAuthor(user.tag, user.displayAvatarURL()).addField("React Actions", "❌ - Deny suggestion. (`Server Admin` or OP)\n✅ - Accept suggestion. (`Server Admin` or OP)"));
                 await msg.react("👍");
                 await msg.react("👎");
                 await msg.react("✅");

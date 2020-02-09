@@ -14,7 +14,7 @@ module.exports = {
             if(perm === "admin") perm = "Server Administrator";
             if(perm === "mod") perm = "Server Moderator";
             // + "\nYou can edit the message to execute again.");
-            text = "**Command name:** " + command.name + (command.description ? "\n**Description:** " + command.description : "") + (perm ? "\n**Permissions required:** " + perm : "") + (command.aliases ? "\n**Aliases:** " + command.aliases.map(a => "`" + a + "`").join(", ") : "") + (command.params ? "\n**Parameters:** " + command.params.map(a => "`" + a + "`").join(", ") + "\n**[required] (optional)**" : "");
+            text = "**Command name:** `" + command.name + "`" + (command.description ? "\n**Description:** " + command.description : "") + (perm ? "\n**Permissions required:** " + perm : "") + (command.aliases ? "\n**Aliases:** " + command.aliases.map(a => "`" + a + "`").join(", ") : "") + (command.params ? "\n**Parameters:** " + command.params.map(a => "`" + a + "`").join(", ") + "\n**[required] (optional)**" : "");
         }
         // + "\nYou can edit the message to execute again.");
         else text = "Command not found!";

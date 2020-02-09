@@ -5,23 +5,36 @@ client.on("messageReactionAdd", async (r, u) => {
     // Ignore if the event was handled externally.
     if(r.message.deleted) return;
 
+    // Handle To-Do list actions.
     if(channel.id === config.channels.todolist) {
         if(u.id === client.user.id) return;
-        if(!["❌","✅"].includes(r.emoji.toString())) return;
         const embed = config.getEmbed(r.message);
-        await r.message.delete();
-        if(r.emoji.toString() === "❌") config.botLog().send(embed.setColor(config.color.red).setTitle("To Do List Item - Declined"));
-        if(r.emoji.toString() === "✅") config.botLog().send(embed.setColor(config.color.green).setTitle("To Do List Item - Completed"));
+        switch(r.emoji.toString()) {
+            case "❌":
+                config.botLog().send(embed.setColor(config.color.red).setTitle("To Do List Item - Declined"));
+                await r.message.delete();
+                break;
+            case "✅":
+                config.botLog().send(embed.setColor(config.color.green).setTitle("To Do List Item - Completed"));
+                await r.message.delete();
+                break;
+            case "🗑":
+                await r.message.delete();
+                break;
+        }
     }
 
     // Handle Suggestion admin reactions.
     if(guild && channel["parent"] && channel["parent"].name === "Suggestions" && embeds && embeds.length) {
         if(u.id === client.user.id) return;
-        const suggestion = embeds.find(e => e.title === "They suggested:");
+        let suggestion = embeds.find(e => e.title === "They suggested:");
         const member = guild.members.resolve(u.id);
-        const pass = member ? await config.getPerms(member, "mod") : false;
+        const pass = member ? await config.getPerms(member, "admin") : false;
         if(suggestion && ["✅", "❌"].includes(r.emoji.toString()) && !["accepted", "denied"].includes(channel["name"]) && pass) {
-            await r.users.remove(u.id);
+            suggestion = suggestion.spliceField(0, 1)
+                .addField("👍", "Upvotes: " + r.message.reactions.resolve("👍").count--, true)
+                .addField("👎", "Downvotes: " + r.message.reactions.resolve("👎").count--, true);
+            await r.message.reactions.removeAll();
             if(r.emoji.toString() === "✅") {
                 await r.message.edit(suggestion.setColor(config.color.green).setTitle("Accepted Suggestion:"));
                 // noinspection JSUnresolvedFunction

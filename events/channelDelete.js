@@ -10,9 +10,9 @@ client.on("channelDelete", async channel => {
 
     if(!["FormCategoryEmpty"].includes(log.reason)) {
         config.log(guild, embed => embed.setColor(config.color.logs.channelDelete)
-            .setFooter("Channel ID: " + channel.id)
+            .setFooter("Channel ID: `" + channel.id + "`")
             .setTitle("Channel Deleted")
-            .setDescription("**Name:** " + channel["name"] + "\n**Type:** " + channel.type.toFormalCase() + (channel["parentID"] ? "\n**Parent ID:** " + channel["parentID"] : "") + "\n**By User:** " + log.executor.toString() + (log.reason ? "\n**Reason:** " + log.reason : "")));
+            .setDescription("**Name:** `" + channel["name"] + "`\n**Type:** " + channel.type.toFormalCase() + (channel["parentID"] ? "\n**Parent ID:** " + channel["parentID"] : "") + "\n**By User:** " + log.executor.toString() + (log.reason ? "\n**Reason:** " + log.reason : "")));
     }
 
     // If channel deleted was the last one in the form category, delete the category.
