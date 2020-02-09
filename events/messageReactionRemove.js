@@ -1,4 +1,4 @@
-const client = require("../bot");
+const client = require("../server");
 const {config} = client;
 client.on("messageReactionRemove", async (r, u) => {
     const {guild} = r.message;

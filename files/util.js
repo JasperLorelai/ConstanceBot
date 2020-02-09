@@ -1,23 +1,31 @@
 module.exports = {
+    async discordAPI(code, redirect, request) {
+        const creds = "Basic " + btoa(process.env.CLIENT_ID + ":" + process.env.CLIENT_SECRET);
+        const response = await fetch("https://discordapp.com/api/oauth2/token?grant_type=authorization_code&code=" + code + "&redirect_uri=" + encodeURI(redirect), {
+            method: "POST", headers: {Authorization: creds}
+        }).then(y => y.json());
+        // noinspection JSUnresolvedVariable
+        return await fetch(request, {headers: {Authorization: "Bearer " + response.access_token}}).then(y => y.json());
+    },
     log(guild, funct) {
         if(!guild) return;
-        const channelID = this.channels.logs[guild.id];
+        const channelID = this.config.channels.logs[guild.id];
         const channel = channelID ? guild.channels.resolve(channelID) : guild.channels.find(c => c.name === "logs");
 
         // TODO: Remove this. This is just temporary global logs to help find conflicts.
-        if(guild.id !== "406825495502782486") this.getMainGuild().channels.resolve(this.channels.globalLogs).send("`" + guild.id + ": " + channel + "` **" + guild.name + "**", funct(new this.discord.MessageEmbed().setTimestamp(new Date())));
+        if(guild.id !== "406825495502782486") this.config.getMainGuild().channels.resolve(this.config.channels.globalLogs).send("`" + guild.id + ": " + channel + "` **" + guild.name + "**", funct(new this.config.discord.MessageEmbed().setTimestamp(new Date())));
 
         if(!channel) return;
         // Let the dev make changes against this embed before sending.
-        channel.send(funct(new this.discord.MessageEmbed().setTimestamp(new Date())));
+        channel.send(funct(new this.config.discord.MessageEmbed().setTimestamp(new Date())));
     },
     getJoinPosition(member) {
         return member.guild.members.sort((a, b) => a.joinedAt - b.joinedAt).array().findIndex(m => m.id === member.id);
     },
     getBaseEmbed() {
-        return new this.discord.MessageEmbed()
-            .setColor(this.color.base)
-            .setFooter("Bot made by: " + this.author.username, this.author.displayAvatarURL())
+        return new this.config.discord.MessageEmbed()
+            .setColor(this.config.color.base)
+            .setFooter("Bot made by: " + this.config.author.username, this.config.author.displayAvatarURL())
             .setTimestamp(new Date());
     },
     embed(title, description, color) {
@@ -32,7 +40,7 @@ module.exports = {
     },
     getEmbed(message) {
         if(message.embeds.length < 1) return;
-        const embed = new this.discord.MessageEmbed(message.embeds.filter(e => e.type === "rich")[0]);
+        const embed = new this.config.discord.MessageEmbed(message.embeds.filter(e => e.type === "rich")[0]);
         if(embed.image) embed.image.url = "attachment://" + embed.image.url.substr(embed.image.url.lastIndexOf("/") + 1);
         if(embed.thumbnail) embed.thumbnail.url = "attachment://" + embed.thumbnail.url.substr(embed.thumbnail.url.lastIndexOf("/") + 1);
         return embed;
@@ -84,7 +92,7 @@ module.exports = {
         return guild.members.find(m => find === m.id || find === m.user.username || find.substring(2, find.length - 1) === m.id || find.substring(3, find.length - 1) === m.id || m.user.username.toLowerCase().includes(find.toLowerCase()));
     },
     findUser(find) {
-        return this.getClient().users.find(u => find === u.id || find === u.username || find.substring(2, find.length - 1) === u.id || find.substring(3, find.length - 1) === u.id || u.username.toLowerCase().includes(find.toLowerCase()));
+        return client.users.find(u => find === u.id || find === u.username || find.substring(2, find.length - 1) === u.id || find.substring(3, find.length - 1) === u.id || u.username.toLowerCase().includes(find.toLowerCase()));
     },
     findRole(find, guild) {
         return guild.roles.filter(r => r.id !== guild.id).find(r => find === r.id || find.substring(3, find.length - 1) === r.id || find.toLowerCase() === r.name.toLowerCase() || r.name.toLowerCase().includes(find.toLowerCase()));
@@ -185,7 +193,7 @@ module.exports = {
         return null;
     },
     getTextWidth(text, font) {
-        let ctx = this.getClient().canvas.createCanvas(0, 0).getContext("2d");
+        let ctx = client.canvas.createCanvas(0, 0).getContext("2d");
         ctx.font = font;
         return ctx.measureText(text).width;
     },
@@ -250,7 +258,7 @@ module.exports = {
             if(db[guild.id].mods) mods = db[guild.id].mods;
         }
         // Process permissions prior to execution.
-        const isAuthor = member.id === this.author.id;
+        const isAuthor = member.id === this.config.author.id;
         const isAdmin = member ? member.hasPermission("ADMINISTRATOR") : false;
         // Different approach for mods.
         let isMod = false;

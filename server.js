@@ -5,10 +5,12 @@ const Keyv = require("keyv");
 const express = require("express");
 const app = express();
 
+// Add custom prototype methods.
+require("./files/prototype")(Discord);
+
 // Creating classes and collections
 const client = new Discord.Client();
 client.fs = require("fs");
-client.commands = new Discord.Collection();
 client.emojiFile = require("./files/emoji.js");
 client.config = require("./files/config.js");
 client.util = require("./files/util.js");
@@ -17,42 +19,41 @@ client.fetch = require("node-fetch");
 client.canvas = require("canvas");
 client.handleMsg = require("./files/handleMsg.js");
 
+// Connect Util and Config.
+client.util.config = client.config;
+client.config.util = client.util;
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log("App running on port " + PORT);
 });
 
-// Initialising variables
-const {keyv, fs} = client;
-
 client.login(process.env.BOT_TOKEN).catch(e => console.log(e));
 module.exports = client;
 
+const {keyv, fs} = client;
+keyv.on("error", err => console.error("Keyv connection error:\n", err));
+
 // Grabbing handlers
+client.commands = new Discord.Collection();
 for(let f of fs.readdirSync("./commands").filter(file => file.endsWith(".js") && !file.startsWith("#"))) {
     const command = require("./commands/" + f);
     client.commands.set(command.name, command);
 }
+client.app = new Discord.Collection();
+for(let f of fs.readdirSync("./app").filter(file => file.endsWith(".js"))) {
+    const app = require("./app/" + f);
+    client.app.set(f.substr(0, f.length-3), app);
+}
 client.removeAllListeners();
-for(let event of fs.readdirSync("./events").filter(file => file.endsWith(".js") && !file.startsWith("#"))) {
+for(let event of fs.readdirSync("./events").filter(file => file.endsWith(".js"))) {
     require("./events/" + event);
 }
-keyv.on("error", err => console.error("Keyv connection error:\n", err));
 
-// Creating some base methods
-String.prototype.toFormalCase = function() {
-    return this.charAt(0).toUpperCase() + this.substr(1).toLowerCase();
-};
-String.prototype.discordMKD = function() {
-    let splits = this.split("\n").filter(l => l !== "---");
-    for(let i = 0; i < splits.length; i++) {
-        if(splits[i].startsWith("######") || splits[i].startsWith("#####") || splits[i].startsWith("####") || splits[i].startsWith("###") || splits[i].startsWith("##")) {
-            splits[i] = splits[i].replace(/#{2,6}\s?/g, "**") + "**";
-        }
-        if(splits[i].startsWith("#")) splits[i] = "__**" + splits[i].substr(1) + "**__";
-    }
-    return splits.join("\n");
-};
-Discord.MessageEmbed.prototype.setColorRandom = function() {
-    return this.setColor(Math.floor(Math.random()*16777215));
-};
+// Add a handler for all application routes.
+app.get("/", (request, response) => client.app.get("defaultRoute")(request, response));
+app.get("/:route", (request, response) => {
+    const route = request.params.route;
+    if(client.app.has(route)) client.app.get(route)(request, response);
+    else response.end();
+});

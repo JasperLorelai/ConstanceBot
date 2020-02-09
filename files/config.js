@@ -89,14 +89,24 @@ module.exports = {
             characters: "9qhuraUB"
         }
     },
+    discordapi: {
+        users: "https://discordapp.com/api/users/@me"
+    },
+    app: {
+        forms: {
+            staffapp: "https://docs.google.com/forms/d/e/1FAIpQLSdBDDYZ9533HAYuyT500KQTMmX5HZk70SggktlxxoVU7e2ezQ/viewform?usp=pp_url&entry.500203582=",
+            suggestions: "https://docs.google.com/forms/d/e/1FAIpQLSfAvHfhebjZ2qgBfkUC5eXFLCqDGzrjOa4REncwLN2P3_HY-A/viewform?usp=pp_url&entry.1021015769=",
+            supportticket: "https://docs.google.com/forms/d/e/1FAIpQLSc2RncxLbzmS_N25onb-2pWC_X9k4NKdglTR1oH0GN8DsXRFg/viewform?usp=pp_url&entry.1524462986=EVERYONE!&entry.303030427="
+        }
+    },
+    getClient() {
+        return require("../server");
+    },
     getTrello() {
         return "?key=" + process.env.TRELLO_KEY + "&token=" + process.env.TRELLO_TOKEN;
     },
     botLog() {
         return this.getMainGuild().channels.resolve(this.channels.botLogs);
-    },
-    getClient() {
-        return require("../bot");
     },
     getMainGuild() {
         return this.getClient().guilds.resolve(this.guilds.mainGuild);
@@ -112,7 +122,7 @@ module.exports = {
         return [];
     },
     getHomeEmbed() {
-        return this.embed("My Hero Academia Prodigy - Information")
+        return this.util.embed("My Hero Academia Prodigy - Information")
             .addField("Basic Information",
                 "**IP:** `" + this.defaultIP + "`\n" +
                 "**Version:** Release 1.13.2\n" +

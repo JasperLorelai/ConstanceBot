@@ -1,4 +1,4 @@
-const client = require("../bot");
+const client = require("../server");
 client.on("ready", async () => {
     console.log("Reafy!");
     await client.user.setPresence({activity: {name: " ", type: "WATCHING"}});

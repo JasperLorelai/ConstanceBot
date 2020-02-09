@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Minecraft Soundboard</title>
+        <meta name="theme-color" content="#ff7a21">
+        <meta property="og:title" content="Minecraft Soundboard">
+        <meta property="og:description" content="A minecraft soundboard. Made with ❤ using the MagicSpells plugin.">
+        <meta property="og:image" content="https://cdn.discordapp.com/attachments/423551934784339968/665490786468626452/dzIqb-FsjNxRvlhODVh1fPZMnqX7jWK0sx8S3j2vGn72C-lUYYgL4XVe_CGJiwfe4mgw300.png">
+        <!--suppress JSUnresolvedVariable -->
+        <script>
+            function on(tag) {document.getElementById(tag).style.width = "100%"}
+            function off(tag) {document.getElementById(tag).style.width = "0%"}
+            fetch("https://api.github.com/repos/JasperLorelai/minecraft-soundboard/releases").then(y=>y.text()).then(body => {
+                let text = "";
+                JSON.parse(body).forEach((v,i) => {
+                    let body = v.body;
+                    while(body.includes("***")) body = body.replace("***","<strong>").replace("***","</strong>");
+                    while(body.includes("**")) body = body.replace("**","<b>").replace("**","</b>");
+                    while(body.includes("*")) body = body.replace("*","<i>").replace("*","</i>");
+                    while(body.includes("\n")) body = body.replace("\n","<br>");
+                    while(body.includes("```")) body = body.replace("```","<code style='white-space:pre;font-family:Courier New,monospace'>").replace("```","</code>");
+                    while(body.includes("`")) body = body.replace("`","<code style='white-space:pre;font-family:Courier New,monospace'>").replace("`","</code>");
+                    while(body.includes("![](")) {
+                        let url = body.substr(body.indexOf("![](")+4,(body.indexOf(")",body.indexOf("![]("))-body.indexOf("![](")-4));
+                        body = body.substring(0,body.indexOf("![](")) + "<img width='90%' height='90%' src=" + url + " alt=\"\">" + body.substring(body.indexOf(")",body.indexOf("![]("))+1);
+                    }
+                    text += (i===0 ? "" : "<br>") + "[<b>" + v.tag_name + "</b>] - <b>" + v.name + "</b> [<a target='_blank' href=" + v.assets[0].browser_download_url + ">Download</a>] (<b>" + v.assets[0].download_count + "</b>) <button style='format-weight:bold' onclick='on(\"overlay" + i + "\")'><b>Show description</b></button> <overlay id='overlay" + i + "' onclick='off(\"overlay" + i + "\")'><description>" + body + "</description></overlay>";
+                });
+                document.getElementById("versions").innerHTML += text;
+            });
+        </script>
+    </head>
+    <style>
+        body {
+            background-image:url("https://cdn.discordapp.com/attachments/541747333302321167/605410718476664833/0b470f_2fa850ac59d34ece818721a27faf0036mv2.png");
+            background-size:100%;
+        }
+        box {
+            position:absolute;
+            left:50%;
+            top:50%;
+            border-width:1vw;
+            border-style:outset;
+            border-color:#303338;
+            border-radius:7vw;
+            transition:border-color 1s linear 0s;
+            transform:translate(-50%,-50%);
+            width:70%;
+            height:90%;
+            background:#36393F;
+        }
+        box:hover {border-color:#085FE0}
+        box2 {
+            position:absolute;
+            left:50%;
+            top:50%;
+            transform:translate(-50%,-50%);
+            width:100%;
+            height:80%;
+            overflow-y:auto;
+        }
+        div.h1 {
+            position:absolute;
+            top:1.5%;
+            left:25%;
+            text-align:center;
+            font-family:sans-serif;
+            font-size:2vw;
+            color:#D6D7D9;
+        }
+        div.h2 {
+            position:absolute;
+            top:7%;
+            left:32%;
+            font-family:sans-serif;
+            font-size:1.5vw;
+            color:#D6D7D9;
+        }
+        div.text {
+            position:absolute;
+            left:2%;
+            font-family:sans-serif;
+            font-size:1.1vw;
+            color:#D6D7D9;
+        }
+        button {
+            background-color:grey;
+            border:.12px solid #5a616e;
+            box-shadow:.12vw .12vw #4d4d4d;
+            cursor:pointer;
+            border-radius:10vw;
+            font-size:.8vw;
+        }
+        overlay {
+            cursor:pointer;
+            height:100%;
+            width:0;
+            position:fixed;
+            z-index:1;
+            top:0;
+            left:0;
+            background-color:rgba(0,0,0,.9);
+            overflow:hidden;
+            transition:0.5s;
+            overflow-y:auto;
+        }
+        description {
+            text-align:left;
+            position:relative;
+            left:1.5%;
+            top:2%;
+            font-family:sans-serif;
+            font-size:1.4vw;
+            color:white;
+        }
+    </style>
+    <body>
+        <box>
+            <div class="h1"><b><u>Minecraft Soundboard (MagicSpells)</u></b></div>
+            <div class="h2"><b><u>Visit the project's <a target="_blank" href="https://github.com/JasperLorelai/minecraft-soundboard">GitHub repository</a></u></b></div>
+            <box2>
+                <div id="versions" class="text">
+                    <h2><b><u>How To Setup:</u></b></h2>
+                    <p>This configuration file requires the plugin <a target="_blank" href="https://github.com/TheComputerGeek2/MagicSpells/releases"><strong>MagicSpells</strong></a> to run. Note that the 1.0.0 version of the Soundboard only includes sounds up to 1.12.2. That Minecraft version is only supported by <strong>MagicSpells versions below 4.0, which require <a target="_blank" href="https://dev.bukkit.org/projects/effectlib/files">EffectLib</a> as well</strong>. The 1.0.0 version works on Minecraft versions 1.8.x-1.12.2, but you obviously can't play 1.12.x sounds on versions below. <strong>Soundboard versions above 1.0.0 support MagicSpells 4.0+</strong>.</p>
+                    <p>Download the configuration file below and place the file in your MagicSpells plugin folder, then reload the plugin. To open use one of following commands: <strong>/soundboard</strong>, <strong>/sounds</strong> or <strong>/sb</strong>. To grant other players access to the commannd, give them the permission <strong>magicspells.cast.*</strong></p>
+                    <p>In the GUI you can search for sounds to check their sound names or select it to play it. You can modify pitch and volume and try what it sounds like with your configuration. Once you think the sound is good enough you can click the paper item to paste the current sound configuration in chat where you can copy it.</p>
+                    <h2><b><u>Downloads:</u></b></h2>
+                </div>
+            </box2>
+        </box>
+    </body>
+</html>
