@@ -2,8 +2,6 @@
 require("dotenv").config();
 const Discord = require("discord.js");
 const Keyv = require("keyv");
-const express = require("express");
-const app = express();
 
 // Add custom prototype methods.
 require("./files/prototype")(Discord);
@@ -22,11 +20,6 @@ client.handleMsg = require("./files/handleMsg.js");
 // Connect Util and Config.
 client.util.config = client.config;
 client.config.util = client.util;
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log("App running on port " + PORT);
-});
 
 client.login(process.env.BOT_TOKEN).catch(e => console.log(e));
 module.exports = client;
