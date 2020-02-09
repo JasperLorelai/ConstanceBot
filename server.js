@@ -10,6 +10,6 @@ app.listen(PORT, () => {
 app.get("/", (request, response) => require("./bot").app.get("defaultRoute")(request, response));
 app.get("/:route", (request, response) => {
     const route = request.params.route;
-    if(require("./bot").app.has(route)) client.app.get(route)(request, response);
+    if(require("./bot").app.has(route)) require("./bot").app.get(route)(request, response);
     else response.end();
 });
