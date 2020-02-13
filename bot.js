@@ -2,6 +2,8 @@
 require("dotenv").config();
 const Discord = require("discord.js");
 const Keyv = require("keyv");
+const express = require("express");
+const app = express();
 
 // Add custom prototype methods.
 require("./files/prototype")(Discord);
@@ -25,7 +27,6 @@ client.login(process.env.BOT_TOKEN).catch(e => console.log(e));
 module.exports = client;
 
 const {keyv, fs} = client;
-keyv.on("error", err => console.error("Keyv connection error:\n", err));
 
 // Grabbing handlers
 client.commands = new Discord.Collection();
@@ -42,3 +43,23 @@ client.removeAllListeners();
 for(let event of fs.readdirSync("./events").filter(file => file.endsWith(".js"))) {
     require("./events/" + event);
 }
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log("Webserver running on port: " + PORT);
+});
+
+keyv.on("error", err => console.error("Keyv connection error:\n", err));
+
+// Add a handler for all application routes.
+app.get("/", (request, response) => client.app.get("defaultRoute")(request, response));
+app.get("/:route", (request, response) => {
+    const route = request.params.route;
+    if(client.app.has(route)) client.app.get(route)(request, response);
+    else response.end();
+});
+
+// Keep the web application online. Has to ping every 20mins.
+setInterval(async () => {
+    await fetch("http://mhaprodigy.uk/wakeUp");
+}, 1000*60*20);
