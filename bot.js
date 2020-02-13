@@ -52,14 +52,17 @@ app.listen(PORT, () => {
 keyv.on("error", err => console.error("Keyv connection error:\n", err));
 
 // Add a handler for all application routes.
-app.get("/", (request, response) => client.app.get("defaultRoute")(request, response));
+app.get("/", (request, response) => {
+    response.redirect(request.protocol + "://" + request.hostname + "/" + "defaultRoute");
+});
 app.get("/:route", (request, response) => {
+    client.webserver = request.protocol + "://" + request.hostname + "/";
     const route = request.params.route;
-    if(client.app.has(route)) client.app.get(route)(request, response);
+    if(client.app.has(route)) client.app.get(route)(request, response, client);
     else response.end();
 });
 
 // Keep the web application online. Has to ping every 20mins.
 setInterval(async () => {
-    await fetch("http://mhaprodigy.uk/wakeUp");
+    await client.fetch(client.webserver);
 }, 1000*60*20);
