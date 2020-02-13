@@ -56,7 +56,7 @@ app.get("/", (request, response) => {
     response.redirect(request.protocol + "://" + request.hostname + "/" + "defaultRoute");
 });
 app.get("/:route", (request, response) => {
-    client.webserver = request.protocol + "://" + request.hostname + "/";
+    client.webserver = request.protocol + "://" + request.hostname;
     const route = request.params.route;
     if(client.app.has(route)) client.app.get(route)(request, response, client);
     else response.end();
