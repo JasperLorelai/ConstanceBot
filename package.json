@@ -6,15 +6,12 @@
   "scripts": {
     "start": "node bot.js"
   },
-  "engines": {
-    "node" : "12.10.0"
-  },
   "author": "JasperLorelai",
   "license": "ISC",
   "dependencies": {
     "@keyv/mysql": "^1.1.4",
     "canvas": "^2.6.0",
-    "discord.js": "github:discordjs/discord.js",
+    "discord.js": "github:discordjs/discord.js#21d37ed0cc71b227be0feadc4ffbcd522ca4f00e",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "keyv": "^3.1.0",

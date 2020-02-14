@@ -9,7 +9,7 @@ module.exports = {
     // Permission required. Options: "author", "admin", "mod"
     perm: "author",
     hide: true,
-    // "args" is unneccessary if "params" is empty or has no required parameters.
+    // "args" is unnecessary if "params" is empty or has no required parameters.
     execute(message, args) {
     }
 };

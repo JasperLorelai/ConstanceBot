@@ -20,7 +20,7 @@ module.exports = {
         channel.send(funct(new this.config.discord.MessageEmbed().setTimestamp(new Date())));
     },
     getJoinPosition(member) {
-        return member.guild.members.sort((a, b) => a.joinedAt - b.joinedAt).array().findIndex(m => m.id === member.id);
+        return member.guild.members.cache.sort((a, b) => a.joinedAt - b.joinedAt).array().findIndex(m => m.id === member.id);
     },
     getBaseEmbed() {
         return new this.config.discord.MessageEmbed()
