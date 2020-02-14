@@ -21,7 +21,7 @@ module.exports = {
         const coll = msg.createReactionCollector((r, u) => u.id !== client.user.id, {time: 15000});
         let size = 128;
         coll.on("collect", (r, u) => {
-            r.users.remove(u);
+            r.users.cache.delete(u);
             if(u.id !== author.id) return;
             switch(r.emoji.toString()) {
                 case emojiFile["1"]:

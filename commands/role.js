@@ -34,7 +34,7 @@ module.exports = {
                 text += "\n**`?`** " + role.toString() + " was higher in the permission hierarchy";
                 continue;
             }
-            if(member.roles.has(role.id)) {
+            if(member.roles.cache.has(role.id)) {
                 text += "\n**`-`** " + role.toString();
                 member.roles.remove(role);
             }

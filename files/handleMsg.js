@@ -45,7 +45,7 @@ module.exports = async message => {
         }
 
         // Redirect messages to it's respective DM channel.
-        let dmchannel = main.channels.filter(c => c.name === author.id).array()[0];
+        let dmchannel = main.channels.cache.filter(c => c.name === author.id).array()[0];
         if(!dmchannel) {
             dmchannel = await main.channels.create(author.id, {
                 topic: author.username,
@@ -89,7 +89,7 @@ module.exports = async message => {
     }
 
     // Clean prefix query.
-    if(mentions && mentions.users && mentions.users.has(client.user.id) && content.replace(config.discord.MessageMentions.USERS_PATTERN, "").trim() === "") {
+    if(mentions && mentions.users && mentions.users.cache.has(client.user.id) && content.replace(config.discord.MessageMentions.USERS_PATTERN, "").trim() === "") {
         if(author.id === client.user.id) return;
         await channel.send(util.embed("Guild Prefix", "My prefix is: **" + (db && guild && db[guild.id] && db[guild.id].prefix ? db[guild.id].prefix : config.globalPrefix) + "**"));
         return;
@@ -109,13 +109,13 @@ module.exports = async message => {
                 postsCategory = await guild.channels.create(categoryTitle, {type: "category", permissionOverwrites: config.getOverwrites("mhapDefault", guild.id)});
                 await postsCategory.setPosition(client.channels.resolve(config.categories.olympus).position - 1);
             }
-            const latestChannel = guild.channels.filter(c => c.parentID === postsCategory.id).find(c => c.position === 0);
+            const latestChannel = guild.channels.cache.filter(c => c.parentID === postsCategory.id).find(c => c.position === 0);
             channelName = channelName + "-" + (latestChannel ? (parseInt(latestChannel.name.substr(latestChannel.name.lastIndexOf("-") + 1)) + 1) : 1);
             const newChannel = await guild.channels.create(channelName, {permissionOverwrites: config.getOverwrites("mhapDefault", guild.id), parent: postsCategory.id, topic: channelTopic || ""});
             return await newChannel.setPosition(0);
         }
 
-        const categories = guild.channels.filter(c => c.type === "category");
+        const categories = guild.channels.cache.filter(c => c.type === "category");
         let msg;
         switch(type) {
             case "rawSupportTicket":

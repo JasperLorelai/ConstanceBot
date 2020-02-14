@@ -11,7 +11,7 @@ module.exports = {
             await channel.send(util.embed("Role Members", "Role not found!", config.color.red));
             return;
         }
-        const text = guild.members.filter(m => m.roles.has(role.id)).map(m => "<@" + m.id + ">").join(", ");
+        const text = guild.members.cache.filter(m => m.roles.cache.has(role.id)).map(m => "<@" + m.id + ">").join(", ");
         const msg = await channel.send(util.embed("Role Members: " + role.name, (text.length >= 2000 ? "" : text)));
         if(text.length >= 2000) await util.handlePrompt(msg, text);
     }

@@ -64,5 +64,5 @@ app.get("/:route", (request, response) => {
 
 // Keep the web application online. Has to ping every 20mins.
 setInterval(async () => {
-    await client.fetch(client.webserver + "/" + "defaultRoute");
+    await client.fetch("http://localhost:" + PORT);
 }, 1000*60*20);

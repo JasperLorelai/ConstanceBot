@@ -3,7 +3,7 @@ const {config, util, keyv} = client;
 client.on("guildMemberRemove", async member => {
     const {guild, user} = member;
 
-    const roles = member.roles ? member.roles.filter(r => r.id !== guild.id) : null;
+    const roles = member.roles ? member.roles.cache.filter(r => r.id !== guild.id) : null;
     util.log(guild, embed => embed.setColor(config.color.logs.guildMemberRemove)
         .setTitle("User Left")
         .setAuthor(user.tag, user.displayAvatarURL())

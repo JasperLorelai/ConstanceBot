@@ -6,9 +6,9 @@ module.exports = {
     async execute(message) {
         const {client, guild, channel, author} = message;
         const {util} = client;
-        const {channels} = guild;
-        const tc = channels.array().filter(c => c.type === "text");
-        const vc = channels.array().filter(c => c.type === "voice");
+        const channels = guild.channels.cache.cache.array();
+        const tc = channels.filter(c => c.type === "text");
+        const vc = channels.filter(c => c.type === "voice");
         // This might need to be updated whenever a new one is added. Alternatively,
         // if it has to be, look into accessing the original array from
         // discord.js: https://github.com/discordjs/discord.js/blob/master/src/util/Constants.js

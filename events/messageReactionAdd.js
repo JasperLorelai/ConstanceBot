@@ -55,7 +55,7 @@ client.on("messageReactionAdd", async (r, u) => {
         if(u.id === client.user.id) return;
         const ticket = embeds.find(e => e.title === "Problem:");
         if(ticket) {
-            await r.users.remove(u.id);
+            await r.users.cache.delete(u.id);
             if(!channel["name"].includes("solved")) {
                 let pass = false;
                 // Is creator.
@@ -77,7 +77,7 @@ client.on("messageReactionAdd", async (r, u) => {
         }
         const closedTicket = embeds.find(e => e.title === "Closed");
         if(closedTicket) {
-            await r.users.remove(u.id);
+            await r.users.cache.delete(u.id);
             const member = guild.members.resolve(u.id);
             if(member && await util.getPerms(member, "admin")) {
                 // noinspection JSUnresolvedFunction
@@ -92,7 +92,7 @@ client.on("messageReactionAdd", async (r, u) => {
     if(r.message.id === config.messages.rules && r.emoji.toString() === "✅") {
         if(u.id === client.user.id) return;
         const member = await guild.members.resolve(u.id);
-        if(member.roles.has(config.roles.verified)) return;
+        if(member.roles.cache.has(config.roles.verified)) return;
         await member.roles.remove(config.roles.unverified);
         await member.roles.add(config.roles.verified);
         util.log(guild, embed => embed.setColor(config.color.green)
