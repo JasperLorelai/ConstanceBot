@@ -6,6 +6,9 @@
   "scripts": {
     "start": "node bot.js"
   },
+  "engines": {
+    "node" : "0.12.2"
+  },
   "author": "JasperLorelai",
   "license": "ISC",
   "dependencies": {
