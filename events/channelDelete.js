@@ -17,7 +17,7 @@ client.on("channelDelete", async channel => {
 
     // If channel deleted was the last one in the form category, delete the category.
     if(parent) {
-        if(guild.channels.filter(c => c.parent && c.parent.name === parent.name).size) return;
+        if(guild.channels.cache.filter(c => c.parent && c.parent.name === parent.name).size) return;
         // Category names.
         if(!["Suggestions", "Support Tickets"].includes(parent.name)) return;
         parent.delete("FormCategoryEmpty");

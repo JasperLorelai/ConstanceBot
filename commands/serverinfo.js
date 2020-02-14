@@ -6,7 +6,7 @@ module.exports = {
     async execute(message) {
         const {client, guild, channel, author} = message;
         const {util} = client;
-        const channels = guild.channels.cache.cache.array();
+        const channels = guild.channels.cache.array();
         const tc = channels.filter(c => c.type === "text");
         const vc = channels.filter(c => c.type === "voice");
         // This might need to be updated whenever a new one is added. Alternatively,
