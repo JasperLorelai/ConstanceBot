@@ -99,6 +99,20 @@ module.exports = {
             supportticket: "https://docs.google.com/forms/d/e/1FAIpQLSc2RncxLbzmS_N25onb-2pWC_X9k4NKdglTR1oH0GN8DsXRFg/viewform?usp=pp_url&entry.1524462986=EVERYONE!&entry.303030427="
         }
     },
+    vctext: [
+        {
+            // The Disco, Lounge, Living Room, Tree House, Basement
+            voice: ["419636274979143700", "419628763102314531", "419634460104065024", "419635113702457364", "616630459543322664"],
+            // voice-chat, music-bot
+            text: ["421171068645015553", "419636349780623380"]
+        },
+        {
+            // Staff chat
+            voice: ["419646844776480778"],
+            // staff-voice-chat
+            text: ["475132287877513226"]
+        }
+    ],
     getClient() {
         return require("../bot");
     },

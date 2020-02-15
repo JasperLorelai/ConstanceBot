@@ -10,14 +10,13 @@
   "license": "ISC",
   "dependencies": {
     "@keyv/mysql": "^1.1.4",
+    "btoa": "^1.2.1",
     "canvas": "^2.6.0",
     "discord.js": "github:discordjs/discord.js#21d37ed0cc71b227be0feadc4ffbcd522ca4f00e",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "keyv": "^3.1.0",
-    "node-fetch": "^2.6.0"
-  },
-  "devDependencies": {
+    "node-fetch": "^2.6.0",
     "@types/express": "^4.17.2"
   }
 }

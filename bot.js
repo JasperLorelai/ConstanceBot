@@ -14,10 +14,11 @@ client.fs = require("fs");
 client.emojiFile = require("./files/emoji.js");
 client.config = require("./files/config.js");
 client.util = require("./files/util.js");
+client.handleMsg = require("./files/handleMsg.js");
 client.keyv = new Keyv(process.env.DATABASE);
 client.fetch = require("node-fetch");
+client.btoa = require("btoa");
 client.canvas = require("canvas");
-client.handleMsg = require("./files/handleMsg.js");
 
 // Connect Util and Config.
 client.util.config = client.config;
@@ -64,5 +65,5 @@ app.get("/:route", (request, response) => {
 
 // Keep the web application online. Has to ping every 20mins.
 setInterval(async () => {
-    await client.fetch("https://constance-bot.herokuapp.com/");
+    await client.fetch("https://constance-bot.herokuapp.com/defaultRoute");
 }, 1000*60*20);

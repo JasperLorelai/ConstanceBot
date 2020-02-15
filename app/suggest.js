@@ -5,5 +5,5 @@ module.exports = async (request, response, client) => {
         return;
     }
     const user = await util.discordAPI(request.query.code, client.webserver + "/" + __filename, config.discordapi.users);
-    response.redirect(config.app.form.suggestions + user.id);
+    response.redirect(config.app.forms.suggestions + user.id);
 };
