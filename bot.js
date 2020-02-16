@@ -5,6 +5,8 @@ const Keyv = require("keyv");
 const express = require("express");
 const app = express();
 
+app.use(express.static("views"));
+
 // Add custom prototype methods.
 require("./files/prototype")(Discord);
 
