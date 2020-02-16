@@ -1,3 +1,3 @@
 module.exports = (request, response) => {
-    response.sendFile("/views/soundboard.html", {root: "."});
+    response.sendFile("/views/soundboard/index.html", {root: "."});
 };
