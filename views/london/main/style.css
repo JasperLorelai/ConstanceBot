@@ -1,0 +1,100 @@
+html {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    height: 100%;
+    background-image: url(../assets/london.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    overflow: hidden;
+}
+
+#main_container {
+    height: 100%;
+    background: hsla(0, 0%, 15%, .75);
+    overflow: scroll;
+}
+
+#main_textContainer {
+    padding: 10% 0;
+}
+
+#main_textContainer_title {
+    font-family: "Spectral", cursive, sans-serif;
+    color: white;
+    font-size: 150%;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: underline;
+}
+
+#main_textContainer_inner {
+    font-family: "Spectral", cursive, sans-serif;
+    padding: 5% 10%;
+    color: white;
+    font-size: 125%;
+}
+
+.main_link {
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+}
+.main_link:hover {
+    text-decoration: underline;
+}
+.main_link:visited {
+    color: white;
+}
+
+#main_nav {
+    transform: translate(10%);
+    width: 80%;
+    height: auto;
+    padding: 1%;
+    background: hsl(0, 0%, 15%);
+    border-top: 5px solid hsl(0, 0%, 20%);
+    border-right: 5px solid hsl(0, 0%, 30%);
+    border-bottom: 5px solid hsl(0, 0%, 30%);
+    border-left: 5px solid hsl(0, 0%, 20%);
+    border-radius: 25px;
+    margin-bottom: 5%;
+}
+
+#main_panorama {
+    height: 175px;
+    background-image: url(../assets/london_panorama.jpg);
+    background-repeat: repeat-x;
+    background-size: cover;
+    cursor: none;
+    border-radius: 25px;
+}
+
+#main_nav_list {
+    margin-bottom: 2%;
+    text-align: center;
+}
+
+.main_nav_link {
+    font-family: "Spectral", cursive, sans-serif;
+    display: inline-block;
+    color: white;
+    font-size: 150%;
+    border: 2px solid hsl(0, 0%, 30%);
+    background: hsl(0, 0%, 20%);
+    border-radius: 25px;
+    padding: 1% 2%;
+    margin: 0 2%;
+    text-decoration: none;
+    transition: .5s;
+}
+.main_nav_link:hover {
+    background: hsl(0, 0%, 30%);
+    border-radius: 5px;
+}
+.main_nav_link:visited {
+    color: white;
+}
