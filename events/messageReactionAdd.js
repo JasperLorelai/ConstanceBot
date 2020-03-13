@@ -55,7 +55,7 @@ client.on("messageReactionAdd", async (r, u) => {
         if(u.id === client.user.id) return;
         const ticket = embeds.find(e => e.title === "Problem:");
         if(ticket) {
-            await r.users.cache.delete(u.id);
+            await r.users.remove(u.id);
             if(!channel["name"].includes("solved")) {
                 let pass = false;
                 // Is creator.
@@ -77,7 +77,7 @@ client.on("messageReactionAdd", async (r, u) => {
         }
         const closedTicket = embeds.find(e => e.title === "Closed");
         if(closedTicket) {
-            await r.users.cache.delete(u.id);
+            await r.users.remove(u.id);
             const member = guild.members.resolve(u.id);
             if(member && await util.getPerms(member, "admin")) {
                 // noinspection JSUnresolvedFunction

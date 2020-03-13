@@ -28,7 +28,7 @@ module.exports = {
         await msg.react("➖");
         const collector = msg.createReactionCollector((r, u) => u.id !== client.user.id, {time: 90000});
         collector.on("collect", async (r, u) => {
-            await r.users.cache.delete(u);
+            await r.users.remove(u);
             if(!["➕", "➖"].includes(r.emoji.toString())) return;
             if(u.id !== author.id) return;
             const msgInput = await msg.channel.send(author.toString(), util.embed("Configure Server Mods", "Please specify a role or a user. Timeout of this prompt is **10s**.", config.color.yellow));
@@ -74,7 +74,7 @@ module.exports = {
             collMod.on("end", async () => {
                 await msg.edit(author.toString(), util.embed("Configure Server Mods", await getList() + "\n\n" + instr));
                 await msgInput.delete();
-                await r.users.cache.delete(u);
+                await r.users.remove(u);
             });
         });
         collector.on("end", async () => {

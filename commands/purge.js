@@ -25,7 +25,7 @@ module.exports = {
         const created = new Date().getTime();
         const coll = msg.createReactionCollector((r, u) => u.id !== client.user.id, {time: 30000});
         coll.on("collect", async (r, u) => {
-            await r.users.cache.delete(u);
+            await r.users.remove(u);
             if(u.id !== author.id) return null;
 
             async function handleDeletePrompt(message, messages) {
@@ -34,7 +34,7 @@ module.exports = {
                 await msg.react("✅");
                 const coll = msg.createReactionCollector((r, u) => u.id !== message.client.user.id, {time: 10000});
                 coll.on("collect", async (r, u) => {
-                    await r.users.cache.delete(u);
+                    await r.users.remove(u);
                     if(u.id !== message.author.id) return;
                     switch(r.emoji.toString()) {
                         case "❌":

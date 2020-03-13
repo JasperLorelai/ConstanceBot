@@ -68,4 +68,4 @@ app.get("/:route", (request, response) => {
 // Keep the web application online. Has to ping every 20mins.
 setInterval(async () => {
     await client.fetch("https://constance-bot.herokuapp.com/defaultRoute");
-}, 1000*60*20);
+}, 1000*60*5);

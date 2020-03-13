@@ -20,7 +20,7 @@ module.exports = {
         const msg = await channel.send(author.toString(), util.embed("Ban Member", "Purge messages of how many days?"));
         const coll = msg.createReactionCollector((r, u) => u.id !== msg.client.user.id, {time: 10000});
         coll.on("collect", async (r, u) => {
-            await r.users.cache.delete(u);
+            await r.users.remove(u);
             if(u.id !== author.id) return null;
             let days = 0;
             switch(r.emoji.toString()) {

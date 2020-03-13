@@ -23,7 +23,7 @@ module.exports = {
         let idle = true;
         const coll = msg.createReactionCollector((r, u) => u.id !== msg.client.user.id, {time: 90000});
         coll.on("collect", async (r, u) => {
-            await r.users.cache.delete(u);
+            await r.users.remove(u);
             if(u.id !== member.id) return;
             if(!idle) return;
             switch(r.emoji.toString()) {

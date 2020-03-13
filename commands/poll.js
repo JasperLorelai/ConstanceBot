@@ -53,7 +53,7 @@ module.exports = {
             const created = new Date().getTime();
             const collector = msg.createReactionCollector((r, u) => u.id !== client.user.id, {time: 300000});
             collector.on("collect", async (r, u) => {
-                await r.users.cache.delete(u);
+                await r.users.remove(u);
                 if(u.id !== author.id) return null;
                 let msg2, msgColl;
                 switch(r.emoji.toString()) {

@@ -2,16 +2,17 @@ module.exports = {
     async discordAPI(code, redirect, request) {
         const client = require("../bot");
         const creds = "Basic " + client.btoa(process.env.CLIENT_ID + ":" + process.env.CLIENT_SECRET);
+        // noinspection JSUnresolvedFunction
         const response = await client.fetch("https://discordapp.com/api/oauth2/token?grant_type=authorization_code&code=" + code + "&redirect_uri=" + encodeURI(redirect), {
             method: "POST", headers: {Authorization: creds}
         }).then(y => y.json());
-        // noinspection JSUnresolvedVariable
+        // noinspection JSUnresolvedFunction, JSUnresolvedVariable
         return await client.fetch(request, {headers: {Authorization: "Bearer " + response.access_token}}).then(y => y.json());
     },
     log(guild, funct) {
         if(!guild) return;
         const channelID = this.config.channels.logs[guild.id];
-        const channel = channelID ? guild.channels.resolve(channelID) : guild.channels.find(c => c.name === "logs");
+        const channel = channelID ? guild.channels.resolve(channelID) : guild.channels.cache.find(c => c.name === "logs");
 
         // TODO: Remove this. This is just temporary global logs to help find conflicts.
         if(guild.id !== "406825495502782486") this.config.getMainGuild().channels.resolve(this.config.channels.globalLogs).send("`" + guild.id + ": " + channel + "` **" + guild.name + "**", funct(new this.config.discord.MessageEmbed().setTimestamp(new Date())));
@@ -81,7 +82,7 @@ module.exports = {
                 if(index < 0) index = splits.length - 1;
             }
             await message.edit(embed.setDescription(splits[index]).spliceField(0, 1, "Pages", "Page: " + (index + 1) + "**/**" + splits.length, true));
-            await r.users.cache.delete(u.id);
+            await r.users.remove(u.id);
         });
         coll.on("end", async () => {
             await message.edit(embed.spliceField(0, 1));
@@ -209,7 +210,7 @@ module.exports = {
         await msg.react("✅");
         const coll = msg.createReactionCollector((r, u) => u.id !== msg.client.user.id, {time: 30000});
         coll.on("collect", async (r, u) => {
-            await r.users.cache.delete(u.id);
+            await r.users.remove(u.id);
             if(author.id !== u.id) return;
             embed = getEmbed(msg);
             switch(r.emoji.toString()) {
