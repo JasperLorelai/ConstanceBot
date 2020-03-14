@@ -56,7 +56,7 @@ keyv.on("error", err => console.error("Keyv connection error:\n", err));
 
 // Add a handler for all application routes.
 app.get("/", (request, response) => {
-    response.redirect(request.protocol + "://" + request.hostname + "/" + "defaultRoute");
+    response.redirect(request.protocol + "://" + request.hostname + "/discord");
 });
 app.get("/:route", (request, response) => {
     client.webserver = request.protocol + "://" + request.hostname;
@@ -67,5 +67,5 @@ app.get("/:route", (request, response) => {
 
 // Keep the web application online. Has to ping every 20mins.
 setInterval(async () => {
-    await client.fetch("https://constance-bot.herokuapp.com/defaultRoute");
+    await client.fetch("https://constance-bot.herokuapp.com/webAppRefresh");
 }, 1000*60*5);
