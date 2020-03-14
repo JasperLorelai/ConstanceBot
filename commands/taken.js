@@ -8,6 +8,6 @@ module.exports = {
         const {config, util} = client;
         const chars = JSON.parse(await client.fetch("https://api.trello.com/1/cards/" + config.trello["lists"].characters).then(y => y.text()))["desc"].discordMKD();
         const msg = await channel.send(author.toString(), util.embed("Canon Character List", (chars.length >= 2000 ? "" : chars)));
-        if(chars.length >= 2000) await util.handlePrompt(msg, text);
+        if(chars.length >= 2000) await util.handlePrompt(msg, chars);
     }
 };

@@ -9,7 +9,7 @@ module.exports = {
         let db;
 
         function getHelp(poll) {
-            return "React with:" + "\n💬 - Set text." + "\n➕ - Add react option." + "\n🚫 - Reset reactions." + "\n💟 - Ping everyone with the Polls role. (`" + poll.rolePing + "`)" + "\n" + client.emoji["1"] + " - Unique reactions only. (`" + poll.unique + "`)" + "\n✅ - Send poll." + "\n❌ - Cancel poll.";
+            return "React with:" + "\n💬 - Set text." + "\n➕ - Add react option." + "\n🚫 - Reset reactions." + "\n💟 - Ping everyone with the Polls role. (`" + poll.rolePing + "`)" + "\n" + client.emojiFile["1"] + " - Unique reactions only. (`" + poll.unique + "`)" + "\n✅ - Send poll." + "\n❌ - Cancel poll.";
         }
 
         async function refresh(msg, poll) {
@@ -91,7 +91,7 @@ module.exports = {
                     case "🚫":
                         if(poll.emoji.length > 0) {
                             poll.emoji = [];
-                            await msg.edit(util.getEmbed(msg).spliceField(1, 1));
+                            await msg.edit(util.getEmbed(msg).spliceFields(1, 1));
                         }
                         break;
                     case "💟":

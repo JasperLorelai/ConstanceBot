@@ -19,7 +19,7 @@ async function handleDisconnect(state) {
         if(!vc) config.botLog().send(config.embed("Voice-Text Handler", "Array `" + state.channelID + "` contains non-existent channel `" + ch + "`.", config.color.yellow));
         else {
             // noinspection JSCheckFunctionSignatures
-            await vc.overwritePermissions({permissionOverwrites: vc.permissionOverwrites.filter(o => o.id !== state.id)});
+            await vc.overwritePermissions(vc.permissionOverwrites.filter(o => o.id !== state.id));
         }
     }
 }

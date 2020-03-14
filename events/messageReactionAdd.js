@@ -31,7 +31,7 @@ client.on("messageReactionAdd", async (r, u) => {
         const member = guild.members.resolve(u.id);
         const pass = member ? await util.getPerms(member, "admin") : false;
         if(suggestion && ["✅", "❌"].includes(r.emoji.toString()) && !["accepted", "denied"].includes(channel["name"]) && pass) {
-            suggestion = suggestion.spliceField(0, 1)
+            suggestion = suggestion.spliceFields(0, 1)
                 .addField("👍", "Upvotes: " + r.message.reactions.resolve("👍").count--, true)
                 .addField("👎", "Downvotes: " + r.message.reactions.resolve("👎").count--, true);
             await r.message.reactions.removeAll();
@@ -46,7 +46,7 @@ client.on("messageReactionAdd", async (r, u) => {
                 await channel.setName("denied-" + channel["name"]);
             }
             // noinspection JSUnresolvedFunction
-            await channel.overwritePermissions({permissionOverwrites: [{id: guild.id, deny: "SEND_MESSAGES"}]});
+            await channel.overwritePermissions([{id: guild.id, deny: "SEND_MESSAGES"}]);
         }
     }
 
@@ -81,7 +81,7 @@ client.on("messageReactionAdd", async (r, u) => {
             const member = guild.members.resolve(u.id);
             if(member && await util.getPerms(member, "admin")) {
                 // noinspection JSUnresolvedFunction
-                await channel.overwritePermissions({permissionOverwrites: [{id: guild.id, deny: "VIEW_CHANNEL"}]});
+                await channel.overwritePermissions([{id: guild.id, deny: "VIEW_CHANNEL"}]);
                 await r.message.reactions.removeAll();
                 await r.message.delete();
             }

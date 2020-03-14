@@ -130,7 +130,7 @@ module.exports = async message => {
                         {id: user.id, allow: ["VIEW_CHANNEL"]}
                     ];
                     if(restriction === "Staff only.") permissions.push({id: config.roles.staff, allow: ["VIEW_CHANNEL"]});
-                    await ticket.overwritePermissions({permissionOverwrites: permissions});
+                    await ticket.overwritePermissions(permissions);
                 }
                 break;
             case "rawSuggestion":

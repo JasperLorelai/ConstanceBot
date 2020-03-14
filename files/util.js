@@ -81,11 +81,12 @@ module.exports = {
                 index--;
                 if(index < 0) index = splits.length - 1;
             }
-            await message.edit(embed.setDescription(splits[index]).spliceField(0, 1, "Pages", "Page: " + (index + 1) + "**/**" + splits.length, true));
+            // noinspection JSCheckFunctionSignatures
+            await message.edit(embed.setDescription(splits[index]).spliceFields(0, 1, {name: "Pages", value: "Page: " + (index + 1) + "**/**" + splits.length, inline: true}));
             await r.users.remove(u.id);
         });
         coll.on("end", async () => {
-            await message.edit(embed.spliceField(0, 1));
+            await message.edit(embed.spliceFields(0, 1));
             await message.reactions.removeAll();
             await message.react("❤");
         });
