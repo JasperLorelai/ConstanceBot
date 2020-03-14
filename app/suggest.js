@@ -4,6 +4,6 @@ module.exports = async (request, response, client) => {
         response.sendFile("/views/redirect-suggest.html", {root: "."});
         return;
     }
-    const user = await util.discordAPI(request.query.code, client.webserver + "/" + __filename, config.discordapi.users);
+    const user = await util.discordAPI(request.query.code, client.webserver + "/suggest", config.discordapi.users);
     response.redirect(config.app.forms.suggestions + user.id);
 };
