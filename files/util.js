@@ -40,12 +40,14 @@ module.exports = {
         if(description) embed.setDescription(description);
         return embed;
     },
-    getEmbed(message) {
-        if(message.embeds.length < 1) return;
-        const embed = new this.config.discord.MessageEmbed(message.embeds.filter(e => e.type === "rich")[0]);
-        if(embed.image) embed.image.url = "attachment://" + embed.image.url.substr(embed.image.url.lastIndexOf("/") + 1);
-        if(embed.thumbnail) embed.thumbnail.url = "attachment://" + embed.thumbnail.url.substr(embed.thumbnail.url.lastIndexOf("/") + 1);
-        return embed;
+    getEmbeds(message) {
+        if(message.embeds.length < 1) return null;
+        return message.embeds.filter(e => e.type === "rich").map(e => {
+            const embed = new this.config.discord.MessageEmbed(e);
+            if(embed.image) embed.image.url = "attachment://" + embed.image.url.substr(embed.image.url.lastIndexOf("/") + 1);
+            if(embed.thumbnail) embed.thumbnail.url = "attachment://" + embed.thumbnail.url.substr(embed.thumbnail.url.lastIndexOf("/") + 1);
+            return embed;
+        });
     },
     async handlePrompt(message, text, ttl, seperator) {
         // Split text into segments based on the seperator.
@@ -64,7 +66,7 @@ module.exports = {
             i += end;
         }
         // Setup
-        const embed = this.getEmbed(message);
+        const embed = this.getEmbeds(message)[0];
         let index = 0;
         await message.edit(embed.setDescription(splits[0]).addField("Pages", "Page: " + (index + 1) + "**/**" + splits.length, true));
         await message.react("◀");
@@ -205,7 +207,7 @@ module.exports = {
     async handleChange(msg, author, modify, denied, accepted, options) {
         if(!denied) denied = () => {};
         if(!accepted) accepted = () => {};
-        let embed = this.getEmbed(msg);
+        let embed = this.getEmbeds(msg)[0];
         await msg.edit(embed.setColor(color.yellow).setDescription((embed.description ? embed.description : "") + "\n\n**React with:\n✅ - to confirm changes.\n❌ - deny changes.**"));
         await msg.react("❌");
         await msg.react("✅");
@@ -213,7 +215,7 @@ module.exports = {
         coll.on("collect", async (r, u) => {
             await r.users.remove(u.id);
             if(author.id !== u.id) return;
-            embed = getEmbed(msg);
+            embed = getEmbeds(msg)[0];
             switch(r.emoji.toString()) {
                 case "❌":
                     denied(modify);
@@ -231,7 +233,7 @@ module.exports = {
         });
         coll.on("end", async (c, reason) => {
             if(msg.deleted) return;
-            const embed = this.getEmbed(msg);
+            const embed = this.getEmbeds(msg)[0];
             if(!["denied", "accepted"].includes(reason)) embed.setColor("666666").setDescription("Timed out.");
             if(reason === "denied" && !options.denied) embed.setDescription("");
             if(reason === "accepted" && !options.accepted) embed.setDescription("");

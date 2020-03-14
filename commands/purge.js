@@ -42,7 +42,7 @@ module.exports = {
                             break;
                         case "✅":
                             coll.stop();
-                            await message.channel.bulkDelete(messages);
+                            messages.each(m => m.delete());
                             break;
                     }
                 });
@@ -83,7 +83,7 @@ module.exports = {
             }
             else {
                 await msg.reactions.removeAll();
-                await msg.edit(util.getEmbed(msg).setDescription("**Messages found:** " + (over ? "limited to `50`" : "`" + num + "`") + "\n\n**Timed out.**").setColor("666666"));
+                await msg.edit(util.getEmbeds(msg)[0].setDescription("**Messages found:** " + (over ? "limited to `50`" : "`" + num + "`") + "\n\n**Timed out.**").setColor("666666"));
             }
         });
     }

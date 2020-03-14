@@ -13,7 +13,7 @@ module.exports = {
         }
 
         async function refresh(msg, poll) {
-            const embed = util.getEmbed(msg);
+            const embed = util.getEmbeds(msg)[0];
             embed.fields[0].value = getHelp(poll);
             embed.setDescription(poll.text || "No text set.");
             await msg.edit(embed);
@@ -79,7 +79,7 @@ module.exports = {
                             const emoji = poll.emoji.concat(util.getEmoji(m.content)).filter(e => e);
                             if(emoji[0]) {
                                 poll.emoji = emoji;
-                                const embed = util.getEmbed(msg);
+                                const embed = util.getEmbeds(msg)[0];
                                 if(embed.fields.length > 1) embed.fields[1].value = emoji.join(", "); else embed.addField("Emoji", emoji.join(", "));
                                 msg.edit(embed);
                                 msgColl.stop();
@@ -91,7 +91,7 @@ module.exports = {
                     case "🚫":
                         if(poll.emoji.length > 0) {
                             poll.emoji = [];
-                            await msg.edit(util.getEmbed(msg).spliceFields(1, 1));
+                            await msg.edit(util.getEmbeds(msg)[0].spliceFields(1, 1));
                         }
                         break;
                     case "💟":
@@ -121,7 +121,7 @@ module.exports = {
                                 collector.stop("done");
                             }
                             else {
-                                const embed = util.getEmbed(msg2);
+                                const embed = util.getEmbeds(msg2)[0];
                                 await msg2.edit(embed.setDescription(embed.description + "\n\nChannel not found!").setColor(config.color.red));
                             }
                             m.delete();

@@ -54,7 +54,7 @@ module.exports = {
     },
     webhooks: {
         // Main
-        mainRedirect: "668075261962485761"
+        mainRedirect: "688398876591259793"
     },
     channels: {
         // Main

@@ -21,7 +21,7 @@ module.exports = async message => {
             }
 
             const msg = await channel.messages.fetch(db[config.guilds.mhapGuild].welcomer[author.id]);
-            const embed = util.getEmbed(msg);
+            const embed = util.getEmbeds(msg)[0];
             let newMsg;
             switch(embed.title) {
                 case "Roles - Poll (Stage 1)":
@@ -97,7 +97,7 @@ module.exports = async message => {
 
     // Handle raw forms.
     if(message.webhookID && message.webhookID === config.webhooks.mainRedirect) {
-        let embed = util.getEmbed(message);
+        let embed = util.getEmbeds(message)[0];
         const user = client.users.resolve(embed.title);
         const type = message.content;
         const guild = client.guilds.resolve(config.guilds.mhapGuild);
@@ -140,6 +140,25 @@ module.exports = async message => {
                 await msg.react("👎");
                 await msg.react("✅");
                 await msg.react("❌");
+                break;
+            case "rawStaffApp":
+                const appFragments = util.getEmbeds(message);
+                appFragments.shift();
+                const lastFragment = appFragments[appFragments.length -1];
+                appFragments.splice(appFragments.length-1);
+                const staffApp = await handlePost("Staff Applications", "staffapp", "Would you like to apply? Use this form here: http://mhaprodigy.uk/apply");
+                const firstFragment = await staffApp.send(new config.discord.MessageEmbed()
+                    .setTitle("Staff Application")
+                    .setColor(config.color.base)
+                    .setThumbnail(user.displayAvatarURL())
+                    .setDescription(embed.description)
+                    .setAuthor("Issued by: " + user.tag)
+                );
+                for(const fragment of appFragments) await staffApp.send(new config.discord.MessageEmbed().setColor(config.color.base).setDescription(fragment.description));
+                msg = await staffApp.send(util.embed("", lastFragment.description).addField("Staff Application Actions", "❌ - Deny application. (`Server Admin`)\n✅ - Accept application. (`Server Admin`)"));
+                await msg.react("✅");
+                await msg.react("❌");
+                await firstFragment.pin();
                 break;
         }
         message.delete();

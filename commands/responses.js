@@ -53,7 +53,7 @@ module.exports = {
                             if(!db[guild.id].responses) db[guild.id].responses = [];
                             db[guild.id].responses.push({trigger: trigger, reply: reply});
                             await keyv.set("guilds", db);
-                            await msg.edit(util.getEmbed(msg).setDescription((await getResponses() || "No responses in DB.") + "\n\n**React with:\n➖ - to remove a response.\n➕ - to add a new response.**"));
+                            await msg.edit(util.getEmbeds(msg)[0].setDescription((await getResponses() || "No responses in DB.") + "\n\n**React with:\n➖ - to remove a response.\n➕ - to add a new response.**"));
                             msg.channel.send(util.embed("Auto Response Creator", "Auto response created!", config.color.green)).then(tempMsg => {
                                 tempMsg.delete({timeout: 3000});
                             });
@@ -96,7 +96,7 @@ module.exports = {
                         if(!db[guild.id].responses) db[guild.id].responses = [];
                         db[guild.id].responses = db[guild.id].responses.filter((r, i) => i !== ind);
                         await keyv.set("guilds", db);
-                        await msg.edit(util.getEmbed(msg).setDescription((await getResponses() || "No responses in DB.") + "\n\n**React with:\n➖ - to remove a response.\n➕ - to add a new response.**"));
+                        await msg.edit(util.getEmbeds(msg)[0].setDescription((await getResponses() || "No responses in DB.") + "\n\n**React with:\n➖ - to remove a response.\n➕ - to add a new response.**"));
                         msg.channel.send(util.embed("Auto Response Creator", "Auto response deleted!", config.color.green)).then(tempMsg => {
                             tempMsg.delete({timeout: 3000});
                         });
@@ -109,7 +109,7 @@ module.exports = {
             }
         });
         coll.on("end", async () => {
-            await msg.edit(util.getEmbed(msg).setDescription(await getResponses()).setColor(config.color.base));
+            await msg.edit(util.getEmbeds(msg)[0].setDescription(await getResponses()).setColor(config.color.base));
             await msg.reactions.removeAll();
         });
     }
