@@ -88,6 +88,21 @@ module.exports = async message => {
         return;
     }
 
+    // Message quoting.
+    if(/https:\/\/.*?discordapp.com\/channels\//g.test(content)) {
+        // Extract components of the url and search for them.
+        let [msgGuild, msgChannel, msgID] = content.substring(content.indexOf("channels")+9).split("/");
+        msgGuild = msgGuild ? client.guilds.resolve(msgGuild) : null;
+        msgChannel = msgChannel ? msgGuild.channels.resolve(msgChannel) : null;
+        msgID = msgID ? await msgChannel.messages.fetch(msgID) : null;
+        // If the msg was truly found, quote it.
+        if(msgID) {
+            const embed = util.embed(null, msgID.content, config.color.yellow).setAuthor("Sent by: " + msgID.author.tag, msgID.author.displayAvatarURL());
+            if(msgID.attachments.size) embed.attachFiles([{attachment: msgID.attachments.first().attachment, name: "image.png"}]).setImage("attachment://image.png");
+            channel.send(embed.setTitle("Quoted by: " + author.tag));
+        }
+    }
+
     // Clean prefix query.
     if(mentions && mentions.users && mentions.users.has(client.user.id) && content.replace(config.discord.MessageMentions.USERS_PATTERN, "").trim() === "") {
         if(author.id === client.user.id) return;
@@ -99,67 +114,75 @@ module.exports = async message => {
     if(message.webhookID && message.webhookID === config.webhooks.mainRedirect) {
         let embed = util.getEmbeds(message)[0];
         const user = client.users.resolve(embed.title);
-        const type = message.content;
         const guild = client.guilds.resolve(config.guilds.mhapGuild);
+        if(user) {
+            const type = message.content;
 
-        async function handlePost(categoryTitle, channelName, channelTopic) {
-            let postsCategory = categories.find(c => c.name.toLowerCase() === categoryTitle.toLowerCase());
-            if(!postsCategory) {
-                // noinspection JSCheckFunctionSignatures
-                postsCategory = await guild.channels.create(categoryTitle, {type: "category", permissionOverwrites: config.getOverwrites("mhapDefault", guild.id)});
-                await postsCategory.setPosition(client.channels.resolve(config.categories.olympus).position - 1);
-            }
-            const latestChannel = guild.channels.cache.filter(c => c.parentID === postsCategory.id).find(c => c.position === 0);
-            channelName = channelName + "-" + (latestChannel ? (parseInt(latestChannel.name.substr(latestChannel.name.lastIndexOf("-") + 1)) + 1) : 1);
-            const newChannel = await guild.channels.create(channelName, {permissionOverwrites: config.getOverwrites("mhapDefault", guild.id), parent: postsCategory.id, topic: channelTopic || ""});
-            return await newChannel.setPosition(0);
-        }
-
-        const categories = guild.channels.cache.filter(c => c.type === "category");
-        let msg;
-        switch(type) {
-            case "rawSupportTicket":
-                const ticket = await handlePost("Support Tickets", "ticket", "Need support? Open a support ticket here: http://mhaprodigy.uk/support");
-                msg = await ticket.send(util.embed("Problem:", embed.description).setAuthor(user.tag, user.displayAvatarURL()).addField("React Actions", "❌ - Close support ticket. (`Server Admin` or OP)").setFooter(user.id));
-                await msg.react("❌");
-                const restriction = embed.fields[0].value;
-                if(restriction && restriction !== "EVERYONE!") {
-                    let permissions = [
-                        {id: guild.id, deny: ["VIEW_CHANNEL"]},
-                        {id: config.roles.muted, deny: ["SEND_MESSAGES"]},
-                        {id: user.id, allow: ["VIEW_CHANNEL"]}
-                    ];
-                    if(restriction === "Staff only.") permissions.push({id: config.roles.staff, allow: ["VIEW_CHANNEL"]});
-                    await ticket.overwritePermissions(permissions);
+            async function handlePost(categoryTitle, channelName, channelTopic) {
+                let postsCategory = categories.find(c => c.name.toLowerCase() === categoryTitle.toLowerCase());
+                if(!postsCategory) {
+                    // noinspection JSCheckFunctionSignatures
+                    postsCategory = await guild.channels.create(categoryTitle, {type: "category", permissionOverwrites: config.getOverwrites("mhapDefault", guild.id)});
+                    await postsCategory.setPosition(client.channels.resolve(config.categories.olympus).position - 1);
                 }
-                break;
-            case "rawSuggestion":
-                const suggestion = await handlePost("Suggestions", "suggestion", "Would you like to suggest something? Open a suggestion here: http://mhaprodigy.uk/suggest");
-                msg = await suggestion.send(util.embed("They suggested:", embed.description).setAuthor(user.tag, user.displayAvatarURL()).addField("React Actions", "❌ - Deny suggestion. (`Server Admin` or OP)\n✅ - Accept suggestion. (`Server Admin` or OP)"));
-                await msg.react("👍");
-                await msg.react("👎");
-                await msg.react("✅");
-                await msg.react("❌");
-                break;
-            case "rawStaffApp":
-                const appFragments = util.getEmbeds(message);
-                appFragments.shift();
-                const lastFragment = appFragments[appFragments.length -1];
-                appFragments.splice(appFragments.length-1);
-                const staffApp = await handlePost("Staff Applications", "staffapp", "Would you like to apply? Use this form here: http://mhaprodigy.uk/apply");
-                const firstFragment = await staffApp.send(new config.discord.MessageEmbed()
-                    .setTitle("Staff Application")
-                    .setColor(config.color.base)
-                    .setThumbnail(user.displayAvatarURL())
-                    .setDescription(embed.description)
-                    .setAuthor("Issued by: " + user.tag)
-                );
-                for(const fragment of appFragments) await staffApp.send(new config.discord.MessageEmbed().setColor(config.color.base).setDescription(fragment.description));
-                msg = await staffApp.send(util.embed("", lastFragment.description).addField("Staff Application Actions", "❌ - Deny application. (`Server Admin`)\n✅ - Accept application. (`Server Admin`)"));
-                await msg.react("✅");
-                await msg.react("❌");
-                await firstFragment.pin();
-                break;
+                const latestChannel = guild.channels.cache.filter(c => c.parentID === postsCategory.id).find(c => c.position === 0);
+                channelName = channelName + "-" + (latestChannel ? (parseInt(latestChannel.name.substr(latestChannel.name.lastIndexOf("-") + 1)) + 1) : 1);
+                const newChannel = await guild.channels.create(channelName, {permissionOverwrites: config.getOverwrites("mhapDefault", guild.id), parent: postsCategory.id, topic: channelTopic || ""});
+                return await newChannel.setPosition(0);
+            }
+
+            const categories = guild.channels.cache.filter(c => c.type === "category");
+            let msg;
+            switch(type) {
+                case "rawSupportTicket":
+                    const ticket = await handlePost("Support Tickets", "ticket", "Need support? Open a support ticket here: http://mhaprodigy.uk/support");
+                    msg = await ticket.send(util.embed("Problem:", embed.description).setAuthor(user.tag, user.displayAvatarURL()).addField("React Actions", "❌ - Close support ticket. (`Server Admin` or OP)").setFooter(user.id));
+                    await msg.react("❌");
+                    const restriction = embed.fields[0].value;
+                    if(restriction && restriction !== "EVERYONE!") {
+                        let permissions = [
+                            {id: guild.id, deny: ["VIEW_CHANNEL"]},
+                            {id: config.roles.muted, deny: ["SEND_MESSAGES"]},
+                            {id: user.id, allow: ["VIEW_CHANNEL"]}
+                        ];
+                        if(restriction === "Staff only.") permissions.push({id: config.roles.staff, allow: ["VIEW_CHANNEL"]});
+                        await ticket.overwritePermissions(permissions);
+                    }
+                    break;
+                case "rawSuggestion":
+                    const suggestion = await handlePost("Suggestions", "suggestion", "Would you like to suggest something? Open a suggestion here: http://mhaprodigy.uk/suggest");
+                    msg = await suggestion.send(util.embed("They suggested:", embed.description).setAuthor(user.tag, user.displayAvatarURL()).addField("React Actions", "❌ - Deny suggestion. (`Server Admin` or OP)\n✅ - Accept suggestion. (`Server Admin` or OP)"));
+                    await msg.react("👍");
+                    await msg.react("👎");
+                    await msg.react("✅");
+                    await msg.react("❌");
+                    break;
+                case "rawStaffApp":
+                    const appFragments = util.getEmbeds(message);
+                    appFragments.shift();
+                    const lastFragment = appFragments[appFragments.length -1];
+                    appFragments.splice(appFragments.length-1);
+                    const staffApp = await handlePost("Staff Applications", "staffapp", "Would you like to apply? Use this form here: http://mhaprodigy.uk/apply");
+                    const firstFragment = await staffApp.send(new config.discord.MessageEmbed()
+                        .setTitle("Staff Application")
+                        .setColor(config.color.base)
+                        .setThumbnail(user.displayAvatarURL())
+                        .setDescription(embed.description)
+                        .setAuthor("Issued by: " + user.tag)
+                    );
+                    for(const fragment of appFragments) await staffApp.send(new config.discord.MessageEmbed().setColor(config.color.base).setDescription(fragment.description));
+                    msg = await staffApp.send(util.embed("", lastFragment.description).addField("Staff Application Actions", "❌ - Deny application. (`Server Admin`)\n✅ - Accept application. (`Server Admin`)"));
+                    await msg.react("✅");
+                    await msg.react("❌");
+                    await firstFragment.pin();
+                    break;
+            }
+        }
+        else {
+            util.log(guild, logEmbed => logEmbed.setColor(config.color.yellow)
+                .setTitle("Form Submit Failed")
+                .setDescription("A form failed to be submitted due to an invalid user ID.\n**Entered Value:** " + embed.title + "\n\n```" + embed.description + "```")
+            );
         }
         message.delete();
         return;
