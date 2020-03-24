@@ -141,7 +141,8 @@ module.exports = {
                 "**IP:** `" + this.defaultIP + "`\n" +
                 "**Version:** Release 1.13.2\n" +
                 "**Discord Invite:** http://mhaprodigy.uk/discord\n" +
-                "**Trello Board:** http://mhaprodigy.uk/trello")
+                "**Trello Board:** http://mhaprodigy.uk/trello\n" +
+                "**Staff Apps:** http://mhaprodigy.uk/apply")
             .addField("Forms",
                 "**Would you like suggest something?** [(Click here)](http://mhaprodigy.uk/suggest)\n" +
                 "**Need support?** [(Click here)](http://mhaprodigy.uk/support)")
