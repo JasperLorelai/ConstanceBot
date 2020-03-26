@@ -1,2 +1,3 @@
-# Variables
 .env
+node_modules
+.idea
