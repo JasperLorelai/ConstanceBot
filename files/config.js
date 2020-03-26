@@ -144,7 +144,8 @@ module.exports = {
                 "**Trello Board:** http://mhaprodigy.uk/trello")
             .addField("Forms",
                 "**Would you like suggest something?** [(Click here)](http://mhaprodigy.uk/suggest)\n" +
-                "**Need support?** [(Click here)](http://mhaprodigy.uk/support)")
+                "**Need support?** [(Click here)](http://mhaprodigy.uk/support)\n" +
+                "**Would you like to apply for staff?** [(Click here)](http://mhaprodigy.uk/apply)")
             .addField("Authentication","🔞 - **NSFW Authentication** - *This authentication is here to warn the recipient to not open the channel at the office or near young children because the channels it will reveal after accepting contain sexual or repulsive content.*\nReact with the displayed reaction to toggle access to the NSFW channel section.")
             .addField("Toggle Pingable Roles",
                 "📦 - <@&" + this.roles.polls + "> - If you have this role, you will be pinged whenever a poll is up.\n" +
