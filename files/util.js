@@ -101,10 +101,10 @@ module.exports = {
         return client.users.cache.find(u => find === u.id || find === u.username || find.substring(2, find.length - 1) === u.id || find.substring(3, find.length - 1) === u.id || u.username.toLowerCase().includes(find.toLowerCase()));
     },
     findRole(find, guild) {
-        return guild.roles.filter(r => r.id !== guild.id).find(r => find === r.id || find.substring(3, find.length - 1) === r.id || find.toLowerCase() === r.name.toLowerCase() || r.name.toLowerCase().includes(find.toLowerCase()));
+        return guild.roles.cache.filter(r => r.id !== guild.id).find(r => find === r.id || find.substring(3, find.length - 1) === r.id || find.toLowerCase() === r.name.toLowerCase() || r.name.toLowerCase().includes(find.toLowerCase()));
     },
     findChannel(find, guild) {
-        return guild.channels.filter(c => c.id !== guild.id).find(c => find === c.id || find.substring(3, find.length - 1) === c.id || find.toLowerCase() === c.name.toLowerCase() || c.name.toLowerCase().includes(find.toLowerCase()));
+        return guild.channels.cache.filter(c => c.id !== guild.id).find(c => find === c.id || find.substring(3, find.length - 1) === c.id || find.toLowerCase() === c.name.toLowerCase() || c.name.toLowerCase().includes(find.toLowerCase()));
     },
     isJSON(json) {
         try {if(typeof JSON.parse(json) == "object") return true} catch(e) {}
@@ -298,5 +298,19 @@ module.exports = {
             default:
                 return true;
         }
+    },
+    msToTime(ms) {
+        const days = Math.floor(ms / 86400000);
+        const hours = Math.floor(ms % 86400000 / 3600000);
+        const minutes = Math.floor(ms % 3600000 / 60000);
+        const seconds = Math.floor(ms % 60000 / 1000);
+
+        let str = [];
+        if (days) str.push(days + " days");
+        if (hours) str.push(hours + " hours");
+        if (minutes) str.push(minutes + " minutes");
+        if (seconds) str.push(seconds + " seconds");
+
+        return str.join(", ");
     }
 };
