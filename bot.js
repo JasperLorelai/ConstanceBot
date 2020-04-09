@@ -3,9 +3,18 @@ require("dotenv").config();
 const Discord = require("discord.js");
 const Keyv = require("keyv");
 const express = require("express");
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
 const app = express();
 
 app.use(express.static("views"));
+app.use(cookieParser());
+app.use(session({
+    // Random long string.
+    secret: process.env.TRELLO_KEY,
+    resave: false,
+    saveUninitialized: true
+}));
 
 // Add custom prototype methods.
 require("./files/prototype")(Discord);
