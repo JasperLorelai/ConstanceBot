@@ -1,6 +1,6 @@
 module.exports = async (request, response, client) => {
-    const {util, config} = client;
-    let db = await client.keyv.get("minecraft") || {};
+    const {util, config, keyv} = client;
+    let db = await keyv.get("minecraft") || {};
 
     if (!request.query.code) {
         // If nothing was specified, exit.
@@ -10,9 +10,12 @@ module.exports = async (request, response, client) => {
         }
 
         // If uuid was specified, but not the code.
-        if (db && db[request.query.uuid.replace(/-/g, "")]) {
-            response.sendFile("/views/discordLinking/clone.html", {root: "."});
-            return;
+        if (db) {
+            const user = Object.keys(db).find(key => db[key] === request.query.uuid.replace(/-/g, ""));
+            if (user) {
+                response.sendFile("/views/discordLinking/clone.html", {root: "."});
+                return;
+            }
         }
 
         if (!client.discordLink) client.discordLink = {};
@@ -39,9 +42,9 @@ module.exports = async (request, response, client) => {
     const user = await util.discordAPI(request.query.code, client.webserver + "/link", config.discordapi.users);
     if(user) {
         // Save user.
-        // TODO: Add website for "saved".
-        let db = await client.keyv.get("minecraft") || {};
-        db[uuid.replace(/-/g, "")] = user.id;
+        if (!db) db = {};
+        db[user.id] = uuid.replace(/-/g, "");
+        keyv.set("minecraft", db);
         response.sendFile("/views/discordLinking/linked.html", {root: "."});
     }
     else response.send("Authorisation failed. Contact the owner of the application for help.");
