@@ -19,8 +19,7 @@ client.util = require("./files/util.js");
 client.handleMsg = require("./files/handleMsg.js");
 client.keyv = new Keyv(process.env.DATABASE);
 client.fetch = require("node-fetch");
-client.btoa = require("btoa");
-client.atob = require("atob");
+client.base64 = require("btoa-atob");
 client.canvas = require("canvas");
 
 // Connect Util and Config.

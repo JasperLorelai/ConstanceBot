@@ -13,7 +13,7 @@ module.exports = async (request, response, client) => {
     const user = await util.discordAPI(request.query.code, client.webserver + "/support", config.discordapi.users);
     if(user) {
         // True?
-        response.send(request.query.uuid + " \n " + client.atob(request.query.uuid));
+        response.send(request.query.uuid + " \n " + client.base64.atob(request.query.uuid));
     }
     else response.send("Authorisation failed. Contact the owner of the application for help.");
 };

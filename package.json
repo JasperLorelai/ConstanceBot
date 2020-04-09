@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "@keyv/mysql": "^1.1.4",
-    "btoa": "^1.2.1",
+    "btoa-atob": "^0.1.2",
     "canvas": "^2.6.0",
     "discord.js": "github:discordjs/discord.js#36050d07f5ded196f5f6601619da2d3dc3604126",
     "dotenv": "^8.2.0",
