@@ -7,7 +7,7 @@ module.exports = async (request, response, client) => {
                 return;
             }
             let db = await client.keyv.get("minecraft");
-            response.send(db[value] | "");
+            response.send(db[value] || "");
         }
     }
 };

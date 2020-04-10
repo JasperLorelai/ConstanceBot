@@ -5,7 +5,7 @@ module.exports = {
     async execute(message) {
         const {client, author, channel} = message;
         const {keyv, util, config} = client;
-        let db = await keyv.get("minecraft") | {};
+        let db = await keyv.get("minecraft") || {};
         if (!db[author.id]) {
             channel.send(author.toString(), util.embed("Discord Unlink", "Your account isn't linked.", config.color.red));
             return;
