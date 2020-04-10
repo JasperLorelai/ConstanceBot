@@ -10,12 +10,10 @@ module.exports = async (request, response, client) => {
         }
 
         // If uuid was specified, but not the code.
-        if (db) {
-            const user = Object.keys(db).find(key => db[key] === request.query.uuid, "");
-            if (user) {
-                response.sendFile("/views/discordLinking/clone.html", {root: "."});
-                return;
-            }
+        const user = Object.keys(db).find(key => db[key] === request.query.uuid, "");
+        if (user) {
+            response.sendFile("/views/discordLinking/clone.html", {root: "."});
+            return;
         }
 
         if (!client.discordLink) client.discordLink = {};
@@ -42,7 +40,6 @@ module.exports = async (request, response, client) => {
     const user = await util.discordAPI(request.query.code, client.webserver + "/link", config.discordapi.users);
     if(user) {
         // Save user.
-        if (!db) db = {};
         db[user.id] = uuid;
         keyv.set("minecraft", db);
         response.sendFile("/views/discordLinking/linked.html", {root: "."});
