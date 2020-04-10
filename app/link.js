@@ -11,7 +11,7 @@ module.exports = async (request, response, client) => {
 
         // If uuid was specified, but not the code.
         if (db) {
-            const user = Object.keys(db).find(key => db[key] === request.query.uuid.replace(/-/g, ""));
+            const user = Object.keys(db).find(key => db[key] === request.query.uuid, "");
             if (user) {
                 response.sendFile("/views/discordLinking/clone.html", {root: "."});
                 return;
@@ -43,7 +43,7 @@ module.exports = async (request, response, client) => {
     if(user) {
         // Save user.
         if (!db) db = {};
-        db[user.id] = uuid.replace(/-/g, "");
+        db[user.id] = uuid;
         keyv.set("minecraft", db);
         response.sendFile("/views/discordLinking/linked.html", {root: "."});
     }

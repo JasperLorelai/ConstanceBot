@@ -10,7 +10,7 @@ module.exports = {
         const {red} = config.color;
         const member = util.findGuildMember(args.shift(), guild);
         if(!member) {
-            await channel.send(util.embed("Role Management", "User not found!", red));
+            await channel.send(author.toString(), util.embed("Role Management", "User not found!", red));
             return;
         }
         if(!member.manageable) {

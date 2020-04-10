@@ -58,7 +58,7 @@ module.exports = {
                 let msg2, msgColl;
                 switch(r.emoji.toString()) {
                     case "💬":
-                        msg2 = await channel.send(util.embed("Poll Creator - Text Manager", "Type a message to be used for the poll text. Type `cancel` to cancel.", config.color.yellow));
+                        msg2 = await channel.send(author.toString(), util.embed("Poll Creator - Text Manager", "Type a message to be used for the poll text. Type `cancel` to cancel.", config.color.yellow));
                         msgColl = channel.createMessageCollector(m => m.author.id !== client.user.id, {time: util.collTtl(collector, created)});
                         msgColl.on("collect", m => {
                             if(!poll) return;
@@ -72,7 +72,7 @@ module.exports = {
                         msgColl.on("end", () => msg2.delete());
                         break;
                     case "➕":
-                        msg2 = await channel.send(util.embed("Poll Creator - Reaction Manager", "Type a message that includes reactions.", config.color.yellow));
+                        msg2 = await channel.send(author.toString(), util.embed("Poll Creator - Reaction Manager", "Type a message that includes reactions.", config.color.yellow));
                         msgColl = channel.createMessageCollector(m => m.author.id !== client.user.id, {time: util.collTtl(collector, created)});
                         msgColl.on("collect", m => {
                             if(!poll) return;
@@ -101,7 +101,7 @@ module.exports = {
                         poll.unique = !poll.unique;
                         break;
                     case "✅":
-                        msg2 = await channel.send(util.embed("Poll Creator - Sender", "Type the channel you'd like to send this poll to.", config.color.yellow));
+                        msg2 = await channel.send(author.toString(), util.embed("Poll Creator - Sender", "Type the channel you'd like to send this poll to.", config.color.yellow));
                         msgColl = channel.createMessageCollector(m => m.author.id !== client.user.id, {time: util.collTtl(collector, created)});
                         msgColl.on("collect", async m => {
                             if(!poll) return;
@@ -160,7 +160,7 @@ module.exports = {
         let msg;
         if(polls && polls.length > 0) {
             await keyv.set("polls." + author.id, polls);
-            msg = await channel.send(util.embed("Poll Drafts", "**0**. New poll.\n" + polls.map((poll, i) => "**" + (i + 1) + "**. `" + new Date(poll.draftID).toLocaleString() + "`").join("\n"), config.color.yellow));
+            msg = await channel.send(author.toString(), util.embed("Poll Drafts", "**0**. New poll.\n" + polls.map((poll, i) => "**" + (i + 1) + "**. `" + new Date(poll.draftID).toLocaleString() + "`").join("\n"), config.color.yellow));
             const collector = channel.createMessageCollector(m => m.author.id !== client.user.id, {time: 10000});
             collector.on("collect", async m => {
                 const index = parseInt(m.content);

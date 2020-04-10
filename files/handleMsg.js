@@ -106,7 +106,7 @@ module.exports = async message => {
     // Clean prefix query.
     if(mentions && mentions.users && mentions.users.cache && mentions.users.cache.has(client.user.id) && content.replace(config.discord.MessageMentions.USERS_PATTERN, "").trim() === "") {
         if(author.id === client.user.id) return;
-        await channel.send(util.embed("Guild Prefix", "My prefix is: **" + (db && guild && db[guild.id] && db[guild.id].prefix ? db[guild.id].prefix : config.globalPrefix) + "**"));
+        await channel.send(author.toString(), util.embed("Guild Prefix", "My prefix is: **" + (db && guild && db[guild.id] && db[guild.id].prefix ? db[guild.id].prefix : config.globalPrefix) + "**"));
         return;
     }
 
