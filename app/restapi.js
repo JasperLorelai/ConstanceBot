@@ -14,7 +14,7 @@ module.exports = async (request, response, client) => {
                 break;
             case "getMCUserID":
                 let db = await keyv.get("minecraft") || {};
-                response.send(value ? Object.keys(db).find(key => db[key] === value)) : "");
+                response.send(value ? Object.keys(db).find(key => db[key] === value) : "");
                 break;
         }
     }
