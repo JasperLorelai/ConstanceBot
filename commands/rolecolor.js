@@ -22,7 +22,7 @@ module.exports = {
         const canvasImage = canvas.createCanvas(380, 84);
         const ctx = canvasImage.getContext("2d");
         ctx.fillStyle = "#36393F";
-        client {width, height} = canvasImage;
+        const {width, height} = canvasImage;
         ctx.fillRect(0, 0, width, height);
         ctx.font = "15px Verdana";
         ctx.fillStyle = "#" + color;
