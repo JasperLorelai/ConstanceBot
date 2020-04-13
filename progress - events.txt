@@ -1,6 +1,0 @@
-Voice-Text Handler
-Reaction Handler:
-  Add:
-  - Role Toggle
-  Remove:
-  - Role Toggle
