@@ -77,7 +77,7 @@ app.get("/:route", (request, response) => {
 
 // Keep the web application online. Has to ping every 20mins.
 /*
-Not necessary on a hobby Dyno.
+Not necessary on a "hobby" Dyno.
 setInterval(async () => {
     await client.fetch("https://constance-bot.herokuapp.com/webAppRefresh");
 }, 1000*60*20);

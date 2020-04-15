@@ -33,6 +33,10 @@ client.on("message", async message => {
             await message.reply("Can't execute that command inside DMs.");
             return;
         }
+
+        // This disables command execution. What sets the channel is in Util -> setMCChannel
+        if (client["minecraft"] && channel.id === client["minecraft"]) return;
+
         if(!await util.getPerms(member, command.perm)) {
             await channel.send(author.toString(), util.embed("No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + command.perm + "`", config.color.red));
             return;

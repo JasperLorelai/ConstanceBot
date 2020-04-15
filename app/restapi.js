@@ -7,7 +7,7 @@ module.exports = async (request, response, client) => {
                 break;
             case "getMCUser":
                 if (value) {
-                let db = await keyv.get("minecraft") || {};
+                    let db = await keyv.get("minecraft") || {};
                     response.send(db[value] || "");
                 }
                 else response.end();
@@ -18,6 +18,11 @@ module.exports = async (request, response, client) => {
                 break;
             case "getMCUsers":
                 response.send(await keyv.get("minecraft") || {});
+                break;
+            case "putMCChannel":
+                response.end();
+                if (!value) return;
+                client.minecraft = value;
                 break;
         }
     }
