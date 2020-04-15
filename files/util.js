@@ -208,7 +208,7 @@ module.exports = {
         if(!denied) denied = () => {};
         if(!accepted) accepted = () => {};
         let embed = this.getEmbeds(msg)[0];
-        await msg.edit(embed.setColor(color.yellow).setDescription((embed.description ? embed.description : "") + "\n\n**React with:\n✅ - to confirm changes.\n❌ - deny changes.**"));
+        await msg.edit(embed.setColor(this.config.color.yellow).setDescription((embed.description ? embed.description : "") + "\n\n**React with:\n✅ - to confirm changes.\n❌ - deny changes.**"));
         await msg.react("❌");
         await msg.react("✅");
         const coll = msg.createReactionCollector((r, u) => u.id !== msg.client.user.id, {time: 30000});
@@ -220,13 +220,13 @@ module.exports = {
                 case "❌":
                     denied(modify);
                     if(options.denied) embed.setDescription(options.denied);
-                    await msg.edit(embed.setColor(color.red));
+                    await msg.edit(embed.setColor(this.config.color.red));
                     coll.stop("denied");
                     break;
                 case "✅":
                     accepted(modify);
                     if(options.accepted) embed.setDescription(options.accepted);
-                    await msg.edit(embed.setColor(color.green));
+                    await msg.edit(embed.setColor(this.config.color.green));
                     coll.stop("accepted");
                     break;
             }
@@ -312,5 +312,8 @@ module.exports = {
         if (seconds) str.push(seconds + " seconds");
 
         return str.join(", ");
+    },
+    getKeyByValue(object, value) {
+        return Object.keys(object).find(key => object[key] === value);
     }
 };
