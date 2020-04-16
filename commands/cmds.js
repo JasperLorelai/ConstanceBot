@@ -6,7 +6,7 @@ module.exports = {
         const {client, guild, channel, author} = message;
         const {commands, util} = client;
         let perm;
-        const text = commands.filter(c => !c.hide).map(c => {
+        const text = commands.filter(c => !c.hide && !(c.guildWhitelist && !c.guildWhitelist.includes(guild.id))).map(c => {
             perm = c.perm;
             if(perm === "author") perm = "**Bot Author**";
             if(perm === "admin") perm = "**Server Administrator**";

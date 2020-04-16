@@ -4,9 +4,16 @@ module.exports = {
     aliases: ["ip"],
     params: ["(ip)"],
     async execute(message, args) {
-        const {client, channel} = message;
+        const {client, channel, guild, author} = message;
         const {config, util} = client;
-        const server = JSON.parse(await client.fetch("https://api.mcsrvstat.us/2/" + (args[0] ? args[0] : config.defaultIP)).then(y => y.text()));
+        let ip = args[0];
+        // Whitelisting default IP to it's respective server.
+        if (config.guilds.mhapGuild === guild.id && !ip) ip = config.defaultIP;
+        else {
+            channel.send(author.toString(), util.embed("Minecraft Server Info", "Please provide an IP parameter.", config.color.red));
+            return;
+        }
+        const server = JSON.parse(await client.fetch("https://api.mcsrvstat.us/2/" + ip).then(y => y.text()));
         let text = "";
         if(server.debug && server.debug.ping) {
             if(server.online) {

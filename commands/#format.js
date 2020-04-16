@@ -6,6 +6,8 @@ module.exports = {
     params: ["[required]", "(optional)"],
     // When true, makes it so it can't be executed in DMs.
     guildOnly: false,
+    // Guilds this command will work on.
+    guildWhitelist: [],
     // Permission required. Options: "author", "admin", "mod"
     perm: "author",
     hide: true,
