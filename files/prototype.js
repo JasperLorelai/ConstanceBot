@@ -5,11 +5,11 @@ module.exports = (Discord) => {
     };
     String.prototype.discordMKD = function() {
         let splits = this.split("\n").filter(l => l !== "---");
-        for(let i = 0; i < splits.length; i++) {
-            if(splits[i].startsWith("######") || splits[i].startsWith("#####") || splits[i].startsWith("####") || splits[i].startsWith("###") || splits[i].startsWith("##")) {
+        for (let i = 0; i < splits.length; i++) {
+            if (splits[i].startsWith("######") || splits[i].startsWith("#####") || splits[i].startsWith("####") || splits[i].startsWith("###") || splits[i].startsWith("##")) {
                 splits[i] = splits[i].replace(/#{2,6}\s?/g, "**") + "**";
             }
-            if(splits[i].startsWith("#")) splits[i] = "__**" + splits[i].substr(1) + "**__";
+            if (splits[i].startsWith("#")) splits[i] = "__**" + splits[i].substr(1) + "**__";
         }
         return splits.join("\n");
     };

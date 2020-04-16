@@ -1,5 +1,5 @@
 async function copy(text) {
-    if(navigator.clipboard) await navigator.clipboard.writeText(text);
+    if (navigator.clipboard) await navigator.clipboard.writeText(text);
     else {
         // Fallback copy.
         const copyElement = document.createElement("textarea");
@@ -16,13 +16,13 @@ async function copy(text) {
 }
 
 function translateMarkdown(str) {
-    while(str.includes("***")) str = str.replace("***","<strong>").replace("***","</strong>");
-    while(str.includes("**")) str = str.replace("**","<b>").replace("**","</b>");
-    while(str.includes("*")) str = str.replace("*","<i>").replace("*","</i>");
+    while (str.includes("***")) str = str.replace("***","<strong>").replace("***","</strong>");
+    while (str.includes("**")) str = str.replace("**","<b>").replace("**","</b>");
+    while (str.includes("*")) str = str.replace("*","<i>").replace("*","</i>");
     str = str.replace(/\n/g, "<br>");
-    while(str.includes("```")) str = str.replace("```","<code style='white-space:pre;font-family:Courier New,monospace'>").replace("```","</code>");
-    while(str.includes("`")) str = str.replace("`","<code style='white-space:pre;font-family:Courier New,monospace'>").replace("`","</code>");
-    while(str.includes("![](")) {
+    while (str.includes("```")) str = str.replace("```","<code style='white-space:pre;font-family:Courier New,monospace'>").replace("```","</code>");
+    while (str.includes("`")) str = str.replace("`","<code style='white-space:pre;font-family:Courier New,monospace'>").replace("`","</code>");
+    while (str.includes("![](")) {
         let url = str.substr(str.indexOf("![](")+4,(str.indexOf(")",str.indexOf("![]("))-str.indexOf("![](")-4));
         str = str.substring(0,str.indexOf("![](")) + "<img width='90%' height='90%' alt='image.png' src=" + url + ">" + str.substring(str.indexOf(")",str.indexOf("![]("))+1);
     }
@@ -31,7 +31,7 @@ function translateMarkdown(str) {
 
 async function onLoad() {
     // Setup copy elements.
-    for(const element of document.getElementsByClassName("cmd")) {
+    for (const element of document.getElementsByClassName("cmd")) {
         // Create an element to store this element's value.
         const copyArea = document.createElement("span");
         copyArea.innerHTML = element.innerHTML;
@@ -51,7 +51,7 @@ async function onLoad() {
     const releases = await fetch("https://api.github.com/repos/JasperLorelai/minecraft-soundboard/releases").then(y => y.json());
     const downloadList = document.getElementById("download_list");
     downloadList.innerHTML = "";
-    for(const release of releases) {
+    for (const release of releases) {
         // Append list item.
         const item = document.createElement("li");
         item.classList.add("download_release");
@@ -84,7 +84,7 @@ async function onLoad() {
         // noinspection JSCheckFunctionSignatures
         version.appendChild(tooltip);
         // Add description button.
-        if(!release.body) continue;
+        if (!release.body) continue;
         const description = document.createElement("span");
         description.classList.add("download_description_button");
         description.innerHTML = "Description";
@@ -106,7 +106,7 @@ async function onLoad() {
     function toggle(element) {
         element.classList.toggle("download_description_button_active");
         const hidden = element.nextElementSibling;
-        if(hidden.style.maxHeight) {
+        if (hidden.style.maxHeight) {
             hidden.style.maxHeight = null;
             hidden.style.padding = "0px 2.25%";
         }

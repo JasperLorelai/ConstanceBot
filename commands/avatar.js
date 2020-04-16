@@ -8,7 +8,7 @@ module.exports = {
         const {config, util, emojiFile} = client;
         const {red, yellow} = config.color;
         const user = args[0] ? util.findUser(args[0]) : author;
-        if(!user) {
+        if (!user) {
             await channel.send(author.toString(), util.embed("Avatar", "User not found!", red));
             return null;
         }
@@ -22,8 +22,8 @@ module.exports = {
         let size = 128;
         coll.on("collect", (r, u) => {
             r.users.remove(u);
-            if(u.id !== author.id) return;
-            switch(r.emoji.toString()) {
+            if (u.id !== author.id) return;
+            switch (r.emoji.toString()) {
                 case emojiFile["1"]:
                     size = 128;
                     break;
@@ -43,7 +43,7 @@ module.exports = {
             coll.stop();
         });
         coll.on("end", async () => {
-            if(!msg.deleted) await msg.delete();
+            if (!msg.deleted) await msg.delete();
             await channel.send(author.toString(), util.embed("**" + user.username + "**'s Avatar")
                 .attachFiles([{
                     attachment: await client.fetch(user.displayAvatarURL({

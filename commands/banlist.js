@@ -10,6 +10,6 @@ module.exports = {
         const {util} = client;
         const text = (await message.guild.fetchBans()).map(b => "**" + b.user.username + "** `" + b.user.id + "`: " + (b.reason === "null" ?  "No reason given." : b.reason)).join("\n\n");
         const msg = await channel.send(author.toString(), util.embed("Guild Bans", (text.length >= 2000 ? "" : text)));
-        if(text.length >= 2000) await util.handlePrompt(msg, text);
+        if (text.length >= 2000) await util.handlePrompt(msg, text);
     }
 };

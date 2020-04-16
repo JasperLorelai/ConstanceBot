@@ -10,14 +10,14 @@ module.exports = {
         return await client.fetch(request, {headers: {Authorization: "Bearer " + response.access_token}}).then(y => y.json());
     },
     log(guild, funct) {
-        if(!guild) return;
+        if (!guild) return;
         const channelID = this.config.channels.logs[guild.id];
         const channel = channelID ? guild.channels.resolve(channelID) : guild.channels.cache.find(c => c.name === "logs");
 
         // TODO: Remove this. This is just temporary global logs to help find conflicts.
-        if(guild.id !== "406825495502782486") this.config.getMainGuild().channels.resolve(this.config.channels.globalLogs).send("`" + guild.id + ": " + channel + "` **" + guild.name + "**", funct(new this.config.discord.MessageEmbed().setTimestamp(new Date())));
+        if (guild.id !== "406825495502782486") this.config.getMainGuild().channels.resolve(this.config.channels.globalLogs).send("`" + guild.id + ": " + channel + "` **" + guild.name + "**", funct(new this.config.discord.MessageEmbed().setTimestamp(new Date())));
 
-        if(!channel) return;
+        if (!channel) return;
         // Let the dev make changes against this embed before sending.
         channel.send(funct(new this.config.discord.MessageEmbed().setTimestamp(new Date())));
     },
@@ -32,30 +32,30 @@ module.exports = {
     },
     embed(title, description, color) {
         const embed = this.getBaseEmbed();
-        if(color) {
+        if (color) {
             const col = this.colorToHex(color);
             embed.setColor(col ? col : color);
         }
-        if(title) embed.setTitle(title);
-        if(description) embed.setDescription(description);
+        if (title) embed.setTitle(title);
+        if (description) embed.setDescription(description);
         return embed;
     },
     getEmbeds(message) {
-        if(message.embeds.length < 1) return null;
+        if (message.embeds.length < 1) return null;
         return message.embeds.filter(e => e.type === "rich").map(e => {
             const embed = new this.config.discord.MessageEmbed(e);
-            if(embed.image) embed.image.url = "attachment://" + embed.image.url.substr(embed.image.url.lastIndexOf("/") + 1);
-            if(embed.thumbnail) embed.thumbnail.url = "attachment://" + embed.thumbnail.url.substr(embed.thumbnail.url.lastIndexOf("/") + 1);
+            if (embed.image) embed.image.url = "attachment://" + embed.image.url.substr(embed.image.url.lastIndexOf("/") + 1);
+            if (embed.thumbnail) embed.thumbnail.url = "attachment://" + embed.thumbnail.url.substr(embed.thumbnail.url.lastIndexOf("/") + 1);
             return embed;
         });
     },
     async handlePrompt(message, text, ttl, seperator) {
         // Split text into segments based on the seperator.
         let splits = [];
-        if(!seperator) seperator = " ";
+        if (!seperator) seperator = " ";
         let i = 0;
-        while(text.length) {
-            if(text.length < 2000) {
+        while (text.length) {
+            if (text.length < 2000) {
                 splits.push(text);
                 text = "";
                 break;
@@ -75,13 +75,13 @@ module.exports = {
         const coll = message.createReactionCollector((r, u) => u.id !== message.client.user.id, {time: ttl || 90000});
         coll.on("collect", async (r, u) => {
             let emoji = r.emoji.toString();
-            if(emoji === "▶") {
+            if (emoji === "▶") {
                 index++;
-                if(index >= splits.length) index = 0;
+                if (index >= splits.length) index = 0;
             }
-            if(emoji === "◀") {
+            if (emoji === "◀") {
                 index--;
-                if(index < 0) index = splits.length - 1;
+                if (index < 0) index = splits.length - 1;
             }
             // noinspection JSCheckFunctionSignatures
             await message.edit(embed.setDescription(splits[index]).spliceFields(0, 1, {name: "Pages", value: "Page: " + (index + 1) + "**/**" + splits.length, inline: true}));
@@ -107,7 +107,7 @@ module.exports = {
         return guild.channels.cache.filter(c => c.id !== guild.id).find(c => find === c.id || find.substring(3, find.length - 1) === c.id || find.toLowerCase() === c.name.toLowerCase() || c.name.toLowerCase().includes(find.toLowerCase()));
     },
     isJSON(json) {
-        try {if(typeof JSON.parse(json) == "object") return true} catch(e) {}
+        try {if (typeof JSON.parse(json) == "object") return true} catch(e) {}
         return false;
     },
     isRegex(regex) {
@@ -155,32 +155,32 @@ module.exports = {
     },
     colorToHex(color) {
         let final = color.match(/([0-9]*(\.[0-9]*)?(?:[%|°])?)+/g).filter(e => e);
-        if(color.startsWith("rgb(")) {
+        if (color.startsWith("rgb(")) {
             return final.map(c => {
-                if(c.endsWith("%")) return Math.round(c.substr(0, c.length - 1) / 100 * 255); else {
+                if (c.endsWith("%")) return Math.round(c.substr(0, c.length - 1) / 100 * 255); else {
                     const str = (+c).toString(16);
                     return str.length === 1 ? "0" + str : str;
                 }
             }).join("");
         }
-        if(color.startsWith("hsl(")) {
+        if (color.startsWith("hsl(")) {
             final = final.map(e => {
-                if(e.endsWith("°") || e.endsWith("%")) return e.substr(0, e.length - 1); else return e;
+                if (e.endsWith("°") || e.endsWith("%")) return e.substr(0, e.length - 1); else return e;
             });
             const h = parseInt(final[0]) / 360;
             const s = parseInt(final[1]) / 100;
             const l = parseInt(final[2]) / 100;
             let r, g, b;
-            if(s === 0) {
+            if (s === 0) {
                 r = g = b = l;
             }// Achromatic.
             else {
                 const hue2rgb = (p, q, t) => {
-                    if(t < 0) t += 1;
-                    if(t > 1) t -= 1;
-                    if(t < 1 / 6) return p + (q - p) * 6 * t;
-                    if(t < 1 / 2) return q;
-                    if(t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+                    if (t < 0) t += 1;
+                    if (t > 1) t -= 1;
+                    if (t < 1 / 6) return p + (q - p) * 6 * t;
+                    if (t < 1 / 2) return q;
+                    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
                     return p;
                 };
                 const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
@@ -195,7 +195,7 @@ module.exports = {
             };
             return toHex(r) + toHex(g) + toHex(b);
         }
-        if(color.startsWith("#")) return color.substr(1);
+        if (color.startsWith("#")) return color.substr(1);
         return null;
     },
     getTextWidth(text, font) {
@@ -205,8 +205,8 @@ module.exports = {
         return ctx.measureText(text).width;
     },
     async handleChange(msg, author, modify, denied, accepted, options) {
-        if(!denied) denied = () => {};
-        if(!accepted) accepted = () => {};
+        if (!denied) denied = () => {};
+        if (!accepted) accepted = () => {};
         let embed = this.getEmbeds(msg)[0];
         await msg.edit(embed.setColor(this.config.color.yellow).setDescription((embed.description ? embed.description : "") + "\n\n**React with:\n✅ - to confirm changes.\n❌ - deny changes.**"));
         await msg.react("❌");
@@ -214,30 +214,30 @@ module.exports = {
         const coll = msg.createReactionCollector((r, u) => u.id !== msg.client.user.id, {time: 30000});
         coll.on("collect", async (r, u) => {
             await r.users.remove(u.id);
-            if(author.id !== u.id) return;
+            if (author.id !== u.id) return;
             embed = getEmbeds(msg)[0];
-            switch(r.emoji.toString()) {
+            switch (r.emoji.toString()) {
                 case "❌":
                     denied(modify);
-                    if(options.denied) embed.setDescription(options.denied);
+                    if (options.denied) embed.setDescription(options.denied);
                     await msg.edit(embed.setColor(this.config.color.red));
                     coll.stop("denied");
                     break;
                 case "✅":
                     accepted(modify);
-                    if(options.accepted) embed.setDescription(options.accepted);
+                    if (options.accepted) embed.setDescription(options.accepted);
                     await msg.edit(embed.setColor(this.config.color.green));
                     coll.stop("accepted");
                     break;
             }
         });
         coll.on("end", async (c, reason) => {
-            if(msg.deleted) return;
+            if (msg.deleted) return;
             const embed = this.getEmbeds(msg)[0];
-            if(!["denied", "accepted"].includes(reason)) embed.setColor("666666").setDescription("Timed out.");
-            if(reason === "denied" && !options.denied) embed.setDescription("");
-            if(reason === "accepted" && !options.accepted) embed.setDescription("");
-            if(options.newTitle) embed.setTitle(options.newTitle);
+            if (!["denied", "accepted"].includes(reason)) embed.setColor("666666").setDescription("Timed out.");
+            if (reason === "denied" && !options.denied) embed.setDescription("");
+            if (reason === "accepted" && !options.accepted) embed.setDescription("");
+            if (options.newTitle) embed.setTitle(options.newTitle);
             await msg.edit(embed);
             await msg.reactions.removeAll();
         });
@@ -260,9 +260,9 @@ module.exports = {
         let db = guild ? await guild.client.keyv.get("guilds") : null;
         let realPrefix = null;
         let mods = null;
-        if(db && guild && db[guild.id] && db[guild.id].prefix) {
+        if (db && guild && db[guild.id] && db[guild.id].prefix) {
             realPrefix = db[guild.id].prefix;
-            if(db[guild.id].mods) mods = db[guild.id].mods;
+            if (db[guild.id].mods) mods = db[guild.id].mods;
         }
         // Process permissions prior to execution.
         const isAuthor = member.id === this.config.author.id;
@@ -270,24 +270,24 @@ module.exports = {
         // Different approach for mods.
         let isMod = false;
         const modRoles = mods ? mods["roles"] : null;
-        if(modRoles) {
-            for(let r of modRoles) {
-                if(member.roles.cache.has(r)) {
+        if (modRoles) {
+            for (let r of modRoles) {
+                if (member.roles.cache.has(r)) {
                     isMod = true;
                     break;
                 }
             }
         }
         const modUsers = mods ? mods["users"] : null;
-        if(!isMod && modUsers) {
-            for(let u of modUsers) {
-                if(member.id === u) {
+        if (!isMod && modUsers) {
+            for (let u of modUsers) {
+                if (member.id === u) {
                     isMod = true;
                     break;
                 }
             }
         }
-        switch(perm) {
+        switch (perm) {
             case "author":
                 return isAuthor;
             case "admin":

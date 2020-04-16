@@ -9,7 +9,7 @@ module.exports = {
         const {client, guild, channel, author} = message;
         const {config, util} = client;
         const role = util.findRole(args.join(" "), guild);
-        if(!role) {
+        if (!role) {
             await channel.send(author.toString(), util.embed("Role Deleter", "Role could not be found.", config.color.red));
             return null;
         }

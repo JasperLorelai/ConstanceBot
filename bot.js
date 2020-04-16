@@ -43,17 +43,17 @@ const {keyv, fs} = client;
 
 // Grabbing handlers
 client.commands = new Discord.Collection();
-for(let f of fs.readdirSync("./commands").filter(file => file.endsWith(".js") && !file.startsWith("#"))) {
+for (let f of fs.readdirSync("./commands").filter(file => file.endsWith(".js") && !file.startsWith("#"))) {
     const command = require("./commands/" + f);
     client.commands.set(command.name, command);
 }
 client.app = new Discord.Collection();
-for(let f of fs.readdirSync("./app").filter(file => file.endsWith(".js"))) {
+for (let f of fs.readdirSync("./app").filter(file => file.endsWith(".js"))) {
     const app = require("./app/" + f);
     client.app.set(f.substr(0, f.length-3), app);
 }
 client.removeAllListeners();
-for(let event of fs.readdirSync("./events").filter(file => file.endsWith(".js"))) {
+for (let event of fs.readdirSync("./events").filter(file => file.endsWith(".js"))) {
     require("./events/" + event);
 }
 
@@ -71,7 +71,7 @@ app.get("/", (request, response) => {
 app.get("/:route", (request, response) => {
     client.webserver = request.protocol + "://" + request.hostname;
     const route = request.params.route;
-    if(client.app.has(route)) client.app.get(route)(request, response, client);
+    if (client.app.has(route)) client.app.get(route)(request, response, client);
     else response.end();
 });
 

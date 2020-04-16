@@ -11,7 +11,7 @@ module.exports = {
         const {config, util} = client;
         const {red, yellow} = config.color;
         let num = parseInt(args[0]);
-        if(!num || num < 1) {
+        if (!num || num < 1) {
             await channel.send(author.toString(), util.embed("Channel Purge", "Parameter `number` is not a number or is less than 1!", red));
             return;
         }
@@ -26,7 +26,7 @@ module.exports = {
         const coll = msg.createReactionCollector((r, u) => u.id !== client.user.id, {time: 30000});
         coll.on("collect", async (r, u) => {
             await r.users.remove(u);
-            if(u.id !== author.id) return null;
+            if (u.id !== author.id) return null;
 
             async function handleDeletePrompt(message, messages) {
                 const msg = await message.channel.send(author.toString(), util.embed("Delete Confirmation", "**Messages found by filter:** `" + messages.size + "`\n\n**React with:\n❌ - to cancel delete.\n✅ - to confirm delete.**", yellow));
@@ -35,8 +35,8 @@ module.exports = {
                 const coll = msg.createReactionCollector((r, u) => u.id !== message.client.user.id, {time: 10000});
                 coll.on("collect", async (r, u) => {
                     await r.users.remove(u);
-                    if(u.id !== message.author.id) return;
-                    switch(r.emoji.toString()) {
+                    if (u.id !== message.author.id) return;
+                    switch (r.emoji.toString()) {
                         case "❌":
                             coll.stop();
                             break;
@@ -49,7 +49,7 @@ module.exports = {
                 coll.on("end", async () => await msg.delete());
             }
 
-            switch(r.emoji.toString()) {
+            switch (r.emoji.toString()) {
                 case "🗑":
                     coll.stop("chosen");
                     await handleDeletePrompt(message, messages);
@@ -61,7 +61,7 @@ module.exports = {
                     collUser.on("collect", mUser => {
                         member = util.findGuildMember(mUser.content, guild);
                         mUser.delete();
-                        if(!member) {
+                        if (!member) {
                             msg.channel.send(author.toString(), util.embed("Channel Purge - By User", "User not found!", red)).then(tempMsg => {
                                 tempMsg.delete({timeout: 3000});
                             });
@@ -71,13 +71,13 @@ module.exports = {
                     collUser.on("end", async (c, reason) => {
                         await msgUser.delete();
                         coll.stop("chosen");
-                        if(reason === "found") await handleDeletePrompt(message, messages.filter(m => m.author.id === member.id));
+                        if (reason === "found") await handleDeletePrompt(message, messages.filter(m => m.author.id === member.id));
                     });
                     break;
             }
         });
         coll.on("end", async (c, reason) => {
-            if(reason === "chosen") {
+            if (reason === "chosen") {
                 await msg.delete();
                 await message.delete();
             }

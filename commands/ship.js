@@ -8,15 +8,15 @@ module.exports = {
         const {client, channel, author} = message;
         const {config, util} = client;
         const target1 = util.findUser(args[0]);
-        if(!target1) {
+        if (!target1) {
             channel.send(author.toString(), util.embed("Love Calculator", "User \"" + args[0] + "\" not found!", config.color.red));
             return;
         }
         let target2 = null;
         // If target2 was specified, check if they exist.
-        if(args[1]) {
+        if (args[1]) {
             target2 = util.findUser(args[1]);
-            if(!target2) {
+            if (!target2) {
                 channel.send(author.toString(), util.embed("Love Calculator", "User \"" + args[1] + "\" not found!", config.color.red));
                 return;
             }
@@ -40,7 +40,7 @@ module.exports = {
             }, 250);
         }
 
-        if((!target2 && target1.id === author.id) || (target2 && target1.id === target2.id)) {
+        if ((!target2 && target1.id === author.id) || (target2 && target1.id === target2.id)) {
             const msg = await channel.send(author.toString(), util.embed("Shipping...").setColorRandom());
             const randomMsg = ["This soul is very poor.", "Missing parameter: ❤", "This heart is too cold to calculate.",
                 "Maybe a 🍔 could warm up this cold heart?", "I don't know.", "Blue?"];
@@ -57,8 +57,8 @@ module.exports = {
         a = a.replace(/0/g, "");
         let temp = a.length;
         let temp2 = parseInt(a.substring(a.length - 1));
-        if(temp2 === 0) temp2 = 1;
-        while(a.length > 1) {
+        if (temp2 === 0) temp2 = 1;
+        while (a.length > 1) {
             a = a.replace(/0/g, "");
             sumA += parseInt(a.substring(a.length - 1)) % 10;
             a = a.substring(0, a.length - 1);
@@ -67,8 +67,8 @@ module.exports = {
         b = b.replace(/0/g, "");
         temp = b.length;
         temp2 = parseInt(b.substring(b.length - 1));
-        if(temp2 === 0) temp2 = 1;
-        while(b.length > 1) {
+        if (temp2 === 0) temp2 = 1;
+        while (b.length > 1) {
             b = b.replace(/0/g, "");
             sumB += parseInt(b.substring(b.length - 1)) % 10;
             b = b.substring(0, b.length - 1);
@@ -78,12 +78,12 @@ module.exports = {
         temp += "%";
 
         // Check cache in case this should be a fake ship.
-        for(let s of config.ship) {
-            if(s.target1 && s.target2 && s.target1 === target1.id && s.target2 === target2.id) {
+        for (let s of config.ship) {
+            if (s.target1 && s.target2 && s.target1 === target1.id && s.target2 === target2.id) {
                 temp = s.calc(temp);
                 break;
             }
-            if(s.any && (s.any === target1.id || s.any === target2.id)) {
+            if (s.any && (s.any === target1.id || s.any === target2.id)) {
                 temp = s.calc(temp);
                 break;
             }

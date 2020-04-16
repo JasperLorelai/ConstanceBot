@@ -1,6 +1,6 @@
 module.exports = async (request, response, client) => {
     const {keyv, util} = client;
-    for(let [key, value] of Object.entries(request.query)) {
+    for (let [key, value] of Object.entries(request.query)) {
         switch (key) {
             case "getWebhook":
                 response.send(process.env.WEBHOOK_REDIRECT);

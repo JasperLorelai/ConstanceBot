@@ -9,11 +9,11 @@ module.exports = {
         const {config, util, emojiFile} = client;
         const {red} = config.color;
         let member = util.findGuildMember(args[0], guild);
-        if(!member) {
+        if (!member) {
             await channel.send(author.toString(), util.embed("Ban Member", "User not found.", red));
             return;
         }
-        if(!member.bannable) {
+        if (!member.bannable) {
             await channel.send(author.toString(), util.embed("Ban Member", "Cannot modify that user.", red));
             return;
         }
@@ -21,9 +21,9 @@ module.exports = {
         const coll = msg.createReactionCollector((r, u) => u.id !== msg.client.user.id, {time: 10000});
         coll.on("collect", async (r, u) => {
             await r.users.remove(u);
-            if(u.id !== author.id) return null;
+            if (u.id !== author.id) return null;
             let days = 0;
-            switch(r.emoji.toString()) {
+            switch (r.emoji.toString()) {
                 case "❌":
                     days = 0;
                     break;

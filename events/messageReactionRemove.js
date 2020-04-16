@@ -3,13 +3,13 @@ const {config} = client;
 client.on("messageReactionRemove", async (r, u) => {
     const {guild} = r.message;
     // Ignore if the event was handled externally.
-    if(r.message.deleted) return;
+    if (r.message.deleted) return;
 
     // Role toggles.
-    if(config.messages.home && r.message.id === config.messages.home) {
-        if(u.id === client.user.id) return;
+    if (config.messages.home && r.message.id === config.messages.home) {
+        if (u.id === client.user.id) return;
         const member = await guild.members.resolve(u.id);
-        switch(r.emoji.toString()) {
+        switch (r.emoji.toString()) {
             case "🔞":
                 member.roles.remove(config.roles.nsfw);
                 break;

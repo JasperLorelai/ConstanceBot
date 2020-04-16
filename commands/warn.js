@@ -8,17 +8,17 @@ module.exports = {
         const {client, guild, channel, author} = message;
         const {config, util, keyv} = client;
         const member = util.findGuildMember(args[0], guild);
-        if(!member) {
+        if (!member) {
             channel.send(author.toString(), util.embed("Warn", "User not found!", config.color.red));
             return;
         }
         args.shift();
         const reason = args.length ? args.join(" ") : null;
         let db = await keyv.get("guilds");
-        if(!db) db = {};
-        if(!db[guild.id]) db[guild.id] = {};
-        if(!db[guild.id].warns) db[guild.id].warns = {};
-        if(!db[guild.id].warns[member.id]) db[guild.id].warns[member.id] = [];
+        if (!db) db = {};
+        if (!db[guild.id]) db[guild.id] = {};
+        if (!db[guild.id].warns) db[guild.id].warns = {};
+        if (!db[guild.id].warns[member.id]) db[guild.id].warns[member.id] = [];
         db[guild.id].warns[member.id].push({date: new Date().toLocaleString(), mod: author.id, reason: reason});
         await keyv.set("guilds", db);
         channel.send(util.embed("Warn", "**User " + member.toString() + " has been warned by " + author.toString() + (reason ? " for:** " + reason : ".**")));

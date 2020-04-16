@@ -10,6 +10,6 @@ module.exports = {
         roles.shift();
         const text = roles.map(r => r.toString() + " - `<@&" + r + ">` **(" + r.members.size + ")**").join("\n");
         const msg = await channel.send(author.toString(), util.embed("Guild Roles", (text.length >= 2000 ? "" : text)));
-        if(text.length >= 2000) await util.handlePrompt(msg, text);
+        if (text.length >= 2000) await util.handlePrompt(msg, text);
     }
 };

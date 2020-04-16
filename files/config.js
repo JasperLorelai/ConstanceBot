@@ -126,7 +126,7 @@ module.exports = {
         return this.getClient().guilds.resolve(this.guilds.mainGuild);
     },
     getOverwrites(type, everyoneRole) {
-        if(type === "mhapDefault") {
+        if (type === "mhapDefault") {
             return [
                 {id: everyoneRole, deny: ["VIEW_CHANNEL"]},
                 {id: this.roles.verified, allow: ["VIEW_CHANNEL"]},

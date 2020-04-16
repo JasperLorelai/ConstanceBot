@@ -39,7 +39,7 @@ module.exports = async (request, response, client) => {
 
     request.session.destroy();
     const user = await util.discordAPI(request.query.code, client.webserver + "/link", config.discordapi.users);
-    if(user) {
+    if (user) {
         // Save user.
         db[user.id] = uuid;
         keyv.set("minecraft", db);

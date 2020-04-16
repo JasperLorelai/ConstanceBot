@@ -9,11 +9,11 @@ module.exports = {
         const {config, util} = client;
         const {red} = config.color;
         let member = util.findGuildMember(args[0], guild);
-        if(!member) {
+        if (!member) {
             await channel.send(util.embed(author.toString(), "Kick Member", "User not found.", red));
             return;
         }
-        if(!member.kickable) {
+        if (!member.kickable) {
             await channel.send(util.embed(author.toString(), "Kick Member", "Cannot modify that user.", red));
             return;
         }

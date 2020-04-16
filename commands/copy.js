@@ -8,16 +8,16 @@ module.exports = {
         const {client, channel, author} = message;
         const {config, util} = client;
         const originChannel = client.channels.resolve(args[0]);
-        if(!originChannel) {
+        if (!originChannel) {
             channel.send(author.toString(), util.embed("Message Copy", "Origin channel not found. Confirm the channel with this ID exists and is visible to the bot client.", config.color.red));
             return;
         }
         const copyMsg = await originChannel.messages.fetch(args[1]).catch(() => {
             channel.send(author.toString(), util.embed("Message Copy", "Message with that ID was not found in channel " + originChannel.toString() + ".", config.color.red));
         });
-        if(!copyMsg) return;
+        if (!copyMsg) return;
         const archive = client.channels.resolve(args[2]);
-        if(!archive) {
+        if (!archive) {
             channel.send(author.toString(), util.embed("Message Copy", "Specified channel where the fetched message should be copied to was not found. Confirm the channel with this ID exists and is visible to the bot client.", config.color.red));
             return;
         }

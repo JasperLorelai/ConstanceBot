@@ -6,7 +6,7 @@ module.exports = {
         const {channel, author, client} = message;
         const {config, util} = client;
         let hex = util.colorToHex(args.join("").replace(/\s/g, ""));
-        if(!hex) {
+        if (!hex) {
             await channel.send(author.toString(), util.embed("Colors", "Invalid color! The only color types supported are hex, 'rgb(r,g,b)' and 'hsl(h,s,l)'.", config.color.red));
             return null;
         }

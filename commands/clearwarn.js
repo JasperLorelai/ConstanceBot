@@ -8,19 +8,19 @@ module.exports = {
         const {client, guild, channel, author} = message;
         const {config, util, keyv} = client;
         let member = util.findUser(args[0]) || args[0];
-        if(typeof member !== "string") member = member.id;
+        if (typeof member !== "string") member = member.id;
         let db = await keyv.get("guilds");
-        if(!db || !db[guild.id] || !db[guild.id].warns || !db[guild.id].warns[member]) {
+        if (!db || !db[guild.id] || !db[guild.id].warns || !db[guild.id].warns[member]) {
             channel.send(author.toString(), util.embed("Clearing Warns", "This user has no warnings to be cleared.", config.color.red));
             return;
         }
-        if(args[1]) {
+        if (args[1]) {
             const warnCase = parseInt(args[1]);
-            if(isNaN(warnCase)) {
+            if (isNaN(warnCase)) {
                 channel.send(author.toString(), util.embed("Clearing Warns", "Second command parameter, if specified, must be the case number.", config.color.red));
                 return;
             }
-            if(!db[guild.id].warns[member][warnCase]) {
+            if (!db[guild.id].warns[member][warnCase]) {
                 channel.send(author.toString(), util.embed("Clearing Warns", "This user has no warn with this case index.", config.color.red));
                 return;
             }

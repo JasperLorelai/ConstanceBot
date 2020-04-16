@@ -8,7 +8,7 @@ module.exports = {
         const {client, guild, channel, author} = message;
         const {config, util} = client;
         let role = util.findRole(args.join(" "), guild);
-        if(!role) {
+        if (!role) {
             await channel.send(author.toString(), util.embed("Role Info", "Role not found!", config.color.red));
             return;
         }

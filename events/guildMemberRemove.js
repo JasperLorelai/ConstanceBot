@@ -12,7 +12,7 @@ client.on("guildMemberRemove", async member => {
 
     // Remove user from welcomer db.
     let db = await keyv.get("special");
-    if(db && db.mhap && db.mhap.welcomer && db.mhap.welcomer[u.id]) {
+    if (db && db.mhap && db.mhap.welcomer && db.mhap.welcomer[u.id]) {
         delete db.mhap.welcomer[u.id];
         await keyv.set("special", db);
     }
