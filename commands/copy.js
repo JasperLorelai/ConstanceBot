@@ -21,9 +21,9 @@ module.exports = {
             channel.send(author.toString(), util.embed("Message Copy", "Specified channel where the fetched message should be copied to was not found. Confirm the channel with this ID exists and is visible to the bot client.", config.color.red));
             return;
         }
-        const wb = await channel.createWebhook(copyMsg.author.username, {avatar: copyMsg.author.displayAvatarURL(), reason: "Message Copy - initiated by " + author.username + "(" + author.id + ")"});
+        const wb = await archive.createWebhook(copyMsg.author.username, {avatar: copyMsg.author.displayAvatarURL(), reason: "Message Copy - initiated by " + author.username + "(" + author.id + ")"});
         const newMsg = await wb.send(copyMsg);
-        channel.send(author.toString(), util.embed("", "Message copied. [\(Jump\)](" + newMsg.url + ")"));
+        archive.send(author.toString(), util.embed("", "Message copied. [\(Jump\)](" + newMsg.url + ")"));
         await wb.delete();
     }
 };
