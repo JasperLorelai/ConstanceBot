@@ -8,12 +8,13 @@ module.exports = {
         const {config, util} = client;
         let ip = args[0];
         // Whitelisting default IP to it's respective server.
-        if (config.guilds.mhapGuild === guild.id) ip = config.defaultIP;
         if (!ip) {
-            channel.send(author.toString(), util.embed("Minecraft Server Info", "Please provide an IP parameter.", config.color.red));
-            return;
+            if (config.guilds.mhapGuild === guild.id) ip = config.defaultIP;
+            else {
+                channel.send(author.toString(), util.embed("Minecraft Server Info", "Please provide an IP parameter.", config.color.red));
+                return;
+            }
         }
-        console.log(ip);
         const server = JSON.parse(await client.fetch("https://api.mcsrvstat.us/2/" + ip).then(y => y.text()));
         let text = "";
         if (server.debug && server.debug.ping) {
