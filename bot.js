@@ -1,21 +1,18 @@
 // Importing libraries
 require("dotenv").config();
 const session = require("express-session");
-const MySQLStore = require("express-mysql-session")(session);
 const Discord = require("discord.js");
 const Keyv = require("keyv");
 const express = require("express");
-const cookieParser = require("cookie-parser");
 const app = express();
 
 app.use(express.static("views"));
-app.use(cookieParser());
 app.use(session({
     // Random long string.
     secret: process.env.TRELLO_KEY,
+    cookie: {},
     resave: false,
-    saveUninitialized: true,
-    store: new MySQLStore(process.env.DATABASE)
+    saveUninitialized: false
 }));
 
 // Add custom prototype methods.
