@@ -9,9 +9,10 @@ const app = express();
 
 app.use(express.static("views"));
 app.use(cookieParser());
+const randomString = process.env.TRELLO_KEY;
 app.use(session({
     // Random long string.
-    secret: process.env.TRELLO_KEY,
+    secret: randomString,
     resave: false,
     saveUninitialized: true
 }));
