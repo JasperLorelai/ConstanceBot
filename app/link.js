@@ -26,14 +26,14 @@ module.exports = async (request, response, client) => {
     // If the code was found.
     // Safeguard.
     if (!client.discordLink) {
-        response.send("client");
-        //response.sendFile("/views/discordLinking/invalid.html", {root: "."});
+        request.session.destroy();
+        response.sendFile("/views/discordLinking/invalid.html", {root: "."});
         return;
     }
     const uuid = client.discordLink[request.sessionID];
     if (!uuid) {
-        response.send("wrong uuid<br>" + JSON.stringify(client.discordLink) + "<br>" + request.sessionID);
-        //response.sendFile("/views/discordLinking/invalid.html", {root: "."});
+        request.session.destroy();
+        response.sendFile("/views/discordLinking/invalid.html", {root: "."});
         return;
     }
 

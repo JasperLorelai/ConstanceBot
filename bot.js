@@ -11,8 +11,8 @@ app.use(session({
     // Random long string.
     secret: process.env.TRELLO_KEY,
     cookie: {},
-    resave: false,
-    saveUninitialized: false
+    resave: true,
+    saveUninitialized: true
 }));
 
 // Add custom prototype methods.
