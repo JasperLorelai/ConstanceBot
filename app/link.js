@@ -32,7 +32,7 @@ module.exports = async (request, response, client) => {
     }
     const uuid = client.discordLink[request.sessionID];
     if (!uuid) {
-        response.send("wrong uuid\n" + client.discordLink);
+        response.send("wrong uuid<br>" + JSON.stringify(client.discordLink) + "<br>" + request.sessionID);
         //response.sendFile("/views/discordLinking/invalid.html", {root: "."});
         return;
     }
