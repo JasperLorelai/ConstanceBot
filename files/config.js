@@ -20,6 +20,8 @@ module.exports = {
         {any: "359658850724478978", calc: c => "A very gay " + c + ". No, really, you can't \"no homo\" this now, so congrats."},
         // Pingu
         {any: "303184895629459458", calc: c =>  c + " (Brexit approved)"},
+        // Pingu & Ano
+        {any: "303184895629459458", calc: () =>  "0% (Violates Brexit)"},
         // Constance
         {any: "579759958556672011", calc: () =>  "0%"}
     ],
