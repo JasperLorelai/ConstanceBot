@@ -1,5 +1,2 @@
 mute
 unmute
-construct
-trellobuild
-rosterbuild
