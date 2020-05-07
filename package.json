@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "bot.js",
+  "engines": {
+    "node": "12.x"
+  },
   "scripts": {
     "start": "node bot.js",
     "reinstall": "npm i"
