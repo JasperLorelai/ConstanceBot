@@ -1,10 +1,14 @@
 {
   "name": "constance",
   "version": "1.0.0",
-  "description": "",
+  "description": "Discord bot - assisting http://mhaprodigy.uk/",
   "main": "bot.js",
+  "repository": {
+    "url": "https://github.com/JasperLorelai/ConstanceBot/"
+  },
   "engines": {
-    "node": "12.x"
+    "node": "12.x",
+    "npm": "6.x"
   },
   "scripts": {
     "start": "node bot.js",
@@ -23,6 +27,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "keyv": "^3.1.0",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.0",
+    "node-pre-gyp": "^0.14.0"
   }
 }
