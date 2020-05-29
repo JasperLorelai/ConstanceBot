@@ -2,7 +2,7 @@ module.exports = {
     name: "setnick",
     description: "Change a user's nickname.",
     aliases: ["nick"],
-    params: ["[user]", "[new nick]"],
+    params: ["[user]", "[reset / new nick]"],
     guildOnly: true,
     perm: "mod",
     async execute(message, args) {
@@ -13,7 +13,8 @@ module.exports = {
             await channel.send(author.toString(), util.embed("Set Nick", "User not found in this guild!", config.color.red));
             return null;
         }
-        await member.setNickname(args.join(" "));
-        await channel.send(author.toString(), util.embed("Set Nick", "Nick for user " + member.toString() + " was changed to: **" + args.join(" ") + "**"));
+        const nickname = args.join(" ");
+        await member.setNickname(nickname === "reset" ? "" : nickname);
+        await channel.send(author.toString(), util.embed("Set Nick", "Nick for user " + member.toString() + " was " + (nickname === "reset" ? "reset." : "changed to: **" + nickname + "**")));
     }
 };
