@@ -139,6 +139,19 @@ client.on("messageReactionAdd", async (r, u) => {
         await keyv.set("guilds", db);
     }
 
+    // Poll - unique reactions.
+    if (r.message.author.id === client.user.id) {
+        if (u.id === client.user.id) return;
+        const embed = util.getEmbeds(r.message)[0];
+        if (embed.color === parseInt("0x" + config.color.poll) && embed.footer.text.startsWith("Unique reactions | ")) {
+            for (const reaction of r.message.reactions.cache.values()) {
+                console.log(r.emoji.toString() === reaction.emoji.toString());
+                if (r.emoji.toString() === reaction.emoji.toString()) continue;
+                await reaction.users.remove(u);
+            }
+        }
+    }
+
     // Role toggles.
     if (config.messages.home && r.message.id === config.messages.home) {
         if (u.id === client.user.id) return;

@@ -114,6 +114,8 @@ module.exports = {
                                 }
                                 const embed = util.embed(null, poll.text);
                                 embed.setAuthor(author.username, author.displayAvatarURL());
+                                embed.setFooter("Unique reactions | " + embed.footer.text);
+                                embed.setColor(config.color.poll);
                                 const created = await ch.send(ping, embed);
                                 for (let emoji of poll.emoji) await created.react(emoji);
                                 msg.delete();
@@ -122,7 +124,7 @@ module.exports = {
                             }
                             else {
                                 const embed = util.getEmbeds(msg2)[0];
-                                await msg2.edit(embed.setDescription(embed.description + "\n\nChannel not found!").setColor(config.color.red));
+                                await msg2.edit(embed.setDescription(embed.description + "\n\n**Channel not found!**").setColor(config.color.red));
                             }
                             m.delete();
                         });

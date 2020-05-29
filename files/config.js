@@ -31,6 +31,7 @@ module.exports = {
         red: "ff0000",
         gray: "5c5c5c",
         base: "009dff",
+        poll: "02bae3",
         logs: {
             messageUpdate: "6200ff",
             guildMemberAdd: "00b33e",
