@@ -7,6 +7,7 @@ module.exports = {
             method: "POST", headers: {Authorization: creds}
         }).then(y => y.json());
         // noinspection JSUnresolvedFunction, JSUnresolvedVariable
+        console.log(response);
         return await client.fetch(request, {headers: {Authorization: "Bearer " + response.access_token}}).then(y => y.json());
     },
     log(guild, funct) {
