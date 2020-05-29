@@ -109,7 +109,7 @@ module.exports = {
             }
         });
         coll.on("end", async () => {
-            await msg.edit(util.getEmbeds(msg)[0].setDescription(await getResponses()).setColor(config.color.base));
+            await msg.edit(util.getEmbeds(msg)[0].setDescription(await getResponses() || "No responses in DB.").setColor(config.color.base));
             await msg.reactions.removeAll();
         });
     }
