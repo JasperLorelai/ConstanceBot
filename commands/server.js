@@ -27,7 +27,7 @@ module.exports = {
             }
             if (server["players"] && server["players"].list) {
                 let {online, max, list} = server["players"];
-                text += "\n**Players (**" + online + "/" + max + "**):** " + list.join("**,** ");
+                text += "\n**Players (**" + online + "/" + max + "**):** " + list.map(u => u.escapeMarkdown()).join("**,** ");
             }
             if (server.version) text += "\n**Version:** " + server.version;
             if (server["software"]) text += "\n**Software:** " + server["software"];

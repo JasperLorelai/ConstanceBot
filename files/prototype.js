@@ -13,6 +13,9 @@ module.exports = (Discord) => {
         }
         return splits.join("\n");
     };
+    String.prototype.escapeMarkdown = function() {
+        return Discord.Util.escapeMarkdown(this);
+    }
     Discord.MessageEmbed.prototype.setColorRandom = function() {
         return this.setColor(Math.floor(Math.random()*16777215));
     };
