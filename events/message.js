@@ -24,32 +24,28 @@ client.on("message", async message => {
     }
     const args = content.slice(prefix.length).split(/ +/);
     const commandName = args.shift().toLowerCase();
+
     // Execute commands
     const command = commands.get(commandName) || commands.find(cmd => cmd["aliases"] && cmd["aliases"].includes(commandName));
     // "cmd not found, try using ?commands to find your command"
     if (!command) return;
-    try {
-        if (command.guildOnly && channel.type !== "text") {
-            await message.reply("Can't execute that command inside DMs.");
-            return;
-        }
-
-        // Check guild whitelist.
-        if (command.guildWhitelist && !command.guildWhitelist.includes(guild.id)) return;
-
-        // This disables command execution. What sets the channel is in Util -> setMCChannel
-        if (client["minecraft"] && channel.id === client["minecraft"]) return;
-
-        if (!await util.getPerms(member, command.perm)) {
-            await channel.send(author.toString(), util.embed("No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + command.perm + "`", config.color.red));
-            return;
-        }
-        // Run command if all required args are specified.
-        if (!command.params || args.length >= command.params.filter(p => p.startsWith("[")).length) command.execute(message, args);
-        // Execute help command for command if not.
-        else commands.get("help").execute(message, [commandName]);
-    } catch(e) {
-        await channel.send(author.toString(), util.embed("Error", "Exception during command execution. Full error log was sent to console.", config.color.red));
-        console.error(e);
+    if (command.guildOnly && channel.type !== "text") {
+        await message.reply("Can't execute that command inside DMs.");
+        return;
     }
+
+    // Check guild whitelist.
+    if (command.guildWhitelist && !command.guildWhitelist.includes(guild.id)) return;
+
+    // This disables command execution. What sets the channel is in Util -> setMCChannel
+    if (client["minecraft"] && channel.id === client["minecraft"]) return;
+
+    if (!await util.getPerms(member, command.perm)) {
+        await channel.send(author.toString(), util.embed("No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + command.perm + "`", config.color.red));
+        return;
+    }
+    // Run command if all required args are specified.
+    if (!command.params || args.length >= command.params.filter(p => p.startsWith("[")).length) command.execute(message, args);
+    // Execute help command for command if not.
+    else commands.get("help").execute(message, [commandName]);
 });

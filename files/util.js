@@ -315,5 +315,8 @@ module.exports = {
     },
     getKeyByValue(object, value) {
         return Object.keys(object).find(key => object[key] === value);
+    },
+    async handleError(message, error) {
+        await message.channel.send(message.author.toString(), this.embed("Exception during command execution.", error, message.client.config.color.red));
     }
 };

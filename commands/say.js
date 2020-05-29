@@ -7,15 +7,20 @@ module.exports = {
     async execute(message, args) {
         const {client, channel} = message;
         const {util} = client;
-        // Check if the first argument is a channel id and set it as target.
-        let ch = client.channels.resolve(args[0]);
-        if (ch) args.shift();
-        // If not, assume the target channel to be the source channel.
-        else ch = channel;
-        let msg = args.join(" ");
-        if (msg.startsWith("`") && msg.endsWith("`")) msg = msg.replace(/`/g, "");
-        msg = util.isJSON(msg) ? JSON.parse(msg) : msg;
-        await ch.send(msg);
-        await message.delete();
+        try {
+            // Check if the first argument is a channel id and set it as target.
+            let ch = client.channels.resolve(args[0]);
+            if (ch) args.shift();
+            // If not, assume the target channel to be the source channel.
+            else ch = channel;
+            let msg = args.join(" ");
+            if (msg.startsWith("`") && msg.endsWith("`")) msg = msg.replace(/`/g, "");
+            msg = util.isJSON(msg) ? JSON.parse(msg) : msg;
+            await ch.send(msg);
+            await message.delete();
+        }
+        catch(e) {
+            await util.handleError(message, e);
+        }
     }
 };

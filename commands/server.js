@@ -9,7 +9,8 @@ module.exports = {
         let ip = args[0];
         // Whitelisting default IP to it's respective server.
         if (!ip) {
-            if (config.guilds.mhapGuild === guild.id) ip = config.defaultIP;
+            if (config.guilds.mhapGuild === guild.id) ip = config.hostname.mhap;
+            if (config.guilds.nlGuild === guild.id) ip = config.hostname.nl;
             else {
                 channel.send(author.toString(), util.embed("Minecraft Server Info", "Please provide an IP parameter.", config.color.red));
                 return;

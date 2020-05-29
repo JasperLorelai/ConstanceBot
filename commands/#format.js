@@ -12,6 +12,13 @@ module.exports = {
     perm: "author",
     hide: true,
     // "args" is unnecessary if "params" is empty or has no required parameters.
-    execute(message, args) {
+    async execute(message, args) {
+        const {client} = message;
+        const {util} = client;
+        try {
+        }
+        catch(e) {
+            await util.handleError(message, e);
+        }
     }
 };
