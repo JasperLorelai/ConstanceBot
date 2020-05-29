@@ -53,11 +53,6 @@ module.exports = {
     },
     guilds: {
         mainGuild: "575376952517591041",
-        mhapGuild: "419628763102314527"
-    },
-    webhooks: {
-        // Main
-        mainRedirect: "688398876591259793"
     },
     channels: {
         // Main
@@ -122,6 +117,9 @@ module.exports = {
     getTrello() {
         return "?key=" + process.env.TRELLO_KEY + "&token=" + process.env.TRELLO_TOKEN;
     },
+    getWebhookID() {
+        return process.env.WEBHOOK_REDIRECT.match(/[0-9]+/)[0];
+    },
     botLog() {
         return this.getMainGuild().channels.resolve(this.channels.botLogs);
     },
@@ -141,7 +139,7 @@ module.exports = {
     getHomeEmbed() {
         return this.util.embed("My Hero Academia Prodigy - Information")
             .addField("Basic Information",
-                "**IP:** `" + this.defaultIP + "`\n" +
+                "**IP:** `" + this.defaultID + "`\n" +
                 "**Version:** Release 1.13.2\n" +
                 "**Discord Invite:** http://mhaprodigy.uk/discord\n" +
                 "**Trello Board:** http://mhaprodigy.uk/trello")

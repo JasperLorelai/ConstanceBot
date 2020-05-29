@@ -111,7 +111,7 @@ module.exports = async message => {
     }
 
     // Handle raw forms.
-    if (message.webhookID && message.webhookID === config.webhooks.mainRedirect) {
+    if (message.webhookID && message.webhookID === config.getWebhookID()) {
         let embed = util.getEmbeds(message)[0];
         const user = client.users.resolve(embed.title);
         const guild = client.guilds.resolve(config.guilds.mhapGuild);
