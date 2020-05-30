@@ -21,6 +21,7 @@ require("./files/prototype")(Discord);
 // Creating classes and collections
 const client = new Discord.Client();
 client.fs = require("fs");
+client.ms = require("ms");
 client.emojiFile = require("./files/emoji.js");
 client.config = require("./files/config.js");
 client.util = require("./files/util.js");
