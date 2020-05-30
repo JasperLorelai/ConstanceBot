@@ -1,6 +1,6 @@
 module.exports = {
     name: "help",
-    description: "Show info about a specific command.",
+    description: "Show info about a specific command. Run the `commands` command to display a list of all commands.",
     aliases: ["command"],
     params: ["[command]"],
     execute(message, args) {
