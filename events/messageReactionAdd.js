@@ -143,7 +143,7 @@ client.on("messageReactionAdd", async (r, u) => {
     if (r.message.author.id === client.user.id) {
         if (u.id === client.user.id) return;
         const embed = util.getEmbeds(r.message)[0];
-        if (embed.color === parseInt("0x" + config.color.poll) && embed.footer.text.startsWith("Unique reactions | ")) {
+        if (embed.hexColor === config.color.poll && embed.footer.text.startsWith("Unique reactions | ")) {
             for (const reaction of r.message.reactions.cache.values()) {
                 console.log(r.emoji.toString() === reaction.emoji.toString());
                 if (r.emoji.toString() === reaction.emoji.toString()) continue;
@@ -153,6 +153,9 @@ client.on("messageReactionAdd", async (r, u) => {
     }
 
     // Role toggles.
+    if (r.message.id === config.messages.nlnotify && r.emoji.toString() === "👋") {
+        await guild.members.resolve(u.id).roles.add(config.roles.notify);
+    }
     if (config.messages.home && r.message.id === config.messages.home) {
         if (u.id === client.user.id) return;
         const member = await guild.members.resolve(u.id);

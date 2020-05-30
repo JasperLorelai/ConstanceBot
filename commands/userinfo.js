@@ -7,7 +7,7 @@ module.exports = {
     async execute(message, args) {
         const {client, guild, channel, author} = message;
         const {config, util} = client;
-        let member = args[0] ? util.findGuildMember(args.join(" "), guild) : message.member;
+        const member = args[0] ? util.findGuildMember(args.join(" "), guild) : message.member;
         if (!member) {
             await channel.send(author.toString(), util.embed("User Info", "User not found!", config.color.red));
             return;

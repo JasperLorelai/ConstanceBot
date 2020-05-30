@@ -26,13 +26,13 @@ module.exports = {
         function ship(msg, embedToSend) {
             const c = author.toString();
             const embed = util.getEmbeds(msg)[0];
-            setTimeout(() => {
+            client.setTimeout(() => {
                 msg.edit(c, embed.setDescription("**.**"));
-                setTimeout(() => {
+                client.setTimeout(() => {
                     msg.edit(c, embed.setDescription("**.**   **.**"));
-                    setTimeout(() => {
+                    client.setTimeout(() => {
                         msg.edit(c, embed.setDescription("**.**   **.**   **.**"));
-                        setTimeout(() => {
+                        client.setTimeout(() => {
                             msg.edit(c, embedToSend.setColor(embed.color).setTitle(":revolving_hearts::hearts::two_hearts: Shipped :two_hearts::hearts::revolving_hearts:"));
                         }, 1000);
                     }, 1000);
