@@ -7,10 +7,7 @@ module.exports = {
         const response = await client.fetch("https://discordapp.com/api/oauth2/token?code=" + code + "&grant_type=authorization_code&redirect_uri=" + encodeURI(redirect), {
             method: "POST",
             headers: {Authorization: creds}
-        }).then(y => {
-            console.log(y);
-            return y.json()
-        });
+        }).then(y => y.json());
         console.log(response);
         // noinspection JSUnresolvedFunction, JSUnresolvedVariable
         return await client.fetch(request, {headers: {Authorization: "Bearer " + response.access_token}}).then(y => y.json());

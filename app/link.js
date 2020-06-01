@@ -39,7 +39,7 @@ module.exports = async (request, response, client) => {
 
     request.session.destroy();
     const user = await util.discordAPI(request.query.code, client.webserver + "/link", config.discordapi.users);
-    if (user && (!user.error || user.error !== "invalid_request")) {
+    if (user && !user.error) {
         // Save user.
         db[user.id] = client.atob(uuid);
         keyv.set("minecraft", db);
