@@ -9,14 +9,12 @@ module.exports = {
         form.append("code", code);
         form.append("redirect_uri", encodeURI(redirect));
         form.append("scope", "identify");
-        console.log(form)
         // noinspection JSUnresolvedFunction
         const response = await client.fetch("https://discordapp.com/api/oauth2/token", {
             method: "POST",
             body: form,
             headers: {Authorization: creds}
         }).then(y => y.json());
-        console.log(response);
         // noinspection JSUnresolvedFunction, JSUnresolvedVariable
         return await client.fetch(request, {headers: {Authorization: "Bearer " + response.access_token}}).then(y => y.json());
     },
