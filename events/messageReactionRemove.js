@@ -6,6 +6,9 @@ client.on("messageReactionRemove", async (r, u) => {
     if (r.message.deleted) return;
 
     // Role toggles.
+    if (r.message.id === config.messages.nlnotify && r.emoji.toString() === "👋") {
+        await guild.members.resolve(u.id).roles.remove(config.roles.notify);
+    }
     if (config.messages.home && r.message.id === config.messages.home) {
         if (u.id === client.user.id) return;
         const member = await guild.members.resolve(u.id);

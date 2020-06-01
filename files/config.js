@@ -2,7 +2,6 @@
 module.exports = {
     discord: require("discord.js"),
     globalPrefix: "&",
-    defaultIP: "play.mhaprodigy.uk",
     ship: [
         // Ray & Jelly
         {target1: "155791290099826689", target2: "462712474353926174", calc: () => "-66%. That's it. No hackery here."},
@@ -49,10 +48,19 @@ module.exports = {
         events: "598335388536274950",
         changelog: "598335450242875392",
         staff: "419964554139926559",
-        nsfw: "435465339757789186"
+        nsfw: "435465339757789186",
+        // NL
+        player: "704906830425620531",
+        notify: "707080930728083508"
     },
     guilds: {
         mainGuild: "575376952517591041",
+        mhapGuild: "419628763102314527",
+        nlGuild: "704902534241976440"
+    },
+    hostname: {
+        mhap: "play.mhaprodigy.uk",
+        nl: "alegacybegins.mcserv.co"
     },
     channels: {
         // Main
@@ -64,6 +72,8 @@ module.exports = {
         logs: {
             // Main
             "575376952517591041": "575738387307298831",
+            // NL
+            "704902534241976440": "716811006801608819"
         }
     },
     categories: {
@@ -76,7 +86,9 @@ module.exports = {
     messages: {
         // MHAP
         rules: "550735939257892865",
-        home: "673629257834037285"
+        home: "673629257834037285",
+        // NL
+        nlnotify: "709955815213236225"
     },
     trello: {
         boards: {
@@ -139,7 +151,7 @@ module.exports = {
     getHomeEmbed() {
         return this.util.embed("My Hero Academia Prodigy - Information")
             .addField("Basic Information",
-                "**IP:** `" + this.defaultID + "`\n" +
+                "**IP:** `" + this.hostname.mhap + "`\n" +
                 "**Version:** Release 1.13.2\n" +
                 "**Discord Invite:** http://mhaprodigy.uk/discord\n" +
                 "**Trello Board:** http://mhaprodigy.uk/trello")
