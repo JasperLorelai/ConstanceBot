@@ -4,7 +4,7 @@ module.exports = {
         const creds = "Basic " + client.btoa(process.env.CLIENT_ID + ":" + process.env.CLIENT_SECRET);
         console.log("https://discordapp.com/api/oauth2/token?grant_type=authorization_code&redirect_uri=" + encodeURI(redirect) + "&code" + code);
         // noinspection JSUnresolvedFunction
-        const response = await client.fetch("https://discordapp.com/api/oauth2/token?grant_type=authorization_code&redirect_uri=" + encodeURI(redirect) + "&code" + code, {
+        const response = await client.fetch("https://discordapp.com/api/oauth2/token?code=" + code + "&grant_type=authorization_code&redirect_uri=" + encodeURI(redirect), {
             method: "POST",
             headers: {Authorization: creds}
         }).then(y => {
