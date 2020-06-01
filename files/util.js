@@ -2,10 +2,18 @@ module.exports = {
     async discordAPI(code, redirect, request) {
         const client = require("../bot");
         const creds = "Basic " + client.btoa(process.env.CLIENT_ID + ":" + process.env.CLIENT_SECRET);
-        console.log("https://discordapp.com/api/oauth2/token?grant_type=authorization_code&redirect_uri=" + encodeURI(redirect) + "&code" + code);
+        const form = new client.formData();
+        form.append("client_id", process.env.CLIENT_ID);
+        form.append("client_secret", process.env.CLIENT_SECRET);
+        form.append("grant_type", "authorization_code");
+        form.append("code", code);
+        form.append("redirect_uri", encodeURI(redirect));
+        form.append("scope", "identify");
+        console.log(form)
         // noinspection JSUnresolvedFunction
-        const response = await client.fetch("https://discordapp.com/api/oauth2/token?code=" + code + "&grant_type=authorization_code&redirect_uri=" + encodeURI(redirect), {
+        const response = await client.fetch("https://discordapp.com/api/oauth2/token", {
             method: "POST",
+            body: form,
             headers: {Authorization: creds}
         }).then(y => y.json());
         console.log(response);

@@ -21,7 +21,6 @@ require("./files/prototype")(Discord);
 // Creating classes and collections
 const client = new Discord.Client();
 client.fs = require("fs");
-client.ms = require("ms");
 client.emojiFile = require("./files/emoji.js");
 client.config = require("./files/config.js");
 client.util = require("./files/util.js");
@@ -31,6 +30,8 @@ client.fetch = require("node-fetch");
 client.btoa = require("btoa");
 client.atob = require("atob");
 client.canvas = require("canvas");
+client.ms = require("ms");
+client.formData = require("form-data");
 
 // Connect Util and Config.
 client.util.config = client.config;
