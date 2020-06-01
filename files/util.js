@@ -9,7 +9,7 @@ module.exports = {
             headers: {Authorization: creds}
         }).then(y => {
             console.log(y);
-            y.json()
+            return y.json()
         });
         console.log(response);
         // noinspection JSUnresolvedFunction, JSUnresolvedVariable
