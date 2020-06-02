@@ -15,9 +15,9 @@ module.exports = {
                 await channel.send(author.toString(), util.embed("Role Color", "Role not found!", config.color.red));
                 return null;
             }
-            let color = util.colorToHex(args.join("").replace(/\s/g, ""));
+            let color = util.getColorFromString(args.join("").replace(/\s/g, ""));
             if (!color) {
-                await channel.send(author.toString(), util.embed("Role Color", "Invalid color! The only color types supported are hex, 'rgb(r,g,b)' and 'hsl(h,s,l)'.", config.color.red));
+                await channel.send(author.toString(), util.embed("Role Color", "Invalid color! The only color types supported are: `keyword`, `hex` (starts with #), `rgb(r, g, b)` and `hsl(h, s, l)`.", config.color.red));
                 return null;
             }
             // noinspection JSUnresolvedFunction

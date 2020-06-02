@@ -124,6 +124,20 @@ module.exports = {
         try {new RegExp(regex)} catch(e) {return false}
         return true;
     },
+    getColorFromString(color) {
+        const {colorConvert} = require("../bot");
+        let matchedDigits = color.match(/([0-9]*(\.[0-9]*)?(?:[%|°])?)+/g).filter(e => e);
+        if (color.startsWith("rgb(")) {
+            matchedDigits = matchedDigits.map(e => e.endsWith("%") ? Math.round(e.substr(0, e.length - 1) / 100 * 255) : e);
+            return colorConvert.rgb.hex(matchedDigits);
+        }
+        if (color.startsWith("hsl(")) {
+            matchedDigits = matchedDigits.map(e => (e.endsWith("°") || e.endsWith("%")) ? Math.round(e.substr(0, e.length - 1)) : e);
+            return colorConvert.hsl.hex(matchedDigits);
+        }
+        if (color.startsWith("#")) return color.substr(1);
+        return colorConvert.keyword.hex(color);
+    },
     getTextWidth(text, font) {
         const client = require("../bot");
         let ctx = client.canvas.createCanvas(0, 0).getContext("2d");

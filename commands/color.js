@@ -7,29 +7,14 @@ module.exports = {
         const {config, util, colorConvert} = client;
         try {
             const color = args.join("");
-            let matchedDigits = color.match(/([0-9]*(\.[0-9]*)?(?:[%|°])?)+/g).filter(e => e);
-            let finalColor;
-            let keyword;
-            if (color.startsWith("rgb(")) {
-                matchedDigits = matchedDigits.map(e => e.endsWith("%") ? Math.round(e.substr(0, e.length - 1) / 100 * 255) : e);
-                finalColor = colorConvert.rgb.hex(matchedDigits);
-            }
-            else if (color.startsWith("hsl(")) {
-                matchedDigits = matchedDigits.map(e => (e.endsWith("°") || e.endsWith("%")) ? Math.round(e.substr(0, e.length - 1)) : e);
-                finalColor = colorConvert.hsl.hex(matchedDigits);
-            }
-            else if (color.startsWith("#")) return color.substr(1);
-            else {
-                finalColor = colorConvert.keyword.hex(color);
-                if (finalColor) keyword = colorConvert.hex.keyword(finalColor);
-            }
+            let finalColor = util.getColorFromString(color);
 
             if (!finalColor) {
-                await channel.send(author.toString(), util.embed("Colors", "Invalid color! The only color types supported are hex, 'rgb(r,g,b)' and 'hsl(h,s,l)'.", config.color.red));
+                await channel.send(author.toString(), util.embed("Colors", "Invalid color! The only color types supported are: `keyword`, `hex` (starts with #), `rgb(r, g, b)` and `hsl(h, s, l)`.", config.color.red));
                 return null;
             }
 
-
+            const keyword = colorConvert.hex.keyword(finalColor);
             const rgb = colorConvert.hex.rgb(finalColor).map(h => (h / 255 * 100).toFixed(1) + "%").join(", ");
             const [h, s, l] = colorConvert.hex.hsl(finalColor);
             const hsl = h + "°, " + s + "%, " + l + "%";
