@@ -7,11 +7,11 @@ module.exports = {
         const {config, util} = client;
         let invite;
         switch (guild.id) {
-            case config.guilds.mhapGuild:
-                invite = "http://mhaprodigy.uk/discord";
+            case config.guilds.mhap:
+                invite = config.invites.mhap;
                 break;
-            case config.guilds.nlGuild:
-                invite = "https://discord.gg/Z9R4j7g";
+            case config.guilds.nl:
+                invite = config.invites.mhap;
                 break;
             default:
                 await message.channel.send(message.author.toString(), util.embed("Invite Fetch", "No saved invite was configured for this guild.", config.color.red));

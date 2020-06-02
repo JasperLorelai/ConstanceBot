@@ -6,24 +6,25 @@ client.on("messageReactionRemove", async (r, u) => {
     if (r.message.deleted) return;
 
     // Role toggles.
-    if (r.message.id === config.messages.nlnotify && r.emoji.toString() === "👋") {
-        await guild.members.resolve(u.id).roles.remove(config.roles.notify);
+    if (r.message.id === config.messages.nl.notify && r.emoji.toString() === "👋") {
+        await guild.members.resolve(u.id).roles.remove(config.roles.nl.notify);
     }
-    if (config.messages.home && r.message.id === config.messages.home) {
+    if (r.message.id === config.messages.mhap.home) {
         if (u.id === client.user.id) return;
         const member = await guild.members.resolve(u.id);
+        const roles = config.roles.mhap;
         switch (r.emoji.toString()) {
             case "🔞":
-                member.roles.remove(config.roles.nsfw);
+                member.roles.remove(roles.nsfw);
                 break;
             case "📦":
-                member.roles.remove(config.roles.polls);
+                member.roles.remove(roles.polls);
                 break;
             case "📆":
-                member.roles.remove(config.roles.events);
+                member.roles.remove(roles.events);
                 break;
             case "📰":
-                member.roles.remove(config.roles.changelog);
+                member.roles.remove(roles.changelog);
                 break;
         }
     }

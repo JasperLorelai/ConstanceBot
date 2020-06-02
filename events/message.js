@@ -5,7 +5,7 @@ client.on("message", async message => {
     const {content, member, author, client, guild, channel} = message;
     const {commands, config, util, handleMsg, keyv} = client;
     let realPrefix = null;
-    let prefix = config.globalPrefix;
+    let prefix = config.defaultPrefix;
     if (guild) {
         let db = await keyv.get("guilds");
         if (db && db[guild.id] && db[guild.id].prefix) realPrefix = db[guild.id].prefix;

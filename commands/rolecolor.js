@@ -20,6 +20,7 @@ module.exports = {
                 await channel.send(author.toString(), util.embed("Role Color", "Invalid color! The only color types supported are hex, 'rgb(r,g,b)' and 'hsl(h,s,l)'.", config.color.red));
                 return null;
             }
+            // noinspection JSUnresolvedFunction
             const canvasImage = canvas.createCanvas(380, 84);
             const ctx = canvasImage.getContext("2d");
             ctx.fillStyle = "#36393F";
@@ -41,6 +42,7 @@ module.exports = {
             ctx.closePath();
             ctx.clip();
             const image = await client.fetch.default(author.displayAvatarURL({format: "png"}) + "?size=40").then(y => y.buffer());
+            // noinspection JSUnresolvedFunction
             ctx.drawImage(await canvas.loadImage(image), width * .05, height * .25);
             channel.send(author.toString(), util.embed("Role Color").attachFiles([{
                 attachment: canvasImage.toBuffer(), name: "bg.png"

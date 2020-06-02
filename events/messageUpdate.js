@@ -9,8 +9,8 @@ client.on("messageUpdate", async (oldMessage, newMessage) => {
 
     if (author.id !== client.user.id && !author.bot &&
         // Handle blacklists.
-        (channel["parentID"] && ![config.categories.olympus, config.categories.archive].includes(channel["parentID"])) &&
-        ![config.channels.bot].includes(channel.id)
+        (channel["parentID"] && ![config.categories.mhap.olympus, config.categories.mhap.archive].includes(channel["parentID"])) &&
+        ![config.channels.main.bot].includes(channel.id)
     ) {
         util.log(guild, embed => embed.setColor(config.color.logs.messageUpdate)
             .setAuthor("@" + author.username + "#" + author.discriminator, author.displayAvatarURL())
@@ -27,11 +27,11 @@ client.on("messageUpdate", async (oldMessage, newMessage) => {
     let realprefix = null;
     let db = await keyv.get("guilds");
     if (guild && db && db[guild.id] && db[guild.id].prefix) realprefix = db[guild.id].prefix;
-    if (!oldMessage.content.startsWith(config.globalPrefix)) {
+    if (!oldMessage.content.startsWith(config.defaultPrefix)) {
         if (!guild) return;
         if (!(realprefix || oldMessage.content.startsWith(realprefix))) return;
     }
-    if (!newMessage.content.startsWith(config.globalPrefix)) {
+    if (!newMessage.content.startsWith(config.defaultPrefix)) {
         if (!newMessage.guild) return;
         if (!(realprefix || newMessage.content.startsWith(realprefix))) return;
     }
