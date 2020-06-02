@@ -7,10 +7,13 @@ client.on("messageUpdate", async (oldMessage, newMessage) => {
     // Check only if content changed.
     if (oldMessage && oldMessage.content === newMessage.content) return;
 
-    if (author.id !== client.user.id && !author.bot &&
+    const {channels, categories} = config;
+    const {mhap} = categories;
+    const {main, nl} = channels;
+    if (author.id !== client.user.id && !author.id &&
         // Handle blacklists.
-        (channel["parentID"] && ![config.categories.mhap.olympus, config.categories.mhap.archive].includes(channel["parentID"])) &&
-        ![config.channels.main.bot].includes(channel.id)
+        (channel["parentID"] && ![mhap.olympus, mhap.archive].includes(channel["parentID"])) &&
+        ![main.bot, nl.logs, nl.triumvirate, nl.leadership, nl.interview2, nl.interview].includes(channel.id)
     ) {
         util.log(guild, embed => embed.setColor(config.color.logs.messageUpdate)
             .setAuthor("@" + author.username + "#" + author.discriminator, author.displayAvatarURL())
