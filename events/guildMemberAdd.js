@@ -5,7 +5,7 @@ client.on("guildMemberAdd", async member => {
 
     util.log(guild, embed => embed.setColor(config.color.logs.guildMemberAdd)
         .setTitle("User Joined")
-        .setAuthor("@" + user.username + "#" + user.discriminator, user.displayAvatarURL())
+        .setAuthor("@" + user.tag, user.displayAvatarURL())
         .setFooter("Member ID: " + user.id)
         .setDescription("New member count: **" + guild.memberCount + "**\n\n**Mention:** " + member.toString() + "\n**Join Position:** " + util.getJoinPosition(member) + "\n**Registered at:** `" + user.createdAt.toLocaleString() + "`"));
 

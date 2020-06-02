@@ -16,7 +16,7 @@ client.on("messageUpdate", async (oldMessage, newMessage) => {
         ![main.bot, nl.triumvirate, nl.leadership, nl.interview2, nl.interview].includes(channel.id)
     ) {
         util.log(guild, embed => embed.setColor(config.color.logs.messageUpdate)
-            .setAuthor("@" + author.username + "#" + author.discriminator, author.displayAvatarURL())
+            .setAuthor("@" + author.tag, author.displayAvatarURL())
             .setTitle("Message Edited")
             .setDescription(channel.toString() + " [\(Jump\)](" + newMessage.url + ")")
             .addField("Before", oldMessage ? oldMessage.content : "Error: The old content wasn't recorded because it was from a previous session of the bot.", false)
