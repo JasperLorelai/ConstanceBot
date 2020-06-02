@@ -22,14 +22,15 @@
     "atob": "2.1.2",
     "btoa": "1.2.1",
     "canvas": "2.6.1",
+    "color-convert": "^2.0.1",
     "discord.js": "github:discordjs/discord.js#36050d07f5ded196f5f6601619da2d3dc3604126",
     "dotenv": "8.2.0",
     "express": "4.17.1",
     "express-session": "1.17.0",
+    "form-data": "^3.0.0",
     "keyv": "3.1.0",
-    "node-fetch": "2.6.0",
-    "node-gyp": "6.1.0",
     "ms": "^2.1.2",
-    "form-data": "^3.0.0"
+    "node-fetch": "2.6.0",
+    "node-gyp": "6.1.0"
   }
 }

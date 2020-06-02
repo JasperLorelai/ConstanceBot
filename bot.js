@@ -32,6 +32,7 @@ client.atob = require("atob");
 client.canvas = require("canvas");
 client.ms = require("ms");
 client.formData = require("form-data");
+client.colorConvert = require("color-convert");
 
 // Connect Util and Config.
 client.util.config = client.config;

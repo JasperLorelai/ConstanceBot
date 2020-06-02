@@ -4,24 +4,47 @@ module.exports = {
     params: ["[color]"],
     async execute(message, args) {
         const {channel, author, client} = message;
-        const {config, util} = client;
+        const {config, util, colorConvert} = client;
         try {
-            let hex = util.colorToHex(args.join("").replace(/\s/g, ""));
-            if (!hex) {
+            const color = args.join("");
+            let matchedDigits = color.match(/([0-9]*(\.[0-9]*)?(?:[%|°])?)+/g).filter(e => e);
+            let finalColor;
+            let keyword;
+            if (color.startsWith("rgb(")) {
+                matchedDigits = matchedDigits.map(e => e.endsWith("%") ? Math.round(e.substr(0, e.length - 1) / 100 * 255) : e);
+                finalColor = colorConvert.rgb.hex(matchedDigits);
+            }
+            else if (color.startsWith("hsl(")) {
+                matchedDigits = matchedDigits.map(e => (e.endsWith("°") || e.endsWith("%")) ? Math.round(e.substr(0, e.length - 1)) : e);
+                finalColor = colorConvert.hsl.hex(matchedDigits);
+            }
+            else if (color.startsWith("#")) return color.substr(1);
+            else {
+                finalColor = colorConvert.keyword.hex(color);
+                if (finalColor) keyword = colorConvert.hex.keyword(finalColor);
+            }
+
+            if (!finalColor) {
                 await channel.send(author.toString(), util.embed("Colors", "Invalid color! The only color types supported are hex, 'rgb(r,g,b)' and 'hsl(h,s,l)'.", config.color.red));
                 return null;
             }
 
-            const rgb = util.hexToRGB(hex).map(h => (h / 255 * 100).toFixed(1) + "%").join(", ");
-            const [h, s, l] = util.hexToHSL(hex);
+
+            const rgb = colorConvert.hex.rgb(finalColor).map(h => (h / 255 * 100).toFixed(1) + "%").join(", ");
+            const [h, s, l] = colorConvert.hex.hsl(finalColor);
             const hsl = h + "°, " + s + "%, " + l + "%";
 
             const canvas = client.canvas.createCanvas(200, 200);
             const ctx = canvas.getContext("2d");
-            ctx.fillStyle = "#" + hex;
+            ctx.fillStyle = "#" + finalColor;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            channel.send(author.toString(), util.embed("Colors", "**Hex:** " + hex + "\n**RGB:** " + rgb + "\n**HSL:** " + hsl).attachFiles([{
+            channel.send(author.toString(), util.embed("Colors",
+                (keyword ? "\n**Keyword:** " + keyword.toFormalCase() : "") +
+                "\n**Hex:** `" + finalColor + "`" +
+                "\n**RGB:** `" + rgb + "`" +
+                "\n**HSL:** `" + hsl + "`"
+            ).attachFiles([{
                 attachment: canvas.toBuffer(), name: "bg.png"
             }]).setImage("attachment://bg.png"));
         }
