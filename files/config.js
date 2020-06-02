@@ -33,6 +33,7 @@ module.exports = {
         poll: "02bae3",
         logs: {
             messageUpdate: "6200ff",
+            messageDelete: "ffaa00",
             guildMemberAdd: "00b33e",
             guildMemberRemove: "a80027",
             channelDelete: "730000"
