@@ -10,10 +10,10 @@ client.on("messageUpdate", async (oldMessage, newMessage) => {
     const {channels, categories} = config;
     const {mhap} = categories;
     const {main, nl} = channels;
-    if (author.id !== client.user.id && !author.id &&
+    if (author.id !== client.user.id &&
         // Handle blacklists.
         (channel["parentID"] && ![mhap.olympus, mhap.archive].includes(channel["parentID"])) &&
-        ![main.bot, nl.logs, nl.triumvirate, nl.leadership, nl.interview2, nl.interview].includes(channel.id)
+        ![main.bot, nl.triumvirate, nl.leadership, nl.interview2, nl.interview].includes(channel.id)
     ) {
         util.log(guild, embed => embed.setColor(config.color.logs.messageUpdate)
             .setAuthor("@" + author.username + "#" + author.discriminator, author.displayAvatarURL())

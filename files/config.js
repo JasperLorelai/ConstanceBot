@@ -63,7 +63,7 @@ module.exports = {
     },
     channels: {
         main: {
-            botLogs: "575738387307298831",
+            bot: "575738387307298831",
             globalLogs: "663988507542421504",
             toDolist: "575695022964473857",
             main: "575738387307298831",
@@ -149,7 +149,7 @@ module.exports = {
         return process.env.WEBHOOK_REDIRECT.match(/[0-9]+/)[0];
     },
     botLog() {
-        return this.getMainGuild().channels.resolve(this.channels.main.botLogs);
+        return this.getMainGuild().channels.resolve(this.channels.main.bot);
     },
     getMainGuild() {
         return this.getClient().guilds.resolve(this.guilds.main);
