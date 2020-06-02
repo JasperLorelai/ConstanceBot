@@ -16,7 +16,7 @@ app.use(session({
 }));
 
 // Add custom prototype methods.
-require("./files/prototype")(Discord);
+require("./files/prototype");
 
 // Creating classes and collections
 const client = new Discord.Client();
@@ -76,11 +76,3 @@ app.get("/:route", (request, response) => {
     if (client.app.has(route)) client.app.get(route)(request, response, client);
     else response.end();
 });
-
-// Keep the web application online. Has to ping every 20mins.
-/*
-Not necessary on a "hobby" Dyno.
-client.setInterval(async () => {
-    await client.fetch("https://constance-bot.herokuapp.com/webAppRefresh");
-}, 1000*60*20);
-*/

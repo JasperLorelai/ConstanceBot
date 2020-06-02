@@ -45,10 +45,7 @@ module.exports = {
     },
     embed(title, description, color) {
         const embed = this.getBaseEmbed();
-        if (color) {
-            const col = this.colorToHex(color);
-            embed.setColor(col ? col : color);
-        }
+        if (color) embed.setColor(color);
         if (title) embed.setTitle(title);
         if (description) embed.setDescription(description);
         return embed;
