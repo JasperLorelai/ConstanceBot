@@ -33,7 +33,7 @@ module.exports = {
         poll: "02bae3",
         logs: {
             messageUpdate: "6200ff",
-            messageDelete: "ffaa00",
+            messageDelete: "ff6600",
             guildMemberAdd: "00b33e",
             guildMemberRemove: "a80027",
             channelDelete: "730000"
@@ -71,7 +71,7 @@ module.exports = {
         },
         mhap: {
             bot: "673521500300640256",
-            logs: "716811006801608819"
+            logs: "673521500300640256"
         },
         nl: {
             logs: "716811006801608819",

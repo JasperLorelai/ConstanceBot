@@ -15,11 +15,10 @@ client.on("messageDelete", async message => {
             embed.setColor(config.color.logs.messageDelete)
                 .setAuthor("@" + author.tag, author.displayAvatarURL())
                 .setTitle("Message Deleted")
-                .setDescription("**Message deleted by** " + author.toString() + " **in channel** " + channel.toString() + ".")
+                .setDescription("**Deleted by** " + author.toString() + " **in channel** " + channel.toString() + ".")
                 .setFooter("Message ID: " + message.id);
             if (message.content) embed.addField("Content", message.content);
             if (message.attachments.size) embed.attachFiles([{attachment: message.attachments.first().attachment, name: "image.png"}]).setImage("attachment://image.png");
-            console.log(embed);
             return embed;
         });
     }
