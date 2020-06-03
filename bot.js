@@ -76,3 +76,18 @@ app.get("/:route", (request, response) => {
     if (client.app.has(route)) client.app.get(route)(request, response, client);
     else response.end();
 });
+
+process.on("beforeExit", code => {
+    setTimeout(() => {
+        console.log("Process will exit with code: " + code);
+        process.exit(code);
+    }, 100);
+});
+process.on("uncaughtException", err => {
+    console.log("Uncaught Exception: " + err.message);
+    process.exit(1);
+});
+process.on("unhandledRejection", (reason, promise) => {
+    console.log("Unhandled rejection at ", promise, "reason: " + reason);
+    process.exit(1);
+});
