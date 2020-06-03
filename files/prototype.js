@@ -1,5 +1,4 @@
-module.exports = () => {
-    const Discord = require("discord.js");
+module.exports = (Discord) => {
     // Creating some base methods
     String.prototype.toFormalCase = function() {
         return this.charAt(0).toUpperCase() + this.substr(1).toLowerCase();

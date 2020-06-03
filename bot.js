@@ -16,7 +16,7 @@ app.use(session({
 }));
 
 // Add custom prototype methods.
-require("./files/prototype");
+require("./files/prototype")(Discord);
 
 // Creating classes and collections
 const client = new Discord.Client();
