@@ -78,7 +78,8 @@ module.exports = {
             triumvirate: "704927190654910505",
             leadership: "704927046228246570",
             interview2: "716131375127724032",
-            interview: "709915026852675646"
+            interview: "709915026852675646",
+            general: "704909426762580049"
         }
     },
     categories: {

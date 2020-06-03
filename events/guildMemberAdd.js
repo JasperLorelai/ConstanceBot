@@ -7,7 +7,11 @@ client.on("guildMemberAdd", async member => {
         .setTitle("User Joined")
         .setAuthor("@" + user.tag, user.displayAvatarURL())
         .setFooter("Member ID: " + user.id)
-        .setDescription("New member count: **" + guild.memberCount + "**\n\n**Mention:** " + member.toString() + "\n**Join Position:** " + util.getJoinPosition(member) + "\n**Registered at:** `" + user.createdAt.toLocaleString() + "`"));
+        .setDescription("New member count: **" + guild.memberCount + "**" +
+            "\n\n**Mention:** " + member.toString() +
+            "\n**Join Position:** " + util.getJoinPosition(member) +
+            "\n**Registered at:** `" + user.createdAt.toLocaleString() + "`")
+    );
 
     if (guild.id === config.guilds.mhap) {
         await member.roles.add(config.roles.mhap.unverified);
@@ -30,6 +34,12 @@ client.on("guildMemberAdd", async member => {
             "\n" + "**Discord Invite:** " + config.invites.nl)
             .setThumbnail(guild.iconURL())
         );
+
+        // Send join message in guild.
+        const channel = guild.channels.resolve(config.channels.nl.general);
+        if (!channel) return;
+        channel.send(util.embed("User Joined", "Welcome " + member.toString() + "! Welcome to **" + guild.name + "**. We hope you enjoy your stay.").setThumbnail(member.user.displayAvatarURL()));
+
         // Start of the welcomer process. Everything else is handled in "handleMsg.js".
         /*
         if (!db) db = {};
