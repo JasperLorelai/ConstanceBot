@@ -19,6 +19,7 @@ client.on("messageDelete", async message => {
                 .setFooter("Message ID: " + message.id);
             if (message.content) embed.addField("Content", message.content);
             if (message.attachments.size) embed.attachFiles([{attachment: message.attachments.first().attachment, name: "image.png"}]).setImage("attachment://image.png");
+            console.log(embed);
             return embed;
         });
     }
