@@ -2,7 +2,7 @@ const client = require("../bot");
 client.on("message", async message => {
     // Ignore if the event was handled externally.
     if (message.deleted) return;
-    const {content, member, author, client, guild, channel} = message;
+    const {content, author, client, guild, channel} = message;
     const {commands, config, util, handleMsg, keyv} = client;
     let realPrefix = null;
     let prefix = config.defaultPrefix;
@@ -56,12 +56,12 @@ client.on("message", async message => {
     }
 
     // Check guild whitelist.
-    if (command.guildWhitelist && !command.guildWhitelist.includes(guild.id)) return;
+    if (guild && command.guildWhitelist && !command.guildWhitelist.includes(guild.id)) return;
 
     // This disables command execution. What sets the channel is in Util -> setMCChannel
     if (client["minecraft"] && channel.id === client["minecraft"]) return;
 
-    if (!await util.getPerms(member, command.perm)) {
+    if (!await util.hasPerm(author, guild, command.perm)) {
         await channel.send(author.toString(), util.embed("No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + command.perm + "`", config.color.red));
         return;
     }

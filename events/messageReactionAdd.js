@@ -31,8 +31,7 @@ client.on("messageReactionAdd", async (r, u) => {
             // Handle Suggestion admin reactions.
             case "Suggestions":
                 embed = embeds.find(e => e.title === "They suggested:");
-                member = guild.members.resolve(u.id);
-                pass = member ? await util.getPerms(member, "admin") : false;
+                pass = member ? await util.hasPerm(u, guild, "admin") : false;
                 if (embed && ["✅", "❌"].includes(r.emoji.toString()) && !["accepted", "denied"].includes(channel["name"]) && pass) {
                     embed = embed.spliceFields(0, 1)
                         .addField("👍", "Upvotes: " + r.message.reactions.resolve("👍").count--, true)
@@ -63,8 +62,7 @@ client.on("messageReactionAdd", async (r, u) => {
                         if (u.id === embed.footer.text) pass = true;
                         // Isn't creator but has mod perms?
                         if (!pass) {
-                            const member = guild.members.resolve(u.id);
-                            if (member) pass = await util.getPerms(member, "admin");
+                            pass = await util.hasPerm(u, guild, "admin");
                         }
                         if (pass) {
                             const msg = await channel.send(util.embed("Closed", "This support ticket was closed by: " + u.toString(), config.color.red).addField("React Actions", "❌ - Hide support ticket. (`Server Admin`)"));
@@ -79,8 +77,7 @@ client.on("messageReactionAdd", async (r, u) => {
                 const closedTicket = embeds.find(e => e.title === "Closed");
                 if (closedTicket) {
                     await r.users.remove(u.id);
-                    const member = guild.members.resolve(u.id);
-                    if (member && await util.getPerms(member, "admin")) {
+                    if (member && await util.hasPerm(u, guild, "admin")) {
                         // noinspection JSUnresolvedFunction
                         await channel.overwritePermissions([{id: guild.id, deny: "VIEW_CHANNEL"}]);
                         await r.message.reactions.removeAll();
@@ -91,8 +88,7 @@ client.on("messageReactionAdd", async (r, u) => {
             // Handle Staff Apps.
             case "Staff Applications":
                 embed = embeds.find(e => e.fields[0].name === "Staff Application Actions");
-                member = guild.members.resolve(u.id);
-                pass = member ? await util.getPerms(member, "admin") : false;
+                pass = member ? await util.hasPerm(u, guild, "admin") : false;
                 /// noinspection DuplicatedCode
                 if (embed && ["✅", "❌"].includes(r.emoji.toString()) && !["accepted", "denied"].includes(channel["name"]) && pass) {
                     await r.message.reactions.removeAll();

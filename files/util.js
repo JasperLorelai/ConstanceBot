@@ -195,49 +195,41 @@ module.exports = {
     getEmoji(str) {
         return str.match(/(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|[\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|[\ud83c[\ude32-\ude3a]|[\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])/g);
     },
-    async getPerms(member, perm) {
-        const {guild} = member;
-        let db = guild ? await guild.client.keyv.get("guilds") : null;
-        let realPrefix = null;
-        let mods = null;
-        if (db && guild && db[guild.id] && db[guild.id].prefix) {
-            realPrefix = db[guild.id].prefix;
-            if (db[guild.id].mods) mods = db[guild.id].mods;
-        }
-        // Process permissions prior to execution.
-        const isAuthor = member.id === this.config.author.id;
-        const isAdmin = member ? member.hasPermission("ADMINISTRATOR") : false;
-        // Different approach for mods.
-        let isMod = false;
-        const modRoles = mods ? mods["roles"] : null;
-        if (modRoles) {
-            for (let r of modRoles) {
-                if (member.roles.cache.has(r)) {
-                    isMod = true;
-                    break;
+    async hasPerm(user, guild, perm) {
+        // Exit if user is author.
+        const isAuthor = user.id === this.config.author.id;
+        if (isAuthor) return true;
+        if (perm === "author") return isAuthor;
+        // Exit of nothing else can be processed.
+        if (!guild) return true;
+        const member = guild.members.resolve(user);
+        if (!member) return true;
+        const isAdmin = member.hasPermission("ADMINISTRATOR");
+        if (isAdmin) return true;
+        if (perm === "admin") return isAdmin;
+        if (perm === "mod") {
+            const db = await guild.client.keyv.get("guilds");
+            let mods = null;
+            if (db && db[guild.id] && db[guild.id].mods) {
+                mods = db[guild.id].mods;
+            }
+            if (!mods) return false;
+            if (mods["users"] && mods["users"].includes(user.id)) return true;
+            if (mods["roles"]) {
+                const roles = member.roles.cache;
+                for (const role of mods["roles"]) {
+                    if (roles.has(role)) {
+                        return true;
+                    }
                 }
             }
+            // Mod permission still expected.
+            return false;
         }
-        const modUsers = mods ? mods["users"] : null;
-        if (!isMod && modUsers) {
-            for (let u of modUsers) {
-                if (member.id === u) {
-                    isMod = true;
-                    break;
-                }
-            }
-        }
-        switch (perm) {
-            case "author":
-                return isAuthor;
-            case "admin":
-                return isAuthor || isAdmin;
-            case "mod":
-                return isAuthor || (isAdmin || isMod);
-            case null:
-            default:
-                return true;
-        }
+        // This should pass if permission type is invalid.
+        const {config} = this;
+        config.botLog().send(config.author.toString(), this.embed("Checking Permission", "Bot is trying to check for a an invalid permission: " + perm, config.color.red));
+        return true;
     },
     msToTime(ms) {
         const days = Math.floor(ms / 86400000);
