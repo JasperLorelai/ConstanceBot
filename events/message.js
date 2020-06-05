@@ -43,7 +43,7 @@ client.on("message", async message => {
             return;
         }
     }
-    const args = content.slice(prefix.length).split(/ +/);
+    const args = content.slice(prefix.length).split(/\s+/);
     const commandName = args.shift().toLowerCase();
 
     // Execute commands
