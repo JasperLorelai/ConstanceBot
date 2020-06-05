@@ -15,8 +15,7 @@ client.on("guildMemberAdd", async member => {
 
     if (guild.id === config.guilds.mhap) {
         await member.roles.add(config.roles.mhap.unverified);
-        // noinspection JSUnresolvedFunction
-        const server = JSON.parse(await client.fetch("https://api.mcsrvstat.us/2/" + config.hostname.mhap).then(y => y.text()));
+        const server = await util.getServer(config.hostname.mhap);
         await member.send(util.embed("Welcome!", "Welcome to **" + guild.name + "**, a Minecraft server based on the **Boku No Hero Academia** manga and anime. The server is not modded. All of our content is made with the help of plugins and our wonderful content creators!" +
             "\n\n" + "**IP:** `" + config.hostname.mhap + "`" +
             (server.version ? "\n" + "**Version:** `" + server.version + "`" : "") +
@@ -26,8 +25,7 @@ client.on("guildMemberAdd", async member => {
     }
     if (guild.id === config.guilds.nl) {
         await member.roles.add(config.roles.nl.player);
-        // noinspection JSUnresolvedFunction
-        const server = JSON.parse(await client.fetch("https://api.mcsrvstat.us/2/" + config.hostname.nl).then(y => y.text()));
+        const server = await util.getServer(config.hostname.nl);
         await member.send(util.embed("Welcome!", "Welcome to **" + guild.name + "**, a Minecraft server based on the **Naruto** anime. The server is not modded. All of our content is made with the help of plugins and our wonderful staff!" +
             "\n\n" + "**IP:** `" + config.hostname.nl + "`" +
             (server.version ? "\n" + "**Version:** `" + server.version + "`" : "") +

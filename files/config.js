@@ -127,6 +127,9 @@ module.exports = {
             supportticket: "https://docs.google.com/forms/d/e/1FAIpQLSc2RncxLbzmS_N25onb-2pWC_X9k4NKdglTR1oH0GN8DsXRFg/viewform?usp=pp_url&entry.1524462986=EVERYONE!&entry.303030427="
         }
     },
+    url: {
+        mcServerQuery: "https://api.mcsrvstat.us/2/"
+    },
     vcText: [
         {
             // The Disco, Lounge, Living Room, Tree House, Basement

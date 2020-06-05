@@ -250,5 +250,10 @@ module.exports = {
     },
     async handleError(message, error) {
         await message.channel.send(message.author.toString(), this.embed("Exception during command execution.", error, message.client.config.color.red));
+    },
+    async getServer(serverIP) {
+        const {config} = this;
+        // noinspection JSUnresolvedFunction
+        return JSON.parse(await config.getClient().fetch(config.url.mcServerQuery + serverIP).then(y => y.text()));
     }
 };

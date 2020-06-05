@@ -16,7 +16,7 @@ module.exports = {
                 return;
             }
         }
-        const server = JSON.parse(await client.fetch("https://api.mcsrvstat.us/2/" + ip).then(y => y.text()));
+        const server = await util.getServer(ip);
         let text = "";
         if (server.debug && server.debug.ping) {
             if (server.online) {
