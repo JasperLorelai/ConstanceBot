@@ -11,7 +11,8 @@ module.exports = {
             await channel.send(author.toString(), util.embed("Role Members", "Role not found!", config.color.red));
             return;
         }
-        const text = guild.members.cache.filter(m => m.roles.cache.has(role.id)).map(m => "<@" + m.id + ">").join(", ");
+        const membersWithRole = guild.members.cache.filter(m => m.roles.cache.has(role.id));
+        const text = "**Members** (**" + membersWithRole.size + "**)**:** " + membersWithRole.map(m => "<@" + m.id + ">").join(", ");
         const msg = await channel.send(author.toString(), util.embed("Role Members: " + role.name, (text.length >= 2000 ? "" : text)));
         if (text.length >= 2000) await util.handlePrompt(msg, text);
     }
