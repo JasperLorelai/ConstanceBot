@@ -1,6 +1,6 @@
 module.exports = {
     async discordAPI(code, redirect, request) {
-        const client = require("../bot");
+        const client = this.config.getClient();
         const creds = "Basic " + client.btoa(process.env.CLIENT_ID + ":" + process.env.CLIENT_SECRET);
         const form = new client.formData();
         form.append("client_id", process.env.CLIENT_ID);
@@ -10,7 +10,7 @@ module.exports = {
         form.append("redirect_uri", encodeURI(redirect));
         form.append("scope", "identify");
         // noinspection JSUnresolvedFunction
-        const response = await client.fetch("https://discordapp.com/api/oauth2/token", {
+        const response = await client.fetch(this.config.urls.discordAPI.oauth2 + "token", {
             method: "POST",
             body: form,
             headers: {Authorization: creds}
@@ -107,7 +107,7 @@ module.exports = {
         return guild.members.cache.find(m => find === m.id || find === m.user.username || find.substring(2, find.length - 1) === m.id || find.substring(3, find.length - 1) === m.id || m.user.username.toLowerCase().includes(find.toLowerCase()));
     },
     findUser(find) {
-        const client = require("../bot");
+        const client = this.config.getClient();
         return client.users.cache.find(u => find === u.id || find === u.username || find.substring(2, find.length - 1) === u.id || find.substring(3, find.length - 1) === u.id || u.username.toLowerCase().includes(find.toLowerCase()));
     },
     findRole(find, guild) {
@@ -125,7 +125,7 @@ module.exports = {
         return true;
     },
     getColorFromString(color) {
-        const {colorConvert} = require("../bot");
+        const {colorConvert} = this.config.getClient();
         let matchedDigits = color.match(/([0-9]*(\.[0-9]*)?(?:[%|°])?)+/g).filter(e => e);
         if (color.startsWith("rgb(")) {
             matchedDigits = matchedDigits.map(e => e.endsWith("%") ? Math.round(e.substr(0, e.length - 1) / 100 * 255) : e);
@@ -139,8 +139,7 @@ module.exports = {
         return colorConvert.keyword.hex(color);
     },
     getTextWidth(text, font) {
-        const client = require("../bot");
-        let ctx = client.canvas.createCanvas(0, 0).getContext("2d");
+        let ctx = this.config.getClient().canvas.createCanvas(0, 0).getContext("2d");
         ctx.font = font;
         return ctx.measureText(text).width;
     },
@@ -251,9 +250,17 @@ module.exports = {
     async handleError(message, error) {
         await message.channel.send(message.author.toString(), this.embed("Exception during command execution.", error, message.client.config.color.red));
     },
-    async getServer(serverIP) {
-        const {config} = this;
+    async getRequest(url, output) {
         // noinspection JSUnresolvedFunction
-        return JSON.parse(await config.getClient().fetch(config.url.mcServerQuery + serverIP).then(y => y.text()));
-    }
+        return await this.config.getClient().fetch(url).then(y => {
+            if (output === "json") return y.json();
+            return y.text();
+        });
+    },
+    async getServer(serverIP) {
+        return await this.getRequest(this.config.url.mcServerQuery + serverIP,"json");
+    },
+    async getTrello(params) {
+        return await this.getRequest(this.config.urls.trello + params + "?key=" + process.env.TRELLO_KEY + "&token=" + process.env.TRELLO_TOKEN, "json");
+    },
 };

@@ -7,7 +7,7 @@ module.exports = {
     async execute(message) {
         const {client, channel, author} = message;
         const {config, util} = client;
-        const chars = JSON.parse(await client.fetch("https://api.trello.com/1/cards/" + config.trello["lists"].characters).then(y => y.text()))["desc"].discordMKD();
+        const chars = (await util.getTrello("cards/" + config.trello.cards.characters)).desc.discordMKD();
         const msg = await channel.send(author.toString(), util.embed("Canon Character List", (chars.length >= 2000 ? "" : chars)));
         if (chars.length >= 2000) await util.handlePrompt(msg, chars);
     }

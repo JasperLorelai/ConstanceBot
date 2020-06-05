@@ -19,7 +19,7 @@ module.exports = async (request, response, client) => {
 
         if (!client.discordLink) client.discordLink = {};
         client.discordLink[request.sessionID] = request.query["uuid"];
-        response.redirect("https://discordapp.com/api/oauth2/authorize?client_id=579759958556672011&redirect_uri=" + encodeURI(client.webserver + "/link") + "&response_type=code&scope=identify");
+        response.redirect(config.urls.discordAPI.oauth2 + "authorize?client_id=579759958556672011&redirect_uri=" + encodeURI(client.webserver + "/link") + "&response_type=code&scope=identify");
         return;
     }
 
@@ -38,7 +38,7 @@ module.exports = async (request, response, client) => {
     }
 
     request.session.destroy();
-    const user = await util.discordAPI(request.query.code, client.webserver + "/link", config.discordapi.users);
+    const user = await util.discordAPI(request.query.code, client.webserver + "/link", config.urls.discordAPI.users);
     if (user && !user.error) {
         // Save user.
         db[user.id] = client.atob(uuid);

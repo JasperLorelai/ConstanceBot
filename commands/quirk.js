@@ -7,9 +7,9 @@ module.exports = {
     guildWhitelist: [require("../files/config").guilds.mhap],
     async execute(message, args) {
         const {client, channel, author} = message;
-        const {config, util, fetch} = client;
+        const {config, util} = client;
         if (args.length) {
-            const lists = await fetch("https://api.trello.com/1/boards/" + config.trello.boards.mhap + "/lists" + config.getTrello()).then(y => y.json());
+            const lists = await util.getTrello("boards/" + config.trello.boards.mhap + "/lists");
             const quirkList = lists.find(l => l.name === "Quirks");
             if (!quirkList) {
                 channel.send(author.toString(), util.embed("Quirks", "Exception encountered. This was automatically reported and will be resolved.", config.color.red));
@@ -17,7 +17,8 @@ module.exports = {
                 return;
             }
             let quirks = [];
-            for (let q of await fetch("https://api.trello.com/1/lists/" + quirkList.id + "/cards" + config.getTrello()).then(y => y.json())) {
+
+            for (let q of await util.getTrello("lists/" + quirkList.id + "/cards")) {
                 quirks.push({id: q.id, desc: q["desc"], name: q["desc"].match(/##\s?Quirk:\s[^\n]*/g)[0].substr(10)});
             }
             const quirk = quirks.find(q => q.name.toLowerCase().includes(args.join(" ").toLowerCase()));
@@ -28,6 +29,7 @@ module.exports = {
             channel.send(author.toString(), util.embed("Quirk - " + quirk.name, quirk.desc.discordMKD()).setURL("https://trello.com/c/" + quirk.id));
             return;
         }
-        channel.send(author.toString(), util.embed("Quirks", (await fetch("https://api.trello.com/1/cards/" + config.trello.cards.quirksRoster + config.getTrello()).then(y => y.json())).desc.discordMKD()).setURL("https://trello.com/c/" + config.trello.cards.quirksRoster));
+
+        channel.send(author.toString(), util.embed("Quirks", (await util.getTrello("cards/" + config.trello.cards.quirksRoster)).desc.discordMKD()).setURL("https://trello.com/c/" + config.trello.cards.quirksRoster));
     }
 };

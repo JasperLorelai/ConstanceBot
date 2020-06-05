@@ -117,18 +117,19 @@ module.exports = {
             characters: "9qhuraUB"
         }
     },
-    discordapi: {
-        users: "https://discordapp.com/api/users/@me"
-    },
-    app: {
+    urls: {
+        mcServerQuery: "https://api.mcsrvstat.us/2/",
         forms: {
             staffapp: "https://docs.google.com/forms/d/e/1FAIpQLSdBDDYZ9533HAYuyT500KQTMmX5HZk70SggktlxxoVU7e2ezQ/viewform?usp=pp_url&entry.500203582=",
             suggestions: "https://docs.google.com/forms/d/e/1FAIpQLSfAvHfhebjZ2qgBfkUC5eXFLCqDGzrjOa4REncwLN2P3_HY-A/viewform?usp=pp_url&entry.1021015769=",
             supportticket: "https://docs.google.com/forms/d/e/1FAIpQLSc2RncxLbzmS_N25onb-2pWC_X9k4NKdglTR1oH0GN8DsXRFg/viewform?usp=pp_url&entry.1524462986=EVERYONE!&entry.303030427="
-        }
-    },
-    url: {
-        mcServerQuery: "https://api.mcsrvstat.us/2/"
+        },
+        trello: "https://api.trello.com/1/",
+        discordAPI: {
+            users: "https://discordapp.com/api/users/@me",
+            oauth2: "https://discordapp.com/api/oauth2/"
+        },
+        mhap: "http://mhaprodigy.uk/"
     },
     vcText: [
         {
@@ -146,9 +147,6 @@ module.exports = {
     ],
     getClient() {
         return require("../bot");
-    },
-    getTrello() {
-        return "?key=" + process.env.TRELLO_KEY + "&token=" + process.env.TRELLO_TOKEN;
     },
     getWebhookID() {
         return process.env.WEBHOOK_REDIRECT.match(/[0-9]+/)[0];
@@ -171,16 +169,17 @@ module.exports = {
     },
     getHomeEmbed() {
         const roles = this.roles.mhap;
+        const {urls} = this;
         return this.util.embed("My Hero Academia Prodigy - Information")
             .addField("Basic Information",
                 "**IP:** `" + this.hostname.mhap + "`\n" +
                 "**Version:** Release 1.13.2\n" +
-                "**Discord Invite:** http://mhaprodigy.uk/discord\n" +
-                "**Trello Board:** http://mhaprodigy.uk/trello")
+                "**Discord Invite:** " + urls.mhap + "discord\n" +
+                "**Trello Board:** " + urls.mhap + "trello")
             .addField("Forms",
-                "**Would you like suggest something?** [(Click here)](http://mhaprodigy.uk/suggest)\n" +
-                "**Need support?** [(Click here)](http://mhaprodigy.uk/support)\n" +
-                "**Would you like to apply for staff?** [(Click here)](http://mhaprodigy.uk/apply)")
+                "**Would you like suggest something?** [(Click here)](" + urls.mhap + "suggest)\n" +
+                "**Need support?** [(Click here)](" + urls.mhap + "support)\n" +
+                "**Would you like to apply for staff?** [(Click here)](" + urls.mhap + "apply)")
             .addField("Authentication","🔞 - **NSFW Authentication** - *This authentication is here to warn the recipient to not open the channel at the office or near young children because the channels it will reveal after accepting contain sexual or repulsive content.*\nReact with the displayed reaction to toggle access to the NSFW channel section.")
             .addField("Toggle Pingable Roles",
                 "📦 - <@&" + roles.polls + "> - If you have this role, you will be pinged whenever a poll is up.\n" +

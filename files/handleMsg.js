@@ -135,7 +135,7 @@ module.exports = async message => {
             let msg;
             switch (type) {
                 case "rawSupportTicket":
-                    const ticket = await handlePost("Support Tickets", "ticket", "Need support? Open a support ticket here: http://mhaprodigy.uk/support");
+                    const ticket = await handlePost("Support Tickets", "ticket", "Need support? Open a support ticket here: " + config.urls.mhap + "support");
                     msg = await ticket.send(util.embed("Problem:", embed.description).setAuthor(user.tag, user.displayAvatarURL()).addField("React Actions", "❌ - Close support ticket. (`Server Admin` or OP)").setFooter(user.id));
                     await msg.react("❌");
                     const restriction = embed.fields[0].value;
@@ -150,7 +150,7 @@ module.exports = async message => {
                     }
                     break;
                 case "rawSuggestion":
-                    const suggestion = await handlePost("Suggestions", "suggestion", "Would you like to suggest something? Open a suggestion here: http://mhaprodigy.uk/suggest");
+                    const suggestion = await handlePost("Suggestions", "suggestion", "Would you like to suggest something? Open a suggestion here: " + config.urls.mhap + "suggest");
                     msg = await suggestion.send(util.embed("They suggested:", embed.description).setAuthor(user.tag, user.displayAvatarURL()).addField("React Actions", "❌ - Deny suggestion. (`Server Admin` or OP)\n✅ - Accept suggestion. (`Server Admin` or OP)"));
                     await msg.react("👍");
                     await msg.react("👎");
@@ -162,7 +162,7 @@ module.exports = async message => {
                     appFragments.shift();
                     const lastFragment = appFragments[appFragments.length -1];
                     appFragments.splice(appFragments.length-1);
-                    const staffApp = await handlePost("Staff Applications", "staffapp", "Would you like to apply? Use this form here: http://mhaprodigy.uk/apply");
+                    const staffApp = await handlePost("Staff Applications", "staffapp", "Would you like to apply? Use this form here: " + config.urls.mhap + "apply");
                     const firstFragment = await staffApp.send(new config.discord.MessageEmbed()
                         .setTitle("Staff Application")
                         .setColor(config.color.base)
