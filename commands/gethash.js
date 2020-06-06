@@ -7,7 +7,7 @@ module.exports = {
         const {client, author, channel} = message;
         const {util} = client;
         try {
-            channel.send(author.toString(), util.embed("Random MD5 Hash Generated", "`" + client.md5(new Date()) + "`"));
+            channel.send(author.toString(), util.embed("Random MD5 Hash Generated", "`" + client.sha1(new Date()) + "`"));
         }
         catch(e) {
             await util.handleError(message, e);
