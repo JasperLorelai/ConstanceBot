@@ -258,7 +258,7 @@ module.exports = {
         });
     },
     async getServer(serverIP) {
-        return await this.getRequest(this.config.url.mcServerQuery + serverIP,"json");
+        return await this.getRequest(this.config.urls.mcServerQuery + serverIP,"json");
     },
     async getTrello(params) {
         return await this.getRequest(this.config.urls.trello + params + "?key=" + process.env.TRELLO_KEY + "&token=" + process.env.TRELLO_TOKEN, "json");
