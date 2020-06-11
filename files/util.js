@@ -21,14 +21,15 @@ module.exports = {
     log(guild, funct) {
         if (!guild) return;
         const channels = this.config.channels[this.getKeyByValue(this.config.guilds, guild.id)];
+        const mainGuild = this.config.getMainGuild();
         if (!channels) {
-            this.config.getMainGuild().channels.resolve(this.config.channels.main.globalLogs).send("Guild `" + guild.id + "` isn't mapped in the configuration guilds.");
+            if (mainGuild) mainGuild.channels.resolve(this.config.channels.main.globalLogs).send("Guild `" + guild.id + "` isn't mapped in the configuration guilds.");
             return;
         }
         const channel = channels.logs ? guild.channels.resolve(channels.logs) : guild.channels.cache.find(c => c.name === "logs");
 
         // TODO: Remove this. This is just temporary global logs to help find conflicts.
-        if (guild.id !== this.config.guilds.lorelai) this.config.getMainGuild().channels.resolve(this.config.channels.main.globalLogs).send("`" + guild.id + (channel ? ": " + channel.toString() : "") + "` **" + guild.name + "**", funct(new this.config.discord.MessageEmbed().setTimestamp(new Date())));
+        if (guild.id !== this.config.guilds.lorelai && mainGuild) mainGuild.channels.resolve(this.config.channels.main.globalLogs).send("`" + guild.id + (channel ? ": " + channel.toString() : "") + "` **" + guild.name + "**", funct(new this.config.discord.MessageEmbed().setTimestamp(new Date())));
 
         if (!channel) return;
         // Let the dev make changes against this embed before sending.
