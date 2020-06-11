@@ -3,18 +3,10 @@ module.exports = {
     discord: require("discord.js"),
     defaultPrefix: "&",
     ship: [
-        // Ray & Jelly
-        {target1: "155791290099826689", target2: "462712474353926174", calc: () => "-66%. That's it. No hackery here."},
         // J & Ano
         {target1: "192710597106728960", target2: "588523406333575189", calc: () => "obvious. It's like when your math teacher asks you what's 0=0. Just stop. Ok?"},
-        // Toaster
-        {any: "153570094113488896", calc: c => "illegal. He's Serbian. But, if you really wanna know, it's " + c},
-        // Bambi
-        {any: "138775336933392385", calc: c => "WHY??? JUST WHY??? Ok, it's (" + c + ")"},
         // Kyo
         {any: "321386112448856064", calc: c => "-" + c},
-        // Ray
-        {any: "462712474353926174", calc: c => "A very sandy " + c},
         // Sen
         {any: "359658850724478978", calc: c => "A very gay " + c + ". No, really, you can't \"no homo\" this now, so congrats."},
         // Pingu
