@@ -20,5 +20,11 @@ client.on("raw", async event => {
             message = await channel.messages.fetch(event.d.id);
             client.emit("messageUpdate", null, message);
             break;
+        case "MESSAGE_DELETE":
+            channel = client.channels.resolve(event.d["channel_id"]);
+            // Ignore if cached already to avoid duplicate events.
+            if (channel.messages.cache.has(event.d.id)) return;
+            client.emit("messageDeleteUncached", event.d);
+            break;
     }
 });
