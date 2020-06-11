@@ -22,7 +22,7 @@ module.exports = {
         if (!guild) return;
         const channels = this.config.channels[this.getKeyByValue(this.config.guilds, guild.id)];
         if (!channels) {
-            this.config.getMainGuild().channels.resolve(this.config.channels.main.globalLogs).send(this.config.author.toString() + ", Guild `" + guild.id + "` isn't mapped in the configuration guilds.");
+            this.config.getMainGuild().channels.resolve(this.config.channels.main.globalLogs).send("Guild `" + guild.id + "` isn't mapped in the configuration guilds.");
             return;
         }
         const channel = channels.logs ? guild.channels.resolve(channels.logs) : guild.channels.cache.find(c => c.name === "logs");
