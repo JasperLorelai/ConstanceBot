@@ -21,7 +21,7 @@ module.exports = {
             args.shift();
             await channel.send(author.toString(), util.embed("Kicked Member", "**" + member.user.username + "** has been kicked from the server by user: " + author.toString() + (args[0] ? "\n**For reason:** " + args.join(" ") : "")));
             await member.kick(member.user.username + " has been kicked from the server by user: " + author.username + (args[0] ? "(reason: " + args.join(" ") + ")" : ""));
-            message.delete();
+            message.delete({reason: "botIntent"});
         }
         catch(e) {
             await util.handleError(message, e);

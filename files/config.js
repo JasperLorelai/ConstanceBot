@@ -80,6 +80,9 @@ module.exports = {
             interview2: "716131375127724032",
             interview: "709915026852675646",
             general: "704909426762580049"
+        },
+        lorelai: {
+            logs: "717502089336455288"
         }
     },
     categories: {

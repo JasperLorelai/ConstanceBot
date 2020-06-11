@@ -12,14 +12,14 @@ client.on("messageReactionAdd", async (r, u) => {
         switch (r.emoji.toString()) {
             case "❌":
                 config.botLog().send(embed.setColor(config.color.red).setTitle("To Do List Item - Declined"));
-                await r.message.delete();
+                await r.message.delete({reason: "botIntent"});
                 break;
             case "✅":
                 config.botLog().send(embed.setColor(config.color.green).setTitle("To Do List Item - Completed"));
-                await r.message.delete();
+                await r.message.delete({reason: "botIntent"});
                 break;
             case "🗑":
-                await r.message.delete();
+                await r.message.delete({reason: "botIntent"});
                 break;
         }
     }
@@ -81,7 +81,7 @@ client.on("messageReactionAdd", async (r, u) => {
                         // noinspection JSUnresolvedFunction
                         await channel.overwritePermissions([{id: guild.id, deny: "VIEW_CHANNEL"}]);
                         await r.message.reactions.removeAll();
-                        await r.message.delete();
+                        await r.message.delete({reason: "botIntent"});
                     }
                 }
                 break;

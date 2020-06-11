@@ -75,10 +75,10 @@ module.exports = {
                                     poll.text = m.content;
                                     refresh(msg, poll);
                                 }
-                                m.delete();
+                                m.delete({reason: "botIntent"});
                                 msgColl.stop();
                             });
-                            msgColl.on("end", () => msg2.delete());
+                            msgColl.on("end", () => msg2.delete({reason: "botIntent"}));
                             break;
                         case "➕":
                             msg2 = await channel.send(author.toString(), util.embed("Poll Creator - Reaction Manager", "Type a message that includes reactions.", config.color.yellow));
@@ -93,9 +93,9 @@ module.exports = {
                                     msg.edit(embed);
                                     msgColl.stop();
                                 }
-                                m.delete();
+                                m.delete({reason: "botIntent"});
                             });
-                            msgColl.on("end", () => msg2.delete());
+                            msgColl.on("end", () => msg2.delete({reason: "botIntent"}));
                             break;
                         case "🚫":
                             if (poll.emoji.length > 0) {
@@ -122,7 +122,7 @@ module.exports = {
                                     embed.setColor(config.color.poll);
                                     const created = await ch.send(poll.rolePing && pollrole ? "<@&" + pollrole.id + ">" : "", embed);
                                     for (let emoji of poll.emoji) await created.react(emoji);
-                                    msg.delete();
+                                    msg.delete({reason: "botIntent"});
                                     msgColl.stop();
                                     collector.stop("done");
                                 }
@@ -130,9 +130,9 @@ module.exports = {
                                     const embed = util.getEmbeds(msg2)[0];
                                     await msg2.edit(embed.setDescription(embed.description + "\n\n**Channel not found!**").setColor(config.color.red));
                                 }
-                                m.delete();
+                                m.delete({reason: "botIntent"});
                             });
-                            msgColl.on("end", () => msg2.delete());
+                            msgColl.on("end", () => msg2.delete({reason: "botIntent"}));
                             break;
                         case "❌":
                             poll = null;
@@ -143,12 +143,12 @@ module.exports = {
                 });
                 collector.on("end", async (coll, reason) => {
                     if (reason === "done") {
-                        if (!message.deleted) message.delete();
+                        if (!message.deleted) message.delete({reason: "botIntent"});
                         return;
                     }
                     await msg.reactions.removeAll();
                     await msg.edit(util.embed("PollCreator Cancelled", reason === "end" ? "Cancelled poll." : "Timeout.", reason === "end" ? config.color.red : config.color.gray));
-                    if (!message.deleted) message.delete();
+                    if (!message.deleted) message.delete({reason: "botIntent"});
                     if (poll) {
                         db = await keyv.get("users");
                         if (!db) db = {};
@@ -170,7 +170,7 @@ module.exports = {
                 const collector = channel.createMessageCollector(m => m.author.id !== client.user.id, {time: 10000});
                 collector.on("collect", async m => {
                     const index = parseInt(m.content);
-                    m.delete();
+                    m.delete({reason: "botIntent"});
                     if (index) {
                         if (polls.length >= index) {
                             collector.stop("end");

@@ -19,7 +19,7 @@ module.exports = {
         // + "\nYou can edit the message to execute again.");
         else text = "Command not found!";
         channel.send(author.toString(), util.embed("Command Help For: " + args[0], text)).then(async m => {
-            if (!command) await m.delete({timeout: 5000});
+            if (!command) await m.delete({timeout: 5000, reason: "botIntent"});
         });
     }
 };

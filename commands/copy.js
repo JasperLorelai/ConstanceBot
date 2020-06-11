@@ -24,7 +24,7 @@ module.exports = {
             }
             const wb = await archive.createWebhook(copyMsg.author.username, {avatar: copyMsg.author.displayAvatarURL(), reason: "Message Copy - initiated by " + author.username + "(" + author.id + ")"});
             const newMsg = await wb.send(copyMsg);
-            await wb.delete();
+            await wb.delete({reason: "botIntent"});
             channel.send(author.toString(), util.embed("", "Message copied. [\(Jump\)](" + newMsg.url + ")"));
         }
         catch(e) {

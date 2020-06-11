@@ -44,7 +44,7 @@ module.exports = {
                 coll.stop();
             });
             coll.on("end", async () => {
-                if (!msg.deleted) await msg.delete();
+                if (!msg.deleted) await msg.delete({reason: "botIntent"});
                 await channel.send(author.toString(), util.embed("**" + user.username + "**'s Avatar")
                     .attachFiles([{
                         attachment: await client.fetch(user.displayAvatarURL({

@@ -19,7 +19,7 @@ module.exports = {
             const over = num > 50;
             num = over ? 50 : num;
             let messages = await channel.messages.fetch({limit: num + 1});
-            messages.delete(message.id);
+            messages.delete(message.id, "botIntent");
             const msg = await channel.send(author.toString(), util.embed("Channel Purge", "**Messages found:** " + (over ? "limited to `50`" : "`" + num + "`") + "\n\n**React with:\n🗑 - to delete currently selected.\n😃 - to apply user filter.**", yellow));
             await msg.react("🗑");
             await msg.react("😃");
@@ -43,11 +43,11 @@ module.exports = {
                                 break;
                             case "✅":
                                 coll.stop();
-                                messages.each(m => m.delete());
+                                messages.each(m => m.delete({reason: "botIntent"}));
                                 break;
                         }
                     });
-                    coll.on("end", async () => await msg.delete());
+                    coll.on("end", async () => await msg.delete({reason: "botIntent"}));
                 }
 
                 switch (r.emoji.toString()) {
@@ -61,16 +61,16 @@ module.exports = {
                         let member;
                         collUser.on("collect", mUser => {
                             member = util.findGuildMember(mUser.content, guild);
-                            mUser.delete();
+                            mUser.delete({reason: "botIntent"});
                             if (!member) {
                                 msg.channel.send(author.toString(), util.embed("Channel Purge - By User", "User not found!", red)).then(tempMsg => {
-                                    tempMsg.delete({timeout: 3000});
+                                    tempMsg.delete({timeout: 3000, reason: "botIntent"});
                                 });
                             }
                             else collUser.stop("found");
                         });
                         collUser.on("end", async (c, reason) => {
-                            await msgUser.delete();
+                            await msgUser.delete({reason: "botIntent"});
                             coll.stop("chosen");
                             if (reason === "found") await handleDeletePrompt(message, messages.filter(m => m.author.id === member.id));
                         });
@@ -79,8 +79,8 @@ module.exports = {
             });
             coll.on("end", async (c, reason) => {
                 if (reason === "chosen") {
-                    await msg.delete();
-                    await message.delete();
+                    await msg.delete({reason: "botIntent"});
+                    await message.delete({reason: "botIntent"});
                 }
                 else {
                     await msg.reactions.removeAll();

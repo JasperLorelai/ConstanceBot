@@ -4,9 +4,7 @@ client.on("channelDelete", async channel => {
     // Ignore DM channels.
     if (channel.type === "dm") return;
     const {guild, parent} = channel;
-
-    const logs = await guild.fetchAuditLogs({type: "CHANNEL_DELETE"});
-    const log = logs.entries.first();
+    const log = (await guild.fetchAuditLogs({type: "CHANNEL_DELETE"})).entries.first();
 
     if (!["FormCategoryEmpty"].includes(log.reason)) {
         util.log(guild, embed => embed.setColor(config.color.logs.channelDelete)

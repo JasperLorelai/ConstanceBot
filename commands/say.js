@@ -17,7 +17,7 @@ module.exports = {
             if (msg.startsWith("`") && msg.endsWith("`")) msg = msg.replace(/`/g, "");
             msg = util.isJSON(msg) ? JSON.parse(msg) : msg;
             await ch.send(msg);
-            await message.delete();
+            await message.delete({reason: "botIntent"});
         }
         catch(e) {
             await util.handleError(message, e);
