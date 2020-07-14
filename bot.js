@@ -79,3 +79,35 @@ app.get("/:route", (request, response) => {
     if (client.app.has(route)) client.app.get(route)(request, response, client);
     else response.end();
 });
+
+
+
+// Recheck muted list.
+client.setInterval(async () => {
+    const db = await keyv.get("guilds");
+    if (!db) return;
+    for (const guild in client.guilds) {
+        if (client.guilds.hasOwnProperty(guild)) {
+            if (!db[guild.id]) continue;
+            const mutedRole = client.util.findRole("Muted", guild);
+            if (mutedRole && db && db[guild.id] && db[guild.id].muted) {
+                const muted = db[guild.id].muted;
+                for (const mutedUserID of Object.keys(muted)) {
+                    const mutedUser = guild.members.resolve(mutedUserID);
+                    if (!mutedUser) {
+                        delete db[guild.id].muted[mutedUserID];
+                        await keyv.set("guilds", db);
+                    }
+                    else {
+                        if (new Date().getTime() > muted[mutedUserID]) {
+                            await mutedUser.roles.remove(mutedRole);
+                            await mutedUser.send(util.embed(guild.name + " - Mute", "Your mute status has been lifted."));
+                            delete db[guild.id].muted[mutedUserID];
+                            await keyv.set("guilds", db);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}, 30000);

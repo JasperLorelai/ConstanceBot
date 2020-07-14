@@ -9,27 +9,6 @@ client.on("message", async message => {
     if (guild) {
         let db = await keyv.get("guilds");
         if (db && db[guild.id] && db[guild.id].prefix) realPrefix = db[guild.id].prefix;
-
-        // Recheck muted list.
-        const mutedRole = util.findRole("Muted", guild);
-        if (mutedRole && db && db[guild.id] && db[guild.id].muted) {
-            const muted = db[guild.id].muted;
-            for (const mutedUserID of Object.keys(muted)) {
-                const mutedUser = guild.members.resolve(mutedUserID);
-                if (!mutedUser) {
-                    delete db[guild.id].muted[mutedUserID];
-                    await keyv.set("guilds", db);
-                }
-                else {
-                    if (new Date().getTime() > muted[mutedUserID]) {
-                        await mutedUser.roles.remove(mutedRole);
-                        await mutedUser.send(util.embed(guild.name + " - Mute", "Your mute status has been lifted."));
-                        delete db[guild.id].muted[mutedUserID];
-                        await keyv.set("guilds", db);
-                    }
-                }
-            }
-        }
     }
     if (!content.startsWith(prefix)) {
         if (!guild) {

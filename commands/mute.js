@@ -59,10 +59,11 @@ module.exports = {
             // Manage mute time.
             member.roles.add(muteRole);
             channel.send(util.embed("Mute", "User " + member.toString() + " has been muted for **" + client.ms(time) + "** by " + author.toString() + (reason ? " for: **" + reason + "**" : "") + "."));
-            client.setTimeout(() => {
-                member.roles.remove(muteRole);
-                channel.send(util.embed("Mute", member.toString() + "'s mute status has been lifted by timeout."));
-            }, time);
+            if (Math.pow(2,32) - 1 > time) {
+                client.setTimeout(() => {
+                    member.roles.remove(muteRole);
+                }, time);
+            }
             let db = await keyv.get("guilds");
             if (!db) db = {};
             if (!db[guild.id]) db[guild.id] = {};

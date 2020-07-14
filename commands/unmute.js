@@ -28,7 +28,7 @@ module.exports = {
 
             let db = await keyv.get("guilds");
             await member.roles.remove(mutedRole);
-            await member.send(util.embed(guild.name + " - Mute", "Your mute status has been lifted by " + author.toString() + " (**" + author.username + "**)."));
+            await member.send(util.embed(guild.name + " - Mute", "Your mute status has been lifted by " + author.toString() + " (**" + author.username + "**).")).catch(() => {});
             channel.send(util.embed("Mute", member.toString() + "'s mute status has been lifted by " + author.toString() + "."));
             if (!(db && db[guild.id] && db[guild.id].muted && db[guild.id].muted[member.id])) return;
             delete db[guild.id].muted[member.id];
