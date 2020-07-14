@@ -79,29 +79,3 @@ app.get("/:route", (request, response) => {
     if (client.app.has(route)) client.app.get(route)(request, response, client);
     else response.end();
 });
-
-process.on("beforeExit", code => {
-    setTimeout(() => {
-        console.log("Process will exit with code: " + code);
-        process.exit(code);
-    }, 100);
-});
-process.on("uncaughtException", err => {
-    console.log("Uncaught Exception: " + err.message);
-    sendWebhookError("Uncaught Exception", err.message);
-    process.exit(1);
-});
-process.on("unhandledRejection", (reason, promise) => {
-    console.log("Unhandled Rejection at:\n", promise, "\nReason: " + reason);
-    sendWebhookError("Uncaught Rejection", promise + "\nReason: " + reason);
-    process.exit(1);
-});
-
-function sendWebhookError(title, description) {
-    client.fetch(process.env.WEBHOOK_ERROR, {method: "POST", contentType: "application/json", payload: JSON.stringify({
-        embeds:[{
-            title: title,
-            description: description,
-        }]
-    })});
-}
