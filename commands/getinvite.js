@@ -5,17 +5,12 @@ module.exports = {
     async execute(message) {
         const {guild, client} = message;
         const {config, util} = client;
+        const data = config.getGuildData(guild.id);
         let invite;
-        switch (guild.id) {
-            case config.guilds.mhap:
-                invite = config.invites.mhap;
-                break;
-            case config.guilds.nl:
-                invite = config.invites.mhap;
-                break;
-            default:
-                await message.channel.send(message.author.toString(), util.embed("Invite Fetch", "No saved invite was configured for this guild.", config.color.red));
-                return;
+        if (data) invite = data.invite;
+        else {
+            await message.channel.send(message.author.toString(), util.embed("Invite Fetch", "No saved invite was configured for this guild.", config.color.red));
+            return;
         }
         await message.channel.send(message.author.toString() + "\n" + invite);
     }

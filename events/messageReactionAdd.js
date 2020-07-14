@@ -6,7 +6,7 @@ client.on("messageReactionAdd", async (r, u) => {
     if (r.message.deleted) return;
 
     // Handle To-Do list actions.
-    if (channel.id === config.channels.main.toDolist) {
+    if (channel.id === config.guildData.main.channels.toDolist) {
         if (u.id === client.user.id) return;
         const embed = util.getEmbeds(r.message)[0];
         switch (r.emoji.toString()) {
@@ -113,17 +113,18 @@ client.on("messageReactionAdd", async (r, u) => {
     }
 
     // Rule accept.
-    if (r.message.id === config.messages.mhap.rules && r.emoji.toString() === "✅") {
+    const mhapGuild = config.guildData.mhap;
+    if (r.message.id === mhapGuild.messages.rules && r.emoji.toString() === "✅") {
         if (u.id === client.user.id) return;
         const member = await guild.members.resolve(u.id);
-        if (member.roles.cache.has(config.roles.mhap.verified)) return;
-        await member.roles.remove(config.roles.mhap.unverified);
-        await member.roles.add(config.roles.mhap.verified);
+        if (member.roles.cache.has(mhapGuild.roles.verified)) return;
+        await member.roles.remove(mhapGuild.roles.unverified);
+        await member.roles.add(mhapGuild.roles.verified);
         util.log(guild, embed => embed.setColor(config.color.green)
             .setTitle("User " + u.username + " has accepted the rules!")
             .setFooter("Member ID: " + u.id)
             .setThumbnail(u.displayAvatarURL())
-            .setDescription(u.toString() + " has accepted the rules and became a member of ***" + guild.name + "***! Count of people who accepted rules: **" + guild.roles.resolve(config.roles.mhap.verified).members.size + "/" + guild.memberCount + "**."));
+            .setDescription(u.toString() + " has accepted the rules and became a member of ***" + guild.name + "***! Count of people who accepted rules: **" + guild.roles.resolve(mhapGuild.roles.verified).members.size + "/" + guild.memberCount + "**."));
         let db = await keyv.get("guilds");
         // Start of the welcomer process. Everything else is handled in "handleMsg.js".
         if (!db) db = {};
@@ -149,25 +150,24 @@ client.on("messageReactionAdd", async (r, u) => {
     }
 
     // Role toggles.
-    if (r.message.id === config.messages.nl.notify && r.emoji.toString() === "👋") {
-        await guild.members.resolve(u.id).roles.add(config.roles.nl.notify);
+    if (r.message.id === config.guildData.nl.messages.notify && r.emoji.toString() === "👋") {
+        await guild.members.resolve(u.id).roles.add(config.guildData.nl.roles.notify);
     }
     if (config.messages.home && r.message.id === config.messages.home) {
         if (u.id === client.user.id) return;
         const member = await guild.members.resolve(u.id);
-        const roles = config.roles.mhap;
         switch (r.emoji.toString()) {
             case "🔞":
-                member.roles.add(roles.nsfw);
+                member.roles.add(mhapGuild.roles.nsfw);
                 break;
             case "📦":
-                member.roles.add(roles.polls);
+                member.roles.add(mhapGuild.roles.polls);
                 break;
             case "📆":
-                member.roles.add(roles.events);
+                member.roles.add(mhapGuild.roles.events);
                 break;
             case "📰":
-                member.roles.add(roles.changelog);
+                member.roles.add(mhapGuild.roles.changelog);
                 break;
         }
     }

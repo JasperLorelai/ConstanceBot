@@ -1,6 +1,5 @@
 // noinspection JSUnusedGlobalSymbols
 module.exports = {
-    discord: require("discord.js"),
     defaultPrefix: "&",
     ship: [
         // J & Ano
@@ -31,77 +30,73 @@ module.exports = {
             channelDelete: "730000"
         }
     },
-    roles: {
+    guildData: {
         mhap: {
-            unverified: "421219080008368128",
-            verified: "419654978022539285",
-            muted: "419644724119601153",
-            bots: "419635738804748289",
-            polls: "598335282357600286",
-            events: "598335388536274950",
-            changelog: "598335450242875392",
-            staff: "419964554139926559",
-            nsfw: "435465339757789186"
+            id: "419628763102314527",
+            hostname: "play.mhaprodigy.uk",
+            invite: "http://mhaprodigy.uk/discord",
+            roles: {
+                unverified: "421219080008368128",
+                verified: "419654978022539285",
+                muted: "419644724119601153",
+                bots: "419635738804748289",
+                polls: "598335282357600286",
+                events: "598335388536274950",
+                changelog: "598335450242875392",
+                staff: "419964554139926559",
+                nsfw: "435465339757789186"
+            },
+            channels: {
+                bot: "673521500300640256",
+                logs: "673521500300640256"
+            },
+            categories: {
+                olympus: "419646295670784002",
+                archive: "619340319418220574"
+            },
+            messages: {
+                rules: "550735939257892865",
+                home: "673629257834037285"
+            }
         },
-        nl: {
-            player: "704906830425620531",
-            notify: "707080930728083508"
-        }
-    },
-    guilds: {
-        main: "575376952517591041",
-        mhap: "419628763102314527",
-        nl: "704902534241976440",
-        lorelai: "406825495502782486"
-    },
-    channels: {
         main: {
-            bot: "575738387307298831",
-            globalLogs: "663988507542421504",
-            toDolist: "575695022964473857",
-            main: "575738387307298831",
-        },
-        mhap: {
-            bot: "673521500300640256",
-            logs: "673521500300640256"
-        },
-        nl: {
-            logs: "716811006801608819",
-            triumvirate: "704927190654910505",
-            leadership: "704927046228246570",
-            interview2: "716131375127724032",
-            interview: "709915026852675646",
-            general: "704909426762580049"
+            id: "575376952517591041",
+            channels: {
+                bot: "575738387307298831",
+                globalLogs: "663988507542421504",
+                toDolist: "575695022964473857",
+                main: "575738387307298831",
+            },
+            categories: {
+                dmChannels: "632697494865707008"
+            }
         },
         lorelai: {
-            logs: "717502089336455288"
-        }
-    },
-    categories: {
-        main: {
-            dmChannels: "632697494865707008"
-        },
-        mhap: {
-            olympus: "419646295670784002",
-            archive: "619340319418220574"
-        }
-    },
-    messages: {
-        mhap: {
-            rules: "550735939257892865",
-            home: "673629257834037285"
+            id: "406825495502782486",
+            channels: {
+                logs: "717502089336455288"
+            }
         },
         nl: {
-            notify: "709955815213236225"
+            id: "704902534241976440",
+            hostname: "alegacybegins.mcserv.co",
+            invite: "https://discord.gg/Z9R4j7g",
+            roles: {
+                player: "704906830425620531",
+                notify: "707080930728083508"
+            },
+            channels: {
+                logs: "716811006801608819",
+                triumvirate: "704927190654910505",
+                leadership: "704927046228246570",
+                interview2: "716131375127724032",
+                interview: "709915026852675646",
+                general: "704909426762580049"
+            },
+            messages: {
+                notify: "709955815213236225"
+            }
         }
-    },
-    hostname: {
-        mhap: "play.mhaprodigy.uk",
-        nl: "alegacybegins.mcserv.co"
-    },
-    invites: {
-        mhap: "http://mhaprodigy.uk/discord",
-        nl: "https://discord.gg/Z9R4j7g"
     },
     trello: {
         boards: {
@@ -147,27 +142,28 @@ module.exports = {
         return process.env.WEBHOOK_REDIRECT.match(/[0-9]+/)[0];
     },
     botLog() {
-        return this.getMainGuild().channels.resolve(this.channels.main.bot);
+        return this.getMainGuild().channels.resolve(this.guildData.main.channels.bot);
     },
     getMainGuild() {
-        return this.getClient().guilds.resolve(this.guilds.main);
+        return this.getClient().guilds.resolve(this.guildData.main.id);
     },
     getOverwrites(type, everyoneRole) {
         if (type === "mhapDefault") {
+            const roles = this.guildData.mhap.roles;
             return [
                 {id: everyoneRole, deny: ["VIEW_CHANNEL"]},
-                {id: this.roles.mhap.verified, allow: ["VIEW_CHANNEL"]},
-                {id: this.roles.mhap.muted, deny: ["SEND_MESSAGES"]}
+                {id: roles.verified, allow: ["VIEW_CHANNEL"]},
+                {id: roles.muted, deny: ["SEND_MESSAGES"]}
             ];
         }
         return [];
     },
     getHomeEmbed() {
-        const roles = this.roles.mhap;
+        const roles = this.guildData.mhap.roles;
         const {urls} = this;
         return this.util.embed("My Hero Academia Prodigy - Information")
             .addField("Basic Information",
-                "**IP:** `" + this.hostname.mhap + "`\n" +
+                "**IP:** `" + this.guildData.mhap.hostname + "`\n" +
                 "**Version:** Release 1.13.2\n" +
                 "**Discord Invite:** " + urls.mhap + "discord\n" +
                 "**Trello Board:** " + urls.mhap + "trello")
@@ -186,5 +182,11 @@ module.exports = {
         await message.react("📦");
         await message.react("📆");
         await message.react("📰");
-    }
+    },
+    getGuildData(id) {
+        for (const guild in this.guildData) {
+            if (guild.id === id) return guild;
+        }
+        return null;
+    },
 };

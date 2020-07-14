@@ -13,28 +13,30 @@ client.on("guildMemberAdd", async member => {
             "\n**Registered at:** `" + user.createdAt.toLocaleString() + "`")
     );
 
-    if (guild.id === config.guilds.mhap) {
-        await member.roles.add(config.roles.mhap.unverified);
-        const server = await util.getServer(config.hostname.mhap);
+    if (guild.id === config.guildData.mhap.id) {
+        const mhapData = config.guildData.mhap;
+        await member.roles.add(mhapData.roles.unverified);
+        const server = await util.getServer(mhapData.hostname);
         await member.send(util.embed("Welcome!", "Welcome to **" + guild.name + "**, a Minecraft server based on the **Boku No Hero Academia** manga and anime. The server is not modded. All of our content is made with the help of plugins and our wonderful content creators!" +
-            "\n\n" + "**IP:** `" + config.hostname.mhap + "`" +
+            "\n\n" + "**IP:** `" + mhapData.hostname + "`" +
             (server.version ? "\n" + "**Version:** `" + server.version + "`" : "") +
-            "\n" + "**Discord Invite:** " + config.invites.mhap)
+            "\n" + "**Discord Invite:** " + mhapData.invite)
             .setThumbnail(guild.iconURL())
         );
     }
-    if (guild.id === config.guilds.nl) {
-        await member.roles.add(config.roles.nl.player);
-        const server = await util.getServer(config.hostname.nl);
+    if (guild.id === config.guildData.nl.id) {
+        const nlData = config.guildData.nl;
+        await member.roles.add(nlData.roles.player);
+        const server = await util.getServer(nlData.hostname);
         await member.send(util.embed("Welcome!", "Welcome to **" + guild.name + "**, a Minecraft server based on the **Naruto** anime. The server is not modded. All of our content is made with the help of plugins and our wonderful staff!" +
-            "\n\n" + "**IP:** `" + config.hostname.nl + "`" +
+            "\n\n" + "**IP:** `" + nlData.hostname + "`" +
             (server.version ? "\n" + "**Version:** `" + server.version + "`" : "") +
-            "\n" + "**Discord Invite:** " + config.invites.nl)
+            "\n" + "**Discord Invite:** " + nlData.invite)
             .setThumbnail(guild.iconURL())
         );
 
         // Send join message in guild.
-        const channel = guild.channels.resolve(config.channels.nl.general);
+        const channel = guild.channels.resolve(config.guildData.nl.channels.general);
         if (!channel) return;
         channel.send(util.embed("User Joined", "Welcome " + member.toString() + " to **" + guild.name + "**. We hope you enjoy your stay.").setColorRandom().setThumbnail(member.user.displayAvatarURL()));
 

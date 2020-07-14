@@ -39,6 +39,8 @@ client.sha1 = require("sha1");
 client.util.config = client.config;
 client.config.util = client.util;
 
+client.config.Discord = Discord;
+
 client.login(process.env.BOT_TOKEN).catch(e => console.log(e));
 module.exports = client;
 

@@ -4,13 +4,11 @@ client.on("messageDelete", async message => {
     const {guild, author, channel} = message;
     const log = (await guild.fetchAuditLogs({type: "MESSAGE_DELETE"})).entries.first();
 
-    const {channels, categories} = config;
-    const {mhap} = categories;
-    const {main, nl} = channels;
+    const {nl} = config.channels;
     if (log.reason !== "botIntent" &&
         // Handle blacklists.
-        (channel["parentID"] && ![mhap.olympus, mhap.archive].includes(channel["parentID"])) &&
-        ![main.bot, nl.triumvirate, nl.leadership, nl.interview2, nl.interview].includes(channel.id)
+        (channel["parentID"] && ![config.guildData.mhap.categories.olympus, config.guildData.mhap.categories.archive].includes(channel["parentID"])) &&
+        ![config.guildData.main.channels.bot, nl.triumvirate, nl.leadership, nl.interview2, nl.interview].includes(channel.id)
     ) {
         util.log(guild, embed => {
             embed.setColor(config.color.logs.messageDelete)

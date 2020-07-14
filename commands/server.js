@@ -7,14 +7,13 @@ module.exports = {
         const {client, channel, guild, author} = message;
         const {config, util} = client;
         let ip = args[0];
-        // Whitelisting default IP to it's respective server.
         if (!ip) {
-            if (config.guilds.mhap === guild.id) ip = config.hostname.mhap;
-            if (config.guilds.nl === guild.id) ip = config.hostname.nl;
-            else {
-                channel.send(author.toString(), util.embed("Minecraft Server Info", "Please provide an IP parameter.", config.color.red));
-                return;
-            }
+            ip = config.getGuildData(guild.id);
+            if (ip) ip = ip.hostname;
+        }
+        if (!ip) {
+            channel.send(author.toString(), util.embed("Minecraft Server Info", "Please provide an IP parameter.", config.color.red));
+            return;
         }
         const server = await util.getServer(ip);
         let text = "";

@@ -23,23 +23,23 @@ module.exports = {
         const channels = this.config.channels[this.getKeyByValue(this.config.guilds, guild.id)];
         const mainGuild = this.config.getMainGuild();
         if (!channels) {
-            if (mainGuild) mainGuild.channels.resolve(this.config.channels.main.globalLogs).send("Guild `" + guild.id + "` isn't mapped in the configuration guilds.");
+            if (mainGuild) mainGuild.channels.resolve(this.config.guildData.main.channels.globalLogs).send("Guild `" + guild.id + "` isn't mapped in the configuration guilds.");
             return;
         }
         const channel = channels.logs ? guild.channels.resolve(channels.logs) : guild.channels.cache.find(c => c.name === "logs");
 
         // TODO: Remove this. This is just temporary global logs to help find conflicts.
-        if (guild.id !== this.config.guilds.lorelai && mainGuild) mainGuild.channels.resolve(this.config.channels.main.globalLogs).send("`" + guild.id + (channel ? ": " + channel.toString() : "") + "` **" + guild.name + "**", funct(new this.config.discord.MessageEmbed().setTimestamp(new Date())));
+        if (guild.id !== this.config.guilds.lorelai && mainGuild) mainGuild.channels.resolve(this.config.guildData.main.channels.globalLogs).send("`" + guild.id + (channel ? ": " + channel.toString() : "") + "` **" + guild.name + "**", funct(new this.config.Discord.MessageEmbed().setTimestamp(new Date())));
 
         if (!channel) return;
         // Let the dev make changes against this embed before sending.
-        channel.send(funct(new this.config.discord.MessageEmbed().setTimestamp(new Date())));
+        channel.send(funct(new this.config.Discord.MessageEmbed().setTimestamp(new Date())));
     },
     getJoinPosition(member) {
         return member.guild.members.cache.sort((a, b) => a.joinedAt - b.joinedAt).array().findIndex(m => m.id === member.id);
     },
     getBaseEmbed() {
-        return new this.config.discord.MessageEmbed()
+        return new this.config.Discord.MessageEmbed()
             .setColor(this.config.color.base)
             .setFooter("Bot made by: " + this.config.author.username, this.config.author.displayAvatarURL())
             .setTimestamp(new Date());
@@ -54,7 +54,7 @@ module.exports = {
     getEmbeds(message) {
         if (message.embeds.length < 1) return null;
         return message.embeds.filter(e => e.type === "rich").map(e => {
-            const embed = new this.config.discord.MessageEmbed(e);
+            const embed = new this.config.Discord.MessageEmbed(e);
             if (embed.image) embed.image.url = "attachment://" + embed.image.url.substr(embed.image.url.lastIndexOf("/") + 1);
             if (embed.thumbnail) embed.thumbnail.url = "attachment://" + embed.thumbnail.url.substr(embed.thumbnail.url.lastIndexOf("/") + 1);
             return embed;
