@@ -16,7 +16,7 @@ client.on("messageDelete", async message => {
                 .setTitle("Message Deleted")
                 .setDescription("**Deleted by** " + log.executor.toString() + " **in channel** " + channel.toString() + ".")
                 .setFooter("Message ID: " + message.id)
-                .addField("Content", message.content);
+                .addField("Content", message.content ? message.content : "**No content.**");
             if (message.attachments.size) embed.attachFiles([{attachment: message.attachments.first().attachment, name: "image.png"}]).setImage("attachment://image.png");
             return embed;
         });

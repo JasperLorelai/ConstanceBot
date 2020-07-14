@@ -46,14 +46,14 @@ module.exports = async message => {
         }
 
         // Redirect messages to it's respective DM channel.
-        let dmchannel = main.channels.cache.filter(c => c.name === author.id).array()[0];
-        if (!dmchannel) {
-            dmchannel = await main.channels.create(author.id, {
+        let dmChannel = main.channels.cache.filter(c => c.name === author.id).array()[0];
+        if (!dmChannel) {
+            dmChannel = await main.channels.create(author.id, {
                 topic: author.username,
-                parent: config.categories.dmChannels
+                parent: config.guildData.main.categories.dmChannels
             });
         }
-        const webhook = await dmchannel.createWebhook(author.username, {avatar: author.displayAvatarURL()});
+        const webhook = await dmChannel.createWebhook(author.username, {avatar: author.displayAvatarURL()});
         if (util.isJSON(content)) {
             const embed = JSON.parse(content);
             let final = {};

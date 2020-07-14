@@ -184,8 +184,10 @@ module.exports = {
         await message.react("📰");
     },
     getGuildData(id) {
-        for (const guild in this.guildData) {
-            if (guild.id === id) return guild;
+        for (const guildKey of Object.keys(this.guildData)) {
+            const guild = this.guildData[guildKey];
+            if (guild.id !== id) continue;
+            return guild;
         }
         return null;
     },

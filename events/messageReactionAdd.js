@@ -1,6 +1,9 @@
 const client = require("../bot");
 const {config, util, keyv} = client;
 client.on("messageReactionAdd", async (r, u) => {
+    // Ignore custom reactions.
+    if (!r) return;
+
     const {guild, channel, embeds} = r.message;
     // Ignore if the event was handled externally.
     if (r.message.deleted) return;
@@ -112,30 +115,6 @@ client.on("messageReactionAdd", async (r, u) => {
         }
     }
 
-    // Rule accept.
-    const mhapGuild = config.guildData.mhap;
-    if (r.message.id === mhapGuild.messages.rules && r.emoji.toString() === "✅") {
-        if (u.id === client.user.id) return;
-        const member = await guild.members.resolve(u.id);
-        if (member.roles.cache.has(mhapGuild.roles.verified)) return;
-        await member.roles.remove(mhapGuild.roles.unverified);
-        await member.roles.add(mhapGuild.roles.verified);
-        util.log(guild, embed => embed.setColor(config.color.green)
-            .setTitle("User " + u.username + " has accepted the rules!")
-            .setFooter("Member ID: " + u.id)
-            .setThumbnail(u.displayAvatarURL())
-            .setDescription(u.toString() + " has accepted the rules and became a member of ***" + guild.name + "***! Count of people who accepted rules: **" + guild.roles.resolve(mhapGuild.roles.verified).members.size + "/" + guild.memberCount + "**."));
-        let db = await keyv.get("guilds");
-        // Start of the welcomer process. Everything else is handled in "handleMsg.js".
-        if (!db) db = {};
-        const {mhap} = config.guilds;
-        if (!db[mhap]) db[mhap] = {};
-        if (!db[mhap].welcomer) db[mhap].welcomer = {};
-        const msg = await u.send(util.embed("Roles - Poll (Stage 1)", "Would you like to be mentioned whenever we release a server poll?\nPlease reply with `yes` or `no`.", config.color.yellow));
-        db[mhap].welcomer[u.id] = msg.id;
-        await keyv.set("guilds", db);
-    }
-
     // Poll - unique reactions.
     if (r.message.author.id === client.user.id) {
         if (u.id === client.user.id) return;
@@ -149,26 +128,58 @@ client.on("messageReactionAdd", async (r, u) => {
         }
     }
 
-    // Role toggles.
-    if (r.message.id === config.guildData.nl.messages.notify && r.emoji.toString() === "👋") {
-        await guild.members.resolve(u.id).roles.add(config.guildData.nl.roles.notify);
-    }
-    if (config.messages.home && r.message.id === config.messages.home) {
-        if (u.id === client.user.id) return;
-        const member = await guild.members.resolve(u.id);
-        switch (r.emoji.toString()) {
-            case "🔞":
-                member.roles.add(mhapGuild.roles.nsfw);
-                break;
-            case "📦":
-                member.roles.add(mhapGuild.roles.polls);
-                break;
-            case "📆":
-                member.roles.add(mhapGuild.roles.events);
-                break;
-            case "📰":
-                member.roles.add(mhapGuild.roles.changelog);
-                break;
-        }
+    // Per message handling.
+    const mhapData = config.guildData.mhap;
+    const nlData = config.guildData.nl;
+    const member = await guild.members.resolve(u.id);
+    if (u.id === client.user.id) return;
+    switch (r.message.id) {
+        // Rule accept.
+        case mhapData.messages.rules:
+            if (r.emoji.toString() !== "✅") return;
+            let roles = mhapData.roles;
+            if (member.roles.cache.has(roles.verified)) return;
+            await member.roles.remove(roles.unverified);
+            await member.roles.add(roles.verified);
+            util.log(guild, embed => embed.setColor(config.color.green)
+                .setTitle("User " + u.username + " has accepted the rules!")
+                .setFooter("Member ID: " + u.id)
+                .setThumbnail(u.displayAvatarURL())
+                .setDescription(u.toString() + " has accepted the rules and became a member of ***" + guild.name + "***! Count of people who accepted rules: **" + guild.roles.resolve(mhapGuild.roles.verified).members.size + "/" + guild.memberCount + "**."));
+            let db = await keyv.get("guilds");
+            // Start of the welcomer process. Everything else is handled in "handleMsg.js".
+            if (!db) db = {};
+            const {mhap} = config.guilds;
+            if (!db[mhap]) db[mhap] = {};
+            if (!db[mhap].welcomer) db[mhap].welcomer = {};
+            const msg = await u.send(util.embed("Roles - Poll (Stage 1)", "Would you like to be mentioned whenever we release a server poll?\nPlease reply with `yes` or `no`.", config.color.yellow));
+            db[mhap].welcomer[u.id] = msg.id;
+            await keyv.set("guilds", db);
+            break;
+
+        // Role toggle (MHAP)
+        case mhapData.messages.home:
+            roles = mhapData.roles;
+            switch (r.emoji.toString()) {
+                case "🔞":
+                    member.roles.add(roles.nsfw);
+                    break;
+                case "📦":
+                    member.roles.add(roles.polls);
+                    break;
+                case "📆":
+                    member.roles.add(roles.events);
+                    break;
+                case "📰":
+                    member.roles.add(roles.changelog);
+                    break;
+            }
+            break;
+
+        // Role toggle (NL)
+        case nlData.messages.notify:
+            if (r.emoji.toString() !== "👋") return;
+            await guild.members.resolve(u.id).roles.add(nlData.roles.notify);
+            break;
     }
 });

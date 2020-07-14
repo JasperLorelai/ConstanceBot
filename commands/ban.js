@@ -8,14 +8,13 @@ module.exports = {
         const {client, guild, channel, author} = message;
         const {config, util, emojiFile} = client;
         try {
-            const {red} = config.color;
             let member = util.findGuildMember(args[0], guild);
             if (!member) {
-                await channel.send(author.toString(), util.embed("Ban Member", "User not found.", red));
+                await channel.send(author.toString(), util.embed("Ban Member", "User not found.", config.color.red));
                 return;
             }
             if (!member.bannable) {
-                await channel.send(author.toString(), util.embed("Ban Member", "Cannot modify that user.", red));
+                await channel.send(author.toString(), util.embed("Ban Member", "Cannot modify that user.", config.color.red));
                 return;
             }
             const msg = await channel.send(author.toString(), util.embed("Ban Member", "Purge messages of how many days?"));
