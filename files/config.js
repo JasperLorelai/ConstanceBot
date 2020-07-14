@@ -2,18 +2,10 @@
 module.exports = {
     defaultPrefix: "&",
     ship: [
-        // J & Ano
-        {target1: "192710597106728960", target2: "588523406333575189", calc: () => "obvious. It's like when your math teacher asks you what's 0=0. Just stop. Ok?"},
-        // Kyo
-        {any: "321386112448856064", calc: c => "-" + c},
-        // Sen
-        {any: "359658850724478978", calc: c => "A very gay " + c + ". No, really, you can't \"no homo\" this now, so congrats."},
         // Pingu
-        {any: "303184895629459458", calc: c =>  c + " (Brexit approved)"},
-        // Pingu & Ano
-        {any: "303184895629459458", calc: () =>  "0% (Violates Brexit)"},
+        {any: "303184895629459458", calc: c => c + " (Brexit approved)"},
         // Constance
-        {any: "579759958556672011", calc: () =>  "0%"}
+        {any: "579759958556672011", calc: () => "0%"}
     ],
     color: {
         green: "04ff00",
