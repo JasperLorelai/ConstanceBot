@@ -98,7 +98,7 @@ process.on("unhandledRejection", async (reason, promise) => {
 });
 
 async function sendWebhookError(title, description) {
-    await fetch(process.env.WEBHOOK_ERROR, {method: "POST", contentType: "application/json", payload: JSON.stringify({
+    await client.fetch(process.env.WEBHOOK_ERROR, {method: "POST", contentType: "application/json", payload: JSON.stringify({
         embeds:[{
             title: title,
             description: description,
