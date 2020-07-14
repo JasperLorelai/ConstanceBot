@@ -99,6 +99,7 @@ module.exports = async message => {
         // If the msg was truly found, quote it.
         if (msgID) {
             const embed = util.embed(null, msgID.content, config.color.yellow).setAuthor("Sent by: " + msgID.author.tag, msgID.author.displayAvatarURL());
+            embed.addField("Want to jump to the message?", "[\(Jump\)](" + msgID.url + ")");
             if (msgID.attachments.size) embed.attachFiles([{attachment: msgID.attachments.first().attachment, name: "image.png"}]).setImage("attachment://image.png");
             channel.send(embed.setTitle("Quoted by: " + author.tag));
         }
