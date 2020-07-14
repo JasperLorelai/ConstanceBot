@@ -3,6 +3,7 @@ module.exports = {
     description: "Creates a poll.",
     guildOnly: true,
     perm: "mod",
+    aliases: ["polls"],
     async execute(message) {
         const {channel, author, client, guild} = message;
         const {config, util, keyv} = client;
