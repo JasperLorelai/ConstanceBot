@@ -15,6 +15,7 @@ module.exports = {
             channel.send(author.toString(), util.embed("Minecraft Server Info", "Please provide an IP parameter.", config.color.red));
             return;
         }
+        const msg = await channel.send(util.embed("Minecraft Server Info", "Pending information...", config.color.yellow));
         const server = await util.getServer(ip);
         let text = "";
         if (server.debug && server.debug.ping) {
@@ -42,7 +43,7 @@ module.exports = {
                 name: "bg.png"
             }]).setThumbnail("attachment://bg.png");
         }
-        const msg = await channel.send(embed);
+        await msg.edit(embed);
         if (text.length >= 2000) await util.handlePrompt(msg, text);
     }
 };
