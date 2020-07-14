@@ -86,19 +86,19 @@ process.on("beforeExit", code => {
         process.exit(code);
     }, 100);
 });
-process.on("uncaughtException", async err => {
+process.on("uncaughtException", err => {
     console.log("Uncaught Exception: " + err.message);
-    await sendWebhookError("Uncaught Exception", err.message);
+    sendWebhookError("Uncaught Exception", err.message);
     process.exit(1);
 });
-process.on("unhandledRejection", async (reason, promise) => {
-    console.log("Unhandled Rejection at ", promise, "\nReason: " + reason);
-    await sendWebhookError("Uncaught Rejection", promise + "\nReason: " + reason);
+process.on("unhandledRejection", (reason, promise) => {
+    console.log("Unhandled Rejection at:\n", promise, "\nReason: " + reason);
+    sendWebhookError("Uncaught Rejection", promise + "\nReason: " + reason);
     process.exit(1);
 });
 
-async function sendWebhookError(title, description) {
-    await client.fetch(process.env.WEBHOOK_ERROR, {method: "POST", contentType: "application/json", payload: JSON.stringify({
+function sendWebhookError(title, description) {
+    client.fetch(process.env.WEBHOOK_ERROR, {method: "POST", contentType: "application/json", payload: JSON.stringify({
         embeds:[{
             title: title,
             description: description,

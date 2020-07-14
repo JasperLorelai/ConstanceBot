@@ -6,7 +6,7 @@ client.on("messageDeleteUncached", async event => {
     const channel = log.extra["channel"];
     const author = log.target;
 
-    const {nl} = config.channels;
+    const nl = config.guildData.nl.channels;
     if (log.reason !== "botIntent" &&
         // Handle blacklists.
         (channel["parentID"] && ![config.guildData.mhap.categories.olympus, config.guildData.mhap.categories.archive].includes(channel["parentID"])) &&
