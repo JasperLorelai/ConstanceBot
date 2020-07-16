@@ -38,7 +38,7 @@ client.on("guildMemberAdd", async member => {
         // Send join message in guild.
         const channel = guild.channels.resolve(config.guildData.nl.channels.general);
         if (!channel) return;
-        channel.send(util.embed("User Joined", "Welcome " + member.toString() + " to **" + guild.name + "**. We hope you enjoy your stay.").setColorRandom().setThumbnail(member.user.displayAvatarURL()));
+        channel.send(util.embed(member.user.username + " Joined", "Welcome " + member.toString() + " to **" + guild.name + "**. We hope you enjoy your stay.").setColorRandom().setThumbnail(member.user.displayAvatarURL()));
 
         // Start of the welcomer process. Everything else is handled in "handleMsg.js".
         /*
