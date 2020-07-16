@@ -71,7 +71,7 @@ module.exports = {
         },
         nl: {
             id: "704902534241976440",
-            hostname: "alegacybegins.mcserv.co",
+            hostname: "198.12.88.10:25565",
             invite: "https://discord.gg/Z9R4j7g",
             roles: {
                 player: "704906830425620531",
