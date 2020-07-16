@@ -23,7 +23,7 @@
     "btoa": "1.2.1",
     "canvas": "2.6.1",
     "color-convert": "^2.0.1",
-    "discord.js": "github:discordjs/discord.js#36050d07f5ded196f5f6601619da2d3dc3604126",
+    "discord.js": "github:discordjs/discord.js#f9f36610907e12b6a1d515aac4728a0f675162aa",
     "dotenv": "8.2.0",
     "express": "4.17.1",
     "express-session": "1.17.0",
