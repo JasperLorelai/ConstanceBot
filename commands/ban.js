@@ -3,6 +3,7 @@ module.exports = {
     description: "Ban a guild member.",
     params: ["[user]", "(reason)"],
     guildOnly: true,
+    aliases: ["snap"],
     perm: "mod",
     async execute(message, args) {
         const {client, guild, channel, author} = message;
@@ -22,7 +23,7 @@ module.exports = {
             coll.on("collect", async (r, u) => {
                 await r.users.remove(u);
                 if (u.id !== author.id) return null;
-                let days = 0;
+                let days = -1;
                 switch (r.emoji.toString()) {
                     case "❌":
                         days = 0;
@@ -50,9 +51,9 @@ module.exports = {
                         break;
                 }
                 args.shift();
-                await channel.send(author.toString(), util.embed("Banned Member", "**" + member.user.username + "** has been banned from the server by user: " + author.toString() + (days ? "\n**Days:** " + days + ")" : "") + (args[0] ? "\n**For reason:** " + args.join(" ") : "")));
+                await channel.send(author.toString(), util.embed("Banned Member", "**" + member.user.username + "** has been banned from the server by user: " + author.toString() + (days > 0 ? "\n**Days:** " + days : "") + (args[0] ? "\n**For reason:** " + args.join(" ") : "")));
                 await member.ban({
-                    days: days,
+                    days: days < 0 ? 0 : days,
                     reason: member.user.username + " has been banned from the server by user: " + author.username + (args[0] ? "(reason: " + args.join(" ") + ")" : "")
                 });
                 message.delete({reason: "botIntent"});
