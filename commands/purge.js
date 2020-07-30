@@ -1,4 +1,3 @@
-// noinspection JSUnusedLocalSymbols
 module.exports = {
     name: "purge",
     description: "Clear messages in text channel. It maps the latest specified amount of messages to delete. You can apply a filter for a specific user.",
@@ -9,18 +8,17 @@ module.exports = {
     async execute(message, args) {
         const {channel, client, author, guild} = message;
         const {config, util} = client;
+        const apiLimit = 98;
         try {
-            const {red, yellow} = config.color;
             let num = parseInt(args[0]);
             if (!num || num < 1) {
-                await channel.send(author.toString(), util.embed("Channel Purge", "Parameter `number` is not a number or is less than 1!", red));
+                await channel.send(author.toString(), util.embed("Channel Purge", "Parameter `number` is not a number or is less than 1!", config.color.red));
                 return;
             }
-            const over = num > 50;
-            num = over ? 50 : num;
+            num = num > apiLimit ? apiLimit : num;
             let messages = await channel.messages.fetch({limit: num + 1});
             messages.delete(message.id, "botIntent");
-            const msg = await channel.send(author.toString(), util.embed("Channel Purge", "**Messages found:** " + (over ? "limited to `50`" : "`" + num + "`") + "\n\n**React with:\n🗑 - to delete currently selected.\n😃 - to apply user filter.**", yellow));
+            const msg = await channel.send(author.toString(), util.embed("Channel Purge", "**Messages found:** " + (num > apiLimit ? "limited to `" + apiLimit + "`" : "`" + num + "`") + "\n\n**React with:\n🗑 - to delete currently selected.\n😃 - to apply user filter.**", config.color.yellow));
             await msg.react("🗑");
             await msg.react("😃");
             const created = new Date().getTime();
@@ -30,7 +28,7 @@ module.exports = {
                 if (u.id !== author.id) return null;
 
                 async function handleDeletePrompt(message, messages) {
-                    const msg = await message.channel.send(author.toString(), util.embed("Delete Confirmation", "**Messages found by filter:** `" + messages.size + "`\n\n**React with:\n❌ - to cancel delete.\n✅ - to confirm delete.**", yellow));
+                    const msg = await message.channel.send(author.toString(), util.embed("Delete Confirmation", "**Messages found by filter:** `" + messages.size + "`\n\n**React with:\n❌ - to cancel delete.\n✅ - to confirm delete.**", config.color.yellow));
                     await msg.react("❌");
                     await msg.react("✅");
                     const coll = msg.createReactionCollector((r, u) => u.id !== message.client.user.id, {time: 10000});
@@ -56,14 +54,14 @@ module.exports = {
                         await handleDeletePrompt(message, messages);
                         break;
                     case "😃":
-                        const msgUser = await msg.channel.send(author.toString(), util.embed("Channel Purge - By User", "Please specify a user who's messages would be deleted.", yellow));
+                        const msgUser = await msg.channel.send(author.toString(), util.embed("Channel Purge - By User", "Please specify a user who's messages would be deleted.", config.color.yellow));
                         const collUser = msgUser.channel.createMessageCollector(m => m.author.id === author.id, {time: util.collTtl(coll, created)});
                         let member;
                         collUser.on("collect", mUser => {
                             member = util.findGuildMember(mUser.content, guild);
                             mUser.delete({reason: "botIntent"});
                             if (!member) {
-                                msg.channel.send(author.toString(), util.embed("Channel Purge - By User", "User not found!", red)).then(tempMsg => {
+                                msg.channel.send(author.toString(), util.embed("Channel Purge - By User", "User not found!", config.color.red)).then(tempMsg => {
                                     tempMsg.delete({timeout: 3000, reason: "botIntent"});
                                 });
                             }
@@ -79,12 +77,14 @@ module.exports = {
             });
             coll.on("end", async (c, reason) => {
                 if (reason === "chosen") {
-                    await msg.delete({reason: "botIntent"});
+                    if (!msg.deleted) await msg.delete({reason: "botIntent"});
                     await message.delete({reason: "botIntent"});
                 }
                 else {
-                    await msg.reactions.removeAll();
-                    await msg.edit(util.getEmbeds(msg)[0].setDescription("**Messages found:** " + (over ? "limited to `50`" : "`" + num + "`") + "\n\n**Timed out.**").setColor("666666"));
+                    if (!msg.deleted) {
+                        await msg.reactions.removeAll();
+                        await msg.edit(util.getEmbeds(msg)[0].setDescription("**Messages found:** " + (num > apiLimit ? "limited to `" + apiLimit + "`" : "`" + num + "`") + "\n\n**Timed out.**").setColor("666666"));
+                    }
                 }
             });
         }
