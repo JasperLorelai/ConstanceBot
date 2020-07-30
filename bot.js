@@ -1,7 +1,7 @@
 // Importing libraries
 require("dotenv").config();
 const session = require("express-session");
-const Discord = require("discord.js");
+const Discord = require("discordjs");
 const Keyv = require("keyv");
 const express = require("express");
 const app = express();
