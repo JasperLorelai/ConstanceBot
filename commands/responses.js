@@ -14,7 +14,7 @@ module.exports = {
                 if (!db[guild.id]) db[guild.id] = {};
                 if (!db[guild.id].responses) db[guild.id].responses = [];
                 const responses = db[guild.id].responses;
-                return !responses.length ? responses.map((r, i) => "[**" + (i + 1) + "**] **Regex:** `" + r.trigger + "` **- reply:** " + r.reply).join("\n") : null;
+                return !responses.size ? responses.map((r, i) => "[**" + (i + 1) + "**] **Regex:** `" + r.trigger + "` **- reply:** " + r.reply).join("\n") : null;
             }
 
             const msg = await channel.send(util.embed("Auto Responses", (await getResponses() || "No responses in DB.") + "\n\n**React with:\n➖ - to remove a response.\n➕ - to add a new response.**", config.color.yellow));
