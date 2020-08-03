@@ -1,5 +1,6 @@
 // noinspection JSUnusedGlobalSymbols
 module.exports = {
+    userAgent: "https://github.com/JasperLorelai",
     defaultPrefix: "&",
     ship: [
         // Pingu
@@ -111,7 +112,8 @@ module.exports = {
             users: "https://discordapp.com/api/users/@me",
             oauth2: "https://discordapp.com/api/oauth2/"
         },
-        mhap: "http://mhaprodigy.uk/"
+        mhap: "http://mhaprodigy.uk/",
+        joke: "https://icanhazdadjoke.com/"
     },
     vcText: [
         {
