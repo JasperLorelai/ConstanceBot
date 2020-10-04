@@ -34,6 +34,7 @@ client.ms = require("ms");
 client.formData = require("form-data");
 client.colorConvert = require("color-convert");
 client.sha1 = require("sha1");
+client.md5 = require("md5");
 
 // Connect Util and Config.
 client.util.config = client.config;
