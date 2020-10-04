@@ -27,7 +27,7 @@ module.exports = {
         mhap: {
             id: "419628763102314527",
             hostname: "play.mhaprodigy.uk",
-            invite: "http://mhaprodigy.uk/discord",
+            invite: "https://mhaprodigy.uk/discord",
             roles: {
                 unverified: "421219080008368128",
                 verified: "419654978022539285",
@@ -109,10 +109,10 @@ module.exports = {
         },
         trello: "https://api.trello.com/1/",
         discordAPI: {
-            users: "https://discordapp.com/api/users/@me",
-            oauth2: "https://discordapp.com/api/oauth2/"
+            users: "https://discord.com/api/users/@me",
+            oauth2: "https://discord.com/api/oauth2/"
         },
-        mhap: "http://mhaprodigy.uk/",
+        mhap: "https://mhaprodigy.uk/",
         joke: "https://icanhazdadjoke.com/"
     },
     vcText: [
