@@ -121,7 +121,6 @@ client.on("messageReactionAdd", async (r, u) => {
         const embed = util.getEmbeds(r.message)[0];
         if (embed.hexColor === config.color.poll && embed.footer.text.startsWith("Unique reactions | ")) {
             for (const reaction of r.message.reactions.cache.values()) {
-                console.log(r.emoji.toString() === reaction.emoji.toString());
                 if (r.emoji.toString() === reaction.emoji.toString()) continue;
                 await reaction.users.remove(u);
             }
