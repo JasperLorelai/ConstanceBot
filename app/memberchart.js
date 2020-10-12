@@ -6,5 +6,5 @@ module.exports = async (request, response, client) => {
     }
     if (gist.toLowerCase() === "whatgistid") client.memberCount = process.env.MEMBER_TRAFFIC;
     else if (!gist.includes(".")) client.memberCount = gist;
-    response.sendFile("/views/memberchartView/index.html", {root: "."});
+    response.sendFile("/views/memberchart/indexFile.html", {root: "."});
 };

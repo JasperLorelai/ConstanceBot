@@ -29,7 +29,10 @@ module.exports = async (request, response, client) => {
                 const body = await client.fetch(gist, {headers: {Accept: "application/vnd.github.v3+json"}}).then(y => y.json());
                 let data;
                 try {
-                    data = JSON.parse(body.files["memberTrafficData.json"].content);
+                    const files = body.files;
+                    const fileNames = Object.keys(files);
+                    const firstFile = body.files[fileNames[0]];
+                    data = await client.fetch(firstFile["raw_url"]).then(y => y.json());
                 }
                 catch (e) {
                     response.json({});
