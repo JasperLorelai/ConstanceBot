@@ -80,6 +80,10 @@ app.get("/:route", (request, response) => {
     if (client.app.has(route)) client.app.get(route)(request, response, client);
     else response.end();
 });
+app.get("/memberchart/:gist", (request, response) => {
+    client.webserver = request.protocol + "://" + request.hostname;
+    client.app.get("memberchart")(request, response, client);
+});
 
 
 

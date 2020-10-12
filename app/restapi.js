@@ -25,7 +25,7 @@ module.exports = async (request, response, client) => {
                 client.minecraft = value;
                 break;
             case "getMemberChart":
-                const gist = config.urls.github + "gists/" + process.env.MEMBER_TRAFFIC;
+                const gist = config.urls.github + "gists/" + client.memberCount;
                 const body = await client.fetch(gist, {headers: {Accept: "application/vnd.github.v3+json"}}).then(y => y.json());
                 let data;
                 try {
