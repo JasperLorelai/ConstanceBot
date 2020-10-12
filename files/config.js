@@ -113,7 +113,8 @@ module.exports = {
             oauth2: "https://discord.com/api/oauth2/"
         },
         mhap: "https://mhaprodigy.uk/",
-        joke: "https://icanhazdadjoke.com/"
+        joke: "https://icanhazdadjoke.com/",
+        github: "https://api.github.com/"
     },
     vcText: [
         {
