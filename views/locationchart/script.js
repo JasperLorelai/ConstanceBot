@@ -20,7 +20,7 @@ AmCharts.makeChart("chart", {
             "id": "Location",
             "size": 18,
             "tabIndex": 0,
-            "text": "Location Pie Chart (18th October 2020)"
+            "text": "Geo Location Pie Chart (18th October 2020)"
         }
     ],
     "dataProvider": [
