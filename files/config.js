@@ -49,8 +49,32 @@ module.exports = {
                 archive: "619340319418220574"
             },
             messages: {
-                rules: "550735939257892865",
-                home: "673629257834037285"
+                info: "673629257834037285",
+                rules: "550735939257892865"
+            },
+            info: {
+                getText(config) {
+                    const data = config.guildData.mhap;
+                    const {roles, hostname} = data;
+                    const url = config.urls.mhap;
+                    return config.util.embed("My Hero Academia Prodigy - Information")
+                        .addField("Basic Information",
+                            "**IP:** `" + hostname + "`\n" +
+                            "**Version:** Release 1.13.2\n" +
+                            "**Discord Invite:** " + url + "discord\n" +
+                            "**Trello Board:** " + url + "trello")
+                        .addField("Forms",
+                            "**Would you like suggest something?** [(Click here)](" + url + "suggest)\n" +
+                            "**Need support?** [(Click here)](" + url + "support)\n" +
+                            "**Would you like to apply for staff?** [(Click here)](" + url + "apply)")
+                        .addField("Authentication","🔞 - **NSFW Authentication** - *This authentication is here to warn the recipient to not open the channel at the office or near young children because the channels it will reveal after accepting contain sexual or repulsive content.*\n" +
+                            "React with the displayed reaction to toggle access to the NSFW channel section.")
+                        .addField("Toggle Pingable Roles",
+                            "📦 - <@&" + roles.polls + "> - If you have this role, you will be pinged whenever a poll is up.\n" +
+                            "📆 - <@&" + roles.events + "> - If you have this role, you will be pinged whenever an envent is announced.\n" +
+                            "📰 - <@&" + roles.changelog + "> - If you have this role, you will be pinged whenever a changelog is released.")
+                },
+                reactions: ["🔞", "📦", "📆", "📰"]
             }
         },
         main: {
@@ -168,31 +192,6 @@ module.exports = {
             ];
         }
         return [];
-    },
-    getHomeEmbed() {
-        const roles = this.guildData.mhap.roles;
-        const {urls} = this;
-        return this.util.embed("My Hero Academia Prodigy - Information")
-            .addField("Basic Information",
-                "**IP:** `" + this.guildData.mhap.hostname + "`\n" +
-                "**Version:** Release 1.13.2\n" +
-                "**Discord Invite:** " + urls.mhap + "discord\n" +
-                "**Trello Board:** " + urls.mhap + "trello")
-            .addField("Forms",
-                "**Would you like suggest something?** [(Click here)](" + urls.mhap + "suggest)\n" +
-                "**Need support?** [(Click here)](" + urls.mhap + "support)\n" +
-                "**Would you like to apply for staff?** [(Click here)](" + urls.mhap + "apply)")
-            .addField("Authentication","🔞 - **NSFW Authentication** - *This authentication is here to warn the recipient to not open the channel at the office or near young children because the channels it will reveal after accepting contain sexual or repulsive content.*\nReact with the displayed reaction to toggle access to the NSFW channel section.")
-            .addField("Toggle Pingable Roles",
-                "📦 - <@&" + roles.polls + "> - If you have this role, you will be pinged whenever a poll is up.\n" +
-                "📆 - <@&" + roles.events + "> - If you have this role, you will be pinged whenever an envent is announced.\n" +
-                "📰 - <@&" + roles.changelog + "> - If you have this role, you will be pinged whenever a changelog is released.\n")
-    },
-    async reactHomeEmbed(message) {
-        await message.react("🔞");
-        await message.react("📦");
-        await message.react("📆");
-        await message.react("📰");
     },
     getGuildData(id) {
         for (const guildKey of Object.keys(this.guildData)) {
