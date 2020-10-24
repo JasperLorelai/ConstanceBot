@@ -20,17 +20,10 @@ module.exports = {
     },
     log(guild, funct) {
         if (!guild) return;
-        const mainGuild = this.config.getMainGuild();
         const guildData = this.config.getGuildData(guild.id);
-        if (!guildData) {
-            if (mainGuild) mainGuild.channels.resolve(this.config.guildData.main.channels.globalLogs).send("Guild `" + guild.id + "` isn't mapped in the configuration guilds.");
-            return;
-        }
+        if (!guildData) return;
+
         const channel = guildData.channels && guildData.channels.logs ? guild.channels.resolve(guildData.channels.logs) : guild.channels.cache.find(c => c.name === "logs");
-
-        // TODO: Remove this. This is just temporary global logs to help find conflicts.
-        if (guild.id !== this.config.guildData.lorelai.id && mainGuild) mainGuild.channels.resolve(this.config.guildData.main.channels.globalLogs).send("`" + guild.id + (channel ? ": " + channel.toString() : "") + "` **" + guild.name + "**", funct(new this.config.Discord.MessageEmbed().setTimestamp(new Date())));
-
         if (!channel) return;
         // Let the dev make changes against this embed before sending.
         channel.send(funct(new this.config.Discord.MessageEmbed().setTimestamp(new Date())));
@@ -109,7 +102,7 @@ module.exports = {
     },
     findUser(find) {
         const client = this.config.getClient();
-        return client.users.cache.find(u => find === u.id || find === u.username || find.substring(2, find.length - 1) === u.id || find.substring(3, find.length - 1) === u.id || u.username.toLowerCase().includes(find.toLowerCase()));
+        return client["users"].cache.find(u => find === u.id || find === u.username || find.substring(2, find.length - 1) === u.id || find.substring(3, find.length - 1) === u.id || u.username.toLowerCase().includes(find.toLowerCase()));
     },
     findRole(find, guild) {
         return guild.roles.cache.filter(r => r.id !== guild.id).find(r => find === r.id || find.substring(3, find.length - 1) === r.id || find.toLowerCase() === r.name.toLowerCase() || r.name.toLowerCase().includes(find.toLowerCase()));
