@@ -119,11 +119,31 @@ module.exports = {
             id: "769314080972341268",
             invite: "https://discord.gg/fwHphNx",
             roles: {
-                postulant: "769317731082174464"
+                postulant: "769317731082174464",
+                polls: "769350123821596694"
             },
             channels: {
                 logs: "769350351223652373",
+                info: "769533988276011028",
                 pedestal: "769336500948172840"
+            },
+            messages: {
+                info: "769686788330881034"
+            },
+            info: {
+                getText(config) {
+                    const data = config.guildData.cctwc;
+                    const urls = config.urls.cctwc;
+                    return config.util.embed("Conquest Carnival: Two Worlds Collide - Server Information")
+                        .addField("Basic Information",
+                            "**Discord Invite:** " + data.invite + "\n" +
+                            "**Please support me on ko-fi:** " + urls.kofi + "\n" +
+                            "**Webnovel:** " + urls.webnovel)
+                        .addField("Toggle Pingable Roles",
+                            "📦 - <@&" + data.roles.polls + "> - If you have this role, you will be pinged whenever a poll is up."
+                        );
+                },
+                reactions: ["📦"]
             }
         }
     },
