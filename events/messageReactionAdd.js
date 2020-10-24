@@ -130,6 +130,7 @@ client.on("messageReactionAdd", async (r, u) => {
     // Per message handling.
     const mhapData = config.guildData.mhap;
     const nlData = config.guildData.nl;
+    const cctwcData = config.guildData.cctwc;
     const member = await guild.members.resolve(u.id);
     if (u.id === client.user.id) return;
     switch (r.message.id) {
@@ -184,6 +185,12 @@ client.on("messageReactionAdd", async (r, u) => {
         case nlData.messages.notify:
             if (r.emoji.toString() !== "👋") return;
             await guild.members.resolve(u.id).roles.add(nlData.roles.notify);
+            break;
+
+        // Role toggle (CCTWC)
+        case cctwcData.messages.info:
+            if (r.emoji.toString() !== "📦") return;
+            await guild.members.resolve(u.id).roles.add(cctwcData.roles.polls);
             break;
     }
 });

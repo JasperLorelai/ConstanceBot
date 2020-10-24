@@ -12,6 +12,7 @@ client.on("messageReactionRemove", async (r, u) => {
     if (u.id === client.user.id) return;
     const mhapData = config.guildData.mhap;
     const nlData = config.guildData.nl;
+    const cctwcData = config.guildData.cctwc;
     const member = await guild.members.resolve(u.id);
     switch (r.message.id) {
         // Role toggles (MHAP)
@@ -40,6 +41,12 @@ client.on("messageReactionRemove", async (r, u) => {
         case nlData.messages.notify:
             if (r.emoji.toString() !== "👋") return;
             await guild.members.resolve(u.id).roles.remove(nlData.roles.notify);
+            break;
+
+        // Role toggle (CCTWC)
+        case cctwcData.messages.info:
+            if (r.emoji.toString() !== "📦") return;
+            await guild.members.resolve(u.id).roles.remove(cctwcData.roles.polls);
             break;
     }
 });
