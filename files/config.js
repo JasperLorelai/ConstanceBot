@@ -89,6 +89,17 @@ module.exports = {
             messages: {
                 notify: "709955815213236225"
             }
+        },
+        cctwc: {
+            id: "769314080972341268",
+            invite: "https://discord.gg/fwHphNx",
+            roles: {
+                postulant: "769317731082174464"
+            },
+            channels: {
+                logs: "769350351223652373",
+                pedestal: "769336500948172840"
+            }
         }
     },
     trello: {
@@ -114,7 +125,11 @@ module.exports = {
         },
         mhap: "https://mhaprodigy.uk/",
         joke: "https://icanhazdadjoke.com/",
-        github: "https://api.github.com/"
+        github: "https://api.github.com/",
+        cctwc: {
+            kofi: "https://ko-fi.com/misterflare",
+            webnovel: "https://www.webnovel.com/book/conquest-carnival-two-worlds-collide_18206343405701805"
+        }
     },
     vcText: [
         {
@@ -140,7 +155,7 @@ module.exports = {
         return this.getMainGuild().channels.resolve(this.guildData.main.channels.bot);
     },
     getMainGuild() {
-        return this.getClient().guilds.resolve(this.guildData.main.id);
+        return this.getClient()["guilds"].resolve(this.guildData.main.id);
     },
     getOverwrites(type, everyoneRole) {
         if (type === "mhapDefault") {
