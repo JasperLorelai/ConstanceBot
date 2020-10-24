@@ -119,7 +119,7 @@ client.on("messageReactionAdd", async (r, u) => {
     if (r.message.author.id === client.user.id) {
         if (u.id === client.user.id) return;
         const embed = util.getEmbeds(r.message)[0];
-        if (embed.hexColor === config.color.poll && embed.footer.text.startsWith("Unique reactions | ")) {
+        if (embed.footer.text.startsWith("Unique reactions | ")) {
             for (const reaction of r.message.reactions.cache.values()) {
                 if (r.emoji.toString() === reaction.emoji.toString()) continue;
                 await reaction.users.remove(u);
