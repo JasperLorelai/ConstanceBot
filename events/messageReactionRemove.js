@@ -15,22 +15,25 @@ client.on("messageReactionRemove", async (r, u) => {
     const member = await guild.members.resolve(u.id);
     switch (r.message.id) {
         // Role toggles (MHAP)
-        case mhapData.messages.home:
+        case mhapData.messages.info:
             const roles = mhapData.roles;
+            let role;
             switch (r.emoji.toString()) {
                 case "🔞":
-                    member.roles.remove(roles.nsfw);
+                    role = roles.nsfw;
                     break;
                 case "📦":
-                    member.roles.remove(roles.polls);
+                    role = roles.polls;
                     break;
                 case "📆":
-                    member.roles.remove(roles.events);
+                    role = roles.events;
                     break;
                 case "📰":
-                    member.roles.remove(roles.changelog);
+                    role = roles.changelog;
                     break;
             }
+            if (!role) break;
+            await member.roles.remove(role);
             break;
 
         // Role toggles (Nl)

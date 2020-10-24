@@ -134,7 +134,7 @@ client.on("messageReactionAdd", async (r, u) => {
     if (u.id === client.user.id) return;
     switch (r.message.id) {
         // Rule accept.
-        case mhapData.messages.rules:
+        case mhapData.messages.rules: {
             if (r.emoji.toString() !== "✅") return;
             let roles = mhapData.roles;
             if (member.roles.cache.has(roles.verified)) return;
@@ -155,25 +155,30 @@ client.on("messageReactionAdd", async (r, u) => {
             db[mhap].welcomer[u.id] = msg.id;
             await keyv.set("guilds", db);
             break;
+        }
 
         // Role toggle (MHAP)
-        case mhapData.messages.home:
-            roles = mhapData.roles;
+        case mhapData.messages.info: {
+            const roles = mhapData.roles;
+            let role;
             switch (r.emoji.toString()) {
                 case "🔞":
-                    member.roles.add(roles.nsfw);
+                    role = roles.nsfw;
                     break;
                 case "📦":
-                    member.roles.add(roles.polls);
+                    role = roles.polls;
                     break;
                 case "📆":
-                    member.roles.add(roles.events);
+                    role = roles.events;
                     break;
                 case "📰":
-                    member.roles.add(roles.changelog);
+                    role = roles.changelog;
                     break;
             }
+            if (!role) break;
+            member.roles.add(role);
             break;
+        }
 
         // Role toggle (NL)
         case nlData.messages.notify:
