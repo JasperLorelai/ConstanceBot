@@ -17,7 +17,7 @@ client.on("messageUpdate", async (oldMessage, newMessage) => {
             .setTitle("Message Edited")
             .setDescription(channel.toString() + " [\(Jump\)](" + newMessage.url + ")")
             .addField("Before", oldMessage ? oldMessage.content : "Error: The old content wasn't recorded because it was from a previous session of the bot.", false)
-            .addField("Now", newMessage.content, false)
+            .addField("Now", newMessage.content || "No content.", false)
             .setFooter("Message ID: " + newMessage.id));
     }
 
