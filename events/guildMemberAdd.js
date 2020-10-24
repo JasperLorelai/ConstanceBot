@@ -59,8 +59,8 @@ client.on("guildMemberAdd", async member => {
             const urls = config.urls.cctwc;
             await member.roles.add(cctwcData.roles.postulant);
             await member.send(util.embed("Welcome!" , "Welcome to **" + guild.name + "**!\n\n" +
-                "Here, you’ll be able to keep track of my hectic upload schedule and talk to fellow readers about the story!\n\n" +
-                "You may feel free to speak your mind, but be sure to take a gander at the laws of the land to ensure you carry yourself in a respectable manner.\n\n" +
+                "> Here, you’ll be able to keep track of my hectic upload schedule and talk to fellow readers about the story!\n> \n" +
+                "> You may feel free to speak your mind, but be sure to take a gander at the laws of the land to ensure you carry yourself in a respectable manner.\n\n" +
                 "**Discord Invite:** " + cctwcData.invite + "\n" +
                 "**Please support me on ko-fi:** " + urls.kofi + "\n" +
                 "**Webnovel:** " + urls.webnovel

@@ -58,21 +58,21 @@ module.exports = {
                     const {roles, hostname} = data;
                     const url = config.urls.mhap;
                     return config.util.embed("My Hero Academia Prodigy - Information")
-                        .addField("Basic Information",
-                            "**IP:** `" + hostname + "`\n" +
-                            "**Version:** Release 1.13.2\n" +
-                            "**Discord Invite:** " + url + "discord\n" +
-                            "**Trello Board:** " + url + "trello")
-                        .addField("Forms",
-                            "**Would you like suggest something?** [(Click here)](" + url + "suggest)\n" +
-                            "**Need support?** [(Click here)](" + url + "support)\n" +
-                            "**Would you like to apply for staff?** [(Click here)](" + url + "apply)")
-                        .addField("Authentication","🔞 - **NSFW Authentication** - *This authentication is here to warn the recipient to not open the channel at the office or near young children because the channels it will reveal after accepting contain sexual or repulsive content.*\n" +
+                        .addField("Basic Information:",
+                            "> **IP:** `" + hostname + "`\n" +
+                            "> **Version:** `Release 1.13.2`\n" +
+                            "> **Discord Invite:** " + url + "discord\n" +
+                            "> **Trello Board:** " + url + "trello")
+                        .addField("Forms:",
+                            "> Would you like suggest something? [(Click here)](" + url + "suggest)\n" +
+                            "> Need support? [(Click here)](" + url + "support)\n" +
+                            "> Would you like to apply for staff? [(Click here)](" + url + "apply)")
+                        .addField("🔞 - NSFW Authentication:","> *This authentication is here to warn the recipient to not open the channel at the office or near young children because the channels it will reveal after accepting contain sexual or repulsive content.*\n" +
                             "React with the displayed reaction to toggle access to the NSFW channel section.")
-                        .addField("Toggle Pingable Roles",
-                            "📦 - <@&" + roles.polls + "> - If you have this role, you will be pinged whenever a poll is up.\n" +
-                            "📆 - <@&" + roles.events + "> - If you have this role, you will be pinged whenever an envent is announced.\n" +
-                            "📰 - <@&" + roles.changelog + "> - If you have this role, you will be pinged whenever a changelog is released.")
+                        .addField("Toggle Pingable Roles:",
+                            "> 📦 <@&" + roles.polls + "> - If you have this role, you will be pinged whenever a poll is up.\n" +
+                            "> 📆 <@&" + roles.events + "> - If you have this role, you will be pinged whenever an envent is announced.\n" +
+                            "> 📰 <@&" + roles.changelog + "> - If you have this role, you will be pinged whenever a changelog is released.")
                 },
                 reactions: ["🔞", "📦", "📆", "📰"]
             }
@@ -135,12 +135,12 @@ module.exports = {
                     const data = config.guildData.cctwc;
                     const urls = config.urls.cctwc;
                     return config.util.embed("Conquest Carnival: Two Worlds Collide - Server Information")
-                        .addField("Basic Information",
-                            "**Discord Invite:** " + data.invite + "\n" +
-                            "**Please support me on ko-fi:** " + urls.kofi + "\n" +
-                            "**Webnovel:** " + urls.webnovel)
-                        .addField("Toggle Pingable Roles",
-                            "📦 - <@&" + data.roles.polls + "> - If you have this role, you will be pinged whenever a poll is up."
+                        .addField("Basic Information:",
+                            "> **Discord Invite:** " + data.invite + "\n" +
+                            "> **Please support me on ko-fi:** " + urls.kofi + "\n" +
+                            "> **Webnovel:** " + urls.webnovel)
+                        .addField("Toggle Pingable Roles:",
+                            "> 📦 <@&" + data.roles.polls + "> - If you have this role, you will be pinged whenever a poll is up."
                         );
                 },
                 reactions: ["📦"]
