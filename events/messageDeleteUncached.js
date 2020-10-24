@@ -7,7 +7,7 @@ client.on("messageDeleteUncached", async event => {
 
     const nl = config.guildData.nl.channels;
     // Handle blacklists.
-    if (![config.guildData.mhap.categories.olympus, config.guildData.mhap.categories.archive].includes(channel.parentID) &&
+    if (![config.guildData.mhap.categories.olympus, config.guildData.mhap.categories.archive, config.guildData.cctwc.categories.staff].includes(channel.parentID) &&
         ![config.guildData.main.channels.bot, nl.triumvirate, nl.leadership, nl.interview2, nl.interview].includes(channel.id)
     ) {
         util.log(guild, embed => {

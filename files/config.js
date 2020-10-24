@@ -127,6 +127,9 @@ module.exports = {
                 info: "769533988276011028",
                 pedestal: "769336500948172840"
             },
+            categories: {
+                staff: "769347262069342248"
+            },
             messages: {
                 info: "769686788330881034"
             },
