@@ -15,6 +15,7 @@ module.exports = {
         }
         const activity = member.presence && member.presence.activity ? member.presence.activity : null;
         const {user} = member;
+        const flags = user.flags.toArray().map(flag => "`" + flag.replace(/_/g, " ").toTitleCase() + "`");
         const roles = member.roles && member.roles.cache ? member.roles.cache.filter(r => r.id !== guild.id) : null;
         const linkedDB = await Client.keyv.get("minecraft") || {};
         let desc = (user.bot ? "**Is BOT:** true" : "") +
@@ -26,6 +27,7 @@ module.exports = {
             (member.nickname ? "\n**Nickname:** " + member.nickname : "") +
             "\n**Status:** " + member.presence.status.toFormalCase() +
             (activity ? "\n**Presence:** " + activity.name : "") +
+            (flags.length ? "\n**Flags:** " + flags.join(", ") : "") +
             (roles && roles.size ? "\n**Roles (" + roles.size + "):** " + roles.array().join(", ") : "");
         if (Config.guildData.mhap.id === guild.id) desc += "\n**Linked MC UUID:** `" + (linkedDB && linkedDB[member.id] ? linkedDB[member.id] : "Not linked") + "`";
         await channel.send(author.toString(), Util.embed("User info for: " + user.username, desc).setThumbnail(user.displayAvatarURL({format: "png"})));
