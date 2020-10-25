@@ -22,7 +22,7 @@ module.exports = {
             const msg = await channel.send(author.toString(), Util.embed("Channel Purge", "**Messages found:** " + (num > apiLimit ? "limited to `" + apiLimit + "`" : "`" + num + "`") + "\n\n**React with:\n🗑 - to delete currently selected.\n😃 - to apply user filter.**", Config.color.yellow));
             await msg.react("🗑");
             await msg.react("😃");
-            const created = new Date().getTime();
+            const created = Date.now();
             const coll = msg.createReactionCollector((r, u) => u.id !== Client.user.id, {time: 30000});
             coll.on("collect", async (r, u) => {
                 await r.users.remove(u);

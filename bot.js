@@ -105,7 +105,7 @@ Client.setInterval(async () => {
                         await keyv.set("guilds", db);
                     }
                     else {
-                        if (new Date().getTime() > muted[mutedUserID]) {
+                        if (Date.now() > muted[mutedUserID]) {
                             await mutedUser.roles.remove(mutedRole);
                             await mutedUser.send(Client.Util.embed(guild.name + " - Mute", "Your mute status has been lifted."));
                             delete db[guild.id].muted[mutedUserID];

@@ -21,7 +21,7 @@ module.exports = {
             const msg = await channel.send(Util.embed("Auto Responses", (await getResponses() || "No responses in DB.") + "\n\n**React with:\n➖ - to remove a response.\n➕ - to add a new response.**", Config.color.yellow));
             await msg.react("➖");
             await msg.react("➕");
-            const created = new Date().getTime();
+            const created = Date.now();
             let idle = true;
             const coll = msg.createReactionCollector((r, u) => u.id !== msg.Client.user.id, {time: 90000});
             coll.on("collect", async (r, u) => {

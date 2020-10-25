@@ -69,7 +69,7 @@ module.exports = {
             if (!db) db = {};
             if (!db[guild.id]) db[guild.id] = {};
             if (!db[guild.id].muted) db[guild.id].muted = {};
-            db[guild.id].muted[member.id] = new Date().getTime() + time;
+            db[guild.id].muted[member.id] = Date.now() + time;
             await keyv.set("guilds", db);
         }
         catch(e) {

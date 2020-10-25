@@ -47,7 +47,7 @@ module.exports = {
                 if (!poll.emoji) poll.emoji = [];
                 if (!poll.rolePing) poll.rolePing = false;
                 if (!poll.unique) poll.unique = false;
-                if (!poll.draftID) poll.draftID = new Date().getTime();
+                if (!poll.draftID) poll.draftID = Date.now();
 
                 const embed = Util.embed("Poll Creator", poll.text, Config.color.yellow).addField("Help", getHelp(poll));
                 if (poll.emoji && poll.emoji.length > 0) embed.addField("Emoji", poll.emoji.join(", "));
@@ -61,7 +61,7 @@ module.exports = {
                 await msg.react(Client.EmojiMap["1"]);
                 await msg.react("✅");
                 await msg.react("❌");
-                const created = new Date().getTime();
+                const created = Date.now();
                 const collector = msg.createReactionCollector((r, u) => u.id !== Client.user.id, {time: 300000});
                 collector.on("collect", async (r, u) => {
                     await r.users.remove(u);
@@ -164,7 +164,7 @@ module.exports = {
 
             // Attempt to recover polls.
             let polls = await keyv.get("polls." + author.id);
-            if (polls) polls = polls.filter(poll => poll.draftID + 172800000 > new Date().getTime());
+            if (polls) polls = polls.filter(poll => poll.draftID + 172800000 > Date.now());
             let msg;
             if (polls && polls.length > 0) {
                 await keyv.set("polls." + author.id, polls);

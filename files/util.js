@@ -176,7 +176,7 @@ module.exports = {
         });
     },
     collTtl(coll, created) {
-        return coll.options.time - (new Date().getTime() - created);
+        return coll.options.time - (Date.now() - created);
     },
     getRoleByPerm(member, perm) {
         return member.roles.cache.array()
