@@ -20,7 +20,7 @@ module.exports = {
         const desc = "**Name:** " + guild.name + " `(" + guild.nameAcronym + ")`" +
             "\n**Guild ID:** `" + guild.id + "`" +
             "\n**Max members:** " + (await guild.fetch()).maximumMembers +
-            "\n**Created at:** `" + guild.createdAt.toLocaleString() + "`" +
+            "\n**Created at:** `" + guild.createdAt.toLocalFormat() + "`" +
             "\n**Member count:** " + guild.memberCount +
             "\n**Guild owner:** " + guild.owner.toString() +
             "\n**Region:** `" + guild.region + "`" +

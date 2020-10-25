@@ -10,7 +10,7 @@ Client.on("guildMemberAdd", async member => {
         .setDescription("New member count: **" + guild.memberCount + "**" +
             "\n\n**Mention:** " + member.toString() +
             "\n**Join Position:** " + Util.getJoinPosition(member) +
-            "\n**Registered at:** `" + user.createdAt.toLocaleString() + "`")
+            "\n**Registered at:** `" + user.createdAt.toLocalFormat() + "`")
     );
 
     switch (guild.id) {

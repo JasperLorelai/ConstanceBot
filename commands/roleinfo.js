@@ -13,7 +13,7 @@ module.exports = {
             await channel.send(author.toString(), Util.embed("Role Info", "Role not found!", Config.color.red));
             return;
         }
-        const desc = "**Role Position:** " + role.position + "\n**Name:** " + role.name + "\n**ID:** `<@&" + role.id + ">`" + "\n**Members:** " + role.members.map(m => m.user.tag).length + "\n**Created at:** " + role.createdAt.toLocaleString() + "\n**Hoistable:** " + role.hoist + "\n**Mentionable:** " + role.mentionable + "\n**Menitoned:** " + role.toString() + "\n**Color:** `" + role.hexColor + "`";
+        const desc = "**Role Position:** " + role.position + "\n**Name:** " + role.name + "\n**ID:** `<@&" + role.id + ">`" + "\n**Members:** " + role.members.map(m => m.user.tag).length + "\n**Created at:** " + role.createdAt.toLocalFormat() + "\n**Hoistable:** " + role.hoist + "\n**Mentionable:** " + role.mentionable + "\n**Menitoned:** " + role.toString() + "\n**Color:** `" + role.hexColor + "`";
         const canvas = Client.canvas.createCanvas(64, 64);
         const ctx = canvas.getContext("2d");
         ctx.fillStyle = role.hexColor;

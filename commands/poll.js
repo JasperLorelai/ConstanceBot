@@ -168,7 +168,7 @@ module.exports = {
             let msg;
             if (polls && polls.length > 0) {
                 await keyv.set("polls." + author.id, polls);
-                msg = await channel.send(author.toString(), Util.embed("Poll Drafts", "**0**. New poll.\n" + polls.map((poll, i) => "**" + (i + 1) + "**. `" + new Date(poll.draftID).toLocaleString() + "`").join("\n"), Config.color.yellow));
+                msg = await channel.send(author.toString(), Util.embed("Poll Drafts", "**0**. New poll.\n" + polls.map((poll, i) => "**" + (i + 1) + "**. `" + new Date(poll.draftID).toLocalFormat() + "`").join("\n"), Config.color.yellow));
                 const collector = channel.createMessageCollector(m => m.author.id !== Client.user.id, {time: 10000});
                 collector.on("collect", async m => {
                     const index = parseInt(m.content);

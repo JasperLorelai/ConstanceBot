@@ -21,9 +21,9 @@ module.exports = {
         let desc = (user.bot ? "**Is BOT:** true" : "") +
             "\n**Mention:** " + member.toString() +
             "\n**ID:** `<@" + member.id + ">`" +
-            "\n**Joined at:** `" + member.joinedAt.toLocaleString() + "`" +
+            "\n**Joined at:** `" + member.joinedAt.toLocalFormat() + "`" +
             "\n**Join Position:** " + Util.getJoinPosition(member) +
-            "\n**Registered at:** `" + user.createdAt.toLocaleString() + "`" +
+            "\n**Registered at:** `" + user.createdAt.toLocalFormat() + "`" +
             (member.nickname ? "\n**Nickname:** " + member.nickname : "") +
             "\n**Status:** " + member.presence.status.toFormalCase() +
             (activity ? "\n**Presence:** " + activity.name : "") +

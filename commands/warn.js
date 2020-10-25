@@ -21,7 +21,7 @@ module.exports = {
             if (!db[guild.id]) db[guild.id] = {};
             if (!db[guild.id].warns) db[guild.id].warns = {};
             if (!db[guild.id].warns[member.id]) db[guild.id].warns[member.id] = [];
-            db[guild.id].warns[member.id].push({date: new Date().toLocaleString(), mod: author.id, reason: reason});
+            db[guild.id].warns[member.id].push({date: new Date().toLocalFormat(), mod: author.id, reason: reason});
             await keyv.set("guilds", db);
             channel.send(Util.embed("Warn", "**User " + member.toString() + " has been warned by " + author.toString() + (reason ? " for:** " + reason : ".**")));
             member.send(Util.embed(guild.name + " - Warn", "**You have been warned by " + author.toString() + (reason ? " for:** " + reason : ".**"), Config.color.red));

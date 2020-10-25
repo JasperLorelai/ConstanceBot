@@ -10,7 +10,7 @@ Client.on("guildMemberRemove", async member => {
         .setFooter("Member ID: " + user.id)
         .setDescription("New member count: **" + guild.memberCount + "**" +
             "\n\n**Mention:** " + member.toString() +
-            "\n**Join Date:** `" + member.joinedAt.toLocaleString() + "`" +
+            "\n**Join Date:** `" + member.joinedAt.toLocalFormat() + "`" +
             (member.nickname ? "\n**Had Nickname:** " + member.nickname : "") +
             (roles && roles.size ? "\n**Roles (" + roles.size + "):** " + roles.array().join(", ") : "")
         )
