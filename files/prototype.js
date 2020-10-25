@@ -1,5 +1,4 @@
 module.exports = (Discord) => {
-    // Creating some base methods
     String.prototype.toFormalCase = function() {
         return this.charAt(0).toUpperCase() + this.substr(1).toLowerCase();
     };
@@ -19,6 +18,9 @@ module.exports = (Discord) => {
     String.prototype.escapeMarkdown = function() {
         return Discord.Util.escapeMarkdown(this);
     }
+    Date.prototype.toLocalFormat = function() {
+        return this.getDate() + "/" + (this.getMonth() + 1) + "/" + this.getFullYear() + ", " + this.getHours() + ":" + this.getMinutes() + ":" + this.getSeconds();
+    };
     Discord.MessageEmbed.prototype.setColorRandom = function() {
         return this.setColor(Math.floor(Math.random()*16777215));
     };
