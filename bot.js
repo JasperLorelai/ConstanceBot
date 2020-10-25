@@ -43,7 +43,7 @@ Client.Config.Util = Client.Util;
 Client.Config.Discord = Discord;
 Client.minecraftChannels = [];
 
-Client.login(process.env.BOT_TOKEN).catch(e => console.log(e));
+Client.login().catch(e => console.log(e));
 module.exports = Client;
 
 const {keyv, fs} = Client;
