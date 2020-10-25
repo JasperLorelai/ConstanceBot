@@ -39,7 +39,7 @@ Client.on("message", async message => {
     if (guild && command.guildWhitelist && !command.guildWhitelist.includes(guild.id)) return;
 
     // This disables command execution. What sets the channel is in Util -> setMCChannel
-    if (Client.minecraft && channel.id === Client.minecraft) return;
+    if (Client.minecraftChannels.includes(channel.id)) return;
 
     if (!await Util.hasPerm(author, guild, command.perm)) {
         await channel.send(author.toString(), Util.embed("No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + command.perm + "`", Config.color.red));

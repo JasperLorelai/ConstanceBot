@@ -41,6 +41,7 @@ Client.Util.Config = Client.Config;
 Client.Config.Util = Client.Util;
 
 Client.Config.Discord = Discord;
+Client.minecraftChannels = [];
 
 Client.login(process.env.BOT_TOKEN).catch(e => console.log(e));
 module.exports = Client;

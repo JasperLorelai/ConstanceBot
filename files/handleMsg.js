@@ -66,6 +66,12 @@ module.exports = async message => {
         return;
     }
 
+    // Handle Minecraft channels.
+    if (author.id === Client.user.id) {
+        if (content === "✅ The server is now online.") Client.minecraftChannels.push(channel.id);
+        if (content === "❌ The server is now offline.") Client.minecraftChannels = Client.minecraftChannels.filter(e => e !== channel.id);
+    }
+
     // Handle To-Do in main guild.
     if (channel.id === Config.guildData.main.channels.toDolist) {
         if (author.id === Client.user.id || author.bot) return;

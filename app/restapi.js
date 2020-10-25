@@ -19,11 +19,6 @@ module.exports = async (request, response, Client) => {
             case "getMCUsers":
                 response.send(await keyv.get("minecraft") || {});
                 break;
-            case "putMCChannel":
-                response.end();
-                if (!value) return;
-                Client.minecraft = value;
-                break;
             case "getMemberChart":
                 const gist = Config.urls.github + "gists/" + Client.memberCount;
                 const body = await Client.fetch(gist, {headers: {Accept: "application/vnd.github.v3+json"}}).then(y => y.json());
