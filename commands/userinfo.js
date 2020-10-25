@@ -17,7 +17,7 @@ module.exports = {
         const {user} = member;
         const roles = member.roles && member.roles.cache ? member.roles.cache.filter(r => r.id !== guild.id) : null;
         const linkedDB = await Client.keyv.get("minecraft") || {};
-        const desc = (user.bot ? "**Is BOT:** true" : "") +
+        let desc = (user.bot ? "**Is BOT:** true" : "") +
             "\n**Mention:** " + member.toString() +
             "\n**ID:** `<@" + member.id + ">`" +
             "\n**Joined at:** `" + member.joinedAt.toLocaleString() + "`" +
@@ -26,8 +26,8 @@ module.exports = {
             (member.nickname ? "\n**Nickname:** " + member.nickname : "") +
             "\n**Status:** " + member.presence.status.toFormalCase() +
             (activity ? "\n**Presence:** " + activity.name : "") +
-            (roles && roles.size ? "\n**Roles (" + roles.size + "):** " + roles.array().join(", ") : "") +
-            "\n**Linked MC UUID:** `" + (linkedDB && linkedDB[member.id] ? linkedDB[member.id] : "Not linked") + "`";
+            (roles && roles.size ? "\n**Roles (" + roles.size + "):** " + roles.array().join(", ") : "");
+        if (Config.guildData.mhap.id === guild.id) desc += "\n**Linked MC UUID:** `" + (linkedDB && linkedDB[member.id] ? linkedDB[member.id] : "Not linked") + "`";
         await channel.send(author.toString(), Util.embed("User info for: " + user.username, desc).setThumbnail(user.displayAvatarURL({format: "png"})));
     }
 };
