@@ -42,7 +42,8 @@ module.exports = {
                                 break;
                             case "✅":
                                 coll.stop();
-                                messages.each(m => m.delete({reason: "botIntent"}));
+                                if (messages[0]) await messages[0].channel.bulkDelete(messages, true);
+                                messages.filter(e => !e.deleted).each(m => m.delete({reason: "botIntent"}));
                                 break;
                         }
                     });
@@ -82,10 +83,9 @@ module.exports = {
                     await message.delete({reason: "botIntent"});
                 }
                 else {
-                    if (!msg.deleted) {
-                        await msg.reactions.removeAll();
-                        await msg.edit(Util.getEmbeds(msg)[0].setDescription("**Messages found:** " + (num > apiLimit ? "limited to `" + apiLimit + "`" : "`" + num + "`") + "\n\n**Timed out.**").setColor("666666"));
-                    }
+                    if (msg.deleted) return;
+                    await msg.reactions.removeAll();
+                    await msg.edit(Util.getEmbeds(msg)[0].setDescription("**Messages found:** " + (num > apiLimit ? "limited to `" + apiLimit + "`" : "`" + num + "`") + "\n\n**Timed out.**").setColor("666666"));
                 }
             });
         }
