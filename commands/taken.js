@@ -5,10 +5,11 @@ module.exports = {
     aliases: ["characters"],
     guildWhitelist: [require("../files/config").guildData.mhap.id],
     async execute(message) {
-        const {client, channel, author} = message;
-        const {config, util} = client;
-        const chars = (await util.getTrello("cards/" + config.trello.cards.characters)).desc.discordMKD();
-        const msg = await channel.send(author.toString(), util.embed("Canon Character List", (chars.length >= 2000 ? "" : chars)));
-        if (chars.length >= 2000) await util.handlePrompt(msg, chars);
+        const Client = message.client;
+        const {channel, author} = message;
+        const {Config, Util} = Client;
+        const chars = (await Util.getTrello("cards/" + Config.trello.cards.characters)).desc.discordMKD();
+        const msg = await channel.send(author.toString(), Util.embed("Canon Character List", (chars.length >= 2000 ? "" : chars)));
+        if (chars.length >= 2000) await Util.handlePrompt(msg, chars);
     }
 };

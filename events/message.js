@@ -1,11 +1,12 @@
-const client = require("../bot");
-client.on("message", async message => {
+const Client = require("../bot");
+Client.on("message", async message => {
     // Ignore if the event was handled externally.
     if (message.deleted) return;
-    const {content, author, client, guild, channel} = message;
-    const {commands, config, util, handleMsg, keyv} = client;
+    const Client = message.client;
+    const {content, author, guild, channel} = message;
+    const {commands, Config, Util, handleMsg, keyv} = Client;
     let realPrefix = null;
-    let prefix = config.defaultPrefix;
+    let prefix = Config.defaultPrefix;
     if (guild) {
         let db = await keyv.get("guilds");
         if (db && db[guild.id] && db[guild.id].prefix) realPrefix = db[guild.id].prefix;
@@ -38,10 +39,10 @@ client.on("message", async message => {
     if (guild && command.guildWhitelist && !command.guildWhitelist.includes(guild.id)) return;
 
     // This disables command execution. What sets the channel is in Util -> setMCChannel
-    if (client["minecraft"] && channel.id === client["minecraft"]) return;
+    if (Client.minecraft && channel.id === Client.minecraft) return;
 
-    if (!await util.hasPerm(author, guild, command.perm)) {
-        await channel.send(author.toString(), util.embed("No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + command.perm + "`", config.color.red));
+    if (!await Util.hasPerm(author, guild, command.perm)) {
+        await channel.send(author.toString(), Util.embed("No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + command.perm + "`", Config.color.red));
         return;
     }
     // Run command if all required args are specified.

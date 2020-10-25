@@ -1,5 +1,5 @@
-module.exports = async (request, response, client) => {
-    const {util, config, keyv} = client;
+module.exports = async (request, response, Client) => {
+    const {Util, Config, keyv} = Client;
     let db = await keyv.get("minecraft") || {};
 
     if (!request.query.code) {
@@ -10,27 +10,27 @@ module.exports = async (request, response, client) => {
         }
 
         // If uuid was specified, but not the code.
-        const uuid = client.atob(request.query["uuid"]);
-        const user = util.getKeyByValue(db, uuid);
+        const uuid = Client.atob(request.query["uuid"]);
+        const user = Util.getKeyByValue(db, uuid);
         if (user) {
             response.sendFile("/views/discordLinking/clone.html", {root: "."});
             return;
         }
 
-        if (!client.discordLink) client.discordLink = {};
-        client.discordLink[request.sessionID] = request.query["uuid"];
-        response.redirect(config.urls.discordAPI.oauth2 + "authorize?client_id=579759958556672011&redirect_uri=" + encodeURI(client.webserver + "/link") + "&response_type=code&scope=identify");
+        if (!Client.discordLink) Client.discordLink = {};
+        Client.discordLink[request.sessionID] = request.query["uuid"];
+        response.redirect(Config.urls.discordAPI.oauth2 + "authorize?client_id=579759958556672011&redirect_uri=" + encodeURI(Client.webserver + "/link") + "&response_type=code&scope=identify");
         return;
     }
 
     // If the code was found.
     // Safeguard.
-    if (!client.discordLink) {
+    if (!Client.discordLink) {
         request.session.destroy();
         response.sendFile("/views/discordLinking/invalid.html", {root: "."});
         return;
     }
-    const uuid = client.discordLink[request.sessionID];
+    const uuid = Client.discordLink[request.sessionID];
     if (!uuid) {
         request.session.destroy();
         response.sendFile("/views/discordLinking/invalid.html", {root: "."});
@@ -38,10 +38,10 @@ module.exports = async (request, response, client) => {
     }
 
     request.session.destroy();
-    const user = await util.discordAPI(request.query.code, client.webserver + "/link", config.urls.discordAPI.users);
+    const user = await Util.discordAPI(request.query.code, Client.webserver + "/link", Config.urls.discordAPI.users);
     if (user && !user.error) {
         // Save user.
-        db[user.id] = client.atob(uuid);
+        db[user.id] = Client.atob(uuid);
         keyv.set("minecraft", db);
         response.sendFile("/views/discordLinking/linked.html", {root: "."});
     }

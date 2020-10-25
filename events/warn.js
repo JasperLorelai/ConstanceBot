@@ -1,5 +1,5 @@
-const client = require("../bot");
-const {config} = client;
-client.on("warn", info => {
-    config.botLog().send(config.embed("Warning", ">>> " + info, config.color.yellow));
+const Client = require("../bot");
+const {Config, Util} = Client;
+Client.on("warn", info => {
+    Config.botLog().send(Util.embed("Warning", ">>> " + info, Config.color.yellow));
 });

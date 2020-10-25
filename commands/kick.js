@@ -5,25 +5,26 @@ module.exports = {
     guildOnly: true,
     perm: "mod",
     async execute(message, args) {
-        const {client, guild, channel, author} = message;
-        const {config, util} = client;
+        const Client = message.client;
+        const {guild, channel, author} = message;
+        const {Config, Util} = Client;
         try {
-            let member = util.findGuildMember(args[0], guild);
+            let member = Util.findGuildMember(args[0], guild);
             if (!member) {
-                await channel.send(author.toString(), util.embed("Kick Member", "User not found.", config.color.red));
+                await channel.send(author.toString(), Util.embed("Kick Member", "User not found.", Config.color.red));
                 return;
             }
             if (!member.kickable) {
-                await channel.send(author.toString(), util.embed("Kick Member", "Cannot modify that user.", config.color.red));
+                await channel.send(author.toString(), Util.embed("Kick Member", "Cannot modify that user.", Config.color.red));
                 return;
             }
             args.shift();
-            await channel.send(author.toString(), util.embed("Kicked Member", "**" + member.user.username + "** has been kicked from the server by user: " + author.toString() + (args[0] ? "\n**For reason:** " + args.join(" ") : "")));
+            await channel.send(author.toString(), Util.embed("Kicked Member", "**" + member.user.username + "** has been kicked from the server by user: " + author.toString() + (args[0] ? "\n**For reason:** " + args.join(" ") : "")));
             await member.kick(member.user.username + " has been kicked from the server by user: " + author.username + (args[0] ? "(reason: " + args.join(" ") + ")" : ""));
             message.delete({reason: "botIntent"});
         }
         catch(e) {
-            await util.handleError(message, e);
+            await Util.handleError(message, e);
         }
     }
 };

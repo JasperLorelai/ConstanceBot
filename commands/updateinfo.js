@@ -4,14 +4,15 @@ module.exports = {
     guildOnly: true,
     perm: "author",
     async execute(message) {
-        const {client, channel, author, guild} = message;
-        const {util, config} = client;
+        const Client = message.client;
+        const {channel, author, guild} = message;
+        const {Util, Config} = Client;
         try {
             function exit(code) {
-                channel.send(author.toString(), util.embed("Info Updater", "Info was not set up for this guild. (code: " + code + ")", config.color.red));
+                channel.send(author.toString(), Util.embed("Info Updater", "Info was not set up for this guild. (code: " + code + ")", Config.color.red));
             }
 
-            const data = config.getGuildData(guild.id);
+            const data = Config.getGuildData(guild.id);
             if (!data) {
                 exit("`no guild data`");
                 return;
@@ -32,7 +33,7 @@ module.exports = {
             let infoMsgID = data.messages.info;
             if (!infoMsgID) {
                 infoMsgID = (await infoChannel.send("Setting up info...")).id;
-                config.botLog().send(client.author.toString() +", guild `" + guild.id + "` **" + guild.name + "** just created an Info message. Please add its ID to its configuration.");
+                Config.botLog().send(Client.author.toString() +", guild `" + guild.id + "` **" + guild.name + "** just created an Info message. Please add its ID to its configuration.");
             }
 
             const infoMsg = await infoChannel.messages.fetch(infoMsgID);
@@ -47,10 +48,10 @@ module.exports = {
                 return;
             }
 
-            const infoText = infoData.getText(config);
+            const infoText = infoData.getText(Config);
 
             // Check if embeds are similar.
-            let embed = util.getEmbeds(infoMsg);
+            let embed = Util.getEmbeds(infoMsg);
             if (embed) {
                 embed = embed[0];
                 if (embed.description === infoText.description && embed.fields === infoText.fields) {
@@ -64,10 +65,10 @@ module.exports = {
                 await infoMsg.react(r);
             }
 
-            channel.send(author.toString(), util.embed("Info Updater", "Info was updated."));
+            channel.send(author.toString(), Util.embed("Info Updater", "Info was updated."));
         }
         catch(e) {
-            await util.handleError(message, e);
+            await Util.handleError(message, e);
         }
     }
 };

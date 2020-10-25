@@ -6,19 +6,20 @@ module.exports = {
     aliases: ["snap"],
     perm: "mod",
     async execute(message, args) {
-        const {client, guild, channel, author} = message;
-        const {config, util, emojiFile} = client;
+        const Client = message.client;
+        const {guild, channel, author} = message;
+        const {Config, Util, EmojiMap} = Client;
         try {
-            let member = util.findGuildMember(args[0], guild);
+            let member = Util.findGuildMember(args[0], guild);
             if (!member) {
-                await channel.send(author.toString(), util.embed("Ban Member", "User not found.", config.color.red));
+                await channel.send(author.toString(), Util.embed("Ban Member", "User not found.", Config.color.red));
                 return;
             }
             if (!member.bannable) {
-                await channel.send(author.toString(), util.embed("Ban Member", "Cannot modify that user.", config.color.red));
+                await channel.send(author.toString(), Util.embed("Ban Member", "Cannot modify that user.", Config.color.red));
                 return;
             }
-            const msg = await channel.send(author.toString(), util.embed("Ban Member", "Purge messages of how many days?"));
+            const msg = await channel.send(author.toString(), Util.embed("Ban Member", "Purge messages of how many days?"));
             const coll = msg.createReactionCollector((r, u) => u.id !== msg.client.user.id, {time: 10000});
             coll.on("collect", async (r, u) => {
                 await r.users.remove(u);
@@ -28,30 +29,30 @@ module.exports = {
                     case "❌":
                         days = 0;
                         break;
-                    case emojiFile["1"]:
+                    case EmojiMap["1"]:
                         days = 1;
                         break;
-                    case emojiFile["2"]:
+                    case EmojiMap["2"]:
                         days = 2;
                         break;
-                    case emojiFile["3"]:
+                    case EmojiMap["3"]:
                         days = 3;
                         break;
-                    case emojiFile["4"]:
+                    case EmojiMap["4"]:
                         days = 4;
                         break;
-                    case emojiFile["5"]:
+                    case EmojiMap["5"]:
                         days = 5;
                         break;
-                    case emojiFile["6"]:
+                    case EmojiMap["6"]:
                         days = 6;
                         break;
-                    case emojiFile["7"]:
+                    case EmojiMap["7"]:
                         days = 7;
                         break;
                 }
                 args.shift();
-                await channel.send(author.toString(), util.embed("Banned Member", "**" + member.user.username + "** has been banned from the server by user: " + author.toString() + (days > 0 ? "\n**Days:** " + days : "") + (args[0] ? "\n**For reason:** " + args.join(" ") : "")));
+                await channel.send(author.toString(), Util.embed("Banned Member", "**" + member.user.username + "** has been banned from the server by user: " + author.toString() + (days > 0 ? "\n**Days:** " + days : "") + (args[0] ? "\n**For reason:** " + args.join(" ") : "")));
                 await member.ban({
                     days: days < 0 ? 0 : days,
                     reason: member.user.username + " has been banned from the server by user: " + author.username + (args[0] ? "(reason: " + args.join(" ") + ")" : "")
@@ -61,17 +62,17 @@ module.exports = {
             coll.on("end", async () => await msg.delete({reason: "botIntent"}));
             try {
                 await msg.react("❌");
-                await msg.react(emojiFile["1"]);
-                await msg.react(emojiFile["2"]);
-                await msg.react(emojiFile["3"]);
-                await msg.react(emojiFile["4"]);
-                await msg.react(emojiFile["5"]);
-                await msg.react(emojiFile["6"]);
-                await msg.react(emojiFile["7"]);
+                await msg.react(EmojiMap["1"]);
+                await msg.react(EmojiMap["2"]);
+                await msg.react(EmojiMap["3"]);
+                await msg.react(EmojiMap["4"]);
+                await msg.react(EmojiMap["5"]);
+                await msg.react(EmojiMap["6"]);
+                await msg.react(EmojiMap["7"]);
             } catch(e) {}
         }
         catch(e) {
-            await util.handleError(message, e);
+            await Util.handleError(message, e);
         }
     }
 };

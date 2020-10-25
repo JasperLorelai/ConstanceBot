@@ -1,8 +1,8 @@
 module.exports = {
     async discordAPI(code, redirect, request) {
-        const client = this.config.getClient();
-        const creds = "Basic " + client.btoa(process.env.CLIENT_ID + ":" + process.env.CLIENT_SECRET);
-        const form = new client.formData();
+        const Client = this.Config.getClient();
+        const creds = "Basic " + Client.btoa(process.env.CLIENT_ID + ":" + process.env.CLIENT_SECRET);
+        const form = new Client.formData();
         form.append("client_id", process.env.CLIENT_ID);
         form.append("client_secret", process.env.CLIENT_SECRET);
         form.append("grant_type", "authorization_code");
@@ -10,31 +10,31 @@ module.exports = {
         form.append("redirect_uri", encodeURI(redirect));
         form.append("scope", "identify");
         // noinspection JSUnresolvedFunction
-        const response = await client.fetch(this.config.urls.discordAPI.oauth2 + "token", {
+        const response = await Client.fetch(this.Config.urls.discordAPI.oauth2 + "token", {
             method: "POST",
             body: form,
             headers: {Authorization: creds}
         }).then(y => y.json());
         // noinspection JSUnresolvedFunction, JSUnresolvedVariable
-        return await client.fetch(request, {headers: {Authorization: "Bearer " + response.access_token}}).then(y => y.json());
+        return await Client.fetch(request, {headers: {Authorization: "Bearer " + response.access_token}}).then(y => y.json());
     },
     log(guild, funct) {
         if (!guild) return;
-        const guildData = this.config.getGuildData(guild.id);
+        const guildData = this.Config.getGuildData(guild.id);
         if (!guildData) return;
 
         const channel = guildData.channels && guildData.channels.logs ? guild.channels.resolve(guildData.channels.logs) : guild.channels.cache.find(c => c.name === "logs");
         if (!channel) return;
         // Let the dev make changes against this embed before sending.
-        channel.send(funct(new this.config.Discord.MessageEmbed().setTimestamp(new Date())));
+        channel.send(funct(new this.Config.Discord.MessageEmbed().setTimestamp(new Date())));
     },
     getJoinPosition(member) {
         return member.guild.members.cache.sort((a, b) => a.joinedAt - b.joinedAt).array().findIndex(m => m.id === member.id);
     },
     getBaseEmbed() {
-        return new this.config.Discord.MessageEmbed()
-            .setColor(this.config.color.base)
-            .setFooter("Bot made by: " + this.config.author.username, this.config.author.displayAvatarURL())
+        return new this.Config.Discord.MessageEmbed()
+            .setColor(this.Config.color.base)
+            .setFooter("Bot made by: " + this.Config.author.username, this.Config.author.displayAvatarURL())
             .setTimestamp(new Date());
     },
     embed(title, description, color) {
@@ -47,7 +47,7 @@ module.exports = {
     getEmbeds(message) {
         if (message.embeds.length < 1) return null;
         return message.embeds.filter(e => e.type === "rich").map(e => {
-            const embed = new this.config.Discord.MessageEmbed(e);
+            const embed = new this.Config.Discord.MessageEmbed(e);
             if (embed.image) embed.image.url = "attachment://" + embed.image.url.substr(embed.image.url.lastIndexOf("/") + 1);
             if (embed.thumbnail) embed.thumbnail.url = "attachment://" + embed.thumbnail.url.substr(embed.thumbnail.url.lastIndexOf("/") + 1);
             return embed;
@@ -101,8 +101,8 @@ module.exports = {
         return guild.members.cache.find(m => find === m.id || find === m.user.username || find.substring(2, find.length - 1) === m.id || find.substring(3, find.length - 1) === m.id || m.user.username.toLowerCase().includes(find.toLowerCase()));
     },
     findUser(find) {
-        const client = this.config.getClient();
-        return client["users"].cache.find(u => find === u.id || find === u.username || find.substring(2, find.length - 1) === u.id || find.substring(3, find.length - 1) === u.id || u.username.toLowerCase().includes(find.toLowerCase()));
+        const Client = this.Config.getClient();
+        return Client.users.cache.find(u => find === u.id || find === u.username || find.substring(2, find.length - 1) === u.id || find.substring(3, find.length - 1) === u.id || u.username.toLowerCase().includes(find.toLowerCase()));
     },
     findRole(find, guild) {
         return guild.roles.cache.filter(r => r.id !== guild.id).find(r => find === r.id || find.substring(3, find.length - 1) === r.id || find.toLowerCase() === r.name.toLowerCase() || r.name.toLowerCase().includes(find.toLowerCase()));
@@ -119,7 +119,7 @@ module.exports = {
         return true;
     },
     getColorFromString(color) {
-        const {colorConvert} = this.config.getClient();
+        const {colorConvert} = this.Config.getClient();
         let matchedDigits = color.match(/([0-9]*(\.[0-9]*)?(?:[%|°])?)+/g).filter(e => e);
         if (color.startsWith("rgb(")) {
             matchedDigits = matchedDigits.map(e => e.endsWith("%") ? Math.round(e.substr(0, e.length - 1) / 100 * 255) : e);
@@ -133,7 +133,7 @@ module.exports = {
         return colorConvert.keyword.hex(color);
     },
     getTextWidth(text, font) {
-        let ctx = this.config.getClient().canvas.createCanvas(0, 0).getContext("2d");
+        let ctx = this.Config.getClient().canvas.createCanvas(0, 0).getContext("2d");
         ctx.font = font;
         return ctx.measureText(text).width;
     },
@@ -141,7 +141,7 @@ module.exports = {
         if (!denied) denied = () => {};
         if (!accepted) accepted = () => {};
         let embed = this.getEmbeds(msg)[0];
-        await msg.edit(embed.setColor(this.config.color.yellow).setDescription((embed.description ? embed.description : "") + "\n\n**React with:\n✅ - to confirm changes.\n❌ - deny changes.**"));
+        await msg.edit(embed.setColor(this.Config.color.yellow).setDescription((embed.description ? embed.description : "") + "\n\n**React with:\n✅ - to confirm changes.\n❌ - deny changes.**"));
         await msg.react("❌");
         await msg.react("✅");
         const coll = msg.createReactionCollector((r, u) => u.id !== msg.client.user.id, {time: 30000});
@@ -153,13 +153,13 @@ module.exports = {
                 case "❌":
                     denied(modify);
                     if (options.denied) embed.setDescription(options.denied);
-                    await msg.edit(embed.setColor(this.config.color.red));
+                    await msg.edit(embed.setColor(this.Config.color.red));
                     coll.stop("denied");
                     break;
                 case "✅":
                     accepted(modify);
                     if (options.accepted) embed.setDescription(options.accepted);
-                    await msg.edit(embed.setColor(this.config.color.green));
+                    await msg.edit(embed.setColor(this.Config.color.green));
                     coll.stop("accepted");
                     break;
             }
@@ -191,7 +191,7 @@ module.exports = {
     async hasPerm(user, guild, perm) {
         if (!perm) return true;
         // Exit if user is author.
-        const isAuthor = user.id === this.config.author.id;
+        const isAuthor = user.id === this.Config.author.id;
         if (isAuthor) return true;
         if (perm === "author") return isAuthor;
         // Exit of nothing else can be processed.
@@ -221,8 +221,8 @@ module.exports = {
             return false;
         }
         // This should pass if permission type is invalid.
-        const {config} = this;
-        config.botLog().send(config.author.toString(), this.embed("Checking Permission", "Bot is trying to check for a an invalid permission: " + perm, config.color.red));
+        const {Config} = this;
+        Config.botLog().send(Config.author.toString(), this.embed("Checking Permission", "Bot is trying to check for a an invalid permission: " + perm, Config.color.red));
         return true;
     },
     msToTime(ms) {
@@ -243,19 +243,19 @@ module.exports = {
         return Object.keys(object).find(key => object[key] === value);
     },
     async handleError(message, error) {
-        await message.channel.send(message.author.toString(), this.embed("Exception during command execution.", error, message.client.config.color.red));
+        await message.channel.send(message.author.toString(), this.embed("Exception during command execution.", error, message.client.Config.color.red));
     },
     async getRequest(url, output) {
         // noinspection JSUnresolvedFunction
-        return await this.config.getClient().fetch(url).then(y => {
+        return await this.Config.getClient().fetch(url).then(y => {
             if (output === "json") return y.json();
             return y.text();
         });
     },
     async getServer(serverIP) {
-        return await this.getRequest(this.config.urls.mcServerQuery + serverIP,"json");
+        return await this.getRequest(this.Config.urls.mcServerQuery + serverIP,"json");
     },
     async getTrello(params) {
-        return await this.getRequest(this.config.urls.trello + params + "?key=" + process.env.TRELLO_KEY + "&token=" + process.env.TRELLO_TOKEN, "json");
+        return await this.getRequest(this.Config.urls.trello + params + "?key=" + process.env.TRELLO_KEY + "&token=" + process.env.TRELLO_TOKEN, "json");
     },
 };

@@ -1,10 +1,10 @@
-module.exports = async (request, response, client) => {
-    const {util, config} = client;
+module.exports = async (request, response, Client) => {
+    const {Util, Config} = Client;
     if (!request.query.code) {
         response.sendFile("/views/redirect-staffapp.html", {root: "."});
         return;
     }
-    const user = await util.discordAPI(request.query.code, client.webserver + "/apply", config.urls.discordAPI.users);
-    if (user) response.redirect(config.urls.forms.staffapp + user.id);
+    const user = await Util.discordAPI(request.query.code, Client.webserver + "/apply", Config.urls.discordAPI.users);
+    if (user) response.redirect(Config.urls.forms.staffapp + user.id);
     else response.send("Authorisation failed. Contact the owner of the application for help.");
 };

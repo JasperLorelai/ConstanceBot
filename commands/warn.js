@@ -5,12 +5,13 @@ module.exports = {
     guildOnly: true,
     perm: "mod",
     async execute(message, args) {
-        const {client, guild, channel, author} = message;
-        const {config, util, keyv} = client;
+        const Client = message.client;
+        const {guild, channel, author} = message;
+        const {Config, Util, keyv} = Client;
         try {
-            const member = util.findGuildMember(args[0], guild);
+            const member = Util.findGuildMember(args[0], guild);
             if (!member) {
-                channel.send(author.toString(), util.embed("Warn", "User not found!", config.color.red));
+                channel.send(author.toString(), Util.embed("Warn", "User not found!", Config.color.red));
                 return;
             }
             args.shift();
@@ -22,11 +23,11 @@ module.exports = {
             if (!db[guild.id].warns[member.id]) db[guild.id].warns[member.id] = [];
             db[guild.id].warns[member.id].push({date: new Date().toLocaleString(), mod: author.id, reason: reason});
             await keyv.set("guilds", db);
-            channel.send(util.embed("Warn", "**User " + member.toString() + " has been warned by " + author.toString() + (reason ? " for:** " + reason : ".**")));
-            member.send(util.embed(guild.name + " - Warn", "**You have been warned by " + author.toString() + (reason ? " for:** " + reason : ".**"), config.color.red));
+            channel.send(Util.embed("Warn", "**User " + member.toString() + " has been warned by " + author.toString() + (reason ? " for:** " + reason : ".**")));
+            member.send(Util.embed(guild.name + " - Warn", "**You have been warned by " + author.toString() + (reason ? " for:** " + reason : ".**"), Config.color.red));
         }
         catch(e) {
-            await util.handleError(message, e);
+            await Util.handleError(message, e);
         }
     }
 };

@@ -5,10 +5,11 @@ module.exports = {
     perm: "mod",
     aliases: ["polls"],
     async execute(message) {
-        const {channel, author, client, guild} = message;
-        const {config, util, keyv} = client;
+        const Client = message.client;
+        const {channel, author, guild} = message;
+        const {Config, Util, keyv} = Client;
         try {
-            const pollrole = util.findRole("Polls", guild);
+            const pollrole = Util.findRole("Polls", guild);
             let db;
 
             function getHelp(poll) {
@@ -17,13 +18,13 @@ module.exports = {
                     "\n➕ - Add react option." +
                     "\n🚫 - Reset reactions." +
                     (pollrole ? "\n💟 - Ping everyone with the Polls role. (`" + poll.rolePing + "`)" : "") +
-                    "\n" + client.emojiFile["1"] + " - Unique reactions only. (`" + poll.unique + "`)" +
+                    "\n" + Client.EmojiMap["1"] + " - Unique reactions only. (`" + poll.unique + "`)" +
                     "\n✅ - Send poll." +
                     "\n❌ - Cancel poll.";
             }
 
             async function refresh(msg, poll) {
-                const embed = util.getEmbeds(msg)[0];
+                const embed = Util.getEmbeds(msg)[0];
                 embed.fields[0].value = getHelp(poll);
                 embed.setDescription(poll.text || "No text set.");
                 await msg.edit(embed);
@@ -48,7 +49,7 @@ module.exports = {
                 if (!poll.unique) poll.unique = false;
                 if (!poll.draftID) poll.draftID = new Date().getTime();
 
-                const embed = util.embed("Poll Creator", poll.text, config.color.yellow).addField("Help", getHelp(poll));
+                const embed = Util.embed("Poll Creator", poll.text, Config.color.yellow).addField("Help", getHelp(poll));
                 if (poll.emoji && poll.emoji.length > 0) embed.addField("Emoji", poll.emoji.join(", "));
                 if (!msg) msg = await channel.send(embed);
                 else await msg.edit(embed);
@@ -57,19 +58,19 @@ module.exports = {
                 await msg.react("➕");
                 await msg.react("🚫");
                 if (pollrole) await msg.react("💟");
-                await msg.react(client.emojiFile["1"]);
+                await msg.react(Client.EmojiMap["1"]);
                 await msg.react("✅");
                 await msg.react("❌");
                 const created = new Date().getTime();
-                const collector = msg.createReactionCollector((r, u) => u.id !== client.user.id, {time: 300000});
+                const collector = msg.createReactionCollector((r, u) => u.id !== Client.user.id, {time: 300000});
                 collector.on("collect", async (r, u) => {
                     await r.users.remove(u);
                     if (u.id !== author.id) return null;
                     let msg2, msgColl;
                     switch (r.emoji.toString()) {
                         case "💬":
-                            msg2 = await channel.send(author.toString(), util.embed("Poll Creator - Text Manager", "Type a message to be used for the poll text. Type `cancel` to cancel.", config.color.yellow));
-                            msgColl = channel.createMessageCollector(m => m.author.id !== client.user.id, {time: util.collTtl(collector, created)});
+                            msg2 = await channel.send(author.toString(), Util.embed("Poll Creator - Text Manager", "Type a message to be used for the poll text. Type `cancel` to cancel.", Config.color.yellow));
+                            msgColl = channel.createMessageCollector(m => m.author.id !== Client.user.id, {time: Util.collTtl(collector, created)});
                             msgColl.on("collect", m => {
                                 if (!poll) return;
                                 if (m.content.trim().toLowerCase() !== "cancel") {
@@ -82,14 +83,14 @@ module.exports = {
                             msgColl.on("end", () => msg2.delete({reason: "botIntent"}));
                             break;
                         case "➕":
-                            msg2 = await channel.send(author.toString(), util.embed("Poll Creator - Reaction Manager", "Type a message that includes reactions.", config.color.yellow));
-                            msgColl = channel.createMessageCollector(m => m.author.id !== client.user.id, {time: util.collTtl(collector, created)});
+                            msg2 = await channel.send(author.toString(), Util.embed("Poll Creator - Reaction Manager", "Type a message that includes reactions.", Config.color.yellow));
+                            msgColl = channel.createMessageCollector(m => m.author.id !== Client.user.id, {time: Util.collTtl(collector, created)});
                             msgColl.on("collect", m => {
                                 if (!poll) return;
-                                const emoji = poll.emoji.concat(util.getEmoji(m.content)).filter(e => e);
+                                const emoji = poll.emoji.concat(Util.getEmoji(m.content)).filter(e => e);
                                 if (emoji[0]) {
                                     poll.emoji = emoji;
-                                    const embed = util.getEmbeds(msg)[0];
+                                    const embed = Util.getEmbeds(msg)[0];
                                     if (embed.fields.length > 1) embed.fields[1].value = emoji.join(", "); else embed.addField("Emoji", emoji.join(", "));
                                     msg.edit(embed);
                                     msgColl.stop();
@@ -101,26 +102,26 @@ module.exports = {
                         case "🚫":
                             if (poll.emoji.length > 0) {
                                 poll.emoji = [];
-                                await msg.edit(util.getEmbeds(msg)[0].spliceFields(1, 1));
+                                await msg.edit(Util.getEmbeds(msg)[0].spliceFields(1, 1));
                             }
                             break;
                         case "💟":
                             if (pollrole) poll.rolePing = !poll.rolePing;
                             break;
-                        case client.emojiFile["1"]:
+                        case Client.EmojiMap["1"]:
                             poll.unique = !poll.unique;
                             break;
                         case "✅":
-                            msg2 = await channel.send(author.toString(), util.embed("Poll Creator - Sender", "Type the channel you'd like to send this poll to.", config.color.yellow));
-                            msgColl = channel.createMessageCollector(m => m.author.id !== client.user.id, {time: util.collTtl(collector, created)});
+                            msg2 = await channel.send(author.toString(), Util.embed("Poll Creator - Sender", "Type the channel you'd like to send this poll to.", Config.color.yellow));
+                            msgColl = channel.createMessageCollector(m => m.author.id !== Client.user.id, {time: Util.collTtl(collector, created)});
                             msgColl.on("collect", async m => {
                                 if (!poll) return;
-                                const ch = util.findChannel(m.content, guild);
+                                const ch = Util.findChannel(m.content, guild);
                                 if (ch) {
-                                    const embed = util.embed(null, poll.text);
+                                    const embed = Util.embed(null, poll.text);
                                     embed.setAuthor(author.username, author.displayAvatarURL());
                                     embed.setFooter("Unique reactions | " + embed.footer.text);
-                                    embed.setColor(config.color.poll);
+                                    embed.setColor(Config.color.poll);
                                     const created = await ch.send(poll.rolePing && pollrole ? "<@&" + pollrole.id + ">" : "", embed);
                                     for (let emoji of poll.emoji) await created.react(emoji);
                                     msg.delete({reason: "botIntent"});
@@ -128,8 +129,8 @@ module.exports = {
                                     collector.stop("done");
                                 }
                                 else {
-                                    const embed = util.getEmbeds(msg2)[0];
-                                    await msg2.edit(embed.setDescription(embed.description + "\n\n**Channel not found!**").setColor(config.color.red));
+                                    const embed = Util.getEmbeds(msg2)[0];
+                                    await msg2.edit(embed.setDescription(embed.description + "\n\n**Channel not found!**").setColor(Config.color.red));
                                 }
                                 m.delete({reason: "botIntent"});
                             });
@@ -148,7 +149,7 @@ module.exports = {
                         return;
                     }
                     await msg.reactions.removeAll();
-                    await msg.edit(util.embed("PollCreator Cancelled", reason === "end" ? "Cancelled poll." : "Timeout.", reason === "end" ? config.color.red : config.color.gray));
+                    await msg.edit(Util.embed("PollCreator Cancelled", reason === "end" ? "Cancelled poll." : "Timeout.", reason === "end" ? Config.color.red : Config.color.gray));
                     if (!message.deleted) message.delete({reason: "botIntent"});
                     if (poll) {
                         db = await keyv.get("users");
@@ -167,8 +168,8 @@ module.exports = {
             let msg;
             if (polls && polls.length > 0) {
                 await keyv.set("polls." + author.id, polls);
-                msg = await channel.send(author.toString(), util.embed("Poll Drafts", "**0**. New poll.\n" + polls.map((poll, i) => "**" + (i + 1) + "**. `" + new Date(poll.draftID).toLocaleString() + "`").join("\n"), config.color.yellow));
-                const collector = channel.createMessageCollector(m => m.author.id !== client.user.id, {time: 10000});
+                msg = await channel.send(author.toString(), Util.embed("Poll Drafts", "**0**. New poll.\n" + polls.map((poll, i) => "**" + (i + 1) + "**. `" + new Date(poll.draftID).toLocaleString() + "`").join("\n"), Config.color.yellow));
+                const collector = channel.createMessageCollector(m => m.author.id !== Client.user.id, {time: 10000});
                 collector.on("collect", async m => {
                     const index = parseInt(m.content);
                     m.delete({reason: "botIntent"});
@@ -185,13 +186,13 @@ module.exports = {
                     }
                 });
                 collector.on("end", async (coll, reason) => {
-                    if (reason !== "end") await msg.edit(util.embed("Poll Drafts - Terminated.", "Timeout.", config.color.red));
+                    if (reason !== "end") await msg.edit(Util.embed("Poll Drafts - Terminated.", "Timeout.", Config.color.red));
                 });
             }
             else await newPoll(msg);
         }
         catch(e) {
-            await util.handleError(message, e);
+            await Util.handleError(message, e);
         }
     }
 };

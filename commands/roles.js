@@ -3,13 +3,14 @@ module.exports = {
     description: "Lists of all guild roles.",
     guildOnly: true,
     async execute(message) {
-        const {guild, channel, client, author} = message;
-        const {util} = client;
+        const Client = message.client;
+        const {guild, channel, author} = message;
+        const {Util} = Client;
         let roles = guild.roles.cache.array();
         // Skip @everyone
         roles.shift();
         const text = roles.map(r => r.toString() + " - `<@&" + r + ">` **(" + r.members.size + ")**").join("\n");
-        const msg = await channel.send(author.toString(), util.embed("Guild Roles", (text.length >= 2000 ? "" : text)));
-        if (text.length >= 2000) await util.handlePrompt(msg, text);
+        const msg = await channel.send(author.toString(), Util.embed("Guild Roles", (text.length >= 2000 ? "" : text)));
+        if (text.length >= 2000) await Util.handlePrompt(msg, text);
     }
 };

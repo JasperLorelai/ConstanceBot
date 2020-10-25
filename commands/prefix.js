@@ -5,13 +5,14 @@ module.exports = {
     params: ["[prefix]"],
     perm: "admin",
     async execute(message, args) {
-        const {client, channel, guild, author} = message;
-        const {keyv} = client;
+        const Client = message.client;
+        const {channel, guild, author} = message;
+        const {keyv} = Client;
         let db = await keyv.get("guilds");
         if (!db) db = {};
         if (!db[guild.id]) db[guild.id] = {};
         db[guild.id].prefix = args[0];
         await keyv.set("guilds", db);
-        await channel.send(author.toString(), client.util.embed("Command Prefix", "**Prefix set to:** " + args[0]));
+        await channel.send(author.toString(), Client.Util.embed("Command Prefix", "**Prefix set to:** " + args[0]));
     }
 };

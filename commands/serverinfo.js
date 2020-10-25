@@ -4,8 +4,9 @@ module.exports = {
     aliases: ["guildinfo"],
     guildOnly: true,
     async execute(message) {
-        const {client, guild, channel, author} = message;
-        const {util} = client;
+        const Client = message.client;
+        const {guild, channel, author} = message;
+        const {Util} = Client;
         const channels = guild.channels.cache.array();
         const tc = channels.filter(c => c.type === "text");
         const vc = channels.filter(c => c.type === "voice");
@@ -33,6 +34,6 @@ module.exports = {
             (guild.vanityURLCode ? "\n**Vanity URL:** `" + guild.vanityURLCode + "`" : "") +
             (tc.length ? "\n**Text Channels:** " + tc.length : "") +
             (vc.length ? "\n**Voice Channels:** " + vc.length : "");
-        await channel.send(author.toString(), util.embed("Guild Info", desc).setThumbnail(guild.iconURL()));
+        await channel.send(author.toString(), Util.embed("Guild Info", desc).setThumbnail(guild.iconURL()));
     }
 };

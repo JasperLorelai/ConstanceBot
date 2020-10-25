@@ -6,18 +6,19 @@ module.exports = {
     guildOnly: true,
     perm: "admin",
     async execute(message, args) {
-        const {client, guild, channel, author} = message;
-        const {util} = client;
+        const Client = message.client;
+        const {guild, channel, author} = message;
+        const {Util} = Client;
         try {
             const role = await guild.roles.create({data: {name: args.join(" ")}});
-            channel.send(author.toString(), util.embed("Role Creator", "**Created role:** " + args.join(" "))).then(async msg => {
-                await util.handleChange(msg, author, role, role => role.delete(), null, {
+            channel.send(author.toString(), Util.embed("Role Creator", "**Created role:** " + args.join(" "))).then(async msg => {
+                await Util.handleChange(msg, author, role, role => role.delete(), null, {
                     denied: "Role deleted!", accepted: "Role created!", newTitle: ""
                 });
             });
         }
         catch(e) {
-            await util.handleError(message, e);
+            await Util.handleError(message, e);
         }
     }
 };

@@ -5,12 +5,12 @@ module.exports = {
     params: ["[code]"],
     perm: "author",
     async execute(message, args) {
-        const {client} = message;
-        const {util} = client;
+        const Client = message.client;
+        const {Util} = Client;
         try {
             eval(args.join(" "));
             await message.react("❌");
-            const coll = message.createReactionCollector((r, u) => u.id !== client.user.id, {time: 10000});
+            const coll = message.createReactionCollector((r, u) => u.id !== Client.user.id, {time: 10000});
             coll.on("collect", r => {
                 if (r.emoji.toString() === "❌") message.delete({reason: "botIntent"});
             });
@@ -19,7 +19,7 @@ module.exports = {
             });
         }
         catch(e) {
-            await util.handleError(message, e);
+            await Util.handleError(message, e);
         }
     }
 };

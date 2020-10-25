@@ -53,11 +53,11 @@ module.exports = {
                 rules: "550735939257892865"
             },
             info: {
-                getText(config) {
-                    const data = config.guildData.mhap;
+                getText(Config) {
+                    const data = Config.guildData.mhap;
                     const {roles, hostname} = data;
-                    const url = config.urls.mhap;
-                    return config.util.embed("My Hero Academia Prodigy - Information")
+                    const url = Config.urls.mhap;
+                    return Config.Util.embed("My Hero Academia Prodigy - Information")
                         .addField("Basic Information:",
                             "> **IP:** `" + hostname + "`\n" +
                             "> **Version:** `Release 1.13.2`\n" +
@@ -134,10 +134,10 @@ module.exports = {
                 info: "769686788330881034"
             },
             info: {
-                getText(config) {
-                    const data = config.guildData.cctwc;
-                    const urls = config.urls.cctwc;
-                    return config.util.embed("Conquest Carnival: Two Worlds Collide - Server Information")
+                getText(Config) {
+                    const data = Config.guildData.cctwc;
+                    const urls = Config.urls.cctwc;
+                    return Config.Util.embed("Conquest Carnival: Two Worlds Collide - Server Information")
                         .addField("Basic Information:",
                             "> **Discord Invite:** " + data.invite + "\n" +
                             "> **Please support me on ko-fi:** " + urls.kofi + "\n" +

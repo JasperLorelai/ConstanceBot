@@ -19,46 +19,46 @@ app.use(session({
 require("./files/prototype")(Discord);
 
 // Creating classes and collections
-const client = new Discord.Client();
-client.fs = require("fs");
-client.emojiFile = require("./files/emoji.js");
-client.config = require("./files/config.js");
-client.util = require("./files/util.js");
-client.handleMsg = require("./files/handleMsg.js");
-client.keyv = new Keyv(process.env.DATABASE);
-client.fetch = require("node-fetch");
-client.btoa = require("btoa");
-client.atob = require("atob");
-client.canvas = require("canvas");
-client.ms = require("ms");
-client.formData = require("form-data");
-client.colorConvert = require("color-convert");
-client.sha1 = require("sha1");
-client.md5 = require("md5");
+const Client = new Discord.Client();
+Client.fs = require("fs");
+Client.EmojiMap = require("./files/EmojiMap.js");
+Client.Config = require("./files/config.js");
+Client.Util = require("./files/util.js");
+Client.handleMsg = require("./files/handleMsg.js");
+Client.keyv = new Keyv(process.env.DATABASE);
+Client.fetch = require("node-fetch");
+Client.btoa = require("btoa");
+Client.atob = require("atob");
+Client.canvas = require("canvas");
+Client.ms = require("ms");
+Client.formData = require("form-data");
+Client.colorConvert = require("color-convert");
+Client.sha1 = require("sha1");
+Client.md5 = require("md5");
 
 // Connect Util and Config.
-client.util.config = client.config;
-client.config.util = client.util;
+Client.Util.Config = Client.Config;
+Client.Config.Util = Client.Util;
 
-client.config.Discord = Discord;
+Client.Config.Discord = Discord;
 
-client.login(process.env.BOT_TOKEN).catch(e => console.log(e));
-module.exports = client;
+Client.login(process.env.BOT_TOKEN).catch(e => console.log(e));
+module.exports = Client;
 
-const {keyv, fs} = client;
+const {keyv, fs} = Client;
 
 // Grabbing handlers
-client.commands = new Discord.Collection();
+Client.commands = new Discord.Collection();
 for (let f of fs.readdirSync("./commands").filter(file => file.endsWith(".js") && !file.startsWith("#"))) {
     const command = require("./commands/" + f);
-    client.commands.set(command.name, command);
+    Client.commands.set(command.name, command);
 }
-client.app = new Discord.Collection();
+Client.app = new Discord.Collection();
 for (let f of fs.readdirSync("./app").filter(file => file.endsWith(".js"))) {
     const app = require("./app/" + f);
-    client.app.set(f.substr(0, f.length-3), app);
+    Client.app.set(f.substr(0, f.length-3), app);
 }
-client.removeAllListeners();
+Client.removeAllListeners();
 for (let event of fs.readdirSync("./events").filter(file => file.endsWith(".js"))) {
     require("./events/" + event);
 }
@@ -75,26 +75,26 @@ app.get("/", (request, response) => {
     response.redirect(request.protocol + "://" + request.hostname + "/discord");
 });
 app.get("/:route", (request, response) => {
-    client.webserver = request.protocol + "://" + request.hostname;
+    Client.webserver = request.protocol + "://" + request.hostname;
     const route = request.params.route;
-    if (client.app.has(route)) client.app.get(route)(request, response, client);
+    if (Client.app.has(route)) Client.app.get(route)(request, response, Client);
     else response.end();
 });
 app.get("/memberchart/:gist", (request, response) => {
-    client.webserver = request.protocol + "://" + request.hostname;
-    client.app.get("memberchart")(request, response, client);
+    Client.webserver = request.protocol + "://" + request.hostname;
+    Client.app.get("memberchart")(request, response, Client);
 });
 
 
 
 // Recheck muted list.
-client.setInterval(async () => {
+Client.setInterval(async () => {
     const db = await keyv.get("guilds");
     if (!db) return;
-    for (const guild in client.guilds) {
-        if (client.guilds.hasOwnProperty(guild)) {
+    for (const guild in Client.guilds) {
+        if (Client.guilds.hasOwnProperty(guild)) {
             if (!db[guild.id]) continue;
-            const mutedRole = client.util.findRole("Muted", guild);
+            const mutedRole = Client.Util.findRole("Muted", guild);
             if (mutedRole && db && db[guild.id] && db[guild.id].muted) {
                 const muted = db[guild.id].muted;
                 for (const mutedUserID of Object.keys(muted)) {
@@ -106,7 +106,7 @@ client.setInterval(async () => {
                     else {
                         if (new Date().getTime() > muted[mutedUserID]) {
                             await mutedUser.roles.remove(mutedRole);
-                            await mutedUser.send(util.embed(guild.name + " - Mute", "Your mute status has been lifted."));
+                            await mutedUser.send(Client.Util.embed(guild.name + " - Mute", "Your mute status has been lifted."));
                             delete db[guild.id].muted[mutedUserID];
                             await keyv.set("guilds", db);
                         }

@@ -3,15 +3,16 @@ module.exports = {
     description: "Displays bot status.",
     aliases: [],
     async execute(message) {
-        const {client, channel, author} = message;
-        const {util, config} = client;
-        const msg = await channel.send(author.toString(), util.embed("Bot Status", "Pinging...", config.color.yellow));
-        await msg.edit(util.getEmbeds(msg)[0]
-            .setColor(config.color.base)
+        const Client = message.client;
+        const {channel, author} = message;
+        const {Util, Config} = Client;
+        const msg = await channel.send(author.toString(), Util.embed("Bot Status", "Pinging...", Config.color.yellow));
+        await msg.edit(Util.getEmbeds(msg)[0]
+            .setColor(Config.color.base)
             .setDescription(
                 "**Server Ping**: `" + (msg.createdAt - message.createdAt) + " ms`" +
-                "\n**API Ping**: `" + Math.round(client.ws.ping) + " ms`" +
-                "\n**Uptime**: `" + util.msToTime(client.uptime) + "`")
+                "\n**API Ping**: `" + Math.round(Client.ws.ping) + " ms`" +
+                "\n**Uptime**: `" + Util.msToTime(Client.uptime) + "`")
         );
     }
 };

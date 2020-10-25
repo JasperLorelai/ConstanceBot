@@ -4,8 +4,9 @@ module.exports = {
     guildOnly: true,
     perm: "mod",
     async execute(message) {
-        const {guild, client, channel, member} = message;
-        const {config, util, keyv} = client;
+        const Client = message.client;
+        const {guild, channel, member} = message;
+        const {Config, Util, keyv} = Client;
         try {
 
             async function getResponses() {
@@ -17,12 +18,12 @@ module.exports = {
                 return !responses.size ? responses.map((r, i) => "[**" + (i + 1) + "**] **Regex:** `" + r.trigger + "` **- reply:** " + r.reply).join("\n") : null;
             }
 
-            const msg = await channel.send(util.embed("Auto Responses", (await getResponses() || "No responses in DB.") + "\n\n**React with:\n➖ - to remove a response.\n➕ - to add a new response.**", config.color.yellow));
+            const msg = await channel.send(Util.embed("Auto Responses", (await getResponses() || "No responses in DB.") + "\n\n**React with:\n➖ - to remove a response.\n➕ - to add a new response.**", Config.color.yellow));
             await msg.react("➖");
             await msg.react("➕");
             const created = new Date().getTime();
             let idle = true;
-            const coll = msg.createReactionCollector((r, u) => u.id !== msg.client.user.id, {time: 90000});
+            const coll = msg.createReactionCollector((r, u) => u.id !== msg.Client.user.id, {time: 90000});
             coll.on("collect", async (r, u) => {
                 await r.users.remove(u);
                 if (u.id !== member.id) return;
@@ -30,20 +31,20 @@ module.exports = {
                 switch (r.emoji.toString()) {
                     case "➕":
                         idle = false;
-                        const msgTrigger = await msg.channel.send(member.toString(), util.embed("Create Trigger", "Send a regex object.", config.color.yellow));
-                        const collTrigger = msgTrigger.channel.createMessageCollector(m => m.author.id === member.id, {time: util.collTtl(coll, created)});
+                        const msgTrigger = await msg.channel.send(member.toString(), Util.embed("Create Trigger", "Send a regex object.", Config.color.yellow));
+                        const collTrigger = msgTrigger.channel.createMessageCollector(m => m.author.id === member.id, {time: Util.collTtl(coll, created)});
                         collTrigger.on("collect", async mTrigger => {
                             const trigger = mTrigger.content;
                             collTrigger.stop();
-                            if (!util.isRegex(trigger)) {
-                                msg.channel.send(member.toString(), util.embed("Create Trigger", "Trigger must be a regex object!", config.color.red)).then(tempMsg => {
+                            if (!Util.isRegex(trigger)) {
+                                msg.channel.send(member.toString(), Util.embed("Create Trigger", "Trigger must be a regex object!", Config.color.red)).then(tempMsg => {
                                     tempMsg.delete({timeout: 3000, reason: "botIntent"});
                                 });
                                 return null;
                             }
-                            const msgReply = await mTrigger.channel.send(member.toString(), util.embed("Create Reply", "Send what the reply message should be.", config.yellow));
+                            const msgReply = await mTrigger.channel.send(member.toString(), Util.embed("Create Reply", "Send what the reply message should be.", Config.yellow));
                             mTrigger.delete({reason: "botIntent"});
-                            const collReply = msgReply.channel.createMessageCollector(m => m.author.id === member.id, {time: util.collTtl(coll, created)});
+                            const collReply = msgReply.channel.createMessageCollector(m => m.author.id === member.id, {time: Util.collTtl(coll, created)});
                             collReply.on("collect", async mReply => {
                                 const reply = mReply.content;
                                 mReply.delete({reason: "botIntent"});
@@ -54,8 +55,8 @@ module.exports = {
                                 if (!db[guild.id].responses) db[guild.id].responses = [];
                                 db[guild.id].responses.push({trigger: trigger, reply: reply});
                                 await keyv.set("guilds", db);
-                                await msg.edit(util.getEmbeds(msg)[0].setDescription((await getResponses() || "No responses in DB.") + "\n\n**React with:\n➖ - to remove a response.\n➕ - to add a new response.**"));
-                                msg.channel.send(member.toString(), util.embed("Auto Response Creator", "Auto response created!", config.color.green)).then(tempMsg => {
+                                await msg.edit(Util.getEmbeds(msg)[0].setDescription((await getResponses() || "No responses in DB.") + "\n\n**React with:\n➖ - to remove a response.\n➕ - to add a new response.**"));
+                                msg.channel.send(member.toString(), Util.embed("Auto Response Creator", "Auto response created!", Config.color.green)).then(tempMsg => {
                                     tempMsg.delete({timeout: 3000, reason: "botIntent"});
                                 });
                             });
@@ -74,18 +75,18 @@ module.exports = {
                         if (!db[guild.id].responses) db[guild.id].responses = [];
                         const responses = db[guild.id].responses;
                         if (responses.length < 1) {
-                            msg.channel.send(member.toString(), util.embed("Auto Response Delete", "There are no responses in DB to delete!", config.color.red)).then(tempMsg => {
+                            msg.channel.send(member.toString(), Util.embed("Auto Response Delete", "There are no responses in DB to delete!", Config.color.red)).then(tempMsg => {
                                 tempMsg.delete({timeout: 3000, reason: "botIntent"});
                             });
                             return null;
                         }
-                        const msgIndex = await msg.channel.send(member.toString(), util.embed("Auto Response Delete", "Send an idex of the response you wish to delete.", config.color.yellow));
+                        const msgIndex = await msg.channel.send(member.toString(), Util.embed("Auto Response Delete", "Send an idex of the response you wish to delete.", Config.color.yellow));
                         const collIndex = msgIndex.channel.createMessageCollector(m => m.author.id === member.id, {time: 10000});
                         collIndex.on("collect", async mIndex => {
                             const ind = parseInt(mIndex.content) - 1;
                             mIndex.delete({reason: "botIntent"});
                             if (ind >= responses.length) {
-                                msg.channel.send(member.toString(), util.embed("Auto Response Delete", "There is no reponse with that index!", config.color.red)).then(tempMsg => {
+                                msg.channel.send(member.toString(), Util.embed("Auto Response Delete", "There is no reponse with that index!", Config.color.red)).then(tempMsg => {
                                     tempMsg.delete({timeout: 3000, reason: "botIntent"});
                                 });
                                 return null;
@@ -97,8 +98,8 @@ module.exports = {
                             if (!db[guild.id].responses) db[guild.id].responses = [];
                             db[guild.id].responses = db[guild.id].responses.filter((r, i) => i !== ind);
                             await keyv.set("guilds", db);
-                            await msg.edit(member.toString(), util.getEmbeds(msg)[0].setDescription((await getResponses() || "No responses in DB.") + "\n\n**React with:\n➖ - to remove a response.\n➕ - to add a new response.**"));
-                            msg.channel.send(member.toString(), util.embed("Auto Response Creator", "Auto response deleted!", config.color.green)).then(tempMsg => {
+                            await msg.edit(member.toString(), Util.getEmbeds(msg)[0].setDescription((await getResponses() || "No responses in DB.") + "\n\n**React with:\n➖ - to remove a response.\n➕ - to add a new response.**"));
+                            msg.channel.send(member.toString(), Util.embed("Auto Response Creator", "Auto response deleted!", Config.color.green)).then(tempMsg => {
                                 tempMsg.delete({timeout: 3000, reason: "botIntent"});
                             });
                         });
@@ -110,12 +111,12 @@ module.exports = {
                 }
             });
             coll.on("end", async () => {
-                await msg.edit(util.getEmbeds(msg)[0].setDescription(await getResponses() || "No responses in DB.").setColor(config.color.base));
+                await msg.edit(Util.getEmbeds(msg)[0].setDescription(await getResponses() || "No responses in DB.").setColor(Config.color.base));
                 await msg.reactions.removeAll();
             });
         }
         catch(e) {
-            await util.handleError(message, e);
+            await Util.handleError(message, e);
         }
     }
 };

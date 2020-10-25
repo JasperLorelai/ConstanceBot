@@ -4,8 +4,9 @@ module.exports = {
     aliases: ["command"],
     params: ["[command]"],
     execute(message, args) {
-        const {client, channel, author} = message;
-        const {commands, util} = client;
+        const Client = message.client;
+        const {channel, author} = message;
+        const {commands, Util} = Client;
         let text;
         const command = commands.get(args[0]) || commands.find(cmd => cmd["aliases"] && cmd["aliases"].includes(args[0]));
         if (command) {
@@ -18,7 +19,7 @@ module.exports = {
         }
         // + "\nYou can edit the message to execute again.");
         else text = "Command not found!";
-        channel.send(author.toString(), util.embed("Command Help For: " + args[0], text)).then(async m => {
+        channel.send(author.toString(), Util.embed("Command Help For: " + args[0], text)).then(async m => {
             if (!command) await m.delete({timeout: 5000, reason: "botIntent"});
         });
     }

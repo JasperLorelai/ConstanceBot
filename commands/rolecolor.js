@@ -7,17 +7,18 @@ module.exports = {
     guildOnly: true,
     perm: "admin",
     async execute(message, args) {
-        const {client, guild, channel, author} = message;
-        const {config, util, canvas} = client;
+        const Client = message.client;
+        const {guild, channel, author} = message;
+        const {Config, Util, canvas} = Client;
         try {
-            const role = util.findRole(args.shift(), guild);
+            const role = Util.findRole(args.shift(), guild);
             if (!role) {
-                await channel.send(author.toString(), util.embed("Role Color", "Role not found!", config.color.red));
+                await channel.send(author.toString(), Util.embed("Role Color", "Role not found!", Config.color.red));
                 return null;
             }
-            let color = util.getColorFromString(args.join("").replace(/\s/g, ""));
+            let color = Util.getColorFromString(args.join("").replace(/\s/g, ""));
             if (!color) {
-                await channel.send(author.toString(), util.embed("Role Color", "Invalid color! The only color types supported are: `keyword`, `hex` (starts with #), `rgb(r, g, b)` and `hsl(h, s, l)`.", config.color.red));
+                await channel.send(author.toString(), Util.embed("Role Color", "Invalid color! The only color types supported are: `keyword`, `hex` (starts with #), `rgb(r, g, b)` and `hsl(h, s, l)`.", Config.color.red));
                 return null;
             }
             // noinspection JSUnresolvedFunction
@@ -33,7 +34,7 @@ module.exports = {
             ctx.font = "11px Verdana";
             ctx.fillStyle = "#686f77";
             const date = new Date();
-            ctx.fillText("Today at " + date.getHours() + ":" + date.getMinutes(), width * .275 + util.getTextWidth(name, "11px Verdana"), height * .44);
+            ctx.fillText("Today at " + date.getHours() + ":" + date.getMinutes(), width * .275 + Util.getTextWidth(name, "11px Verdana"), height * .44);
             ctx.font = "14px Verdana";
             ctx.fillStyle = "#adadad";
             ctx.fillText("I am a beautiful butterfly!", width * .21, height * .65);
@@ -41,17 +42,17 @@ module.exports = {
             ctx.arc(width * .1, height * .5, 20, 0, Math.PI * 2, true);
             ctx.closePath();
             ctx.clip();
-            const image = await client.fetch.default(author.displayAvatarURL({format: "png"}) + "?size=40").then(y => y.buffer());
+            const image = await Client.fetch.default(author.displayAvatarURL({format: "png"}) + "?size=40").then(y => y.buffer());
             // noinspection JSUnresolvedFunction
             ctx.drawImage(await canvas.loadImage(image), width * .05, height * .25);
-            channel.send(author.toString(), util.embed("Role Color").attachFiles([{
+            channel.send(author.toString(), Util.embed("Role Color").attachFiles([{
                 attachment: canvasImage.toBuffer(), name: "bg.png"
             }]).setImage("attachment://bg.png")).then(async msg => {
-                await util.handleChange(msg, author, role, null, role => role.setColor(color), {denied: "", accepted: "Role color updated!", newTitle: "Role Color Preview"});
+                await Util.handleChange(msg, author, role, null, role => role.setColor(color), {denied: "", accepted: "Role color updated!", newTitle: "Role Color Preview"});
             });
         }
         catch(e) {
-            await util.handleError(message, e);
+            await Util.handleError(message, e);
         }
     }
 };

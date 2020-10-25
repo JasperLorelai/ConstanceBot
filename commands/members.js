@@ -4,16 +4,17 @@ module.exports = {
     guildOnly: true,
     params: ["[role]"],
     async execute(message, args) {
-        const {client, guild, channel, author} = message;
-        const {config, util} = client;
-        const role = util.findRole(args[0], guild);
+        const Client = message.client;
+        const {guild, channel, author} = message;
+        const {Config, Util} = Client;
+        const role = Util.findRole(args[0], guild);
         if (!role) {
-            await channel.send(author.toString(), util.embed("Role Members", "Role not found!", config.color.red));
+            await channel.send(author.toString(), Util.embed("Role Members", "Role not found!", Config.color.red));
             return;
         }
         const membersWithRole = guild.members.cache.filter(m => m.roles.cache.has(role.id));
         const text = "**Members** (**" + membersWithRole.size + "**)**:** " + membersWithRole.map(m => "<@" + m.id + ">").join(", ");
-        const msg = await channel.send(author.toString(), util.embed("Role Members: " + role.name, (text.length >= 2000 ? "" : text)));
-        if (text.length >= 2000) await util.handlePrompt(msg, text);
+        const msg = await channel.send(author.toString(), Util.embed("Role Members: " + role.name, (text.length >= 2000 ? "" : text)));
+        if (text.length >= 2000) await Util.handlePrompt(msg, text);
     }
 };

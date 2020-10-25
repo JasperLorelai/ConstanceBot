@@ -5,11 +5,12 @@ module.exports = {
     guildOnly: true,
     perm: "mod",
     async execute(message, args) {
-        const {client, guild, channel, author} = message;
-        const {util, config, keyv} = client;
+        const Client = message.client;
+        const {guild, channel, author} = message;
+        const {Util, Config, keyv} = Client;
         try {
             // Setup mute.
-            let muteRole = util.findRole("Muted", guild);
+            let muteRole = Util.findRole("Muted", guild);
             if (!muteRole) {
                 muteRole = await guild.roles.create({
                     data: {
@@ -18,7 +19,7 @@ module.exports = {
                     },
                     reason: "Mute role was missing."
                 });
-                const botRole = util.findRole(guild.me.user.username, guild);
+                const botRole = Util.findRole(guild.me.user.username, guild);
                 if (botRole) await muteRole.setPosition(botRole.position - 1);
             }
             for (const c of guild.channels.cache.values()) {
@@ -36,21 +37,21 @@ module.exports = {
             }
 
             // Mute function.
-            const member = util.findGuildMember(args[0], guild);
+            const member = Util.findGuildMember(args[0], guild);
             args.shift();
             if (!member) {
-                await channel.send(author.toString(), util.embed("Mute", "User not found!", config.color.red));
+                await channel.send(author.toString(), Util.embed("Mute", "User not found!", Config.color.red));
                 return;
             }
 
             let time;
             try {
-                time = client.ms(args[0]);
+                time = Client.ms(args[0]);
                 args.shift();
-                if (!Number.isInteger(time)) time = client.ms(time);
+                if (!Number.isInteger(time)) time = Client.ms(time);
             }
             catch (e) {
-                await channel.send(author.toString(), util.embed("Mute", "Time format is invalid.", config.color.red));
+                await channel.send(author.toString(), Util.embed("Mute", "Time format is invalid.", Config.color.red));
                 return;
             }
 
@@ -58,9 +59,9 @@ module.exports = {
 
             // Manage mute time.
             member.roles.add(muteRole);
-            channel.send(util.embed("Mute", "User " + member.toString() + " has been muted for **" + client.ms(time) + "** by " + author.toString() + (reason ? " for: **" + reason + "**" : "") + "."));
+            channel.send(Util.embed("Mute", "User " + member.toString() + " has been muted for **" + Client.ms(time) + "** by " + author.toString() + (reason ? " for: **" + reason + "**" : "") + "."));
             if (Math.pow(2,32) - 1 > time) {
-                client.setTimeout(() => {
+                Client.setTimeout(() => {
                     member.roles.remove(muteRole);
                 }, time);
             }
@@ -72,7 +73,7 @@ module.exports = {
             await keyv.set("guilds", db);
         }
         catch(e) {
-            await util.handleError(message, e);
+            await Util.handleError(message, e);
         }
     }
 };

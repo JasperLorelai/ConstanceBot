@@ -13,12 +13,12 @@ module.exports = {
     hide: true,
     // "args" is unnecessary if "params" is empty or has no required parameters.
     async execute(message, args) {
-        const {client} = message;
-        const {util} = client;
+        const Client = message.client;
+        const {Util} = Client;
         try {
         }
         catch(e) {
-            await util.handleError(message, e);
+            await Util.handleError(message, e);
         }
     }
 };

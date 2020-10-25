@@ -4,19 +4,20 @@ module.exports = {
     aliases: ["ip"],
     params: ["(ip)"],
     async execute(message, args) {
-        const {client, channel, guild, author} = message;
-        const {config, util} = client;
+        const Client = message.client;
+        const {channel, guild, author} = message;
+        const {Config, Util} = Client;
         let ip = args[0];
         if (!ip) {
-            ip = config.getGuildData(guild.id);
+            ip = Config.getGuildData(guild.id);
             if (ip) ip = ip.hostname;
         }
         if (!ip) {
-            channel.send(author.toString(), util.embed("Minecraft Server Info", "Please provide an IP parameter.", config.color.red));
+            channel.send(author.toString(), Util.embed("Minecraft Server Info", "Please provide an IP parameter.", Config.color.red));
             return;
         }
-        const msg = await channel.send(util.embed("Minecraft Server Info", "Pending information...", config.color.yellow));
-        const server = await util.getServer(ip);
+        const msg = await channel.send(Util.embed("Minecraft Server Info", "Pending information...", Config.color.yellow));
+        const server = await Util.getServer(ip);
         let text = "";
         if (server.debug && server.debug.ping) {
             if (server.online) {
@@ -36,7 +37,7 @@ module.exports = {
             if (server["mods"]) text += "\n**Mods (" + server["mods"].raw.length + "):** " + server["mods"].names.join("**,** ");
          }
         else text = "**Server was not found.**";
-        const embed = util.embed("Minecraft Server Info", (text.length >= 2000 ? "" : text)).setColor(server.online ? config.color.green : config.color.red);
+        const embed = Util.embed("Minecraft Server Info", (text.length >= 2000 ? "" : text)).setColor(server.online ? Config.color.green : Config.color.red);
         if (server.icon) {
             embed.attachFiles([{
                 attachment: Buffer.from(server.icon.replace(/\\/g, "").replace("data:image/png;base64,", "").replace("==", ""), "base64"),
@@ -44,6 +45,6 @@ module.exports = {
             }]).setThumbnail("attachment://bg.png");
         }
         await msg.edit(embed);
-        if (text.length >= 2000) await util.handlePrompt(msg, text);
+        if (text.length >= 2000) await Util.handlePrompt(msg, text);
     }
 };

@@ -1,5 +1,5 @@
-const client = require("../bot");
-client.on("invalidated", async () => {
+const Client = require("../bot");
+Client.on("invalidated", async () => {
     console.log("Token invalidated! Exited boot-loop gracefully.");
-    client.destroy();
+    Client.destroy();
 });

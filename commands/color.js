@@ -3,14 +3,15 @@ module.exports = {
     description: "Takes a color from any format and displays it in multiple other formats.",
     params: ["[color]"],
     async execute(message, args) {
-        const {channel, author, client} = message;
-        const {config, util, colorConvert} = client;
+        const Client = message.client;
+        const {channel, author} = message;
+        const {Config, Util, colorConvert} = Client;
         try {
             const color = args.join("");
-            let finalColor = util.getColorFromString(color);
+            let finalColor = Util.getColorFromString(color);
 
             if (!finalColor) {
-                await channel.send(author.toString(), util.embed("Colors", "Invalid color! The only color types supported are: `keyword`, `hex` (starts with #), `rgb(r, g, b)` and `hsl(h, s, l)`.", config.color.red));
+                await channel.send(author.toString(), Util.embed("Colors", "Invalid color! The only color types supported are: `keyword`, `hex` (starts with #), `rgb(r, g, b)` and `hsl(h, s, l)`.", Config.color.red));
                 return null;
             }
 
@@ -19,12 +20,12 @@ module.exports = {
             const [h, s, l] = colorConvert.hex.hsl(finalColor);
             const hsl = h + "°, " + s + "%, " + l + "%";
 
-            const canvas = client.canvas.createCanvas(200, 200);
+            const canvas = Client.canvas.createCanvas(200, 200);
             const ctx = canvas.getContext("2d");
             ctx.fillStyle = "#" + finalColor;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            channel.send(author.toString(), util.embed("Colors",
+            channel.send(author.toString(), Util.embed("Colors",
                 (keyword ? "\n**Keyword:** " + keyword.toFormalCase() : "") +
                 "\n**Hex:** `" + finalColor + "`" +
                 "\n**RGB:** `" + rgb + "`" +
@@ -34,7 +35,7 @@ module.exports = {
             }]).setImage("attachment://bg.png"));
         }
         catch(e) {
-            await util.handleError(message, e);
+            await Util.handleError(message, e);
         }
     }
 };

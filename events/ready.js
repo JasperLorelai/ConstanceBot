@@ -1,20 +1,20 @@
-const client = require("../bot");
-client.on("ready", async () => {
-    const {config} = client;
-    client.config.author = client.users.resolve((await client.fetchApplication()).owner.id);
+const Client = require("../bot");
+Client.on("ready", async () => {
+    const {Config} = Client;
+    Config.author = Client.users.resolve((await Client.fetchApplication()).owner.id);
 
     let joke = "";
     do {
-        joke = await client.fetch(config.urls.joke, {
+        joke = await Client.fetch(Config.urls.joke, {
             headers: {
                 "Accept": "text/plain",
-                "User-Agent": config.userAgent
+                "User-Agent": Config.userAgent
             }
         }).then(y => y.text());
     }
     while (joke.length > 128);
     console.log(joke);
-    await client.user.setActivity({name: joke, type: "LISTENING"});
+    await Client.user.setActivity({name: joke, type: "LISTENING"});
 
     console.log("Reafy!");
 });

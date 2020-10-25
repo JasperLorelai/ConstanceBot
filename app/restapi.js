@@ -1,5 +1,5 @@
-module.exports = async (request, response, client) => {
-    const {keyv, util, config} = client;
+module.exports = async (request, response, Client) => {
+    const {keyv, Util, Config} = Client;
     for (let [key, value] of Object.entries(request.query)) {
         switch (key) {
             case "getWebhook":
@@ -14,7 +14,7 @@ module.exports = async (request, response, client) => {
                 break;
             case "getMCUserID":
                 let db = await keyv.get("minecraft") || {};
-                response.send(value ? util.getKeyByValue(db, value) : "");
+                response.send(value ? Util.getKeyByValue(db, value) : "");
                 break;
             case "getMCUsers":
                 response.send(await keyv.get("minecraft") || {});
@@ -22,17 +22,17 @@ module.exports = async (request, response, client) => {
             case "putMCChannel":
                 response.end();
                 if (!value) return;
-                client.minecraft = value;
+                Client.minecraft = value;
                 break;
             case "getMemberChart":
-                const gist = config.urls.github + "gists/" + client.memberCount;
-                const body = await client.fetch(gist, {headers: {Accept: "application/vnd.github.v3+json"}}).then(y => y.json());
+                const gist = Config.urls.github + "gists/" + Client.memberCount;
+                const body = await Client.fetch(gist, {headers: {Accept: "application/vnd.github.v3+json"}}).then(y => y.json());
                 let data;
                 try {
                     const files = body.files;
                     const fileNames = Object.keys(files);
                     const firstFile = body.files[fileNames[0]];
-                    data = await client.fetch(firstFile["raw_url"]).then(y => y.json());
+                    data = await Client.fetch(firstFile["raw_url"]).then(y => y.json());
                 }
                 catch (e) {
                     response.json({});
