@@ -18,7 +18,7 @@ module.exports = {
                 if (!message.deleted) message.reactions.removeAll();
             });
         }
-        catch(e) {
+        catch (e) {
             await Util.handleError(message, e);
         }
     }

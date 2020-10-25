@@ -52,7 +52,7 @@ module.exports = {
                 if (allWarns.length >= 2000) await Util.handlePrompt(msg, allWarns, null, "\n\n");
             }
         }
-        catch(e) {
+        catch (e) {
             await Util.handleError(message, e);
         }
     }

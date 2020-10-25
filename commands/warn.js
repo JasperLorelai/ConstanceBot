@@ -26,7 +26,7 @@ module.exports = {
             channel.send(Util.embed("Warn", "**User " + member.toString() + " has been warned by " + author.toString() + (reason ? " for:** " + reason : ".**")));
             member.send(Util.embed(guild.name + " - Warn", "**You have been warned by " + author.toString() + (reason ? " for:** " + reason : ".**"), Config.color.red));
         }
-        catch(e) {
+        catch (e) {
             await Util.handleError(message, e);
         }
     }

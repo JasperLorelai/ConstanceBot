@@ -17,7 +17,7 @@ module.exports = {
         const {Util} = Client;
         try {
         }
-        catch(e) {
+        catch (e) {
             await Util.handleError(message, e);
         }
     }

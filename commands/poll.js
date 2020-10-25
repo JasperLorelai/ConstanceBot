@@ -191,7 +191,7 @@ module.exports = {
             }
             else await newPoll(msg);
         }
-        catch(e) {
+        catch (e) {
             await Util.handleError(message, e);
         }
     }

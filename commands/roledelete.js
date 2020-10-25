@@ -18,7 +18,7 @@ module.exports = {
             await channel.send(author.toString(), Util.embed("Role Deleter", "Role **" + role.name + "** was successfully deleted."));
             role.delete();
         }
-        catch(e) {
+        catch (e) {
             await Util.handleError(message, e);
         }
     }

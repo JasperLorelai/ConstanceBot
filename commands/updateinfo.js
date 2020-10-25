@@ -67,7 +67,7 @@ module.exports = {
 
             channel.send(author.toString(), Util.embed("Info Updater", "Info was updated."));
         }
-        catch(e) {
+        catch (e) {
             await Util.handleError(message, e);
         }
     }

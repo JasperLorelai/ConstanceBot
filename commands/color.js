@@ -34,7 +34,7 @@ module.exports = {
                 attachment: canvas.toBuffer(), name: "bg.png"
             }]).setImage("attachment://bg.png"));
         }
-        catch(e) {
+        catch (e) {
             await Util.handleError(message, e);
         }
     }

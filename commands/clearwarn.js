@@ -38,7 +38,7 @@ module.exports = {
                 channel.send(author.toString(), Util.embed("Clearing Warns", "Cleared **" + count + "** warnings for user <@" + member + ">."));
             }
         }
-        catch(e) {
+        catch (e) {
             await Util.handleError(message, e);
         }
     }

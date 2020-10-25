@@ -35,7 +35,7 @@ module.exports = {
             delete db[guild.id].muted[member.id];
             await keyv.set("guilds", db);
         }
-        catch(e) {
+        catch (e) {
             await Util.handleError(message, e);
         }
     }

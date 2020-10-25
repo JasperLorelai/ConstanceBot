@@ -115,7 +115,7 @@ module.exports = {
                 await msg.reactions.removeAll();
             });
         }
-        catch(e) {
+        catch (e) {
             await Util.handleError(message, e);
         }
     }

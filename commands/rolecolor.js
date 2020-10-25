@@ -51,7 +51,7 @@ module.exports = {
                 await Util.handleChange(msg, author, role, null, role => role.setColor(color), {denied: "", accepted: "Role color updated!", newTitle: "Role Color Preview"});
             });
         }
-        catch(e) {
+        catch (e) {
             await Util.handleError(message, e);
         }
     }

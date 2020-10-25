@@ -19,7 +19,7 @@ module.exports = {
             await member.setNickname(nickname === "reset" ? "" : nickname);
             await channel.send(author.toString(), Util.embed("Set Nick", "Nick for user " + member.toString() + " was " + (nickname === "reset" ? "reset." : "changed to: **" + nickname + "**")));
         }
-        catch(e) {
+        catch (e) {
             await Util.handleError(message, e);
         }
     }

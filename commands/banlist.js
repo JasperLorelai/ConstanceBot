@@ -14,7 +14,7 @@ module.exports = {
             const msg = await channel.send(author.toString(), Util.embed("Guild Bans", (text.length >= 2000 ? "" : text)));
             if (text.length >= 2000) await Util.handlePrompt(msg, text);
         }
-        catch(e) {
+        catch (e) {
             await Util.handleError(message, e);
         }
     }

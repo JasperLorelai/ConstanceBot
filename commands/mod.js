@@ -87,7 +87,7 @@ module.exports = {
                 await msg.edit(author.toString(), Util.embed("Configure Server Mods", await getList() + "\n\nPrompt timed out."));
             });
         }
-        catch(e) {
+        catch (e) {
             await Util.handleError(message, e);
         }
     }

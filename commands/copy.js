@@ -28,7 +28,7 @@ module.exports = {
             await wb.delete({reason: "botIntent"});
             channel.send(author.toString(), Util.embed("", "Message copied. [\(Jump\)](" + newMsg.url + ")"));
         }
-        catch(e) {
+        catch (e) {
             await Util.handleError(message, e);
         }
     }

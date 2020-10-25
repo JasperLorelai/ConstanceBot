@@ -27,7 +27,7 @@ module.exports = {
             channel.send(author.toString(), Util.embed("", "Message edited. [\(Jump\)](" + editMsg.url + ")"));
             message.delete({reason: "botIntent"});
         }
-        catch(e) {
+        catch (e) {
             await Util.handleError(message, e);
         }
     }

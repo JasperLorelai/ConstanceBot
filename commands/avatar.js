@@ -60,7 +60,7 @@ module.exports = {
                     .setImage("attachment://avatar.png"));
             });
         }
-        catch(e) {
+        catch (e) {
             await Util.handleError(message, e);
         }
     }

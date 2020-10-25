@@ -47,7 +47,7 @@ module.exports = {
             }
             await channel.send(author.toString(), Util.embed("Role Management", text));
         }
-        catch(e) {
+        catch (e) {
             await Util.handleError(message, e);
         }
     }

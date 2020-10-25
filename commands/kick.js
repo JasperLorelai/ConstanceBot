@@ -23,7 +23,7 @@ module.exports = {
             await member.kick(member.user.username + " has been kicked from the server by user: " + author.username + (args[0] ? "(reason: " + args.join(" ") + ")" : ""));
             message.delete({reason: "botIntent"});
         }
-        catch(e) {
+        catch (e) {
             await Util.handleError(message, e);
         }
     }

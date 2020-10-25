@@ -19,7 +19,7 @@ module.exports = {
             await channel.send(msg);
             await message.delete({reason: "botIntent"});
         }
-        catch(e) {
+        catch (e) {
             await Util.handleError(message, e);
         }
     }

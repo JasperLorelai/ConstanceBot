@@ -69,9 +69,10 @@ module.exports = {
                 await msg.react(EmojiMap["5"]);
                 await msg.react(EmojiMap["6"]);
                 await msg.react(EmojiMap["7"]);
-            } catch(e) {}
+            }
+            catch (e) {}
         }
-        catch(e) {
+        catch (e) {
             await Util.handleError(message, e);
         }
     }

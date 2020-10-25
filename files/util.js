@@ -111,12 +111,19 @@ module.exports = {
         return guild.channels.cache.filter(c => c.id !== guild.id).find(c => find === c.id || find.substring(3, find.length - 1) === c.id || find.toLowerCase() === c.name.toLowerCase() || c.name.toLowerCase().includes(find.toLowerCase()));
     },
     isJSON(json) {
-        try {if (typeof JSON.parse(json) == "object") return true} catch(e) {}
+        try {
+            if (typeof JSON.parse(json) == "object") return true;
+        }
+        catch (e) {}
         return false;
     },
     isRegex(regex) {
-        try {new RegExp(regex)} catch(e) {return false}
-        return true;
+        try {
+            new RegExp(regex);
+            return true;
+        }
+        catch (e) {}
+        return false;
     },
     getColorFromString(color) {
         const {colorConvert} = this.Config.getClient();

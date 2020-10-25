@@ -17,7 +17,7 @@ module.exports = {
                 });
             });
         }
-        catch(e) {
+        catch (e) {
             await Util.handleError(message, e);
         }
     }
