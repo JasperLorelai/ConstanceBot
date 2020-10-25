@@ -3,6 +3,9 @@ module.exports = (Discord) => {
     String.prototype.toFormalCase = function() {
         return this.charAt(0).toUpperCase() + this.substr(1).toLowerCase();
     };
+    String.prototype.toTitleCase = function() {
+        return this.split(" ").map(e => e.toFormalCase()).join(" ");
+    };
     String.prototype.discordMKD = function() {
         let splits = this.split("\n").filter(l => l !== "---");
         for (let i = 0; i < splits.length; i++) {
