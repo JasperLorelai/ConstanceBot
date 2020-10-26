@@ -6,7 +6,8 @@ Client.on("guildMemberRemove", async member => {
     const roles = member.roles ? member.roles.cache.filter(r => r.id !== guild.id) : null;
     Util.log(guild, embed => embed.setColor(Config.color.logs.guildMemberRemove)
         .setTitle("User Left")
-        .setAuthor(user.tag, user.displayAvatarURL())
+        .setAuthor(user.tag)
+        .setAuthorIcon(user.displayAvatarURL())
         .setFooter("Member ID: " + user.id)
         .setDescription("New member count: **" + guild.memberCount + "**" +
             "\n\n**Mention:** " + member.toString() +

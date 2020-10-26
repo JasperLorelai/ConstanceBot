@@ -51,13 +51,7 @@ module.exports = {
             });
             coll.on("end", async () => {
                 if (!msg.deleted) await msg.delete({reason: "botIntent"});
-                await channel.send(author.toString(), Util.embed("**" + user.username + "**'s Avatar")
-                    .attachFiles([{
-                        attachment: await Client.fetch(user.displayAvatarURL({
-                            format: "png", size: size
-                        })).then(y => y.buffer()), name: "avatar.png"
-                    }])
-                    .setImage("attachment://avatar.png"));
+                await channel.send(author.toString(), Util.embed("**" + user.username + "**'s Avatar").setImagePermanent(user.displayAvatarURL({format: "png", size: size})));
             });
         }
         catch (e) {

@@ -30,6 +30,6 @@ module.exports = {
             (flags.length ? "\n**Flags:** " + flags.join(", ") : "") +
             (roles && roles.size ? "\n**Roles (" + roles.size + "):** " + roles.array().join(", ") : "");
         if (Config.guildData.mhap.id === guild.id) desc += "\n**Linked MC UUID:** `" + (linkedDB && linkedDB[member.id] ? linkedDB[member.id] : "Not linked") + "`";
-        await channel.send(author.toString(), Util.embed("User info for: " + user.username, desc).setThumbnail(user.displayAvatarURL({format: "png"})));
+        await channel.send(author.toString(), Util.embed("User info for: " + user.username, desc).setThumbnailPermanent(user.displayAvatarURL({format: "png"})));
     }
 };

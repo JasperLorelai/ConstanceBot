@@ -30,9 +30,7 @@ module.exports = {
                 "\n**Hex:** `" + finalColor + "`" +
                 "\n**RGB:** `" + rgb + "`" +
                 "\n**HSL:** `" + hsl + "`"
-            ).attachFiles([{
-                attachment: canvas.toBuffer(), name: "bg.png"
-            }]).setImage("attachment://bg.png"));
+            ).setImagePermanent(canvas.toBuffer()));
         }
         catch (e) {
             await Util.handleError(message, e);

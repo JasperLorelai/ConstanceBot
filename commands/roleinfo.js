@@ -18,8 +18,6 @@ module.exports = {
         const ctx = canvas.getContext("2d");
         ctx.fillStyle = role.hexColor;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        await channel.send(author.toString(), Util.embed("Role information of input: `" + args.join(" ") + "`", desc).attachFiles([{
-            attachment: canvas.toBuffer(), name: "bg.png"
-        }]).setThumbnail("attachment://bg.png"));
+        await channel.send(author.toString(), Util.embed("Role information of input: `" + args.join(" ") + "`", desc).setThumbnailPermanent(canvas.toBuffer()));
     }
 };

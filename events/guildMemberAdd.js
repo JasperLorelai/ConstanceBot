@@ -5,7 +5,8 @@ Client.on("guildMemberAdd", async member => {
 
     Util.log(guild, embed => embed.setColor(Config.color.logs.guildMemberAdd)
         .setTitle("User Joined")
-        .setAuthor("@" + user.tag, user.displayAvatarURL())
+        .setAuthor("@" + user.tag)
+        .setAuthorIcon(user.displayAvatarURL())
         .setFooter("Member ID: " + user.id)
         .setDescription("New member count: **" + guild.memberCount + "**" +
             "\n\n**Mention:** " + member.toString() +
@@ -22,7 +23,7 @@ Client.on("guildMemberAdd", async member => {
                 "\n\n" + "**IP:** `" + mhapData.hostname + "`" +
                 (server.version ? "\n" + "**Version:** `" + server.version + "`" : "") +
                 "\n" + "**Discord Invite:** " + mhapData.invite)
-                .setThumbnail(guild.iconURL())
+                .setThumbnailPermanent(guild.iconURL())
             );
             break;
         }
@@ -34,13 +35,13 @@ Client.on("guildMemberAdd", async member => {
                 "\n\n" + "**IP:** `" + nlData.hostname + "`" +
                 (server.version ? "\n" + "**Version:** `" + server.version + "`" : "") +
                 "\n" + "**Discord Invite:** " + nlData.invite)
-                .setThumbnail(guild.iconURL())
+                .setThumbnailPermanent(guild.iconURL())
             );
 
             // Send join message in guild.
             const channel = guild.channels.resolve(nlData.channels.general);
             if (!channel) return;
-            channel.send(Util.embed(member.user.username + " Joined", "Welcome " + member.toString() + " to **" + guild.name + "**. We hope you enjoy your stay.").setColorRandom().setThumbnail(member.user.displayAvatarURL()));
+            channel.send(Util.embed(member.user.username + " Joined", "Welcome " + member.toString() + " to **" + guild.name + "**. We hope you enjoy your stay.").setColorRandom().setThumbnailPermanent(member.user.displayAvatarURL()));
 
             // Start of the welcomer process. Everything else is handled in "handleMsg.js".
             /*
@@ -65,12 +66,12 @@ Client.on("guildMemberAdd", async member => {
                 "**Please support me on ko-fi:** " + urls.kofi + "\n" +
                 "**Webnovel:** " + urls.webnovel
                 )
-                .setThumbnail(guild.iconURL())
+                .setThumbnailPermanent(guild.iconURL())
             );
 
             const channel = guild.channels.resolve(cctwcData.channels.pedestal);
             if (!channel) return;
-            channel.send(Util.embed(member.user.username + " Joined", "Welcome " + member.toString() + " to **" + guild.name + "**. We hope you enjoy your stay.").setColorRandom().setThumbnail(member.user.displayAvatarURL()));
+            channel.send(Util.embed(member.user.username + " Joined", "Welcome " + member.toString() + " to **" + guild.name + "**. We hope you enjoy your stay.").setColorRandom().setThumbnailPermanent(member.user.displayAvatarURL()));
             break;
         }
 

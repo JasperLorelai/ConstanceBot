@@ -34,6 +34,6 @@ module.exports = {
             (guild.vanityURLCode ? "\n**Vanity URL:** `" + guild.vanityURLCode + "`" : "") +
             (tc.length ? "\n**Text Channels:** " + tc.length : "") +
             (vc.length ? "\n**Voice Channels:** " + vc.length : "");
-        await channel.send(author.toString(), Util.embed("Guild Info", desc).setThumbnail(guild.iconURL()));
+        await channel.send(author.toString(), Util.embed("Guild Info", desc).setThumbnailPermanent(guild.iconURL()));
     }
 };

@@ -45,9 +45,7 @@ module.exports = {
             const image = await Client.fetch.default(author.displayAvatarURL({format: "png"}) + "?size=40").then(y => y.buffer());
             // noinspection JSUnresolvedFunction
             ctx.drawImage(await canvas.loadImage(image), width * .05, height * .25);
-            channel.send(author.toString(), Util.embed("Role Color").attachFiles([{
-                attachment: canvasImage.toBuffer(), name: "bg.png"
-            }]).setImage("attachment://bg.png")).then(async msg => {
+            channel.send(author.toString(), Util.embed("Role Color").setImagePermanent(canvasImage.toBuffer())).then(async msg => {
                 await Util.handleChange(msg, author, role, null, role => role.setColor(color), {denied: "", accepted: "Role color updated!", newTitle: "Role Color Preview"});
             });
         }

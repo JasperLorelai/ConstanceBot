@@ -144,7 +144,7 @@ Client.on("messageReactionAdd", async (r, u) => {
             Util.log(guild, embed => embed.setColor(Config.color.green)
                 .setTitle("User " + u.username + " has accepted the rules!")
                 .setFooter("Member ID: " + u.id)
-                .setThumbnail(u.displayAvatarURL())
+                .setThumbnailPermanent(u.displayAvatarURL())
                 .setDescription(u.toString() + " has accepted the rules and became a member of ***" + guild.name + "***! Count of people who accepted rules: **" + guild.roles.resolve(mhapData.roles.verified).members.size + "/" + guild.memberCount + "**."));
             let db = await keyv.get("guilds");
             // Start of the welcomer process. Everything else is handled in "handleMsg.js".

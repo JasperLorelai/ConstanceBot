@@ -20,15 +20,13 @@ Client.on("messageDelete", async message => {
         if (executor.id === Client.user.id) return;
         Util.log(guild, embed => {
             embed.setColor(Config.color.logs.messageDelete)
-                .setAuthor("@" + author.tag, author.displayAvatarURL())
+                .setAuthor("@" + author.tag)
+                .setAuthorIcon(author.displayAvatarURL())
                 .setTitle("Message Deleted")
                 .setDescription("**Deleted by " + executor.toString() + "from channel** " + channel.toString() + ".")
                 .setFooter("Message ID: " + message.id)
                 .addField("Content", message.content ? message.content : "**No content.**");
-            if (message.attachments.size) embed.attachFiles([{
-                attachment: message.attachments.first().attachment,
-                name: "image.png"
-            }]).setImage("attachment://image.png");
+            if (message.attachments.size) embed = embed.setImagePermanent(message.attachments.first().attachment);
             return embed;
         });
     }

@@ -37,14 +37,10 @@ module.exports = {
             if (server["mods"]) text += "\n**Mods (" + server["mods"].raw.length + "):** " + server["mods"].names.join("**,** ");
          }
         else text = "**Server was not found.**";
-        const embed = Util.embed("Minecraft Server Info", (text.length >= 2000 ? "" : text)).setColor(server.online ? Config.color.green : Config.color.red);
-        if (server.icon) {
-            embed.attachFiles([{
-                attachment: Buffer.from(server.icon.replace(/\\/g, "").replace("data:image/png;base64,", "").replace("==", ""), "base64"),
-                name: "bg.png"
-            }]).setThumbnail("attachment://bg.png");
-        }
-        await msg.edit(embed);
-        if (text.length >= 2000) await Util.handlePrompt(msg, text);
+        let embed = Util.embed("Minecraft Server Info", (text.length >= 2000 ? "" : text)).setColor(server.online ? Config.color.green : Config.color.red);
+        if (server.icon) embed = embed.setThumbnailPermanent(Util.getBufferFromString(server.icon));
+        msg.delete();
+        const newMsg = await channel.send(embed);
+        if (text.length >= 2000) await Util.handlePrompt(newMsg, text);
     }
 };

@@ -76,7 +76,7 @@ module.exports = async message => {
     if (channel.id === Config.guildData.main.channels.toDolist) {
         if (author.id === Client.user.id || author.bot) return;
         message.delete({reason: "botIntent"});
-        const msg = await channel.send(new Config.Discord.MessageEmbed().setDescription(content).setColorRandom().setAuthor(author.tag, author.displayAvatarURL()));
+        const msg = await channel.send(new Config.Discord.MessageEmbed().setDescription(content).setColorRandom().setAuthor(author.tag).setAuthorIcon(author.displayAvatarURL()));
         await msg.react("❌");
         await msg.react("✅");
         await msg.react("🗑");
@@ -105,9 +105,9 @@ module.exports = async message => {
         msgID = msgID ? await msgChannel.messages.fetch(msgID) : null;
         // If the msg was truly found, quote it.
         if (msgID) {
-            const embed = Util.embed(null, msgID.content, Config.color.yellow).setAuthor("Sent by: " + msgID.author.tag, msgID.author.displayAvatarURL());
+            const embed = Util.embed(null, msgID.content, Config.color.yellow).setAuthor("Sent by: " + msgID.author.tag).setAuthorIcon(msgID.author.displayAvatarURL());
             embed.addField("Want to jump to the message?", "[\(Jump\)](" + msgID.url + ")");
-            if (msgID.attachments.size) embed.attachFiles([{attachment: msgID.attachments.first().attachment, name: "image.png"}]).setImage("attachment://image.png");
+            if (msgID.attachments.size) embed.setImagePermanent(msgID.attachments.first().attachment);
             channel.send(embed.setTitle("Quoted by: " + author.tag));
         }
     }
@@ -146,7 +146,7 @@ module.exports = async message => {
             switch (type) {
                 case "rawSupportTicket":
                     const ticket = await handlePost("Support Tickets", "ticket", "Need support? Open a support ticket here: " + Config.urls.mhap + "support");
-                    msg = await ticket.send(Util.embed("Problem:", embed.description).setAuthor(user.tag, user.displayAvatarURL()).addField("React Actions", "❌ - Close support ticket. (`Server Admin` or OP)").setFooter(user.id));
+                    msg = await ticket.send(Util.embed("Problem:", embed.description).setAuthor(user.tag).setAuthorIcon(user.displayAvatarURL()).addField("React Actions", "❌ - Close support ticket. (`Server Admin` or OP)").setFooter(user.id));
                     await msg.react("❌");
                     const restriction = embed.fields[0].value;
                     if (restriction && restriction !== "EVERYONE!") {
@@ -161,7 +161,7 @@ module.exports = async message => {
                     break;
                 case "rawSuggestion":
                     const suggestion = await handlePost("Suggestions", "suggestion", "Would you like to suggest something? Open a suggestion here: " + Config.urls.mhap + "suggest");
-                    msg = await suggestion.send(Util.embed("They suggested:", embed.description).setAuthor(user.tag, user.displayAvatarURL()).addField("React Actions", "❌ - Deny suggestion. (`Server Admin` or OP)\n✅ - Accept suggestion. (`Server Admin` or OP)"));
+                    msg = await suggestion.send(Util.embed("They suggested:", embed.description).setAuthor(user.tag).setAuthorIcon(user.displayAvatarURL()).addField("React Actions", "❌ - Deny suggestion. (`Server Admin` or OP)\n✅ - Accept suggestion. (`Server Admin` or OP)"));
                     await msg.react("👍");
                     await msg.react("👎");
                     await msg.react("✅");
@@ -176,7 +176,7 @@ module.exports = async message => {
                     const firstFragment = await staffApp.send(new Config.Discord.MessageEmbed()
                         .setTitle("Staff Application")
                         .setColor(Config.color.base)
-                        .setThumbnail(user.displayAvatarURL())
+                        .setThumbnailPermanent(user.displayAvatarURL())
                         .setDescription(embed.description)
                         .setAuthor("Issued by: " + user.tag)
                     );

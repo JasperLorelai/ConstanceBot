@@ -118,10 +118,11 @@ module.exports = {
                                 if (!poll) return;
                                 const ch = Util.findChannel(m.content, guild);
                                 if (ch) {
-                                    const embed = Util.embed(null, poll.text);
-                                    embed.setAuthor(author.username, author.displayAvatarURL());
-                                    embed.setFooter("Unique reactions | " + embed.footer.text);
-                                    embed.setColor(Config.color.poll);
+                                    const embed = Util.embed(null, poll.text)
+                                        .setAuthor(author.username)
+                                        .setAuthorIcon(author.displayAvatarURL())
+                                        .setFooter("Unique reactions | " + embed.footer.text)
+                                        .setColor(Config.color.poll);
                                     const created = await ch.send(poll.rolePing && pollrole ? "<@&" + pollrole.id + ">" : "", embed);
                                     for (let emoji of poll.emoji) await created.react(emoji);
                                     msg.delete({reason: "botIntent"});

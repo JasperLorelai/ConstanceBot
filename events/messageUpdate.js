@@ -19,7 +19,8 @@ Client.on("messageUpdate", async (oldMessage, newMessage) => {
         if (newContent.length > 1024) newContent = "Error: The new content is too long to display.";
 
         Util.log(guild, embed => embed.setColor(Config.color.logs.messageUpdate)
-            .setAuthor("@" + author.tag, author.displayAvatarURL())
+            .setAuthor("@" + author.tag)
+            .setAuthorIcon(author.displayAvatarURL())
             .setTitle("Message Edited")
             .setDescription(channel.toString() + " [\(Jump\)](" + newMessage.url + ")")
             .addField("Before", oldContent, false)

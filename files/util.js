@@ -34,7 +34,8 @@ module.exports = {
     getBaseEmbed() {
         return new this.Config.Discord.MessageEmbed()
             .setColor(this.Config.color.base)
-            .setFooter("Bot made by: " + this.Config.author.username, this.Config.author.displayAvatarURL())
+            .setFooter("Bot made by: " + this.Config.author.username)
+            .setFooterIcon(this.Config.author.displayAvatarURL())
             .setTimestamp(new Date());
     },
     embed(title, description, color) {
@@ -120,6 +121,14 @@ module.exports = {
     isRegex(regex) {
         try {
             new RegExp(regex);
+            return true;
+        }
+        catch (e) {}
+        return false;
+    },
+    isURL(url) {
+        try {
+            new URL(url);
             return true;
         }
         catch (e) {}
@@ -265,4 +274,7 @@ module.exports = {
     async getTrello(params) {
         return await this.getRequest(this.Config.urls.trello + params + "?key=" + process.env.TRELLO_KEY + "&token=" + process.env.TRELLO_TOKEN, "json");
     },
+    getBufferFromString(input) {
+        return Buffer.from(input.replace(/\\/g, "").replace("data:image/png;base64,", "").replace("==", ""), "base64");
+    }
 };
