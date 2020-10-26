@@ -97,7 +97,7 @@ module.exports = async message => {
     }
 
     // Message quoting.
-    if (/https:\/\/.*?discordapp.com\/channels\//g.test(content)) {
+    if (/https:\/\/.*?discord(app)?.com\/channels\//g.test(content)) {
         // Extract components of the url and search for them.
         let [msgGuild, msgChannel, msgID] = content.substring(content.indexOf("channels")+9).split("/");
         msgGuild = msgGuild ? Client.guilds.resolve(msgGuild) : null;
