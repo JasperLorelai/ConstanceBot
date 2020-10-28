@@ -18,7 +18,7 @@ app.use(session({
 
 // Add custom prototype methods.
 for (let prototype of fs.readdirSync("./prototype").filter(file => file.endsWith(".js"))) {
-    require("./prototype/" + prototype)();
+    require("./prototype/" + prototype);
 }
 
 // Creating classes and collections
