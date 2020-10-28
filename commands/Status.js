@@ -8,13 +8,18 @@ module.exports = {
         const {channel, author} = message;
         const Client = message.client;
 
-        const msg = await channel.send(author.toString(), Util.embed("Bot Status", "Pinging...", Config.color.yellow));
-        await msg.edit(msg.getFirstEmbed()
-            .setColor(Config.color.base)
-            .setDescription(
-                "**Server Ping**: `" + (msg.createdAt - message.createdAt) + " ms`" +
-                "\n**API Ping**: `" + Math.round(Client.ws.ping) + " ms`" +
-                "\n**Uptime**: `" + Util.msToTime(Client.uptime) + "`")
-        );
+        try {
+            const msg = await channel.send(author.toString(), Util.embed("Bot Status", "Pinging...", Config.color.yellow));
+            await msg.edit(msg.getFirstEmbed()
+                .setColor(Config.color.base)
+                .setDescription(
+                    "**Server Ping**: `" + (msg.createdAt - message.createdAt) + " ms`" +
+                    "\n**API Ping**: `" + Math.round(Client.ws.ping) + " ms`" +
+                    "\n**Uptime**: `" + Util.msToTime(Client.uptime) + "`")
+            );
+        }
+        catch (e) {
+            await Util.handleError(message, e);
+        }
     }
 };

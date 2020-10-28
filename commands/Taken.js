@@ -8,8 +8,13 @@ module.exports = {
     async execute(message) {
         const {channel, author} = message;
 
-        const chars = (await Util.getTrello("cards/" + Config.trello.cards.characters)).desc.discordMKD();
-        const msg = await channel.send(author.toString(), Util.embed("Canon Character List", (chars.length >= 2000 ? "" : chars)));
-        if (chars.length >= 2000) await Util.handlePrompt(msg, chars);
+        try {
+            const chars = (await Util.getTrello("cards/" + Config.trello.cards.characters)).desc.discordMKD();
+            const msg = await channel.send(author.toString(), Util.embed("Canon Character List", (chars.length >= 2000 ? "" : chars)));
+            if (chars.length >= 2000) await Util.handlePrompt(msg, chars);
+        }
+        catch (e) {
+            await Util.handleError(message, e);
+        }
     }
 };

@@ -10,8 +10,8 @@ module.exports = {
     async execute(message, args) {
         const {channel, author, guild} = message;
         const Client = message.client;
-
         const apiLimit = 98;
+
         try {
             let num = parseInt(args[0]);
             if (!num || num < 1) {
