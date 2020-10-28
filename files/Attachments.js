@@ -1,4 +1,4 @@
-const Util = require("./util");
+const Util = require("./Util");
 const Stream = require("stream");
 const md5 = require("md5");
 module.exports = (Discord) => {

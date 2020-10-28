@@ -4,7 +4,7 @@ module.exports = {
     description: "Sends the official list of quirks with hyperlinks that lead to their cards.",
     aliases: ["quirks"],
     params: ["(quirk)"],
-    guildWhitelist: [require("../files/config").guildData.mhap.id],
+    guildWhitelist: [require("../files/Config").guildData.mhap.id],
     async execute(message, args) {
         const Client = message.client;
         const {channel, author} = message;

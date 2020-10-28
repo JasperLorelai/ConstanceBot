@@ -1,5 +1,5 @@
 module.exports = (Discord) => {
-    require("./attachments")(Discord);
+    require("./Attachments")(Discord);
     String.prototype.toFormalCase = function() {
         return this.charAt(0).toUpperCase() + this.substr(1).toLowerCase();
     }

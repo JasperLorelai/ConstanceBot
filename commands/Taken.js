@@ -3,7 +3,7 @@ module.exports = {
     name: "taken",
     description: "Sends the official list of canon characters on our server.",
     aliases: ["characters"],
-    guildWhitelist: [require("../files/config").guildData.mhap.id],
+    guildWhitelist: [require("../files/Config").guildData.mhap.id],
     async execute(message) {
         const Client = message.client;
         const {channel, author} = message;
