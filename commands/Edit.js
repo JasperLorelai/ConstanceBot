@@ -22,7 +22,7 @@ module.exports = {
             args.shift();
             let msg = args.join(" ");
             if (msg.startsWith("`") && msg.endsWith("`")) msg = msg.replace(/`/g, "");
-            msg = Util.isJSON(msg) ? JSON.parse(msg) : msg;
+            msg = msg.isJSON() ? JSON.parse(msg) : msg;
             await editMsg.edit(msg);
             channel.send(author.toString(), Util.embed("", "Message edited. [\(Jump\)](" + editMsg.url + ")"));
             message.delete({reason: "botIntent"});

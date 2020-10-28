@@ -15,7 +15,7 @@ module.exports = {
             else channel = message.channel;
             let msg = args.join(" ");
             if (msg.startsWith("`") && msg.endsWith("`")) msg = msg.replace(/`/g, "");
-            msg = Util.isJSON(msg) ? JSON.parse(msg) : msg;
+            msg = msg.isJSON() ? JSON.parse(msg) : msg;
             await channel.send(msg);
             await message.delete({reason: "botIntent"});
         }

@@ -14,7 +14,7 @@ module.exports = async (request, response, Client) => {
                 break;
             case "getMCUserID":
                 let db = await keyv.get("minecraft") || {};
-                response.send(value ? Util.getKeyByValue(db, value) : "");
+                response.send(value ? db.getKeyByValue(value) : "");
                 break;
             case "getMCUsers":
                 response.send(await keyv.get("minecraft") || {});

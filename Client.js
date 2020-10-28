@@ -35,7 +35,6 @@ Client.atob = require("atob");
 Client.canvas = require("canvas");
 Client.ms = require("ms");
 Client.formData = require("form-data");
-Client.colorConvert = require("color-convert");
 Client.sha1 = require("sha1");
 Client.md5 = require("md5");
 

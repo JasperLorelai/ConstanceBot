@@ -55,7 +55,7 @@ module.exports = async message => {
             });
         }
         const webhook = await dmChannel.createWebhook(author.username, {avatar: author.displayAvatarURL()});
-        if (Util.isJSON(content)) {
+        if (content.isJSON()) {
             const embed = JSON.parse(content);
             let final = {};
             if (!embed.embed) final.embeds = [embed]; else final.embeds = [embed.embed];
@@ -89,7 +89,7 @@ module.exports = async message => {
         // Ignore webhooks - already redirected messages.
         if (message.webhookID) return;
         const user = Client.users.resolve(channel.name);
-        if (user) await user.send(Util.isJSON(content) ? JSON.parse(content) : content); else {
+        if (user) await user.send(content.isJSON() ? JSON.parse(content) : content); else {
             await channel.delete({reason: "botIntent"});
             Config.botLog().send(author.toString(), Util.embed("DM Channel Deleted", "User you tried to DM could not be found. (`" + channel.name + "`)", Config.color.red));
         }

@@ -36,7 +36,7 @@ module.exports = {
                         collTrigger.on("collect", async mTrigger => {
                             const trigger = mTrigger.content;
                             collTrigger.stop();
-                            if (!Util.isRegex(trigger)) {
+                            if (!trigger.isRegex()) {
                                 msg.channel.send(member.toString(), Util.embed("Create Trigger", "Trigger must be a regex object!", Config.color.red)).then(tempMsg => {
                                     tempMsg.delete({timeout: 3000, reason: "botIntent"});
                                 });

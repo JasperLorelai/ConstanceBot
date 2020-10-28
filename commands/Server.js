@@ -38,7 +38,7 @@ module.exports = {
          }
         else text = "**Server was not found.**";
         let embed = Util.embed("Minecraft Server Info", (text.length >= 2000 ? "" : text)).setColor(server.online ? Config.color.green : Config.color.red);
-        if (server.icon) embed = embed.setThumbnailPermanent(Util.getBufferFromString(server.icon));
+        if (server.icon) embed = embed.setThumbnailPermanent(server.icon.getBufferFromString());
         msg.delete();
         const newMsg = await channel.send(embed);
         if (text.length >= 2000) await Util.handlePrompt(newMsg, text);

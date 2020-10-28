@@ -87,7 +87,7 @@ module.exports = {
                             msgColl = channel.createMessageCollector(m => m.author.id !== Client.user.id, {time: Util.collTtl(collector, created)});
                             msgColl.on("collect", m => {
                                 if (!poll) return;
-                                const emoji = poll.emoji.concat(Util.getEmoji(m.content)).filter(e => e);
+                                const emoji = poll.emoji.concat(m.content.getEmoji()).filter(e => e);
                                 if (emoji[0]) {
                                     poll.emoji = emoji;
                                     const embed = Util.getEmbeds(msg)[0];

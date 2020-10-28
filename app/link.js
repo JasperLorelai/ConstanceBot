@@ -10,8 +10,7 @@ module.exports = async (request, response, Client) => {
         }
 
         // If uuid was specified, but not the code.
-        const uuid = Client.atob(request.query["uuid"]);
-        const user = Util.getKeyByValue(db, uuid);
+        const user = db.getKeyByValue(Client.atob(request.query["uuid"]));
         if (user) {
             response.sendFile("/views/discordLinking/clone.html", {root: "."});
             return;
