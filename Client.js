@@ -5,6 +5,7 @@ const Discord = require("discordjs");
 const Keyv = require("keyv");
 const express = require("express");
 const app = express();
+const fs = require("fs");
 
 app.use(express.static("views"));
 app.use(session({
@@ -16,11 +17,13 @@ app.use(session({
 }));
 
 // Add custom prototype methods.
-require("./files/prototype")(Discord);
+for (let prototype of fs.readdirSync("./prototype").filter(file => file.endsWith(".js"))) {
+    require("./prototype/" + prototype)();
+}
 
 // Creating classes and collections
 const Client = new Discord.Client();
-Client.fs = require("fs");
+Client.fs = fs;
 Client.EmojiMap = require("./files/EmojiMap.js");
 Client.Config = require("./files/Config.js");
 Client.Util = require("./files/Util.js");
@@ -46,7 +49,7 @@ Client.minecraftChannels = [];
 Client.login().catch(e => console.log(e));
 module.exports = Client;
 
-const {keyv, fs} = Client;
+const {keyv} = Client;
 
 // Grabbing handlers
 Client.commands = new Discord.Collection();
