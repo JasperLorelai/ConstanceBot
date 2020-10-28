@@ -24,7 +24,7 @@ module.exports = {
             }
 
             async function refresh(msg, poll) {
-                const embed = Util.getEmbeds(msg)[0];
+                const embed = msg.getFirstEmbed();
                 embed.fields[0].value = getHelp(poll);
                 embed.setDescription(poll.text || "No text set.");
                 await msg.edit(embed);
@@ -90,7 +90,7 @@ module.exports = {
                                 const emoji = poll.emoji.concat(m.content.getEmoji()).filter(e => e);
                                 if (emoji[0]) {
                                     poll.emoji = emoji;
-                                    const embed = Util.getEmbeds(msg)[0];
+                                    const embed = msg.getFirstEmbed();
                                     if (embed.fields.length > 1) embed.fields[1].value = emoji.join(", "); else embed.addField("Emoji", emoji.join(", "));
                                     msg.edit(embed);
                                     msgColl.stop();
@@ -102,7 +102,7 @@ module.exports = {
                         case "🚫":
                             if (poll.emoji.length > 0) {
                                 poll.emoji = [];
-                                await msg.edit(Util.getEmbeds(msg)[0].spliceFields(1, 1));
+                                await msg.edit(msg.getFirstEmbed().spliceFields(1, 1));
                             }
                             break;
                         case "💟":
@@ -130,7 +130,7 @@ module.exports = {
                                     collector.stop("done");
                                 }
                                 else {
-                                    const embed = Util.getEmbeds(msg2)[0];
+                                    const embed = msg2.getFirstEmbed();
                                     await msg2.edit(embed.setDescription(embed.description + "\n\n**Channel not found!**").setColor(Config.color.red));
                                 }
                                 m.delete({reason: "botIntent"});

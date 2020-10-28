@@ -7,7 +7,7 @@ module.exports = {
         const {channel, author} = message;
         const {Util, Config} = Client;
         const msg = await channel.send(author.toString(), Util.embed("Bot Status", "Pinging...", Config.color.yellow));
-        await msg.edit(Util.getEmbeds(msg)[0]
+        await msg.edit(msg.getFirstEmbed()
             .setColor(Config.color.base)
             .setDescription(
                 "**Server Ping**: `" + (msg.createdAt - message.createdAt) + " ms`" +

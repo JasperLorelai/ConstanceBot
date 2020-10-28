@@ -23,7 +23,7 @@ module.exports = async message => {
             }
 
             const msg = await channel.messages.fetch(db[mhapGuild.id].welcomer[author.id]);
-            const embed = Util.getEmbeds(msg)[0];
+            const embed = msg.getFirstEmbed();
             let newMsg;
             switch (embed.title) {
                 case "Roles - Poll (Stage 1)":
@@ -121,7 +121,7 @@ module.exports = async message => {
 
     // Handle raw forms.
     if (message.webhookID && message.webhookID === Config.getWebhookID()) {
-        let embed = Util.getEmbeds(message)[0];
+        let embed = message.getFirstEmbed();
         const user = Client.users.resolve(embed.title);
         const guildData = Config.guildData.mhap;
         const guild = Client.guilds.resolve(guildData.id);
@@ -168,7 +168,7 @@ module.exports = async message => {
                     await msg.react("❌");
                     break;
                 case "rawStaffApp":
-                    const appFragments = Util.getEmbeds(message);
+                    const appFragments = message.getEmbeds();
                     appFragments.shift();
                     const lastFragment = appFragments[appFragments.length -1];
                     appFragments.splice(appFragments.length-1);

@@ -55,7 +55,7 @@ module.exports = {
                                 if (!db[guild.id].responses) db[guild.id].responses = [];
                                 db[guild.id].responses.push({trigger: trigger, reply: reply});
                                 await keyv.set("guilds", db);
-                                await msg.edit(Util.getEmbeds(msg)[0].setDescription((await getResponses() || "No responses in DB.") + "\n\n**React with:\n➖ - to remove a response.\n➕ - to add a new response.**"));
+                                await msg.edit(msg.getFirstEmbed().setDescription((await getResponses() || "No responses in DB.") + "\n\n**React with:\n➖ - to remove a response.\n➕ - to add a new response.**"));
                                 msg.channel.send(member.toString(), Util.embed("Auto Response Creator", "Auto response created!", Config.color.green)).then(tempMsg => {
                                     tempMsg.delete({timeout: 3000, reason: "botIntent"});
                                 });
@@ -98,7 +98,7 @@ module.exports = {
                             if (!db[guild.id].responses) db[guild.id].responses = [];
                             db[guild.id].responses = db[guild.id].responses.filter((r, i) => i !== ind);
                             await keyv.set("guilds", db);
-                            await msg.edit(member.toString(), Util.getEmbeds(msg)[0].setDescription((await getResponses() || "No responses in DB.") + "\n\n**React with:\n➖ - to remove a response.\n➕ - to add a new response.**"));
+                            await msg.edit(member.toString(), msg.getFirstEmbed().setDescription((await getResponses() || "No responses in DB.") + "\n\n**React with:\n➖ - to remove a response.\n➕ - to add a new response.**"));
                             msg.channel.send(member.toString(), Util.embed("Auto Response Creator", "Auto response deleted!", Config.color.green)).then(tempMsg => {
                                 tempMsg.delete({timeout: 3000, reason: "botIntent"});
                             });
@@ -111,7 +111,7 @@ module.exports = {
                 }
             });
             coll.on("end", async () => {
-                await msg.edit(Util.getEmbeds(msg)[0].setDescription(await getResponses() || "No responses in DB.").setColor(Config.color.base));
+                await msg.edit(msg.getFirstEmbed().setDescription(await getResponses() || "No responses in DB.").setColor(Config.color.base));
                 await msg.reactions.removeAll();
             });
         }

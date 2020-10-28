@@ -85,7 +85,7 @@ module.exports = {
                 else {
                     if (msg.deleted) return;
                     await msg.reactions.removeAll();
-                    await msg.edit(Util.getEmbeds(msg)[0].setDescription("**Messages found:** " + (num > apiLimit ? "limited to `" + apiLimit + "`" : "`" + num + "`") + "\n\n**Timed out.**").setColor("666666"));
+                    await msg.edit(msg.getFirstEmbed().setDescription("**Messages found:** " + (num > apiLimit ? "limited to `" + apiLimit + "`" : "`" + num + "`") + "\n\n**Timed out.**").setColor("666666"));
                 }
             });
         }

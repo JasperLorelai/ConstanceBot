@@ -11,7 +11,7 @@ Client.on("messageReactionAdd", async (r, u) => {
     // Handle To-Do list actions.
     if (channel.id === Config.guildData.main.channels.toDolist) {
         if (u.id === Client.user.id) return;
-        const embed = Util.getEmbeds(r.message)[0];
+        const embed = r.message.getFirstEmbed();
         switch (r.emoji.toString()) {
             case "❌":
                 Config.botLog().send(embed.setColor(Config.color.red).setTitle("To Do List Item - Declined"));
@@ -118,7 +118,7 @@ Client.on("messageReactionAdd", async (r, u) => {
     // Poll - unique reactions.
     if (r.message.author.id === Client.user.id) {
         if (u.id === Client.user.id) return;
-        const embed = Util.getEmbeds(r.message)[0];
+        const embed = r.message.ggetFirstEmbed();
         if (embed.footer && embed.footer.text.startsWith("Unique reactions | ")) {
             for (const reaction of r.message.reactions.cache.values()) {
                 if (r.emoji.toString() === reaction.emoji.toString()) continue;

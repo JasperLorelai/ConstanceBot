@@ -51,7 +51,7 @@ module.exports = {
             const infoText = infoData.getText(Config);
 
             // Check if embeds are similar.
-            let embed = Util.getEmbeds(infoMsg);
+            let embed = infoMsg.getEmbeds();
             if (embed) {
                 embed = embed[0];
                 if (embed.description === infoText.description && embed.fields === infoText.fields) {

@@ -26,7 +26,7 @@ module.exports = {
 
         function ship(msg, embedToSend) {
             const c = author.toString();
-            const embed = Util.getEmbeds(msg)[0];
+            const embed = msg.getFirstEmbed();
             Client.setTimeout(() => {
                 msg.edit(c, embed.setDescription("**.**"));
                 Client.setTimeout(() => {
