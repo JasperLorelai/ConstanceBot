@@ -23,7 +23,7 @@ module.exports = {
             await msg.react("➕");
             const created = Date.now();
             let idle = true;
-            const coll = msg.createReactionCollector((r, u) => u.id !== msg.Client.user.id, {time: 90000});
+            const coll = msg.createReactionCollector((r, u) => u.id !== msg.client.user.id, {time: 90000});
             coll.on("collect", async (r, u) => {
                 await r.users.remove(u);
                 if (u.id !== member.id) return;
@@ -42,7 +42,7 @@ module.exports = {
                                 });
                                 return null;
                             }
-                            const msgReply = await mTrigger.channel.send(member.toString(), Util.embed("Create Reply", "Send what the reply message should be.", Config.yellow));
+                            const msgReply = await mTrigger.channel.send(member.toString(), Util.embed("Create Reply", "Send what the reply message should be.", Config.color.yellow));
                             mTrigger.delete({reason: "botIntent"});
                             const collReply = msgReply.channel.createMessageCollector(m => m.author.id === member.id, {time: Util.collTtl(coll, created)});
                             collReply.on("collect", async mReply => {

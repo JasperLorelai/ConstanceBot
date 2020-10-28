@@ -16,7 +16,7 @@ module.exports = {
                 await channel.send(author.toString(), Util.embed("Role Color", "Role not found!", Config.color.red));
                 return null;
             }
-            let color = Util.getColorFromString(args.join("").replace(/\s/g, ""));
+            let color = args.join("").replace(/\s/g, "").getColorFromString();
             if (!color) {
                 await channel.send(author.toString(), Util.embed("Role Color", "Invalid color! The only color types supported are: `keyword`, `hex` (starts with #), `rgb(r, g, b)` and `hsl(h, s, l)`.", Config.color.red));
                 return null;

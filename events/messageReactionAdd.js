@@ -119,7 +119,7 @@ Client.on("messageReactionAdd", async (r, u) => {
     // Poll - unique reactions.
     if (r.message.author.id === Client.user.id) {
         if (u.id === Client.user.id) return;
-        const embed = r.message.ggetFirstEmbed();
+        const embed = r.message.getFirstEmbed();
         if (embed.footer && embed.footer.text.startsWith("Unique reactions | ")) {
             for (const reaction of r.message.reactions.cache.values()) {
                 if (r.emoji.toString() === reaction.emoji.toString()) continue;
@@ -150,7 +150,7 @@ Client.on("messageReactionAdd", async (r, u) => {
             let db = await keyv.get("guilds");
             // Start of the welcomer process. Everything else is handled in "handleMsg.js".
             if (!db) db = {};
-            const {mhap} = Config.guilds;
+            const {mhap} = Config.guildData;
             if (!db[mhap]) db[mhap] = {};
             if (!db[mhap].welcomer) db[mhap].welcomer = {};
             const msg = await u.send(Util.embed("Roles - Poll (Stage 1)", "Would you like to be mentioned whenever we release a server poll?\nPlease reply with `yes` or `no`.", Config.color.yellow));

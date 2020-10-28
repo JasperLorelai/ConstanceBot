@@ -67,7 +67,7 @@ module.exports = {
             i += end;
         }
         // Setup
-        const embed = this.getEmbeds(message)[0];
+        const embed = message.getFirstEmbed();
         let index = 0;
         await message.edit(embed.setDescription(splits[0]).addField("Pages", "Page: " + (index + 1) + "**/**" + splits.length, true));
         await message.react("◀");
@@ -120,7 +120,7 @@ module.exports = {
 
         if (!denied) denied = () => {};
         if (!accepted) accepted = () => {};
-        let embed = this.getEmbeds(msg)[0];
+        let embed = msg.getFirstEmbed();
         await msg.edit(embed.setColor(Config.color.yellow).setDescription((embed.description ? embed.description : "") + "\n\n**React with:\n✅ - to confirm changes.\n❌ - deny changes.**"));
         await msg.react("❌");
         await msg.react("✅");
@@ -128,7 +128,7 @@ module.exports = {
         coll.on("collect", async (r, u) => {
             await r.users.remove(u.id);
             if (author.id !== u.id) return;
-            embed = getEmbeds(msg)[0];
+            embed = msg.getFirstEmbed();
             switch (r.emoji.toString()) {
                 case "❌":
                     denied(modify);
@@ -146,7 +146,7 @@ module.exports = {
         });
         coll.on("end", async (c, reason) => {
             if (msg.deleted) return;
-            const embed = this.getEmbeds(msg)[0];
+            const embed = msg.getFirstEmbed();
             if (!["denied", "accepted"].includes(reason)) embed.setColor("666666").setDescription("Timed out.");
             if (reason === "denied" && !options.denied) embed.setDescription("");
             if (reason === "accepted" && !options.accepted) embed.setDescription("");

@@ -9,7 +9,7 @@ module.exports = {
 
         try {
             const color = args.join("");
-            let finalColor = Util.getColorFromString(color);
+            let finalColor = color.getColorFromString();
 
             if (!finalColor) {
                 await channel.send(author.toString(), Util.embed("Colors", "Invalid color! The only color types supported are: `keyword`, `hex` (starts with #), `rgb(r, g, b)` and `hsl(h, s, l)`.", Config.color.red));

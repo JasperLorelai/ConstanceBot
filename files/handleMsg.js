@@ -19,7 +19,7 @@ module.exports = async message => {
         if (db && db[mhapGuild.id] && db[mhapGuild.id].welcomer && db[mhapGuild.id].welcomer[author.id] && (content.toLowerCase().includes("yes") || content.toLowerCase().includes("no"))) {
             function processRole(role) {
                 if (content.toLowerCase().includes("yes")) {
-                    Client.guilds.resolve(mhapGuild.id).members.resolve(author.id).roles.add(Config.roles[role]);
+                    Client.guilds.resolve(mhapGuild.id).members.resolve(author.id).roles.add(mhapGuild.roles[role]);
                     embed.setColor(Config.color.green).setDescription("Role added.");
                 }
                 else embed.setColor(Config.color.red).setDescription("Role dismissed.");
