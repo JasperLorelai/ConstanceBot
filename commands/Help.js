@@ -1,14 +1,17 @@
+const {Util} = require("../Libs");
+
 module.exports = {
     name: "help",
     description: "Show info about a specific command. Run the `commands` command to display a list of all commands.",
     aliases: ["command"],
     params: ["[command]"],
     execute(message, args) {
-        const Client = message.client;
         const {channel, author} = message;
-        const {commands, Util} = Client;
+        const Client = message.client;
+
         let text;
-        const command = commands.get(args[0]) || commands.find(cmd => cmd["aliases"] && cmd["aliases"].includes(args[0]));
+        // noinspection JSValidateTypes
+        const command = Client.commands.get(args[0]) || Client.commands.find(cmd => cmd["aliases"] && cmd["aliases"].includes(args[0]));
         if (command) {
             let perm = command.perm;
             if (perm === "author") perm = "Bot Author";

@@ -1,5 +1,6 @@
 const Client = require("../Client");
-const {Config} = Client;
+const {Config} = require("../Libs");
+
 Client.on("messageReactionRemove", async (r, u) => {
     // Ignore custom reactions.
     if (!r) return;

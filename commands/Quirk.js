@@ -1,14 +1,14 @@
-// noinspection JSUnusedLocalSymbols
+const {Config, Util} = require("../Libs");
+
 module.exports = {
     name: "quirk",
     description: "Sends the official list of quirks with hyperlinks that lead to their cards.",
     aliases: ["quirks"],
     params: ["(quirk)"],
-    guildWhitelist: [require("../files/Config").guildData.mhap.id],
+    guildWhitelist: [Config.guildData.mhap.id],
     async execute(message, args) {
-        const Client = message.client;
         const {channel, author} = message;
-        const {Config, Util} = Client;
+
         if (args.length) {
             const lists = await Util.getTrello("boards/" + Config.trello.boards.mhap + "/lists");
             const quirkList = lists.find(l => l.name === "Quirks");

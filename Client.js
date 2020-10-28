@@ -1,11 +1,8 @@
 // Importing libraries
 require("dotenv").config();
 const session = require("express-session");
-const Discord = require("discordjs");
-const Keyv = require("keyv");
 const express = require("express");
 const app = express();
-const fs = require("fs");
 
 app.use(express.static("views"));
 app.use(session({
@@ -16,39 +13,21 @@ app.use(session({
     saveUninitialized: true
 }));
 
+// Creating libraries.
+const Libs = require("./Libs");
+const {fs, Discord, keyv, Util} = Libs;
+
 // Add custom prototype methods.
 for (let prototype of fs.readdirSync("./prototype").filter(file => file.endsWith(".js"))) {
     require("./prototype/" + prototype);
 }
 
-// Creating classes and collections
+// Create client.
 const Client = new Discord.Client();
-Client.fs = fs;
-Client.EmojiMap = require("./files/EmojiMap.js");
-Client.Config = require("./files/Config.js");
-Client.Util = require("./files/Util.js");
-Client.handleMsg = require("./files/handleMsg.js");
-Client.keyv = new Keyv(process.env.DATABASE);
-Client.fetch = require("node-fetch");
-Client.btoa = require("btoa");
-Client.atob = require("atob");
-Client.canvas = require("canvas");
-Client.ms = require("ms");
-Client.formData = require("form-data");
-Client.sha1 = require("sha1");
-Client.md5 = require("md5");
-
-// Connect Util and Config.
-Client.Util.Config = Client.Config;
-Client.Config.Util = Client.Util;
-
-Client.Config.Discord = Discord;
 Client.minecraftChannels = [];
 
 Client.login().catch(e => console.log(e));
 module.exports = Client;
-
-const {keyv} = Client;
 
 // Grabbing handlers
 Client.commands = new Discord.Collection();
@@ -97,7 +76,7 @@ Client.setInterval(async () => {
     for (const guild in Client.guilds) {
         if (Client.guilds.hasOwnProperty(guild)) {
             if (!db[guild.id]) continue;
-            const mutedRole = Client.Util.findRole("Muted", guild);
+            const mutedRole = Util.findRole("Muted", guild);
             if (mutedRole && db && db[guild.id] && db[guild.id].muted) {
                 const muted = db[guild.id].muted;
                 for (const mutedUserID of Object.keys(muted)) {
@@ -109,7 +88,7 @@ Client.setInterval(async () => {
                     else {
                         if (Date.now() > muted[mutedUserID]) {
                             await mutedUser.roles.remove(mutedRole);
-                            await mutedUser.send(Client.Util.embed(guild.name + " - Mute", "Your mute status has been lifted."));
+                            await mutedUser.send(Util.embed(guild.name + " - Mute", "Your mute status has been lifted."));
                             delete db[guild.id].muted[mutedUserID];
                             await keyv.set("guilds", db);
                         }

@@ -1,11 +1,12 @@
+const {Config, Util, colorConvert, canvas} = require("../Libs");
+
 module.exports = {
     name: "color",
     description: "Takes a color from any format and displays it in multiple other formats.",
     params: ["[color]"],
     async execute(message, args) {
-        const Client = message.client;
         const {channel, author} = message;
-        const {Config, Util, colorConvert} = Client;
+
         try {
             const color = args.join("");
             let finalColor = Util.getColorFromString(color);
@@ -20,7 +21,7 @@ module.exports = {
             const [h, s, l] = colorConvert.hex.hsl(finalColor);
             const hsl = h + "°, " + s + "%, " + l + "%";
 
-            const canvas = Client.canvas.createCanvas(200, 200);
+            const canvas = canvas.createCanvas(200, 200);
             const ctx = canvas.getContext("2d");
             ctx.fillStyle = "#" + finalColor;
             ctx.fillRect(0, 0, canvas.width, canvas.height);

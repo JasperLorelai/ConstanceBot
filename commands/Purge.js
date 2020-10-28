@@ -1,3 +1,5 @@
+const {Config, Util} = require("../Libs");
+
 module.exports = {
     name: "purge",
     description: "Clear messages in text channel. It maps the latest specified amount of messages to delete. You can apply a filter for a specific user.",
@@ -6,9 +8,9 @@ module.exports = {
     guildOnly: true,
     perm: "mod",
     async execute(message, args) {
-        const Client = message.client;
         const {channel, author, guild} = message;
-        const {Config, Util} = Client;
+        const Client = message.client;
+
         const apiLimit = 98;
         try {
             let num = parseInt(args[0]);

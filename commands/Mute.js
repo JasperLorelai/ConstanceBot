@@ -1,3 +1,5 @@
+const {Util, Config, keyv, ms} = require("../Libs");
+
 module.exports = {
     name: "mute",
     description: "The mute command is used to suppress another user's permission to send messages or connect to voice channels.",
@@ -5,9 +7,9 @@ module.exports = {
     guildOnly: true,
     perm: "mod",
     async execute(message, args) {
-        const Client = message.client;
         const {guild, channel, author} = message;
-        const {Util, Config, keyv} = Client;
+        const Client = message.client;
+
         try {
             // Setup mute.
             let muteRole = Util.findRole("Muted", guild);
@@ -46,9 +48,9 @@ module.exports = {
 
             let time;
             try {
-                time = Client.ms(args[0]);
+                time = ms(args[0]);
                 args.shift();
-                if (!Number.isInteger(time)) time = Client.ms(time);
+                if (!Number.isInteger(time)) time = ms(time);
             }
             catch (e) {
                 await channel.send(author.toString(), Util.embed("Mute", "Time format is invalid.", Config.color.red));
@@ -59,7 +61,7 @@ module.exports = {
 
             // Manage mute time.
             member.roles.add(muteRole);
-            channel.send(Util.embed("Mute", "User " + member.toString() + " has been muted for **" + Client.ms(time) + "** by " + author.toString() + (reason ? " for: **" + reason + "**" : "") + "."));
+            channel.send(Util.embed("Mute", "User " + member.toString() + " has been muted for **" + ms(time) + "** by " + author.toString() + (reason ? " for: **" + reason + "**" : "") + "."));
             if (Math.pow(2,32) - 1 > time) {
                 Client.setTimeout(() => {
                     member.roles.remove(muteRole);

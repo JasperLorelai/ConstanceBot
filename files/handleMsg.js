@@ -1,7 +1,10 @@
+const {Config, Util, keyv, Discord} = require("../Libs");
+const {MessageMentions} = Discord;
+
 module.exports = async message => {
     const Client = message.client;
     const {author, content, channel, guild, mentions} = message;
-    const {Config, Util, keyv} = Client;
+
     const main = Config.getMainGuild();
     let db = await keyv.get("guilds");
     // Ignore if it was handled externaly.
@@ -76,7 +79,7 @@ module.exports = async message => {
     if (channel.id === Config.guildData.main.channels.toDolist) {
         if (author.id === Client.user.id || author.bot) return;
         message.delete({reason: "botIntent"});
-        const msg = await channel.send(new Config.Discord.MessageEmbed().setDescription(content).setColorRandom().setAuthor(author.tag).setAuthorIcon(author.displayAvatarURL()));
+        const msg = await channel.send(new Discord.MessageEmbed().setDescription(content).setColorRandom().setAuthor(author.tag).setAuthorIcon(author.displayAvatarURL()));
         await msg.react("❌");
         await msg.react("✅");
         await msg.react("🗑");
@@ -113,7 +116,7 @@ module.exports = async message => {
     }
 
     // Clean prefix query.
-    if (mentions && mentions.users && mentions.users && mentions.users.has(Client.user.id) && content.replace(Config.Discord.MessageMentions.USERS_PATTERN, "").trim() === "") {
+    if (mentions && mentions.users && mentions.users && mentions.users.has(Client.user.id) && content.replace(MessageMentions.USERS_PATTERN, "").trim() === "") {
         if (author.id === Client.user.id) return;
         await channel.send(author.toString(), Util.embed("Guild Prefix", "My prefix is: **" + (db && guild && db[guild.id] && db[guild.id].prefix ? db[guild.id].prefix : Config.defaultPrefix) + "**"));
         return;
@@ -173,14 +176,14 @@ module.exports = async message => {
                     const lastFragment = appFragments[appFragments.length -1];
                     appFragments.splice(appFragments.length-1);
                     const staffApp = await handlePost("Staff Applications", "staffapp", "Would you like to apply? Use this form here: " + Config.urls.mhap + "apply");
-                    const firstFragment = await staffApp.send(new Config.Discord.MessageEmbed()
+                    const firstFragment = await staffApp.send(new Discord.MessageEmbed()
                         .setTitle("Staff Application")
                         .setColor(Config.color.base)
                         .setThumbnailPermanent(user.displayAvatarURL())
                         .setDescription(embed.description)
                         .setAuthor("Issued by: " + user.tag)
                     );
-                    for (const fragment of appFragments) await staffApp.send(new Config.Discord.MessageEmbed().setColor(Config.color.base).setDescription(fragment.description));
+                    for (const fragment of appFragments) await staffApp.send(new Discord.MessageEmbed().setColor(Config.color.base).setDescription(fragment.description));
                     msg = await staffApp.send(Util.embed("", lastFragment.description).addField("Staff Application Actions", "❌ - Deny application. (`Server Admin`)\n✅ - Accept application. (`Server Admin`)"));
                     await msg.react("✅");
                     await msg.react("❌");

@@ -1,3 +1,5 @@
+const {Config, Util} = require("../Libs");
+
 module.exports = {
     name: "ship",
     description: "Calculate the love with the true power of Math.",
@@ -5,9 +7,9 @@ module.exports = {
     params: ["[target 1]", "(target 2)"],
     guildOnly: true,
     async execute(message, args) {
-        const Client = message.client;
         const {channel, author} = message;
-        const {Config, Util} = Client;
+        const Client = message.client;
+
         const target1 = Util.findUser(args[0]);
         if (!target1) {
             channel.send(author.toString(), Util.embed("Love Calculator", "User \"" + args[0] + "\" not found!", Config.color.red));

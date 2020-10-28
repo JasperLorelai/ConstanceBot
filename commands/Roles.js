@@ -1,11 +1,12 @@
+const {Util} = require("../Libs");
+
 module.exports = {
     name: "roles",
     description: "Lists of all guild roles.",
     guildOnly: true,
     async execute(message) {
-        const Client = message.client;
         const {guild, channel, author} = message;
-        const {Util} = Client;
+
         let roles = guild.roles.cache.array();
         // Skip @everyone
         roles.shift();

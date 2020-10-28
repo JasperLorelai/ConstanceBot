@@ -1,3 +1,5 @@
+const {Config, Util, keyv} = require("../Libs");
+
 module.exports = {
     name: "mod",
     description: "Configure guild Mods - roles or users that will pass for the 'mod' permission.",
@@ -5,9 +7,9 @@ module.exports = {
     perm: "admin",
     aliases: ["mods"],
     async execute(message) {
-        const Client = message.client;
         const {guild, channel, author} = message;
-        const {Config, Util, keyv} = Client;
+        const Client = message.client;
+
         try {
             const instr = "**React with:**\n➕ - to add Mods.\n➖ - to remove Mods.";
 

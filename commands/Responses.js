@@ -1,14 +1,14 @@
+const {Config, Util, keyv} = require("../Libs");
+
 module.exports = {
     name: "responses",
     description: "Manage auto reponsese.",
     guildOnly: true,
     perm: "mod",
     async execute(message) {
-        const Client = message.client;
         const {guild, channel, member} = message;
-        const {Config, Util, keyv} = Client;
-        try {
 
+        try {
             async function getResponses() {
                 let db = await keyv.get("guilds");
                 if (!db) db = {};

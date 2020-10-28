@@ -1,3 +1,5 @@
+const {Config, Util, keyv} = require("../Libs");
+
 module.exports = {
     name: "userinfo",
     description: "Displays information about a guild member.",
@@ -5,9 +7,8 @@ module.exports = {
     params: ["(user)"],
     guildOnly: true,
     async execute(message, args) {
-        const Client = message.client;
         const {guild, channel, author} = message;
-        const {Config, Util} = Client;
+
         const member = args[0] ? Util.findGuildMember(args.join(" "), guild) : message.member;
         if (!member) {
             await channel.send(author.toString(), Util.embed("User Info", "User not found!", Config.color.red));
@@ -17,7 +18,7 @@ module.exports = {
         const {user} = member;
         const flags = user.flags.toArray().map(flag => "`" + flag.replace(/_/g, " ").toTitleCase() + "`");
         const roles = member.roles && member.roles.cache ? member.roles.cache.filter(r => r.id !== guild.id) : null;
-        const linkedDB = await Client.keyv.get("minecraft") || {};
+        const linkedDB = await keyv.get("minecraft") || {};
         let desc = (user.bot ? "**Is BOT:** true" : "") +
             "\n**Mention:** " + member.toString() +
             "\n**ID:** `<@" + member.id + ">`" +

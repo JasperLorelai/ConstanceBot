@@ -1,4 +1,5 @@
 const Client = require("../Client");
+
 Client.on("raw", async event => {
     let channel, user, message;
     switch (event.t) {

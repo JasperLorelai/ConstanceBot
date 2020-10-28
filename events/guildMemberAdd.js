@@ -1,5 +1,6 @@
 const Client = require("../Client");
-const {Config, Util} = Client;
+const {Config, Util} = require("../Libs");
+
 Client.on("guildMemberAdd", async member => {
     const {guild, user} = member;
 

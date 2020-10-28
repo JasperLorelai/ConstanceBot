@@ -1,10 +1,5 @@
 const Stream = require("stream");
-const md5 = require("md5");
-const Discord = require("discordjs");
-
-const Util = require("../files/Util");
-
-const {MessageEmbed} = Discord;
+const {MessageEmbed} = require("../Libs").Discord;
 
 function attachFile(resource, embed, func = () => {}) {
     let attachment;

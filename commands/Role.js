@@ -1,3 +1,5 @@
+const {Config, Util} = require("../Libs");
+
 module.exports = {
     name: "role",
     description: "Toggle user's roles. The `roles` parameter could be one role or a list of roles seperated by a comma.",
@@ -5,9 +7,8 @@ module.exports = {
     guildOnly: true,
     perm: "admin",
     async execute(message, args) {
-        const Client = message.client;
         const {guild, channel, author} = message;
-        const {Config, Util} = Client;
+
         try {
             const {red} = Config.color;
             const member = Util.findGuildMember(args.shift(), guild);

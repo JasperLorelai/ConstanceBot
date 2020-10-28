@@ -1,10 +1,13 @@
 const Client = require("../Client");
+const {Config, Util, keyv, handleMsg} = require("../Libs");
+
 Client.on("message", async message => {
     // Ignore if the event was handled externally.
     if (message.deleted) return;
     const Client = message.client;
+    const {commands} = Client;
     const {content, author, guild, channel} = message;
-    const {commands, Config, Util, handleMsg, keyv} = Client;
+
     let realPrefix = null;
     let prefix = Config.defaultPrefix;
     if (guild) {

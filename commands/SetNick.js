@@ -1,3 +1,5 @@
+const {Config, Util} = require("../Libs");
+
 module.exports = {
     name: "setnick",
     description: "Change a user's nickname.",
@@ -6,9 +8,8 @@ module.exports = {
     guildOnly: true,
     perm: "mod",
     async execute(message, args) {
-        const Client = message.client;
         const {channel, guild, author} = message;
-        const {Config, Util} = Client;
+
         try {
             const member = Util.findGuildMember(args.shift(), guild);
             if (!member) {

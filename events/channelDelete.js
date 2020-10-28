@@ -1,5 +1,6 @@
 const Client = require("../Client");
-const {Config, Util} = Client;
+const {Config, Util} = require("../Libs");
+
 Client.on("channelDelete", async channel => {
     // Ignore DM channels.
     if (channel.type === "dm") return;

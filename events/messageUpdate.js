@@ -1,8 +1,9 @@
 const Client = require("../Client");
+const {Config, Util, keyv} = require("../Libs");
+
 Client.on("messageUpdate", async (oldMessage, newMessage) => {
     // Ignore if the event was handled externally.
     if (newMessage.deleted) return;
-    const {Config, Util, keyv} = Client;
     const {guild, author, channel} = newMessage;
     // Check only if content changed.
     if (oldMessage && oldMessage.content === newMessage.content) return;

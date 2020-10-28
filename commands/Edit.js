@@ -1,3 +1,5 @@
+const {Config, Util} = require("../Libs");
+
 module.exports = {
     name: "edit",
     description: "Edit a message as long as it was sent by this client user.",
@@ -5,9 +7,9 @@ module.exports = {
     guildOnly: true,
     perm: "author",
     async execute(message, args) {
-        const Client = message.client;
         const {channel, author} = message;
-        const {Config, Util} = Client;
+        const Client = message.client;
+
         try {
             const originChannel = Client.channels.resolve(args[0]);
             if (!originChannel) {

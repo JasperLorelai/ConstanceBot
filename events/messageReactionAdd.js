@@ -1,5 +1,6 @@
 const Client = require("../Client");
-const {Config, Util, keyv} = Client;
+const {Config, Util, keyv} = require("../Libs");
+
 Client.on("messageReactionAdd", async (r, u) => {
     // Ignore custom reactions.
     if (!r) return;

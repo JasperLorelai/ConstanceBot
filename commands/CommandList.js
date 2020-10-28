@@ -1,13 +1,16 @@
+const {Util} = require("../Libs");
+
 module.exports = {
     name: "cmds",
     description: "Lists of all bot commands.",
     aliases: ["commands"],
     async execute(message) {
-        const Client = message.client;
         const {guild, channel, author} = message;
-        const {commands, Util} = Client;
+        const Client = message.client;
+
         let perm;
-        const text = commands.filter(c => !c.hide && !(c.guildWhitelist && !c.guildWhitelist.includes(guild.id))).map(c => {
+        // noinspection JSValidateTypes
+        const text = Client.commands.filter(c => !c.hide && !(c.guildWhitelist && !c.guildWhitelist.includes(guild.id))).map(c => {
             perm = c.perm;
             if (perm === "author") perm = "**Bot Author**";
             if (perm === "admin") perm = "**Server Administrator**";

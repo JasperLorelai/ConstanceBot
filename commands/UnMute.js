@@ -1,4 +1,5 @@
-// noinspection JSUnusedLocalSymbols
+const {Util, Config, keyv} = require("../Libs");
+
 module.exports = {
     name: "unmute",
     description: "Unmute a muted member.",
@@ -7,9 +8,8 @@ module.exports = {
     guildOnly: true,
     perm: "mod",
     async execute(message, args) {
-        const Client = message.client;
         const {guild, channel, author} = message;
-        const {Util, Config, keyv} = Client;
+
         try {
             const member = Util.findGuildMember(args.join(" "), guild);
             if (!member) {

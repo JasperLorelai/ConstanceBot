@@ -1,5 +1,6 @@
+const {Util, Config, keyv, atob} = require("../Libs");
+
 module.exports = async (request, response, Client) => {
-    const {Util, Config, keyv} = Client;
     let db = await keyv.get("minecraft") || {};
 
     if (!request.query.code) {
@@ -10,7 +11,7 @@ module.exports = async (request, response, Client) => {
         }
 
         // If uuid was specified, but not the code.
-        const user = db.getKeyByValue(Client.atob(request.query["uuid"]));
+        const user = db.getKeyByValue(atob(request.query["uuid"]));
         if (user) {
             response.sendFile("/views/discordLinking/clone.html", {root: "."});
             return;
@@ -40,8 +41,8 @@ module.exports = async (request, response, Client) => {
     const user = await Util.discordAPI(request.query.code, Client.webserver + "/link", Config.urls.discordAPI.users);
     if (user && !user.error) {
         // Save user.
-        db[user.id] = Client.atob(uuid);
-        keyv.set("minecraft", db);
+        db[user.id] = atob(uuid);
+        await keyv.set("minecraft", db);
         response.sendFile("/views/discordLinking/linked.html", {root: "."});
     }
     else response.send("Authorisation failed. Contact the owner of the application for help.");

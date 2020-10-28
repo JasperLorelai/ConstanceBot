@@ -1,3 +1,5 @@
+const {Config, Util, keyv} = require("../Libs");
+
 module.exports = {
     name: "clearwarn",
     description: "Clears a warning from the database. This will clear all warn cases of the user, but if the optional case parameter is specified, only that case of the user will be cleared.",
@@ -5,9 +7,8 @@ module.exports = {
     guildOnly: true,
     perm: "mod",
     async execute(message, args) {
-        const Client = message.client;
         const {guild, channel, author} = message;
-        const {Config, Util, keyv} = Client;
+
         try {
             let member = Util.findUser(args[0]) || args[0];
             if (typeof member !== "string") member = member.id;

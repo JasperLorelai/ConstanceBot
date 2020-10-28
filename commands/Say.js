@@ -1,3 +1,5 @@
+const {Util} = require("../Libs");
+
 module.exports = {
     name: "say",
     description: "Send messages as the bot account. Channel id is optional. The message can be an embed object.",
@@ -6,7 +8,7 @@ module.exports = {
     perm: "author",
     async execute(message, args) {
         const Client = message.client;
-        const {Util} = Client;
+
         try {
             // Check if the first argument is a channel id and set it as target.
             let channel = Client.channels.resolve(args[0]);

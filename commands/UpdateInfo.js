@@ -1,12 +1,14 @@
+const {Util, Config} = require("../Libs");
+
 module.exports = {
     name: "updateinfo",
     description: "Update the main embed of a guild.",
     guildOnly: true,
     perm: "author",
     async execute(message) {
-        const Client = message.client;
         const {channel, author, guild} = message;
-        const {Util, Config} = Client;
+        const Client = message.client;
+
         try {
             function exit(code) {
                 channel.send(author.toString(), Util.embed("Info Updater", "Info was not set up for this guild. (code: " + code + ")", Config.color.red));
@@ -48,7 +50,7 @@ module.exports = {
                 return;
             }
 
-            const infoText = infoData.getText(Config);
+            const infoText = infoData.getText();
 
             // Check if embeds are similar.
             let embed = infoMsg.getEmbeds();

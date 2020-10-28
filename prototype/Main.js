@@ -1,5 +1,5 @@
-const {Util, MessageEmbed} = require("discordjs");
-const colorConvert = require("color-convert");
+const {colorConvert, Discord} = require("../Libs");
+const {Util, MessageEmbed} = Discord;
 
 String.prototype.toFormalCase = function() {
     return this.charAt(0).toUpperCase() + this.substr(1).toLowerCase();

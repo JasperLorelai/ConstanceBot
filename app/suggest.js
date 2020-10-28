@@ -1,5 +1,6 @@
+const {Util, Config} = require("../Libs");
+
 module.exports = async (request, response, Client) => {
-    const {Util, Config} = Client;
     if (!request.query.code) {
         response.sendFile("/views/redirect-suggest.html", {root: "."});
         return;

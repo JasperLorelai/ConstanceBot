@@ -1,6 +1,7 @@
 const Client = require("../Client");
+const {Config, Util} = require("../Libs");
+
 Client.on("messageDelete", async message => {
-    const {Config, Util} = Client;
     const {guild, author, channel} = message;
     const log = (await guild.fetchAuditLogs({type: "MESSAGE_DELETE", limit: 1})).entries.first();
 

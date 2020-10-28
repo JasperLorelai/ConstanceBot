@@ -1,3 +1,5 @@
+const {Config, Util, keyv} = require("../Libs");
+
 module.exports = {
     name: "poll",
     description: "Creates a poll.",
@@ -5,9 +7,9 @@ module.exports = {
     perm: "mod",
     aliases: ["polls"],
     async execute(message) {
-        const Client = message.client;
         const {channel, author, guild} = message;
-        const {Config, Util, keyv} = Client;
+        const Client = message.client;
+
         try {
             const pollrole = Util.findRole("Polls", guild);
             let db;

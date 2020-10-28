@@ -1,5 +1,5 @@
 const Client = require("../Client");
-const {Config} = Client;
+const {Config} = require("../Libs");
 
 async function handleConnect(state) {
     let shouldSee = Config.vcText.find(bundle => bundle.voice.includes(state.channelID));

@@ -1,12 +1,14 @@
+const {Config, Util, EmojiMap} = require("../Libs");
+
 module.exports = {
     name: "avatar",
     description: "Displays your avatar or the avatar of the specified user. Size is optional and comes in: `16`, `32`, `64`, `128`, `256`, `512`, `1024`, `2048`.",
     aliases: ["pfp"],
     params: ["(user)"],
     async execute(message, args) {
-        const Client = message.client;
         const {author, channel} = message;
-        const {Config, Util, EmojiMap} = Client;
+        const Client = message.client;
+
         try {
             const {red, yellow} = Config.color;
             const user = args[0] ? Util.findUser(args[0]) : author;

@@ -1,4 +1,5 @@
-// noinspection JSUnusedLocalSymbols
+const {Config, Util, canvas, fetch} = require("../Libs");
+
 module.exports = {
     name: "rolecolor",
     description: "Change the color of a guild role. The color format can be hex, 'rgb(r,g,b)' or 'hsl(h,s,l)'.",
@@ -7,9 +8,8 @@ module.exports = {
     guildOnly: true,
     perm: "admin",
     async execute(message, args) {
-        const Client = message.client;
         const {guild, channel, author} = message;
-        const {Config, Util, canvas} = Client;
+
         try {
             const role = Util.findRole(args.shift(), guild);
             if (!role) {
@@ -42,7 +42,7 @@ module.exports = {
             ctx.arc(width * .1, height * .5, 20, 0, Math.PI * 2, true);
             ctx.closePath();
             ctx.clip();
-            const image = await Client.fetch.default(author.displayAvatarURL({format: "png"}) + "?size=40").then(y => y.buffer());
+            const image = await fetch.default(author.displayAvatarURL({format: "png"}) + "?size=40").then(y => y.buffer());
             // noinspection JSUnresolvedFunction
             ctx.drawImage(await canvas.loadImage(image), width * .05, height * .25);
             channel.send(author.toString(), Util.embed("Role Color").setImagePermanent(canvasImage.toBuffer())).then(async msg => {

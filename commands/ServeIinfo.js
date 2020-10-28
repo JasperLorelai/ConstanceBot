@@ -1,12 +1,13 @@
+const {Util} = require("../Libs");
+
 module.exports = {
     name: "serverinfo",
     description: "Displays information about the guild.",
     aliases: ["guildinfo"],
     guildOnly: true,
     async execute(message) {
-        const Client = message.client;
         const {guild, channel, author} = message;
-        const {Util} = Client;
+
         const channels = guild.channels.cache.array();
         const tc = channels.filter(c => c.type === "text");
         const vc = channels.filter(c => c.type === "voice");

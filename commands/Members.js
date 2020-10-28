@@ -1,12 +1,13 @@
+const {Config, Util} = require("../Libs");
+
 module.exports = {
     name: "members",
     description: "Lists of all guild members of a role.",
     guildOnly: true,
     params: ["[role]"],
     async execute(message, args) {
-        const Client = message.client;
         const {guild, channel, author} = message;
-        const {Config, Util} = Client;
+
         const role = Util.findRole(args[0], guild);
         if (!role) {
             await channel.send(author.toString(), Util.embed("Role Members", "Role not found!", Config.color.red));

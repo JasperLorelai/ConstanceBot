@@ -1,3 +1,5 @@
+const {Util} = require("../Libs");
+
 // noinspection JSUnusedLocalSymbols
 module.exports = {
     name: "",
@@ -13,8 +15,6 @@ module.exports = {
     hide: true,
     // "args" is unnecessary if "params" is empty or has no required parameters.
     async execute(message, args) {
-        const Client = message.client;
-        const {Util} = Client;
         try {
         }
         catch (e) {

@@ -1,4 +1,5 @@
-// noinspection JSUnusedLocalSymbols
+const {Util} = require("../Libs");
+
 module.exports = {
     name: "banlist",
     description: "List banned users and the reason for their ban.",
@@ -6,9 +7,8 @@ module.exports = {
     guildOnly: true,
     perm: "mod",
     async execute(message) {
-        const Client = message.client;
         const {channel, author} = message;
-        const {Util} = Client;
+
         try {
             const text = (await message.guild.fetchBans()).map(b => "**" + b.user.username + "** `" + b.user.id + "`: " + (b.reason === "null" ?  "No reason given." : b.reason)).join("\n\n");
             const msg = await channel.send(author.toString(), Util.embed("Guild Bans", (text.length >= 2000 ? "" : text)));

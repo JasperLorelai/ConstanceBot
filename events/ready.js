@@ -1,11 +1,12 @@
 const Client = require("../Client");
+const {Config, fetch} = require("../Libs");
+
 Client.on("ready", async () => {
-    const {Config} = Client;
     Config.author = Client.users.resolve((await Client.fetchApplication()).owner.id);
 
     let joke = "";
     do {
-        joke = await Client.fetch(Config.urls.joke, {
+        joke = await fetch(Config.urls.joke, {
             headers: {
                 "Accept": "text/plain",
                 "User-Agent": Config.userAgent

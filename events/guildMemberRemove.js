@@ -1,5 +1,6 @@
 const Client = require("../Client");
-const {Config, Util, keyv} = Client;
+const {Config, Util, keyv} = require("../Libs");
+
 Client.on("guildMemberRemove", async member => {
     const {guild, user} = member;
 

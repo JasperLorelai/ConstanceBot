@@ -1,3 +1,5 @@
+const {Config, Util, keyv} = require("../Libs");
+
 module.exports = {
     name: "warn",
     description: "Warn a user for a given reason. (Behind the scenes a user with 8 warnings should be permanently banned, but this isn't handled automatically.)",
@@ -5,9 +7,8 @@ module.exports = {
     guildOnly: true,
     perm: "mod",
     async execute(message, args) {
-        const Client = message.client;
         const {guild, channel, author} = message;
-        const {Config, Util, keyv} = Client;
+
         try {
             const member = Util.findGuildMember(args[0], guild);
             if (!member) {

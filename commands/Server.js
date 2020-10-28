@@ -1,12 +1,13 @@
+const {Config, Util} = require("../Libs");
+
 module.exports = {
     name: "server",
     description: "Displays info of a minecraft server.",
     aliases: ["ip"],
     params: ["(ip)"],
     async execute(message, args) {
-        const Client = message.client;
         const {channel, guild, author} = message;
-        const {Config, Util} = Client;
+
         let ip = args[0];
         if (!ip) {
             ip = Config.getGuildData(guild.id);

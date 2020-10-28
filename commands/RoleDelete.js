@@ -1,3 +1,5 @@
+const {Config, Util} = require("../Libs");
+
 module.exports = {
     name: "roledelete",
     description: "Delete a role.",
@@ -6,9 +8,8 @@ module.exports = {
     guildOnly: true,
     perm: "admin",
     async execute(message, args) {
-        const Client = message.client;
         const {guild, channel, author} = message;
-        const {Config, Util} = Client;
+
         try {
             const role = Util.findRole(args.join(" "), guild);
             if (!role) {
