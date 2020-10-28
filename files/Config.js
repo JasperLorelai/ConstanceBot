@@ -194,7 +194,7 @@ module.exports = {
         }
     ],
     getClient() {
-        return require("../bot");
+        return require("../Client");
     },
     getWebhookID() {
         return process.env.WEBHOOK_REDIRECT.match(/[0-9]+/)[0];

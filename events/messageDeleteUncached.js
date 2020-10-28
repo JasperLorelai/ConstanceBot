@@ -1,4 +1,4 @@
-const Client = require("../bot");
+const Client = require("../Client");
 Client.on("messageDeleteUncached", async event => {
     const {Config, Util} = Client;
     const guild = Client.guilds.resolve(event["guild_id"]);

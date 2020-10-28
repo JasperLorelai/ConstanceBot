@@ -1,4 +1,4 @@
-const Client = require("../bot");
+const Client = require("../Client");
 Client.on("ready", async () => {
     const {Config} = Client;
     Config.author = Client.users.resolve((await Client.fetchApplication()).owner.id);

@@ -2,7 +2,7 @@
   "name": "constance",
   "version": "1.0.0",
   "description": "Discord bot - assisting http://mhaprodigy.uk/",
-  "main": "bot.js",
+  "main": "Client.js",
   "repository": {
     "url": "https://github.com/JasperLorelai/ConstanceBot/"
   },
@@ -11,7 +11,7 @@
     "npm": "6.x"
   },
   "scripts": {
-    "start": "node bot.js",
+    "start": "node Client.js",
     "reinstall": "npm i"
   },
   "author": "JasperLorelai",

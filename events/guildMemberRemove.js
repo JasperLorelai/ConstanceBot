@@ -1,4 +1,4 @@
-const Client = require("../bot");
+const Client = require("../Client");
 const {Config, Util, keyv} = Client;
 Client.on("guildMemberRemove", async member => {
     const {guild, user} = member;

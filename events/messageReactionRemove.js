@@ -1,4 +1,4 @@
-const Client = require("../bot");
+const Client = require("../Client");
 const {Config} = Client;
 Client.on("messageReactionRemove", async (r, u) => {
     // Ignore custom reactions.

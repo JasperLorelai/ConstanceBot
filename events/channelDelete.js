@@ -1,4 +1,4 @@
-const Client = require("../bot");
+const Client = require("../Client");
 const {Config, Util} = Client;
 Client.on("channelDelete", async channel => {
     // Ignore DM channels.

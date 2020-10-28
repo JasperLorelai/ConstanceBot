@@ -1,4 +1,4 @@
-const Client = require("../bot");
+const Client = require("../Client");
 Client.on("messageDelete", async message => {
     const {Config, Util} = Client;
     const {guild, author, channel} = message;
