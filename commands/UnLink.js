@@ -2,7 +2,7 @@ module.exports = {
     name: "unlink",
     description: "Unlink your Discord account from your Minecraft account.",
     guildOnly: true,
-    //guildWhitelist: [Config.guildData.mhap.id],
+    guildWhitelist: ["mhap"],
     async execute(Libs, message) {
         const {keyv, Util, Config} = Libs;
         const {author, channel} = message;

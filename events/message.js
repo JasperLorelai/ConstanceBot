@@ -40,7 +40,18 @@ Client.on("message", async message => {
     }
 
     // Check guild whitelist.
-    if (guild && command.guildWhitelist && !command.guildWhitelist.includes(guild.id)) return;
+    const whitelist = command.guildWhitelist;
+    if (guild && whitelist && whitelist.length) {
+        let passed;
+        for (const guildName of whitelist) {
+            const data = Config.guildData[guildName];
+            if (!data) continue;
+            if (data.id !== guild.id) continue;
+            passed = true;
+            break;
+        }
+        if (!passed) return;
+    }
 
     // This disables command execution. What sets the channel is in Util -> setMCChannel
     if (Client.minecraftChannels.includes(channel.id)) return;
