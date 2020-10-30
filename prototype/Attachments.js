@@ -23,16 +23,16 @@ function attachFile(resource, embed, func = () => {}) {
     return embed;
 }
 
-MessageEmbed.prototype.setImagePermanent = function (resource) {
+MessageEmbed.prototype.setImagePermanent = function(resource) {
     return attachFile(resource, this, (embed, attachment) => embed.setImage(attachment));
 }
-MessageEmbed.prototype.setThumbnailPermanent = function (resource) {
+MessageEmbed.prototype.setThumbnailPermanent = function(resource) {
     return attachFile(resource, this, (embed, attachment) => embed.setThumbnail(attachment));
 }
-MessageEmbed.prototype.setAuthorIcon = function (resource) {
+MessageEmbed.prototype.setAuthorIcon = function(resource) {
     const author = this.author;
     return attachFile(resource, this, (embed, attachment) => embed.setAuthor(author.name, attachment, author.user));
 }
-MessageEmbed.prototype.setFooterIcon = function (resource) {
+MessageEmbed.prototype.setFooterIcon = function(resource) {
     return attachFile(resource, this, (embed, attachment) => embed.setFooter(embed.footer.text, attachment));
 }

@@ -1,7 +1,7 @@
 const {Discord} = require("../Libs");
 const {Message} = Discord;
 
-Message.prototype.getEmbeds = function () {
+Message.prototype.getEmbeds = function() {
     function getFile(url) {
         return  "attachment://" + url.substr(url.lastIndexOf("/") + 1);
     }
@@ -15,6 +15,6 @@ Message.prototype.getEmbeds = function () {
         return embed;
     });
 }
-Message.prototype.getFirstEmbed = function () {
+Message.prototype.getFirstEmbed = function() {
     return this.getEmbeds()[0];
 }
