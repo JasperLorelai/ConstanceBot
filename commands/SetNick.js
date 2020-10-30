@@ -9,18 +9,13 @@ module.exports = {
         const {Config, Util} = Libs;
         const {channel, guild, author} = message;
 
-        try {
-            const member = Util.findGuildMember(args.shift(), guild);
-            if (!member) {
-                await channel.send(author.toString(), Util.embed("Set Nick", "User not found in this guild!", Config.color.red));
-                return null;
-            }
-            const nickname = args.join(" ");
-            await member.setNickname(nickname === "reset" ? "" : nickname);
-            await channel.send(author.toString(), Util.embed("Set Nick", "Nick for user " + member.toString() + " was " + (nickname === "reset" ? "reset." : "changed to: **" + nickname + "**")));
+        const member = Util.findGuildMember(args.shift(), guild);
+        if (!member) {
+            await channel.send(author.toString(), Util.embed("Set Nick", "User not found in this guild!", Config.color.red));
+            return null;
         }
-        catch (e) {
-            await Util.handleError(message, e);
-        }
+        const nickname = args.join(" ");
+        await member.setNickname(nickname === "reset" ? "" : nickname);
+        await channel.send(author.toString(), Util.embed("Set Nick", "Nick for user " + member.toString() + " was " + (nickname === "reset" ? "reset." : "changed to: **" + nickname + "**")));
     }
 };

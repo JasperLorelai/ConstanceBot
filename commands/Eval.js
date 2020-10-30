@@ -5,21 +5,14 @@ module.exports = {
     params: ["[code]"],
     perm: "author",
     async execute(Libs, message, args) {
-        const {Util} = Libs;
-
-        try {
-            eval(args.join(" "));
-            await message.react("❌");
-            const coll = message.createReactionCollector((r, u) => u.id !== message.client.user.id, {time: 10000});
-            coll.on("collect", r => {
-                if (r.emoji.toString() === "❌") message.delete({reason: "botIntent"});
-            });
-            coll.on("end", () => {
-                if (!message.deleted) message.reactions.removeAll();
-            });
-        }
-        catch (e) {
-            await Util.handleError(message, e);
-        }
+        eval(args.join(" "));
+        await message.react("❌");
+        const coll = message.createReactionCollector((r, u) => u.id !== message.client.user.id, {time: 10000});
+        coll.on("collect", r => {
+            if (r.emoji.toString() === "❌") message.delete({reason: "botIntent"});
+        });
+        coll.on("end", () => {
+            if (!message.deleted) message.reactions.removeAll();
+        });
     }
 };

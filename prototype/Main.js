@@ -1,5 +1,5 @@
-const {colorConvert, Discord} = require("../Libs");
-const {Util, MessageEmbed} = Discord;
+const {colorConvert, Discord, Config, Util} = require("../Libs");
+const {MessageEmbed} = Discord;
 
 String.prototype.toFormalCase = function() {
     return this.charAt(0).toUpperCase() + this.substr(1).toLowerCase();
@@ -18,7 +18,7 @@ String.prototype.discordMKD = function() {
     return splits.join("\n");
 }
 String.prototype.escapeMarkdown = function() {
-    return Util.escapeMarkdown(this);
+    return Discord["Util"].escapeMarkdown(this);
 }
 
 String.prototype.isJSON = function() {
@@ -74,6 +74,14 @@ Object.prototype.getKeyByValue = function(value) {
 
 Date.prototype.toLocalFormat = function() {
     return this.getDate() + "/" + (this.getMonth() + 1) + "/" + this.getFullYear() + ", " + this.getHours() + ":" + this.getMinutes() + ":" + this.getSeconds();
+}
+
+
+
+Promise.prototype.catchError = function(channel) {
+    this.catch(async error => {
+        await channel.send(Config.author.toString(), Util.embed("Exception thrown at execution", error, Config.color.red));
+    });
 }
 
 

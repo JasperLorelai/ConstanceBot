@@ -5,23 +5,17 @@ module.exports = {
     params: ["(channel id)", "[message]"],
     perm: "author",
     async execute(Libs, message, args) {
-        const {Util} = Libs;
         const Client = message.client;
 
-        try {
-            // Check if the first argument is a channel id and set it as target.
-            let channel = Client.channels.resolve(args[0]);
-            if (channel) args.shift();
-            // If not, assume the target channel to be the source channel.
-            else channel = message.channel;
-            let msg = args.join(" ");
-            if (msg.startsWith("`") && msg.endsWith("`")) msg = msg.replace(/`/g, "");
-            msg = msg.isJSON() ? JSON.parse(msg) : msg;
-            await channel.send(msg);
-            await message.delete({reason: "botIntent"});
-        }
-        catch (e) {
-            await Util.handleError(message, e);
-        }
+        // Check if the first argument is a channel id and set it as target.
+        let channel = Client.channels.resolve(args[0]);
+        if (channel) args.shift();
+        // If not, assume the target channel to be the source channel.
+        else channel = message.channel;
+        let msg = args.join(" ");
+        if (msg.startsWith("`") && msg.endsWith("`")) msg = msg.replace(/`/g, "");
+        msg = msg.isJSON() ? JSON.parse(msg) : msg;
+        await channel.send(msg);
+        await message.delete({reason: "botIntent"});
     }
 };

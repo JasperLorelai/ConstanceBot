@@ -13,12 +13,5 @@ module.exports = {
     hide: true,
     // "args" is unnecessary if "params" is empty or has no required parameters.
     async execute(Libs, message, args) {
-        const {Util} = Libs;
-
-        try {
-        }
-        catch (e) {
-            await Util.handleError(message, e);
-        }
     }
 };

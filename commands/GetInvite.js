@@ -5,18 +5,13 @@ module.exports = {
     async execute(Libs, message) {
         const {Config, Util} = Libs;
 
-        try {
-            const data = Config.getGuildData(message.guild.id);
-            let invite;
-            if (data) invite = data.invite;
-            else {
-                await message.channel.send(message.author.toString(), Util.embed("Invite Fetch", "No saved invite was configured for this guild.", Config.color.red));
-                return;
-            }
-            await message.channel.send(message.author.toString() + "\n" + invite);
+        const data = Config.getGuildData(message.guild.id);
+        let invite;
+        if (data) invite = data.invite;
+        else {
+            await message.channel.send(message.author.toString(), Util.embed("Invite Fetch", "No saved invite was configured for this guild.", Config.color.red));
+            return;
         }
-        catch (e) {
-            await Util.handleError(message, e);
-        }
+        await message.channel.send(message.author.toString() + "\n" + invite);
     }
 };

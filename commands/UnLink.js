@@ -7,18 +7,13 @@ module.exports = {
         const {keyv, Util, Config} = Libs;
         const {author, channel} = message;
 
-        try {
-            let db = await keyv.get("minecraft") || {};
-            if (!db[author.id]) {
-                channel.send(author.toString(), Util.embed("Discord Unlink", "Your account isn't linked.", Config.color.red));
-                return;
-            }
-            delete db[author.id];
-            await keyv.set("minecraft", db);
-            channel.send(author.toString(), Util.embed("Discord Unlink", "Your account was successfully unlinked.", Config.color.green));
+        let db = await keyv.get("minecraft") || {};
+        if (!db[author.id]) {
+            channel.send(author.toString(), Util.embed("Discord Unlink", "Your account isn't linked.", Config.color.red));
+            return;
         }
-        catch (e) {
-            await Util.handleError(message, e);
-        }
+        delete db[author.id];
+        await keyv.set("minecraft", db);
+        channel.send(author.toString(), Util.embed("Discord Unlink", "Your account was successfully unlinked.", Config.color.green));
     }
 };

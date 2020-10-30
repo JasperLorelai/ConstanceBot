@@ -61,7 +61,7 @@ Client.on("message", async message => {
         return;
     }
     // Run command if all required args are specified.
-    if (!command.params || args.length >= command.params.filter(p => p.startsWith("[")).length) command.execute(Libs, message, args);
+    if (!command.params || args.length >= command.params.filter(p => p.startsWith("[")).length) command.execute(Libs, message, args).catchError(channel);
     // Execute help command for command if not.
-    else commands.get("help").execute(Libs, message, [commandName]);
+    else commands.get("help").execute(Libs, message, [commandName]).catchError(channel);
 });
