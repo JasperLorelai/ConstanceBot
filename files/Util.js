@@ -9,14 +9,12 @@ module.exports = {
         form.append("code", code);
         form.append("redirect_uri", encodeURI(redirect));
         form.append("scope", "identify");
-        // noinspection JSUnresolvedFunction
         const response = await fetch(Config.urls.discordAPI.oauth2 + "token", {
             method: "POST",
             body: form,
             headers: {Authorization: creds}
         }).then(y => y.json());
-        // noinspection JSUnresolvedFunction, JSUnresolvedVariable
-        return await fetch(request, {headers: {Authorization: "Bearer " + response.access_token}}).then(y => y.json());
+        return await fetch(request, {headers: {Authorization: "Bearer " + response["access_token"]}}).then(y => y.json());
     },
     log(guild, funct) {
         const {Config, Discord} = require("../Libs");
@@ -47,10 +45,10 @@ module.exports = {
         if (description) embed.setDescription(description);
         return embed;
     },
-    async handlePrompt(message, text, ttl, seperator) {
-        // Split text into segments based on the seperator.
+    async handlePrompt(message, text, ttl, separator) {
+        // Split text into segments based on the separator.
         let splits = [];
-        if (!seperator) seperator = " ";
+        if (!separator) separator = " ";
         let i = 0;
         while (text.length) {
             if (text.length < 2000) {
@@ -58,7 +56,7 @@ module.exports = {
                 text = "";
                 break;
             }
-            const end = text.lastIndexOf(seperator, i + 2000);
+            const end = text.lastIndexOf(separator, i + 2000);
             splits.push(text.substring(i, end));
             text = text.substr(end);
             i += end;
@@ -81,7 +79,6 @@ module.exports = {
                 index--;
                 if (index < 0) index = splits.length - 1;
             }
-            // noinspection JSCheckFunctionSignatures
             await message.edit(embed.setDescription(splits[index]).spliceFields(0, 1, {name: "Pages", value: "Page: " + (index + 1) + "**/**" + splits.length, inline: true}));
             await r.users.remove(u.id);
         });

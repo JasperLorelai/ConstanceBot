@@ -71,7 +71,7 @@ module.exports = {
                             "React with the displayed reaction to toggle access to the NSFW channel section.")
                         .addField("Toggle Pingable Roles:",
                             "> 📦 <@&" + roles.polls + "> - If you have this role, you will be pinged whenever a poll is up.\n" +
-                            "> 📆 <@&" + roles.events + "> - If you have this role, you will be pinged whenever an envent is announced.\n" +
+                            "> 📆 <@&" + roles.events + "> - If you have this role, you will be pinged whenever an event is announced.\n" +
                             "> 📰 <@&" + roles.changelog + "> - If you have this role, you will be pinged whenever a changelog is released.")
                 },
                 reactions: ["🔞", "📦", "📆", "📰"]
@@ -82,7 +82,7 @@ module.exports = {
             channels: {
                 bot: "575738387307298831",
                 globalLogs: "663988507542421504",
-                toDolist: "575695022964473857",
+                toDoList: "575695022964473857",
                 main: "575738387307298831",
             },
             categories: {

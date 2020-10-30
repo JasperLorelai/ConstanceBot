@@ -17,10 +17,7 @@ async function handleDisconnect(state) {
     for (const ch of shouldNotSee) {
         const vc = Client.channels.resolve(ch);
         if (!vc) Config.botLog().send(Config.embed("Voice-Text Handler", "Array `" + state.channelID + "` contains non-existent channel `" + ch + "`.", Config.color.yellow));
-        else {
-            // noinspection JSCheckFunctionSignatures
-            await vc.overwritePermissions(vc.permissionOverwrites.filter(o => o.id !== state.id));
-        }
+        else await vc.overwritePermissions(vc.permissionOverwrites.filter(o => o.id !== state.id));
     }
 }
 

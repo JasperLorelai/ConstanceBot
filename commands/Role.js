@@ -1,6 +1,6 @@
 module.exports = {
     name: "role",
-    description: "Toggle user's roles. The `roles` parameter could be one role or a list of roles seperated by a comma.",
+    description: "Toggle user's roles. The `roles` parameter could be one role or a list of roles separated by a comma.",
     params: ["[user]", "[roles]"],
     guildOnly: true,
     perm: "admin",

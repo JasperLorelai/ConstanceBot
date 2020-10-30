@@ -12,7 +12,7 @@ module.exports = {
             const lists = await Util.getTrello("boards/" + Config.trello.boards.mhap + "/lists");
             const quirkList = lists.find(l => l.name === "Quirks");
             if (!quirkList) {
-                Config.botLog().send(Config.author.toString(), Util.embed("Quirk Command Exception", "User **" + author.username + "** couldn't request quirk information becasue the \"Quirks\" list couldn't be found. [\(Jump\)](" + message.url + ")", Config.color.red));
+                Config.botLog().send(Config.author.toString(), Util.embed("Quirk Command Exception", "User **" + author.username + "** couldn't request quirk information because the \"Quirks\" list couldn't be found. [\(Jump\)](" + message.url + ")", Config.color.red));
                 throw new ConditionException(author, "Quirks", "Exception encountered. This was automatically reported and will be resolved.");
             }
             let quirks = [];

@@ -1,6 +1,6 @@
 module.exports = {
     name: "responses",
-    description: "Manage auto reponsese.",
+    description: "Manage auto responses.",
     guildOnly: true,
     perm: "mod",
     async execute(Libs, message) {
@@ -78,13 +78,13 @@ module.exports = {
                         });
                         return;
                     }
-                    const msgIndex = await msg.channel.send(member.toString(), Util.embed("Auto Response Delete", "Send an idex of the response you wish to delete.", Config.color.yellow));
+                    const msgIndex = await msg.channel.send(member.toString(), Util.embed("Auto Response Delete", "Send an index of the response you wish to delete.", Config.color.yellow));
                     const collIndex = msgIndex.channel.createMessageCollector(m => m.author.id === member.id, {time: 10000});
                     collIndex.on("collect", async mIndex => {
                         const ind = parseInt(mIndex.content) - 1;
                         mIndex.delete({reason: "botIntent"});
                         if (ind >= responses.length) {
-                            msg.channel.send(member.toString(), Util.embed("Auto Response Delete", "There is no reponse with that index!", Config.color.red)).then(tempMsg => {
+                            msg.channel.send(member.toString(), Util.embed("Auto Response Delete", "There is no response with that index!", Config.color.red)).then(tempMsg => {
                                 tempMsg.delete({timeout: 3000, reason: "botIntent"});
                             });
                             return null;

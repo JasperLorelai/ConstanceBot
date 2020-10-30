@@ -5,7 +5,7 @@ module.exports = {
     params: ["(user)"],
     guildOnly: true,
     async execute(Libs, message, args) {
-        const {Config, Util, Keyv, ConditionException} = Libs;
+        const {Util, Keyv, ConditionException} = Libs;
         const {guild, channel, author} = message;
         const Client = message.client;
 

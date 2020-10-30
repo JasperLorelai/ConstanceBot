@@ -5,12 +5,10 @@ async function copy(text) {
         const copyElement = document.createElement("textarea");
         copyElement.value = text;
         copyElement.style.position="fixed";
-        // noinspection JSCheckFunctionSignatures
         document.body.appendChild(copyElement);
         copyElement.focus();
         copyElement.select();
         document.execCommand("copy");
-        // noinspection JSCheckFunctionSignatures
         document.body.removeChild(copyElement);
     }
 }
@@ -36,7 +34,6 @@ async function onLoad() {
         const copyArea = document.createElement("span");
         copyArea.innerHTML = element.innerHTML;
         element.innerHTML = "";
-        // noinspection JSCheckFunctionSignatures
         element.appendChild(copyArea);
         element.addEventListener("click", function() {
             copy(copyArea.innerHTML);
@@ -44,7 +41,6 @@ async function onLoad() {
         const tooltip = document.createElement("span");
         tooltip.classList.add("tooltip");
         tooltip.innerHTML = "Click to copy";
-        // noinspection JSCheckFunctionSignatures
         element.appendChild(tooltip);
     }
     // Setup downloads.
@@ -55,45 +51,37 @@ async function onLoad() {
         // Append list item.
         const item = document.createElement("li");
         item.classList.add("download_release");
-        // noinspection JSCheckFunctionSignatures
         downloadList.appendChild(item);
         // Add version tag element.
         const tag = document.createElement("span");
         tag.classList.add("download_tag");
         tag.innerHTML = release["tag_name"];
-        // noinspection JSCheckFunctionSignatures
         item.appendChild(tag);
-        // Add seperator.
-        const seperator = document.createElement("span");
-        seperator.classList.add("download_seperator");
-        seperator.innerHTML = " - ";
-        // noinspection JSCheckFunctionSignatures
-        item.appendChild(seperator);
+        // Add separator.
+        const separator = document.createElement("span");
+        separator.innerHTML = " - ";
+        item.appendChild(separator);
         // Add version name.
         const version = document.createElement("a");
         version.classList.add("download_name");
         version.innerHTML = release.name;
         version.href = release.assets[0]["browser_download_url"];
         version.target = "_blank";
-        // noinspection JSCheckFunctionSignatures
         item.appendChild(version);
         // Add tooltip.
         const tooltip = document.createElement("span");
         tooltip.classList.add("tooltip");
         tooltip.innerHTML = "Click to Download<br>Downloads: <b>" + release.assets[0]["download_count"] + "</b>";
-        // noinspection JSCheckFunctionSignatures
         version.appendChild(tooltip);
         // Add description button.
         if (!release.body) continue;
         const description = document.createElement("span");
         description.classList.add("download_description_button");
         description.innerHTML = "Description";
-        // noinspection JSCheckFunctionSignatures
         item.appendChild(description);
         const description_inside = document.createElement("div");
         description_inside.classList.add("download_description_inside");
         description_inside.innerHTML = translateMarkdown(release.body);
-        // noinspection JSCheckFunctionSignatures
         item.appendChild(description_inside);
         description.addEventListener("click", function() {
             toggle(description);

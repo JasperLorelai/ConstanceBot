@@ -75,7 +75,7 @@ module.exports = async message => {
     }
 
     // Handle To-Do in main guild.
-    if (channel.id === Config.guildData.main.channels.toDolist) {
+    if (channel.id === Config.guildData.main.channels.toDoList) {
         if (author.id === Client.user.id || author.bot) return;
         message.delete({reason: "botIntent"});
         const msg = await channel.send(new Discord.MessageEmbed().setDescription(content).setColorRandom().setAuthor(author.tag).setAuthorIcon(author.displayAvatarURL()));
@@ -133,7 +133,6 @@ module.exports = async message => {
             async function handlePost(categoryTitle, channelName, channelTopic) {
                 let postsCategory = categories.find(c => c.name.toLowerCase() === categoryTitle.toLowerCase());
                 if (!postsCategory) {
-                    // noinspection JSCheckFunctionSignatures
                     postsCategory = await guild.channels.create(categoryTitle, {type: "category", permissionOverwrites: Config.getOverwrites("mhapDefault", guild.id)});
                     await postsCategory.setPosition(Client.channels.resolve(guildData.categories.olympus).position - 1);
                 }

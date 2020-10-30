@@ -97,6 +97,7 @@ h1 {
     text-decoration: none;
     font-family: "Spectral", cursive, sans-serif;
 }
+
 .download_name:hover {text-decoration: underline}
 .download_name:hover .tooltip {visibility: visible}
 .download_name .tooltip:hover {visibility: hidden}

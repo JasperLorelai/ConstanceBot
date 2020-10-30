@@ -10,7 +10,7 @@ Client.on("messageReactionAdd", async (r, u) => {
     if (r.message.deleted) return;
 
     // Handle To-Do list actions.
-    if (channel.id === Config.guildData.main.channels.toDolist) {
+    if (channel.id === Config.guildData.main.channels.toDoList) {
         if (u.id === Client.user.id) return;
         const embed = r.message.getFirstEmbed();
         switch (r.emoji.toString()) {
@@ -43,15 +43,12 @@ Client.on("messageReactionAdd", async (r, u) => {
                     await r.message.reactions.removeAll();
                     if (r.emoji.toString() === "✅") {
                         await r.message.edit(embed.setColor(Config.color.green).setTitle("Accepted Suggestion:"));
-                        // noinspection JSUnresolvedFunction
                         await channel.setName("accepted-" + channel["name"]);
                     }
                     if (r.emoji.toString() === "❌") {
                         await r.message.edit(embed.setColor(Config.color.red).setTitle("Denied Suggestion:"));
-                        // noinspection JSUnresolvedFunction
                         await channel.setName("denied-" + channel["name"]);
                     }
-                    // noinspection JSUnresolvedFunction
                     await channel.overwritePermissions([{id: guild.id, deny: "SEND_MESSAGES"}]);
                 }
                 break;
@@ -71,7 +68,6 @@ Client.on("messageReactionAdd", async (r, u) => {
                         if (pass) {
                             const msg = await channel.send(Util.embed("Closed", "This support ticket was closed by: " + u.toString(), Config.color.red).addField("React Actions", "❌ - Hide support ticket. (`Server Admin`)"));
                             await msg.react("❌");
-                            // noinspection JSUnresolvedFunction
                             await channel.setName("solved-" + channel["name"]);
                             await r.message.reactions.removeAll();
                             await r.message.edit(embed.fields.splice(1, 1));
@@ -82,7 +78,6 @@ Client.on("messageReactionAdd", async (r, u) => {
                 if (closedTicket) {
                     await r.users.remove(u.id);
                     if (member && await Util.hasPerm(u, guild, "admin")) {
-                        // noinspection JSUnresolvedFunction
                         await channel.overwritePermissions([{id: guild.id, deny: "VIEW_CHANNEL"}]);
                         await r.message.reactions.removeAll();
                         await r.message.delete({reason: "botIntent"});
@@ -93,23 +88,19 @@ Client.on("messageReactionAdd", async (r, u) => {
             case "Staff Applications":
                 embed = embeds.find(e => e.fields[0].name === "Staff Application Actions");
                 pass = member ? await Util.hasPerm(u, guild, "admin") : false;
-                /// noinspection DuplicatedCode
                 if (embed && ["✅", "❌"].includes(r.emoji.toString()) && !["accepted", "denied"].includes(channel["name"]) && pass) {
                     await r.message.reactions.removeAll();
                     const firstComponent = (await channel.messages.fetchPinned()).first();
                     if (r.emoji.toString() === "✅") {
                         await r.message.edit(embed.setColor(Config.color.green));
                         await firstComponent.edit(firstComponent.setColor(Config.color.green).setTitle("Accepted Staff Application:"));
-                        // noinspection JSUnresolvedFunction
                         await channel.setName("accepted-" + channel["name"]);
                     }
                     if (r.emoji.toString() === "❌") {
                         await r.message.edit(embed.setColor(Config.color.red));
                         await firstComponent.edit(firstComponent.setColor(Config.color.red).setTitle("Denied Staff Application:"));
-                        // noinspection JSUnresolvedFunction
                         await channel.setName("denied-" + channel["name"]);
                     }
-                    // noinspection JSUnresolvedFunction
                     await channel.overwritePermissions([{id: guild.id, deny: "SEND_MESSAGES"}]);
                 }
                 break;
