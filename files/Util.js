@@ -166,7 +166,7 @@ module.exports = {
             .find(r => r.permissions.has("ADMINISTRATOR") || (r.permissions.has(perm) || null));
     },
     async hasPerm(user, guild, perm) {
-        const {Config} = require("../Libs");
+        const {Config, Keyv} = require("../Libs");
 
         if (!perm) return true;
         // Exit if user is author.
@@ -181,7 +181,7 @@ module.exports = {
         if (isAdmin) return true;
         if (perm === "admin") return isAdmin;
         if (perm === "mod") {
-            const db = await guild.client.keyv.get("guilds");
+            const db = await Keyv.get("guilds");
             let mods = null;
             if (db && db[guild.id] && db[guild.id].mods) {
                 mods = db[guild.id].mods;
