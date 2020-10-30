@@ -218,12 +218,14 @@ module.exports = {
         return str.join(", ");
     },
     async handleError(message, error) {
-        await message.channel.send(message.author.toString(), this.embed("Exception during command execution.", error, message.client.Config.color.red));
-    },
-    async getRequest(url, output) {
         const {Config} = require("../Libs");
 
-        return await Config.getClient().fetch(url).then(y => {
+        await message.channel.send(message.author.toString(), this.embed("Exception during command execution.", error, Config.color.red));
+    },
+    async getRequest(url, output) {
+        const {fetch} = require("../Libs");
+
+        return await fetch(url).then(y => {
             if (output === "json") return y.json();
             return y.text();
         });

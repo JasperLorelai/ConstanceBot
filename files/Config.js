@@ -1,4 +1,3 @@
-// noinspection JSUnusedGlobalSymbols
 module.exports = {
     userAgent: "https://github.com/JasperLorelai",
     defaultPrefix: "&",
