@@ -6,14 +6,11 @@ module.exports = {
     guildOnly: true,
     perm: "admin",
     async execute(Libs, message, args) {
-        const {Config, Util} = Libs;
+        const {Util, ConditionException} = Libs;
         const {guild, channel, author} = message;
 
         const role = Util.findRole(args.join(" "), guild);
-        if (!role) {
-            await channel.send(author.toString(), Util.embed("Role Deleter", "Role could not be found.", Config.color.red));
-            return null;
-        }
+        if (!role) throw new ConditionException(author, "Role Deleter", "Role could not be found.");
         await channel.send(author.toString(), Util.embed("Role Deleter", "Role **" + role.name + "** was successfully deleted."));
         role.delete();
     }

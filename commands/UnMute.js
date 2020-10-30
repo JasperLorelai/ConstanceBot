@@ -6,24 +6,15 @@ module.exports = {
     guildOnly: true,
     perm: "mod",
     async execute(Libs, message, args) {
-        const {Util, Config, Keyv} = Libs;
+        const {Util, Keyv, ConditionException} = Libs;
         const {guild, channel, author} = message;
 
         const member = Util.findGuildMember(args.join(" "), guild);
-        if (!member) {
-            await channel.send(author.toString(), Util.embed("Mute", "User not found!", Config.color.red));
-            return;
-        }
+        if (!member) throw new ConditionException(author, "Mute", "User not found!");
 
         const mutedRole = Util.findRole("Muted", guild);
-        if (!mutedRole) {
-            await channel.send(author.toString(), Util.embed("Mute", "Mute role was not initialised. This probably means nobody is muted.", Config.color.red));
-            return;
-        }
-        if (!member.roles.cache.has(mutedRole.id)) {
-            await channel.send(author.toString(), Util.embed("Mute", "User is not muted.", Config.color.red));
-            return;
-        }
+        if (!mutedRole) throw new ConditionException(author, "Mute", "Mute role was not initialised. This probably means nobody is muted.");
+        if (!member.roles.cache.has(mutedRole.id)) throw new ConditionException(author, "Mute", "User is not muted.");
 
         let db = await Keyv.get("guilds");
         await member.roles.remove(mutedRole);

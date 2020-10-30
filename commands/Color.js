@@ -3,16 +3,13 @@ module.exports = {
     description: "Takes a color from any format and displays it in multiple other formats.",
     params: ["[color]"],
     async execute(Libs, message, args) {
-        const {Config, Util, colorConvert, Canvas} = Libs;
+        const {Util, colorConvert, Canvas, ConditionException} = Libs;
         const {channel, author} = message;
 
         const color = args.join("");
         let finalColor = color.getColorFromString();
 
-        if (!finalColor) {
-            await channel.send(author.toString(), Util.embed("Colors", "Invalid color! The only color types supported are: `keyword`, `hex` (starts with #), `rgb(r, g, b)` and `hsl(h, s, l)`.", Config.color.red));
-            return null;
-        }
+        if (!finalColor) throw new ConditionException(author, "Colors", "Invalid color! The only color types supported are: `keyword`, `hex` (starts with #), `rgb(r, g, b)` and `hsl(h, s, l)`.");
 
         const keyword = colorConvert.hex.keyword(finalColor);
         const rgb = colorConvert.hex.rgb(finalColor).map(h => (h / 255 * 100).toFixed(1) + "%").join(", ");

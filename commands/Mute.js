@@ -5,7 +5,7 @@ module.exports = {
     guildOnly: true,
     perm: "mod",
     async execute(Libs, message, args) {
-        const {Util, Config, Keyv, ms} = Libs;
+        const {Util, Config, Keyv, ms, ConditionException} = Libs;
         const {guild, channel, author} = message;
         const Client = message.client;
 
@@ -39,10 +39,7 @@ module.exports = {
         // Mute function.
         const member = Util.findGuildMember(args[0], guild);
         args.shift();
-        if (!member) {
-            await channel.send(author.toString(), Util.embed("Mute", "User not found!", Config.color.red));
-            return;
-        }
+        if (!member) throw new ConditionException(author, "Mute", "User not found!");
 
         let time;
         try {
@@ -51,8 +48,7 @@ module.exports = {
             if (!Number.isInteger(time)) time = ms(time);
         }
         catch (e) {
-            await channel.send(author.toString(), Util.embed("Mute", "Time format is invalid.", Config.color.red));
-            return;
+            throw new ConditionException(author, "Mute", "Time format is invalid.");
         }
 
         const reason = args.join(" ");

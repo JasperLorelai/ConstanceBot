@@ -1,4 +1,4 @@
-const {colorConvert, Discord, Config, Util} = require("../Libs");
+const {colorConvert, Discord, Config, Util, ConditionException} = require("../Libs");
 const {MessageEmbed} = Discord;
 
 String.prototype.toFormalCase = function() {
@@ -79,8 +79,10 @@ Date.prototype.toLocalFormat = function() {
 
 
 Promise.prototype.catchError = function(channel) {
+    const red = Config.color.red;
     this.catch(async error => {
-        await channel.send(Config.author.toString(), Util.embed("Exception thrown at execution", error, Config.color.red));
+        if (error instanceof ConditionException) await channel.send(error.author.toString(), Util.embed(error.title, error.description, error.color || red));
+        else await channel.send(Config.author.toString(), Util.embed("Exception thrown at execution", error, red));
     });
 }
 

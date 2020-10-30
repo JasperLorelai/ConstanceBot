@@ -4,22 +4,18 @@ module.exports = {
     aliases: ["pfp"],
     params: ["(user)"],
     async execute(Libs, message, args) {
-        const {Config, Util, EmojiMap} = Libs;
+        const {Config, Util, EmojiMap, ConditionException} = Libs;
         const {author, channel} = message;
         const Client = message.client;
 
-        const {red, yellow} = Config.color;
         const user = args[0] ? Util.findUser(args[0]) : author;
-        if (!user) {
-            await channel.send(author.toString(), Util.embed("Avatar", "User not found!", red));
-            return null;
-        }
+        if (!user) throw new ConditionException(author, "Avatar", "User not found!");
         const msg = await channel.send(author.toString(), Util.embed("**" + user.username + "**'s Avatar", "Pick avatar size:\n" +
             EmojiMap["1"] + " - `128`\n" +
             EmojiMap["2"] + " - `256`\n" +
             EmojiMap["3"] + " - `512`\n" +
             EmojiMap["4"] + " - `1024`\n" +
-            EmojiMap["5"] + " - `2048`", yellow));
+            EmojiMap["5"] + " - `2048`", Config.color.yellow));
         await msg.react(EmojiMap["1"]);
         await msg.react(EmojiMap["2"]);
         await msg.react(EmojiMap["3"]);

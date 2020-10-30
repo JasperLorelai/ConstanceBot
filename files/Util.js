@@ -210,10 +210,6 @@ module.exports = {
 
         return str.join(", ");
     },
-    async handleError(message, error) {
-        const {Config} = require("../Libs");
-        await message.channel.send(message.author.toString(), this.embed("Exception during command execution.", error, Config.color.red));
-    },
     async getRequest(url, output) {
         const {fetch} = require("../Libs");
         return await fetch(url).then(y => {

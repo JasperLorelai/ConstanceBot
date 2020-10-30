@@ -4,7 +4,7 @@ module.exports = {
     aliases: ["ip"],
     params: ["(ip)"],
     async execute(Libs, message, args) {
-        const {Config, Util} = Libs;
+        const {Config, Util, ConditionException} = Libs;
         const {channel, guild, author} = message;
 
         let ip = args[0];
@@ -12,10 +12,7 @@ module.exports = {
             ip = Config.getGuildData(guild.id);
             if (ip) ip = ip.hostname;
         }
-        if (!ip) {
-            channel.send(author.toString(), Util.embed("Minecraft Server Info", "Please provide an IP parameter.", Config.color.red));
-            return;
-        }
+        if (!ip) throw new ConditionException(author, "Minecraft Server Info", "Please provide an IP parameter.");
         const msg = await channel.send(Util.embed("Minecraft Server Info", "Pending information...", Config.color.yellow));
         const server = await Util.getServer(ip);
         let text = "";

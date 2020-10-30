@@ -4,14 +4,11 @@ module.exports = {
     guildOnly: true,
     guildWhitelist: ["mhap"],
     async execute(Libs, message) {
-        const {Keyv, Util, Config} = Libs;
+        const {Keyv, Util, Config, ConditionException} = Libs;
         const {author, channel} = message;
 
         let db = await Keyv.get("minecraft") || {};
-        if (!db[author.id]) {
-            channel.send(author.toString(), Util.embed("Discord Unlink", "Your account isn't linked.", Config.color.red));
-            return;
-        }
+        if (!db[author.id]) throw new ConditionException(author, "Discord Unlink", "Your account isn't linked.");
         delete db[author.id];
         await Keyv.set("minecraft", db);
         channel.send(author.toString(), Util.embed("Discord Unlink", "Your account was successfully unlinked.", Config.color.green));

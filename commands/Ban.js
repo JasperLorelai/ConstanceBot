@@ -6,18 +6,12 @@ module.exports = {
     aliases: ["snap"],
     perm: "mod",
     async execute(Libs, message, args) {
-        const {Config, Util, EmojiMap} = Libs;
+        const {Util, EmojiMap, ConditionException} = Libs;
         const {guild, channel, author} = message;
 
         let member = Util.findGuildMember(args[0], guild);
-        if (!member) {
-            await channel.send(author.toString(), Util.embed("Ban Member", "User not found.", Config.color.red));
-            return;
-        }
-        if (!member.bannable) {
-            await channel.send(author.toString(), Util.embed("Ban Member", "Cannot modify that user.", Config.color.red));
-            return;
-        }
+        if (!member) throw new ConditionException(author, "Ban Member", "User not found.");
+        if (!member.bannable) throw new ConditionException(author, "Ban Member", "Cannot modify that user.");
         const msg = await channel.send(author.toString(), Util.embed("Ban Member", "Purge messages of how many days?"));
         const coll = msg.createReactionCollector((r, u) => u.id !== msg.client.user.id, {time: 10000});
         coll.on("collect", async (r, u) => {

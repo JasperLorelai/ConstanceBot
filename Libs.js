@@ -10,6 +10,8 @@ const EmojiMap = require("./files/EmojiMap");
 const Config = require("./files/Config");
 const Util = require("./files/Util");
 
+const ConditionException = require("./files/ConditionException");
+
 const handleMsg = require("./files/handleMsg");
 
 const btoa = require("btoa");
@@ -29,6 +31,8 @@ module.exports = {
     EmojiMap: EmojiMap,
     Config: Config,
     Util: Util,
+
+    ConditionException: ConditionException,
 
     handleMsg: handleMsg,
 

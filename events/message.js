@@ -1,6 +1,6 @@
 const Client = require("../Client");
 const Libs = require("../Libs");
-const {Config, Util, Keyv, handleMsg} = Libs;
+const {Config, Util, Keyv, handleMsg, ConditionException} = Libs;
 
 Client.on("message", async message => {
     // Ignore if the event was handled externally.
@@ -57,7 +57,7 @@ Client.on("message", async message => {
     if (Client.minecraftChannels.includes(channel.id)) return;
 
     if (!await Util.hasPerm(author, guild, command.perm)) {
-        await channel.send(author.toString(), Util.embed("No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + command.perm + "`", Config.color.red));
+        ConditionException.throwSafe(channel, author,"No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + command.perm + "`");
         return;
     }
     // Run command if all required args are specified.

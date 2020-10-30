@@ -5,14 +5,11 @@ module.exports = {
     guildOnly: true,
     perm: "mod",
     async execute(Libs, message, args) {
-        const {Config, Util, Keyv} = Libs;
+        const {Config, Util, Keyv, ConditionException} = Libs;
         const {guild, channel, author} = message;
 
         const member = Util.findGuildMember(args[0], guild);
-        if (!member) {
-            channel.send(author.toString(), Util.embed("Warn", "User not found!", Config.color.red));
-            return;
-        }
+        if (!member) throw new ConditionException(author, "Warn", "User not found!");
         args.shift();
         const reason = args.length ? args.join(" ") : null;
         let db = await Keyv.get("guilds");

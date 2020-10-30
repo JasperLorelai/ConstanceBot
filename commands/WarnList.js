@@ -5,28 +5,19 @@ module.exports = {
     params: ["(user)"],
     guildOnly: true,
     async execute(Libs, message, args) {
-        const {Config, Util, Keyv} = Libs;
+        const {Config, Util, Keyv, ConditionException} = Libs;
         const {guild, channel, author} = message;
         const Client = message.client;
 
         let member = null;
         if (args[0]) {
             member = Util.findUser(args[0], guild) || args[0];
-            if (!member) {
-                channel.send(author.toString(), Util.embed("Warnings", "User specified not found!", Config.color.red));
-                return;
-            }
+            if (!member) throw new ConditionException(author, "Warnings", "User specified not found!");
             if (typeof member !== "string") member = member["id"];
         }
         let db = await Keyv.get("guilds");
-        if (!db || !db[guild.id] || !db[guild.id].warns) {
-            channel.send(author.toString(), Util.embed("Warnings", "Warning database is empty. (for the moment... 😉)"));
-            return;
-        }
-        if (member && !db[guild.id].warns[member]) {
-            channel.send(author.toString(), Util.embed("Warnings", "This user has no warnings. (for the moment... 😉)"));
-            return;
-        }
+        if (!db || !db[guild.id] || !db[guild.id].warns) throw new ConditionException(author, "Warnings", "Warning database is empty. (for the moment... 😉)");
+        if (member && !db[guild.id].warns[member]) throw new ConditionException(author, "Warnings", "This user has no warnings. (for the moment... 😉)");
         // Iterate through users and create an array of objects <user.id, warns string>.
         let warns = {};
         for (let [key, value] of Object.entries(db[guild.id].warns)) {

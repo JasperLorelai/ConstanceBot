@@ -6,20 +6,13 @@ module.exports = {
     guildOnly: true,
     perm: "admin",
     async execute(Libs, message, args) {
-        const {Config, Util, Canvas, fetch} = Libs;
+        const {Util, Canvas, fetch, ConditionException} = Libs;
         const {guild, channel, author} = message;
 
         const role = Util.findRole(args.shift(), guild);
-        if (!role) {
-            await channel.send(author.toString(), Util.embed("Role Color", "Role not found!", Config.color.red));
-            return null;
-        }
+        if (!role) throw new ConditionException(author, "Role Color", "Role not found!");
         let color = args.join("").replace(/\s/g, "").getColorFromString();
-        if (!color) {
-            await channel.send(author.toString(), Util.embed("Role Color", "Invalid color! The only color types supported are: `keyword`, `hex` (starts with #), `rgb(r, g, b)` and `hsl(h, s, l)`.", Config.color.red));
-            return null;
-        }
-        // noinspection JSUnresolvedFunction
+        if (!color) throw new ConditionException(author, "Role Color", "Invalid color! The only color types supported are: `keyword`, `hex` (starts with #), `rgb(r, g, b)` and `hsl(h, s, l)`.");
         const canvasImage = Canvas.createCanvas(380, 84);
         const ctx = canvasImage.getContext("2d");
         ctx.fillStyle = "#36393F";
@@ -41,7 +34,6 @@ module.exports = {
         ctx.closePath();
         ctx.clip();
         const image = await fetch.default(author.displayAvatarURL({format: "png"}) + "?size=40").then(y => y.buffer());
-        // noinspection JSUnresolvedFunction
         ctx.drawImage(await Canvas.loadImage(image), width * .05, height * .25);
         channel.send(author.toString(), Util.embed("Role Color").setImagePermanent(canvasImage.toBuffer())).then(async msg => {
             await Util.handleChange(msg, author, role, null, role => role.setColor(color), {denied: "", accepted: "Role color updated!", newTitle: "Role Color Preview"});

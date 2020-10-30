@@ -5,23 +5,17 @@ module.exports = {
     params: ["[target 1]", "(target 2)"],
     guildOnly: true,
     async execute(Libs, message, args) {
-        const {Config, Util} = Libs;
+        const {Config, Util, ConditionException} = Libs;
         const {channel, author} = message;
         const Client = message.client;
 
         const target1 = Util.findUser(args[0]);
-        if (!target1) {
-            channel.send(author.toString(), Util.embed("Love Calculator", "User \"" + args[0] + "\" not found!", Config.color.red));
-            return;
-        }
+        if (!target1) throw new ConditionException(author, "Love Calculator", "User \"" + args[0] + "\" not found!");
         let target2 = null;
         // If target2 was specified, check if they exist.
         if (args[1]) {
             target2 = Util.findUser(args[1]);
-            if (!target2) {
-                channel.send(author.toString(), Util.embed("Love Calculator", "User \"" + args[1] + "\" not found!", Config.color.red));
-                return;
-            }
+            if (!target2) throw new ConditionException(author, "Love Calculator", "User \"" + args[1] + "\" not found!");
         }
         else target2 = author;
 

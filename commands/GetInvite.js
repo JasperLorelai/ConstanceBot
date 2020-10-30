@@ -3,15 +3,12 @@ module.exports = {
     description: "Fetches the Discord invite.",
     guildOnly: true,
     async execute(Libs, message) {
-        const {Config, Util} = Libs;
+        const {Config, ConditionException} = Libs;
 
         const data = Config.getGuildData(message.guild.id);
         let invite;
         if (data) invite = data.invite;
-        else {
-            await message.channel.send(message.author.toString(), Util.embed("Invite Fetch", "No saved invite was configured for this guild.", Config.color.red));
-            return;
-        }
+        else throw new ConditionException(message.author, "Invite Fetch", "No saved invite was configured for this guild.");
         await message.channel.send(message.author.toString() + "\n" + invite);
     }
 };
