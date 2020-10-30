@@ -1,12 +1,11 @@
-const {Config, Util, keyv} = require("../Libs");
-
 module.exports = {
     name: "warn",
     description: "Warn a user for a given reason. (Behind the scenes a user with 8 warnings should be permanently banned, but this isn't handled automatically.)",
     params: ["[user]", "(reason)"],
     guildOnly: true,
     perm: "mod",
-    async execute(message, args) {
+    async execute(Libs, message, args) {
+        const {Config, Util, keyv} = Libs;
         const {guild, channel, author} = message;
 
         try {

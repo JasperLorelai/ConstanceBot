@@ -1,12 +1,11 @@
-const {Config, Util, keyv} = require("../Libs");
-
 module.exports = {
     name: "mod",
     description: "Configure guild Mods - roles or users that will pass for the 'mod' permission.",
     guildOnly: true,
     perm: "admin",
     aliases: ["mods"],
-    async execute(message) {
+    async execute(Libs, message) {
+        const {Config, Util, keyv} = Libs;
         const {guild, channel, author} = message;
         const Client = message.client;
 

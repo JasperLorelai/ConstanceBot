@@ -1,10 +1,9 @@
-const {Config, Util, colorConvert, canvas} = require("../Libs");
-
 module.exports = {
     name: "color",
     description: "Takes a color from any format and displays it in multiple other formats.",
     params: ["[color]"],
-    async execute(message, args) {
+    async execute(Libs, message, args) {
+        const {Config, Util, colorConvert, canvas} = Libs;
         const {channel, author} = message;
 
         try {

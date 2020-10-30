@@ -1,10 +1,9 @@
-const {Util} = require("../Libs");
-
 module.exports = {
     name: "cmds",
     description: "Lists of all bot commands.",
     aliases: ["commands"],
-    async execute(message) {
+    async execute(Libs, message) {
+        const {Util} = Libs;
         const {guild, channel, author} = message;
         const Client = message.client;
 

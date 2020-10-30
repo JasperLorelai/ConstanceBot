@@ -1,12 +1,11 @@
-const {Config, Util} = require("../Libs");
-
 module.exports = {
     name: "kick",
     description: "Kick a guild member out of the guild. They will still be able to rejoin using an invite.",
     params: ["[user]", "(reason)"],
     guildOnly: true,
     perm: "mod",
-    async execute(message, args) {
+    async execute(Libs, message, args) {
+        const {Config, Util} = Libs;
         const {guild, channel, author} = message;
 
         try {

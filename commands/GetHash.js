@@ -1,10 +1,9 @@
-const {Util, Config, fetch, sha1} = require("../Libs");
-
 module.exports = {
     name: "gethash",
     description: "Generates Sha1 checksum of the provided file.",
     guildOnly: false,
-    async execute(message) {
+    async execute(Libs, message) {
+        const {Util, Config, fetch, sha1} = Libs;
         const {author, channel} = message;
 
         try {

@@ -1,5 +1,3 @@
-const {Util} = require("../Libs");
-
 // noinspection JSUnusedLocalSymbols
 module.exports = {
     name: "",
@@ -14,7 +12,9 @@ module.exports = {
     perm: "author",
     hide: true,
     // "args" is unnecessary if "params" is empty or has no required parameters.
-    async execute(message, args) {
+    async execute(Libs, message, args) {
+        const {Util} = Libs;
+
         try {
         }
         catch (e) {

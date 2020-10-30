@@ -1,10 +1,9 @@
-const {Util} = require("../Libs");
-
 module.exports = {
     name: "roles",
     description: "Lists of all guild roles.",
     guildOnly: true,
-    async execute(message) {
+    async execute(Libs, message) {
+        const {Util} = Libs;
         const {guild, channel, author} = message;
 
         try {

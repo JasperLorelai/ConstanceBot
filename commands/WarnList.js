@@ -1,12 +1,11 @@
-const {Config, Util, keyv} = require("../Libs");
-
 module.exports = {
     name: "warns",
     description: "List all warn cases in this guild. Optionally, a user can be specified as a parameter to display only the warnings of that user in the guild.",
     aliases: ["warnings"],
     params: ["(user)"],
     guildOnly: true,
-    async execute(message, args) {
+    async execute(Libs, message, args) {
+        const {Config, Util, keyv} = Libs;
         const {guild, channel, author} = message;
         const Client = message.client;
 

@@ -1,10 +1,9 @@
-const {Util} = require("../Libs");
-
 module.exports = {
     name: "dmcmds",
     description: "Lists of all commands that can be executed in DMs.",
     aliases: ["dmcommands"],
-    async execute(message) {
+    async execute(Libs, message) {
+        const {Util} = Libs;
         const {channel, author} = message;
         const Client = message.client;
 

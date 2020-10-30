@@ -1,12 +1,12 @@
-const {Util, md5} = require("../Libs");
-
 module.exports = {
     name: "gensecret",
     description: "Generate a secret from a string.",
     params: ["[string]"],
     perm: "author",
     hide: true,
-    async execute(message, args) {
+    async execute(Libs, message, args) {
+        const {Util, md5} = Libs;
+
         try {
             const md5 = md5(args.join(" "));
             // Dashify

@@ -1,12 +1,11 @@
-const {keyv, Util} = require("../Libs");
-
 module.exports = {
     name: "prefix",
     description: "Change command prefix of this server.",
     guildOnly: true,
     params: ["[prefix]"],
     perm: "admin",
-    async execute(message, args) {
+    async execute(Libs, message, args) {
+        const {keyv, Util} = Libs;
         const {channel, guild, author} = message;
 
         try {

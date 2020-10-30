@@ -1,11 +1,10 @@
-const {Config, Util} = require("../Libs");
-
 module.exports = {
     name: "server",
     description: "Displays info of a minecraft server.",
     aliases: ["ip"],
     params: ["(ip)"],
-    async execute(message, args) {
+    async execute(Libs, message, args) {
+        const {Config, Util} = Libs;
         const {channel, guild, author} = message;
 
         try {

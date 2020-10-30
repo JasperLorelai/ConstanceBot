@@ -1,12 +1,11 @@
-const {Config, Util} = require("../Libs");
-
 module.exports = {
     name: "copy",
     description: "Copy a message, including rich embeds, to another channel.",
     params: ["[origin channel ID]", "[message ID]", "[new channel ID]"],
     guildOnly: true,
     perm: "mod",
-    async execute(message, args) {
+    async execute(Libs, message, args) {
+        const {Config, Util} = Libs;
         const {channel, author} = message;
         const Client = message.client;
 

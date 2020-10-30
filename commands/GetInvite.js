@@ -1,10 +1,10 @@
-const {Config, Util} = require("../Libs");
-
 module.exports = {
     name: "getinvite",
     description: "Fetches the Discord invite.",
     guildOnly: true,
-    async execute(message) {
+    async execute(Libs, message) {
+        const {Config, Util} = Libs;
+
         try {
             const data = Config.getGuildData(message.guild.id);
             let invite;

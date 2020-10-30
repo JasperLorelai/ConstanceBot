@@ -1,5 +1,3 @@
-const {Config, Util, canvas, fetch} = require("../Libs");
-
 module.exports = {
     name: "rolecolor",
     description: "Change the color of a guild role. The color format can be hex, 'rgb(r,g,b)' or 'hsl(h,s,l)'.",
@@ -7,7 +5,8 @@ module.exports = {
     params: ["[role]", "[color]"],
     guildOnly: true,
     perm: "admin",
-    async execute(message, args) {
+    async execute(Libs, message, args) {
+        const {Config, Util, canvas, fetch} = Libs;
         const {guild, channel, author} = message;
 
         try {

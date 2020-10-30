@@ -1,5 +1,3 @@
-const {Config, Util} = require("../Libs");
-
 module.exports = {
     name: "roledelete",
     description: "Delete a role.",
@@ -7,7 +5,8 @@ module.exports = {
     params: ["[role]"],
     guildOnly: true,
     perm: "admin",
-    async execute(message, args) {
+    async execute(Libs, message, args) {
+        const {Config, Util} = Libs;
         const {guild, channel, author} = message;
 
         try {

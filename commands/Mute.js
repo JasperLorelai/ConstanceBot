@@ -1,12 +1,11 @@
-const {Util, Config, keyv, ms} = require("../Libs");
-
 module.exports = {
     name: "mute",
     description: "The mute command is used to suppress another user's permission to send messages or connect to voice channels.",
     params: ["[user]", "[time]", "(reason)"],
     guildOnly: true,
     perm: "mod",
-    async execute(message, args) {
+    async execute(Libs, message, args) {
+        const {Util, Config, keyv, ms} = Libs;
         const {guild, channel, author} = message;
         const Client = message.client;
 

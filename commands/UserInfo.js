@@ -1,12 +1,11 @@
-const {Config, Util, keyv} = require("../Libs");
-
 module.exports = {
     name: "userinfo",
     description: "Displays information about a guild member.",
     aliases: ["uinfo", "info", "whois"],
     params: ["(user)"],
     guildOnly: true,
-    async execute(message, args) {
+    async execute(Libs, message, args) {
+        const {Config, Util, keyv} = Libs;
         const {guild, channel, author} = message;
 
         try {

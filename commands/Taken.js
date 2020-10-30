@@ -1,11 +1,10 @@
-const {Config, Util} = require("../Libs");
-
 module.exports = {
     name: "taken",
     description: "Sends the official list of canon characters on our server.",
     aliases: ["characters"],
     //guildWhitelist: [Config.guildData.mhap.id],
-    async execute(message) {
+    async execute(Libs, message) {
+        const {Config, Util} = Libs;
         const {channel, author} = message;
 
         try {

@@ -1,11 +1,10 @@
-const {Util} = require("../Libs");
-
 module.exports = {
     name: "serverinfo",
     description: "Displays information about the guild.",
     aliases: ["guildinfo"],
     guildOnly: true,
-    async execute(message) {
+    async execute(Libs, message) {
+        const {Util} = Libs;
         const {guild, channel, author} = message;
 
         try {

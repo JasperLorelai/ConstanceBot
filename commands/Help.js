@@ -1,11 +1,10 @@
-const {Util} = require("../Libs");
-
 module.exports = {
     name: "help",
     description: "Show info about a specific command. Run the `commands` command to display a list of all commands.",
     aliases: ["command"],
     params: ["[command]"],
-    async execute(message, args) {
+    async execute(Libs, message, args) {
+        const {Util} = Libs;
         const {channel, author} = message;
         const Client = message.client;
 

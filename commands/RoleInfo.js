@@ -1,12 +1,11 @@
-const {Config, Util, canvas} = require("../Libs");
-
 module.exports = {
     name: "roleinfo",
     description: "Displays information about a guild role.",
     aliases: ["rinfo"],
     params: ["[role]"],
     guildOnly: true,
-    async execute(message, args) {
+    async execute(Libs, message, args) {
+        const {Config, Util, canvas} = Libs;
         const {guild, channel, author} = message;
 
         try {

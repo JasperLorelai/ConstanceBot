@@ -1,5 +1,3 @@
-const {Config, Util} = require("../Libs");
-
 module.exports = {
     name: "setnick",
     description: "Change a user's nickname.",
@@ -7,7 +5,8 @@ module.exports = {
     params: ["[user]", "[reset / new nick]"],
     guildOnly: true,
     perm: "mod",
-    async execute(message, args) {
+    async execute(Libs, message, args) {
+        const {Config, Util} = Libs;
         const {channel, guild, author} = message;
 
         try {

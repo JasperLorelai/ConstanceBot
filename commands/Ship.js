@@ -1,12 +1,11 @@
-const {Config, Util} = require("../Libs");
-
 module.exports = {
     name: "ship",
     description: "Calculate the love with the true power of Math.",
     aliases: ["love", "lovecalc"],
     params: ["[target 1]", "(target 2)"],
     guildOnly: true,
-    async execute(message, args) {
+    async execute(Libs, message, args) {
+        const {Config, Util} = Libs;
         const {channel, author} = message;
         const Client = message.client;
 

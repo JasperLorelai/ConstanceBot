@@ -1,5 +1,3 @@
-const {Util, Config, keyv} = require("../Libs");
-
 module.exports = {
     name: "unmute",
     description: "Unmute a muted member.",
@@ -7,7 +5,8 @@ module.exports = {
     params: ["[user]"],
     guildOnly: true,
     perm: "mod",
-    async execute(message, args) {
+    async execute(Libs, message, args) {
+        const {Util, Config, keyv} = Libs;
         const {guild, channel, author} = message;
 
         try {

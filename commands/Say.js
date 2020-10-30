@@ -1,12 +1,11 @@
-const {Util} = require("../Libs");
-
 module.exports = {
     name: "say",
     description: "Send messages as the bot account. Channel id is optional. The message can be an embed object.",
     guildOnly: true,
     params: ["(channel id)", "[message]"],
     perm: "author",
-    async execute(message, args) {
+    async execute(Libs, message, args) {
+        const {Util} = Libs;
         const Client = message.client;
 
         try {

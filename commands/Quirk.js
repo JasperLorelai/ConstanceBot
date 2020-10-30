@@ -1,12 +1,11 @@
-const {Config, Util} = require("../Libs");
-
 module.exports = {
     name: "quirk",
     description: "Sends the official list of quirks with hyperlinks that lead to their cards.",
     aliases: ["quirks"],
     params: ["(quirk)"],
     //guildWhitelist: [Config.guildData.mhap.id],
-    async execute(message, args) {
+    async execute(Libs, message, args) {
+        const {Config, Util} = Libs;
         const {channel, author} = message;
 
         try {

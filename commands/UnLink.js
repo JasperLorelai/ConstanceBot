@@ -1,11 +1,10 @@
-const {keyv, Util, Config} = require("../Libs");
-
 module.exports = {
     name: "unlink",
     description: "Unlink your Discord account from your Minecraft account.",
     guildOnly: true,
     //guildWhitelist: [Config.guildData.mhap.id],
-    async execute(message) {
+    async execute(Libs, message) {
+        const {keyv, Util, Config} = Libs;
         const {author, channel} = message;
 
         try {

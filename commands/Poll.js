@@ -1,12 +1,11 @@
-const {Config, Util, keyv} = require("../Libs");
-
 module.exports = {
     name: "poll",
     description: "Creates a poll.",
     guildOnly: true,
     perm: "mod",
     aliases: ["polls"],
-    async execute(message) {
+    async execute(Libs, message) {
+        const {Config, Util, keyv} = Libs;
         const {channel, author, guild} = message;
         const Client = message.client;
 

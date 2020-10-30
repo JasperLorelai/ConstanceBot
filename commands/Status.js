@@ -1,10 +1,9 @@
-const {Util, Config} = require("../Libs");
-
 module.exports = {
     name: "status",
     description: "Displays bot status.",
     aliases: [],
-    async execute(message) {
+    async execute(Libs, message) {
+        const {Util, Config} = require("../Libs");
         const {channel, author} = message;
         const Client = message.client;
 

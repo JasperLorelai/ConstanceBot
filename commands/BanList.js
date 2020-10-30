@@ -1,12 +1,11 @@
-const {Util} = require("../Libs");
-
 module.exports = {
     name: "banlist",
     description: "List banned users and the reason for their ban.",
     aliases: ["bans"],
     guildOnly: true,
     perm: "mod",
-    async execute(message) {
+    async execute(Libs, message) {
+        const {Util} = Libs;
         const {channel, author} = message;
 
         try {

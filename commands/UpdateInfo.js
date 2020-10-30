@@ -1,11 +1,10 @@
-const {Util, Config} = require("../Libs");
-
 module.exports = {
     name: "updateinfo",
     description: "Update the main embed of a guild.",
     guildOnly: true,
     perm: "author",
-    async execute(message) {
+    async execute(Libs, message) {
+        const {Util, Config} = Libs;
         const {channel, author, guild} = message;
         const Client = message.client;
 

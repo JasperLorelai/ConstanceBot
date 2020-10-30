@@ -1,5 +1,3 @@
-const {Util} = require("../Libs");
-
 module.exports = {
     name: "rolecreate",
     description: "Creates a new role.",
@@ -7,7 +5,8 @@ module.exports = {
     params: ["[name]"],
     guildOnly: true,
     perm: "admin",
-    async execute(message, args) {
+    async execute(Libs, message, args) {
+        const {Util} = Libs;
         const {guild, channel, author} = message;
 
         try {

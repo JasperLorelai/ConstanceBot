@@ -1,5 +1,3 @@
-const {Config, Util, EmojiMap} = require("../Libs");
-
 module.exports = {
     name: "ban",
     description: "Ban a guild member.",
@@ -7,7 +5,8 @@ module.exports = {
     guildOnly: true,
     aliases: ["snap"],
     perm: "mod",
-    async execute(message, args) {
+    async execute(Libs, message, args) {
+        const {Config, Util, EmojiMap} = Libs;
         const {guild, channel, author} = message;
 
         try {

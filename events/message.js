@@ -1,5 +1,6 @@
 const Client = require("../Client");
-const {Config, Util, keyv, handleMsg} = require("../Libs");
+const Libs = require("../Libs");
+const {Config, Util, keyv, handleMsg} = Libs;
 
 Client.on("message", async message => {
     // Ignore if the event was handled externally.
@@ -49,7 +50,7 @@ Client.on("message", async message => {
         return;
     }
     // Run command if all required args are specified.
-    if (!command.params || args.length >= command.params.filter(p => p.startsWith("[")).length) command.execute(message, args);
+    if (!command.params || args.length >= command.params.filter(p => p.startsWith("[")).length) command.execute(Libs, message, args);
     // Execute help command for command if not.
-    else commands.get("help").execute(message, [commandName]);
+    else commands.get("help").execute(Libs, message, [commandName]);
 });

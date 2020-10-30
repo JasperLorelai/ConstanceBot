@@ -1,11 +1,10 @@
-const {Config, Util, keyv} = require("../Libs");
-
 module.exports = {
     name: "responses",
     description: "Manage auto reponsese.",
     guildOnly: true,
     perm: "mod",
-    async execute(message) {
+    async execute(Libs, message) {
+        const {Config, Util, keyv} = Libs;
         const {guild, channel, member} = message;
 
         try {

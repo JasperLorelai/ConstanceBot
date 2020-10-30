@@ -1,12 +1,12 @@
-const {Util} = require("../Libs");
-
 module.exports = {
     name: "eval",
     description: "Evaluates string as code from root script.",
     aliases: ["run"],
     params: ["[code]"],
     perm: "author",
-    async execute(message, args) {
+    async execute(Libs, message, args) {
+        const {Util} = Libs;
+
         try {
             eval(args.join(" "));
             await message.react("❌");
