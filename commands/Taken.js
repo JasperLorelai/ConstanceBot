@@ -4,7 +4,7 @@ module.exports = {
     name: "taken",
     description: "Sends the official list of canon characters on our server.",
     aliases: ["characters"],
-    guildWhitelist: [Config.guildData.mhap.id],
+    //guildWhitelist: [Config.guildData.mhap.id],
     async execute(message) {
         const {channel, author} = message;
 
