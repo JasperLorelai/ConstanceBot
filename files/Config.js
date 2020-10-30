@@ -54,7 +54,6 @@ module.exports = {
             info: {
                 getText() {
                     const {Config, Util} = require("../Libs");
-
                     const data = Config.guildData.mhap;
                     const {roles, hostname} = data;
                     const url = Config.urls.mhap;
@@ -137,7 +136,6 @@ module.exports = {
             info: {
                 getText() {
                     const {Config, Util} = require("../Libs");
-
                     const data = Config.guildData.cctwc;
                     const urls = Config.urls.cctwc;
                     return Util.embed("Conquest Carnival: Two Worlds Collide - Server Information")

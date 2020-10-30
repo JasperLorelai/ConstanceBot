@@ -1,7 +1,6 @@
 module.exports = async message => {
     const {Config, Util, Keyv, Discord} = require("../Libs");
     const {MessageMentions} = Discord;
-
     const Client = message.client;
     const {author, content, channel, guild, mentions} = message;
 

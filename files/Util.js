@@ -1,7 +1,6 @@
 module.exports = {
     async discordAPI(code, redirect, request) {
         const {btoa, fetch, FormData, Config} = require("../Libs");
-
         const creds = "Basic " + btoa(process.env.CLIENT_ID + ":" + process.env.CLIENT_SECRET);
         const form = new FormData();
         form.append("client_id", process.env.CLIENT_ID);
@@ -21,7 +20,6 @@ module.exports = {
     },
     log(guild, funct) {
         const {Config, Discord} = require("../Libs");
-
         if (!guild) return;
         const guildData = Config.getGuildData(guild.id);
         if (!guildData) return;
@@ -36,7 +34,6 @@ module.exports = {
     },
     getBaseEmbed() {
         const {Config, Discord} = require("../Libs");
-
         return new Discord.MessageEmbed()
             .setColor(Config.color.base)
             .setFooter("Bot made by: " + Config.author.username)
@@ -99,7 +96,6 @@ module.exports = {
     },
     findUser(find) {
         const {Config} = require("../Libs");
-
         return Config.getClient().users.cache.find(u => find === u.id || find === u.username || find.substring(2, find.length - 1) === u.id || find.substring(3, find.length - 1) === u.id || u.username.toLowerCase().includes(find.toLowerCase()));
     },
     findRole(find, guild) {
@@ -110,14 +106,12 @@ module.exports = {
     },
     getTextWidth(text, font) {
         const {Canvas} = require("../Libs");
-
         let ctx = Canvas.createCanvas(0, 0).getContext("2d");
         ctx.font = font;
         return ctx.measureText(text).width;
     },
     async handleChange(msg, author, modify, denied, accepted, options) {
         const {Config} = require("../Libs");
-
         if (!denied) denied = () => {};
         if (!accepted) accepted = () => {};
         let embed = msg.getFirstEmbed();
@@ -167,7 +161,6 @@ module.exports = {
     },
     async hasPerm(user, guild, perm) {
         const {Config, Keyv} = require("../Libs");
-
         if (!perm) return true;
         // Exit if user is author.
         const isAuthor = user.id === Config.author.id;
@@ -219,12 +212,10 @@ module.exports = {
     },
     async handleError(message, error) {
         const {Config} = require("../Libs");
-
         await message.channel.send(message.author.toString(), this.embed("Exception during command execution.", error, Config.color.red));
     },
     async getRequest(url, output) {
         const {fetch} = require("../Libs");
-
         return await fetch(url).then(y => {
             if (output === "json") return y.json();
             return y.text();
@@ -232,12 +223,10 @@ module.exports = {
     },
     async getServer(serverIP) {
         const {Config} = require("../Libs");
-
         return await this.getRequest(Config.urls.mcServerQuery + serverIP,"json");
     },
     async getTrello(params) {
         const {Config} = require("../Libs");
-
         return await this.getRequest(Config.urls.trello + params + "?key=" + process.env.TRELLO_KEY + "&token=" + process.env.TRELLO_TOKEN, "json");
     }
 };
