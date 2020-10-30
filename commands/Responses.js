@@ -38,7 +38,7 @@ module.exports = {
                             msg.channel.send(member.toString(), Util.embed("Create Trigger", "Trigger must be a regex object!", Config.color.red)).then(tempMsg => {
                                 tempMsg.delete({timeout: 3000, reason: "botIntent"});
                             });
-                            return null;
+                            return;
                         }
                         const msgReply = await mTrigger.channel.send(member.toString(), Util.embed("Create Reply", "Send what the reply message should be.", Config.color.yellow));
                         mTrigger.delete({reason: "botIntent"});
@@ -76,7 +76,7 @@ module.exports = {
                         msg.channel.send(member.toString(), Util.embed("Auto Response Delete", "There are no responses in DB to delete!", Config.color.red)).then(tempMsg => {
                             tempMsg.delete({timeout: 3000, reason: "botIntent"});
                         });
-                        return null;
+                        return;
                     }
                     const msgIndex = await msg.channel.send(member.toString(), Util.embed("Auto Response Delete", "Send an idex of the response you wish to delete.", Config.color.yellow));
                     const collIndex = msgIndex.channel.createMessageCollector(m => m.author.id === member.id, {time: 10000});

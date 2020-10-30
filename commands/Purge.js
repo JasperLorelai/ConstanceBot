@@ -23,7 +23,7 @@ module.exports = {
         const coll = msg.createReactionCollector((r, u) => u.id !== Client.user.id, {time: 30000});
         coll.on("collect", async (r, u) => {
             await r.users.remove(u);
-            if (u.id !== author.id) return null;
+            if (u.id !== author.id) return;
 
             async function handleDeletePrompt(message, messages) {
                 const msg = await message.channel.send(author.toString(), Util.embed("Delete Confirmation", "**Messages found by filter:** `" + messages.size + "`\n\n**React with:\n❌ - to cancel delete.\n✅ - to confirm delete.**", Config.color.yellow));

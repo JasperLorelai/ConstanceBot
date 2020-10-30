@@ -65,7 +65,7 @@ module.exports = {
             const collector = msg.createReactionCollector((r, u) => u.id !== Client.user.id, {time: 300000});
             collector.on("collect", async (r, u) => {
                 await r.users.remove(u);
-                if (u.id !== author.id) return null;
+                if (u.id !== author.id) return;
                 let msg2, msgColl;
                 switch (r.emoji.toString()) {
                     case "💬":
