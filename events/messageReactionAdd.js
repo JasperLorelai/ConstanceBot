@@ -1,5 +1,5 @@
 const Client = require("../Client");
-const {Config, Util, keyv} = require("../Libs");
+const {Config, Util, Keyv} = require("../Libs");
 
 Client.on("messageReactionAdd", async (r, u) => {
     // Ignore custom reactions.
@@ -147,7 +147,7 @@ Client.on("messageReactionAdd", async (r, u) => {
                 .setFooter("Member ID: " + u.id)
                 .setThumbnailPermanent(u.displayAvatarURL())
                 .setDescription(u.toString() + " has accepted the rules and became a member of ***" + guild.name + "***! Count of people who accepted rules: **" + guild.roles.resolve(mhapData.roles.verified).members.size + "/" + guild.memberCount + "**."));
-            let db = await keyv.get("guilds");
+            let db = await Keyv.get("guilds");
             // Start of the welcomer process. Everything else is handled in "handleMsg.js".
             if (!db) db = {};
             const {mhap} = Config.guildData;
@@ -155,7 +155,7 @@ Client.on("messageReactionAdd", async (r, u) => {
             if (!db[mhap].welcomer) db[mhap].welcomer = {};
             const msg = await u.send(Util.embed("Roles - Poll (Stage 1)", "Would you like to be mentioned whenever we release a server poll?\nPlease reply with `yes` or `no`.", Config.color.yellow));
             db[mhap].welcomer[u.id] = msg.id;
-            await keyv.set("guilds", db);
+            await Keyv.set("guilds", db);
             break;
         }
 

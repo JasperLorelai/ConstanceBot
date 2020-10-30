@@ -6,7 +6,7 @@ module.exports = {
     guildOnly: true,
     perm: "mod",
     async execute(Libs, message, args) {
-        const {Util, Config, keyv} = Libs;
+        const {Util, Config, Keyv} = Libs;
         const {guild, channel, author} = message;
 
         const member = Util.findGuildMember(args.join(" "), guild);
@@ -25,12 +25,12 @@ module.exports = {
             return;
         }
 
-        let db = await keyv.get("guilds");
+        let db = await Keyv.get("guilds");
         await member.roles.remove(mutedRole);
         await member.send(Util.embed(guild.name + " - Mute", "Your mute status has been lifted by " + author.toString() + " (**" + author.username + "**).")).catch(() => {});
         channel.send(Util.embed("Mute", member.toString() + "'s mute status has been lifted by " + author.toString() + "."));
         if (!(db && db[guild.id] && db[guild.id].muted && db[guild.id].muted[member.id])) return;
         delete db[guild.id].muted[member.id];
-        await keyv.set("guilds", db);
+        await Keyv.set("guilds", db);
     }
 };

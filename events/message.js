@@ -1,6 +1,6 @@
 const Client = require("../Client");
 const Libs = require("../Libs");
-const {Config, Util, keyv, handleMsg} = Libs;
+const {Config, Util, Keyv, handleMsg} = Libs;
 
 Client.on("message", async message => {
     // Ignore if the event was handled externally.
@@ -12,7 +12,7 @@ Client.on("message", async message => {
     let realPrefix = null;
     let prefix = Config.defaultPrefix;
     if (guild) {
-        let db = await keyv.get("guilds");
+        let db = await Keyv.get("guilds");
         if (db && db[guild.id] && db[guild.id].prefix) realPrefix = db[guild.id].prefix;
     }
     if (!content.startsWith(prefix)) {

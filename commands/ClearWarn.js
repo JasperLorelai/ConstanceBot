@@ -5,12 +5,12 @@ module.exports = {
     guildOnly: true,
     perm: "mod",
     async execute(Libs, message, args) {
-        const {Config, Util, keyv} = Libs;
+        const {Config, Util, Keyv} = Libs;
         const {guild, channel, author} = message;
 
         let member = Util.findUser(args[0]) || args[0];
         if (typeof member !== "string") member = member.id;
-        let db = await keyv.get("guilds");
+        let db = await Keyv.get("guilds");
         if (!db || !db[guild.id] || !db[guild.id].warns || !db[guild.id].warns[member]) {
             channel.send(author.toString(), Util.embed("Clearing Warns", "This user has no warnings to be cleared.", Config.color.red));
             return;
@@ -27,13 +27,13 @@ module.exports = {
             }
             delete db[guild.id].warns[member][warnCase];
             db[guild.id].warns[member] = db[guild.id].warns[member].filter(e => e);
-            await keyv.set("guilds", db);
+            await Keyv.set("guilds", db);
             channel.send(author.toString(), Util.embed("Clearing Warns", "Cleared warn case **" + warnCase + "**  for user <@" + member + ">."));
         }
         else {
             const count = db[guild.id].warns[member].length;
             delete db[guild.id].warns[member];
-            await keyv.set("guilds", db);
+            await Keyv.set("guilds", db);
             channel.send(author.toString(), Util.embed("Clearing Warns", "Cleared **" + count + "** warnings for user <@" + member + ">."));
         }
     }

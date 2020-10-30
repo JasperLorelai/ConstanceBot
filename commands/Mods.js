@@ -5,14 +5,14 @@ module.exports = {
     perm: "admin",
     aliases: ["mods"],
     async execute(Libs, message) {
-        const {Config, Util, keyv} = Libs;
+        const {Config, Util, Keyv} = Libs;
         const {guild, channel, author} = message;
         const Client = message.client;
 
         const instr = "**React with:**\n➕ - to add Mods.\n➖ - to remove Mods.";
 
         async function getList() {
-            let db = await keyv.get("guilds");
+            let db = await Keyv.get("guilds");
             if (!db) db = {};
             if (!db[guild.id]) db[guild.id] = {};
             if (!db[guild.id].mods) db[guild.id].mods = {};
@@ -50,7 +50,7 @@ module.exports = {
                     await m.delete({reason: "botIntent"});
                     return;
                 }
-                let db = await keyv.get("guilds");
+                let db = await Keyv.get("guilds");
                 if (!db) db = {};
                 if (!db[guild.id]) db[guild.id] = {};
                 if (!db[guild.id].mods) db[guild.id].mods = {};
@@ -64,12 +64,12 @@ module.exports = {
                         }
                         mods = mods.concat(found[1]);
                         db[guild.id].mods[found[0]] = mods;
-                        await keyv.set("guilds", db);
+                        await Keyv.set("guilds", db);
                         break;
                     case "➖":
                         mods = mods.filter(e => e !== found[1]);
                         db[guild.id].mods[found[0]] = !mods.length ? null : mods;
-                        await keyv.set("guilds", db);
+                        await Keyv.set("guilds", db);
                         break;
                 }
                 collMod.stop();

@@ -1,4 +1,4 @@
-const {keyv, Config, fetch} = require("../Libs");
+const {Keyv, Config, fetch} = require("../Libs");
 
 module.exports = async (request, response, Client) => {
 
@@ -9,17 +9,17 @@ module.exports = async (request, response, Client) => {
                 break;
             case "getMCUser":
                 if (value) {
-                    let db = await keyv.get("minecraft") || {};
+                    let db = await Keyv.get("minecraft") || {};
                     response.send(db[value] || "");
                 }
                 else response.end();
                 break;
             case "getMCUserID":
-                let db = await keyv.get("minecraft") || {};
+                let db = await Keyv.get("minecraft") || {};
                 response.send(value ? db.getKeyByValue(value) : "");
                 break;
             case "getMCUsers":
-                response.send(await keyv.get("minecraft") || {});
+                response.send(await Keyv.get("minecraft") || {});
                 break;
             case "getMemberChart":
                 const gist = Config.urls.github + "gists/" + Client.memberCount;

@@ -1,7 +1,7 @@
-const {Util, Config, keyv, atob} = require("../Libs");
+const {Util, Config, Keyv, atob} = require("../Libs");
 
 module.exports = async (request, response, Client) => {
-    let db = await keyv.get("minecraft") || {};
+    let db = await Keyv.get("minecraft") || {};
 
     if (!request.query.code) {
         // If nothing was specified, exit.
@@ -42,7 +42,7 @@ module.exports = async (request, response, Client) => {
     if (user && !user.error) {
         // Save user.
         db[user.id] = atob(uuid);
-        await keyv.set("minecraft", db);
+        await Keyv.set("minecraft", db);
         response.sendFile("/views/discordLinking/linked.html", {root: "."});
     }
     else response.send("Authorisation failed. Contact the owner of the application for help.");

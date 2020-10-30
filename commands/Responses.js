@@ -4,11 +4,11 @@ module.exports = {
     guildOnly: true,
     perm: "mod",
     async execute(Libs, message) {
-        const {Config, Util, keyv} = Libs;
+        const {Config, Util, Keyv} = Libs;
         const {guild, channel, member} = message;
 
         async function getResponses() {
-            let db = await keyv.get("guilds");
+            let db = await Keyv.get("guilds");
             if (!db) db = {};
             if (!db[guild.id]) db[guild.id] = {};
             if (!db[guild.id].responses) db[guild.id].responses = [];
@@ -47,12 +47,12 @@ module.exports = {
                             const reply = mReply.content;
                             mReply.delete({reason: "botIntent"});
                             collReply.stop();
-                            let db = await keyv.get("guilds");
+                            let db = await Keyv.get("guilds");
                             if (!db) db = {};
                             if (!db[guild.id]) db[guild.id] = {};
                             if (!db[guild.id].responses) db[guild.id].responses = [];
                             db[guild.id].responses.push({trigger: trigger, reply: reply});
-                            await keyv.set("guilds", db);
+                            await Keyv.set("guilds", db);
                             await msg.edit(msg.getFirstEmbed().setDescription((await getResponses() || "No responses in DB.") + "\n\n**React with:\n➖ - to remove a response.\n➕ - to add a new response.**"));
                             msg.channel.send(member.toString(), Util.embed("Auto Response Creator", "Auto response created!", Config.color.green)).then(tempMsg => {
                                 tempMsg.delete({timeout: 3000, reason: "botIntent"});
@@ -67,7 +67,7 @@ module.exports = {
                     break;
                 case "➖":
                     idle = false;
-                    let db = await keyv.get("guilds");
+                    let db = await Keyv.get("guilds");
                     if (!db) db = {};
                     if (!db[guild.id]) db[guild.id] = {};
                     if (!db[guild.id].responses) db[guild.id].responses = [];
@@ -90,12 +90,12 @@ module.exports = {
                             return null;
                         }
                         collIndex.stop();
-                        let db = await keyv.get("guilds");
+                        let db = await Keyv.get("guilds");
                         if (!db) db = {};
                         if (!db[guild.id]) db[guild.id] = {};
                         if (!db[guild.id].responses) db[guild.id].responses = [];
                         db[guild.id].responses = db[guild.id].responses.filter((r, i) => i !== ind);
-                        await keyv.set("guilds", db);
+                        await Keyv.set("guilds", db);
                         await msg.edit(member.toString(), msg.getFirstEmbed().setDescription((await getResponses() || "No responses in DB.") + "\n\n**React with:\n➖ - to remove a response.\n➕ - to add a new response.**"));
                         msg.channel.send(member.toString(), Util.embed("Auto Response Creator", "Auto response deleted!", Config.color.green)).then(tempMsg => {
                             tempMsg.delete({timeout: 3000, reason: "botIntent"});

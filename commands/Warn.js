@@ -5,7 +5,7 @@ module.exports = {
     guildOnly: true,
     perm: "mod",
     async execute(Libs, message, args) {
-        const {Config, Util, keyv} = Libs;
+        const {Config, Util, Keyv} = Libs;
         const {guild, channel, author} = message;
 
         const member = Util.findGuildMember(args[0], guild);
@@ -15,13 +15,13 @@ module.exports = {
         }
         args.shift();
         const reason = args.length ? args.join(" ") : null;
-        let db = await keyv.get("guilds");
+        let db = await Keyv.get("guilds");
         if (!db) db = {};
         if (!db[guild.id]) db[guild.id] = {};
         if (!db[guild.id].warns) db[guild.id].warns = {};
         if (!db[guild.id].warns[member.id]) db[guild.id].warns[member.id] = [];
         db[guild.id].warns[member.id].push({date: new Date().toLocalFormat(), mod: author.id, reason: reason});
-        await keyv.set("guilds", db);
+        await Keyv.set("guilds", db);
         channel.send(Util.embed("Warn", "**User " + member.toString() + " has been warned by " + author.toString() + (reason ? " for:** " + reason : ".**")));
         member.send(Util.embed(guild.name + " - Warn", "**You have been warned by " + author.toString() + (reason ? " for:** " + reason : ".**"), Config.color.red));
     }

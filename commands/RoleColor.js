@@ -6,7 +6,7 @@ module.exports = {
     guildOnly: true,
     perm: "admin",
     async execute(Libs, message, args) {
-        const {Config, Util, canvas, fetch} = Libs;
+        const {Config, Util, Canvas, fetch} = Libs;
         const {guild, channel, author} = message;
 
         const role = Util.findRole(args.shift(), guild);
@@ -20,7 +20,7 @@ module.exports = {
             return null;
         }
         // noinspection JSUnresolvedFunction
-        const canvasImage = canvas.createCanvas(380, 84);
+        const canvasImage = Canvas.createCanvas(380, 84);
         const ctx = canvasImage.getContext("2d");
         ctx.fillStyle = "#36393F";
         const {width, height} = canvasImage;
@@ -42,7 +42,7 @@ module.exports = {
         ctx.clip();
         const image = await fetch.default(author.displayAvatarURL({format: "png"}) + "?size=40").then(y => y.buffer());
         // noinspection JSUnresolvedFunction
-        ctx.drawImage(await canvas.loadImage(image), width * .05, height * .25);
+        ctx.drawImage(await Canvas.loadImage(image), width * .05, height * .25);
         channel.send(author.toString(), Util.embed("Role Color").setImagePermanent(canvasImage.toBuffer())).then(async msg => {
             await Util.handleChange(msg, author, role, null, role => role.setColor(color), {denied: "", accepted: "Role color updated!", newTitle: "Role Color Preview"});
         });

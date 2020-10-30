@@ -5,7 +5,7 @@ module.exports = {
     perm: "mod",
     aliases: ["polls"],
     async execute(Libs, message) {
-        const {Config, Util, keyv} = Libs;
+        const {Config, Util, Keyv} = Libs;
         const {channel, author, guild} = message;
         const Client = message.client;
 
@@ -32,13 +32,13 @@ module.exports = {
 
         async function newPoll(msg, poll, index) {
             if (index && index > 0) {
-                db = await keyv.get("users");
+                db = await Keyv.get("users");
                 if (!db) db = {};
                 if (!db[author.id]) db[author.id] = {};
                 if (!db[author.id].polls) db[author.id].polls = [];
                 delete db[author.id].polls[index - 1];
                 db[author.id].polls = db[author.id].polls.filter(e => e);
-                await keyv.set("users", db);
+                await Keyv.set("users", db);
             }
 
             // Constructor
@@ -153,22 +153,22 @@ module.exports = {
                 await msg.edit(Util.embed("PollCreator Cancelled", reason === "end" ? "Cancelled poll." : "Timeout.", reason === "end" ? Config.color.red : Config.color.gray));
                 if (!message.deleted) message.delete({reason: "botIntent"});
                 if (poll) {
-                    db = await keyv.get("users");
+                    db = await Keyv.get("users");
                     if (!db) db = {};
                     if (!db[author.id]) db[author.id] = {};
                     if (!db[author.id].polls) db[author.id].polls = [];
                     db[author.id].polls.push(poll);
-                    await keyv.set("users", db);
+                    await Keyv.set("users", db);
                 }
             });
         }
 
         // Attempt to recover polls.
-        let polls = await keyv.get("polls." + author.id);
+        let polls = await Keyv.get("polls." + author.id);
         if (polls) polls = polls.filter(poll => poll.draftID + 172800000 > Date.now());
         let msg;
         if (polls && polls.length > 0) {
-            await keyv.set("polls." + author.id, polls);
+            await Keyv.set("polls." + author.id, polls);
             msg = await channel.send(author.toString(), Util.embed("Poll Drafts", "**0**. New poll.\n" + polls.map((poll, i) => "**" + (i + 1) + "**. `" + new Date(poll.draftID).toLocalFormat() + "`").join("\n"), Config.color.yellow));
             const collector = channel.createMessageCollector(m => m.author.id !== Client.user.id, {time: 10000});
             collector.on("collect", async m => {

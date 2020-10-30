@@ -1,5 +1,5 @@
 const Client = require("../Client");
-const {Config, Util, keyv} = require("../Libs");
+const {Config, Util, Keyv} = require("../Libs");
 
 Client.on("messageUpdate", async (oldMessage, newMessage) => {
     // Ignore if the event was handled externally.
@@ -33,7 +33,7 @@ Client.on("messageUpdate", async (oldMessage, newMessage) => {
     if (!oldMessage) return;
 
     let realprefix = null;
-    let db = await keyv.get("guilds");
+    let db = await Keyv.get("guilds");
     if (guild && db && db[guild.id] && db[guild.id].prefix) realprefix = db[guild.id].prefix;
     if (!oldMessage.content.startsWith(Config.defaultPrefix)) {
         if (!guild) return;

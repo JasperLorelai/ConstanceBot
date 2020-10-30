@@ -15,7 +15,7 @@ app.use(session({
 
 // Creating libraries.
 const Libs = require("./Libs");
-const {fs, Discord, keyv, Util} = Libs;
+const {fs, Discord, Keyv, Util} = Libs;
 
 // Add custom prototype methods.
 for (let prototype of fs.readdirSync("./prototype").filter(file => file.endsWith(".js"))) {
@@ -50,7 +50,7 @@ app.listen(PORT, () => {
     console.log("Webserver running on port: " + PORT);
 });
 
-keyv.on("error", err => console.error("Keyv connection error:\n", err));
+Keyv.on("error", err => console.error("Keyv connection error:\n", err));
 
 // Add a handler for all application routes.
 app.get("/", (request, response) => {
@@ -71,7 +71,7 @@ app.get("/memberchart/:gist", (request, response) => {
 
 // Recheck muted list.
 Client.setInterval(async () => {
-    const db = await keyv.get("guilds");
+    const db = await Keyv.get("guilds");
     if (!db) return;
     for (const guild in Client.guilds) {
         if (Client.guilds.hasOwnProperty(guild)) {
@@ -83,14 +83,14 @@ Client.setInterval(async () => {
                     const mutedUser = guild.members.resolve(mutedUserID);
                     if (!mutedUser) {
                         delete db[guild.id].muted[mutedUserID];
-                        await keyv.set("guilds", db);
+                        await Keyv.set("guilds", db);
                     }
                     else {
                         if (Date.now() > muted[mutedUserID]) {
                             await mutedUser.roles.remove(mutedRole);
                             await mutedUser.send(Util.embed(guild.name + " - Mute", "Your mute status has been lifted."));
                             delete db[guild.id].muted[mutedUserID];
-                            await keyv.set("guilds", db);
+                            await Keyv.set("guilds", db);
                         }
                     }
                 }

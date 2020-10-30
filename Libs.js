@@ -1,10 +1,10 @@
-const Keyv = require("keyv");
-const keyv = new Keyv(process.env.DATABASE);
+const KeyvClass = require("keyv");
+const Keyv = new KeyvClass(process.env.DATABASE);
 const Discord = require("discordjs");
 const fs = require("fs");
 const fetch = require("node-fetch");
-const canvas = require("canvas");
-const formData = require("form-data");
+const Canvas = require("canvas");
+const FormData = require("form-data");
 
 const EmojiMap = require("./files/EmojiMap");
 const Config = require("./files/Config");
@@ -19,12 +19,12 @@ const sha1 = require("sha1");
 const md5 = require("md5");
 
 module.exports = {
-    keyv: keyv,
+    Keyv: Keyv,
     Discord: Discord,
     fs: fs,
     fetch: fetch,
-    canvas: canvas,
-    formData: formData,
+    Canvas: Canvas,
+    FormData: FormData,
 
     EmojiMap: EmojiMap,
     Config: Config,

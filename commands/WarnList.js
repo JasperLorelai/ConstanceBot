@@ -5,7 +5,7 @@ module.exports = {
     params: ["(user)"],
     guildOnly: true,
     async execute(Libs, message, args) {
-        const {Config, Util, keyv} = Libs;
+        const {Config, Util, Keyv} = Libs;
         const {guild, channel, author} = message;
         const Client = message.client;
 
@@ -18,7 +18,7 @@ module.exports = {
             }
             if (typeof member !== "string") member = member["id"];
         }
-        let db = await keyv.get("guilds");
+        let db = await Keyv.get("guilds");
         if (!db || !db[guild.id] || !db[guild.id].warns) {
             channel.send(author.toString(), Util.embed("Warnings", "Warning database is empty. (for the moment... 😉)"));
             return;

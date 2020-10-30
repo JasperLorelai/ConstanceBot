@@ -5,7 +5,7 @@ module.exports = {
     guildOnly: true,
     perm: "mod",
     async execute(Libs, message, args) {
-        const {Util, Config, keyv, ms} = Libs;
+        const {Util, Config, Keyv, ms} = Libs;
         const {guild, channel, author} = message;
         const Client = message.client;
 
@@ -65,11 +65,11 @@ module.exports = {
                 member.roles.remove(muteRole);
             }, time);
         }
-        let db = await keyv.get("guilds");
+        let db = await Keyv.get("guilds");
         if (!db) db = {};
         if (!db[guild.id]) db[guild.id] = {};
         if (!db[guild.id].muted) db[guild.id].muted = {};
         db[guild.id].muted[member.id] = Date.now() + time;
-        await keyv.set("guilds", db);
+        await Keyv.set("guilds", db);
     }
 };

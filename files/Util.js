@@ -1,9 +1,9 @@
 module.exports = {
     async discordAPI(code, redirect, request) {
-        const {btoa, fetch, formData, Config} = require("../Libs");
+        const {btoa, fetch, FormData, Config} = require("../Libs");
 
         const creds = "Basic " + btoa(process.env.CLIENT_ID + ":" + process.env.CLIENT_SECRET);
-        const form = new formData();
+        const form = new FormData();
         form.append("client_id", process.env.CLIENT_ID);
         form.append("client_secret", process.env.CLIENT_SECRET);
         form.append("grant_type", "authorization_code");
@@ -109,9 +109,9 @@ module.exports = {
         return guild.channels.cache.filter(c => c.id !== guild.id).find(c => find === c.id || find.substring(3, find.length - 1) === c.id || find.toLowerCase() === c.name.toLowerCase() || c.name.toLowerCase().includes(find.toLowerCase()));
     },
     getTextWidth(text, font) {
-        const {canvas} = require("../Libs");
+        const {Canvas} = require("../Libs");
 
-        let ctx = canvas.createCanvas(0, 0).getContext("2d");
+        let ctx = Canvas.createCanvas(0, 0).getContext("2d");
         ctx.font = font;
         return ctx.measureText(text).width;
     },

@@ -1,5 +1,5 @@
 const Client = require("../Client");
-const {Config, Util, keyv} = require("../Libs");
+const {Config, Util, Keyv} = require("../Libs");
 
 Client.on("guildMemberRemove", async member => {
     const {guild, user} = member;
@@ -19,15 +19,15 @@ Client.on("guildMemberRemove", async member => {
     );
 
     // Remove user from welcomer db.
-    let db = await keyv.get("special");
+    let db = await Keyv.get("special");
     if (db) {
         if (db.mhap && db.mhap.welcomer && db.mhap.welcomer[user.id]) {
             delete db.mhap.welcomer[user.id];
-            await keyv.set("special", db);
+            await Keyv.set("special", db);
         }
         if (db.nl && db.nl.welcomer && db.nl.welcomer[user.id]) {
             delete db.nl.welcomer[user.id];
-            await keyv.set("special", db);
+            await Keyv.set("special", db);
         }
     }
 });

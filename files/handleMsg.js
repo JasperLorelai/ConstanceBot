@@ -1,12 +1,12 @@
 module.exports = async message => {
-    const {Config, Util, keyv, Discord} = require("../Libs");
+    const {Config, Util, Keyv, Discord} = require("../Libs");
     const {MessageMentions} = Discord;
 
     const Client = message.client;
     const {author, content, channel, guild, mentions} = message;
 
     const main = Config.getMainGuild();
-    let db = await keyv.get("guilds");
+    let db = await Keyv.get("guilds");
     // Ignore if it was handled externaly.
     if (message.deleted) return;
     // DM Channel messages.
@@ -45,7 +45,7 @@ module.exports = async message => {
                     break;
             }
             await msg.edit(embed);
-            await keyv.set("guilds", db);
+            await Keyv.set("guilds", db);
             return;
         }
 
