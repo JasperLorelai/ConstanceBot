@@ -73,28 +73,26 @@ app.get("/memberchart/:gist", (request, response) => {
 Client.setInterval(async () => {
     const db = await Keyv.get("guilds");
     if (!db) return;
+    let edited;
     for (const guild in Client.guilds) {
-        if (Client.guilds.hasOwnProperty(guild)) {
-            if (!db[guild.id]) continue;
-            const mutedRole = Util.findRole("Muted", guild);
-            if (mutedRole && db && db[guild.id] && db[guild.id].muted) {
-                const muted = db[guild.id].muted;
-                for (const mutedUserID of Object.keys(muted)) {
-                    const mutedUser = guild.members.resolve(mutedUserID);
-                    if (!mutedUser) {
-                        delete db[guild.id].muted[mutedUserID];
-                        await Keyv.set("guilds", db);
-                    }
-                    else {
-                        if (Date.now() > muted[mutedUserID]) {
-                            await mutedUser.roles.remove(mutedRole);
-                            await mutedUser.send(Util.embed(guild.name + " - Mute", "Your mute status has been lifted."));
-                            delete db[guild.id].muted[mutedUserID];
-                            await Keyv.set("guilds", db);
-                        }
-                    }
-                }
+        if (!Client.guilds.hasOwnProperty(guild)) continue;
+        if (!db[guild.id]) continue;
+        const mutedRole = Util.findRole("Muted", guild);
+        if (!(mutedRole && db && db[guild.id] && db[guild.id].muted)) continue;
+        const muted = db[guild.id].muted;
+        for (const mutedUserID of Object.keys(muted)) {
+            const mutedUser = guild.members.resolve(mutedUserID);
+            if (!mutedUser) {
+                delete db[guild.id].muted[mutedUserID];
+                edited = true;
+                continue;
             }
+            if (Date.now() <= muted[mutedUserID]) continue;
+            await mutedUser.roles.remove(mutedRole);
+            await mutedUser.send(Util.embed(guild.name + " - Mute", "Your mute status has been lifted.")).catch(() => {});
+            delete db[guild.id].muted[mutedUserID];
+            edited = true;
         }
     }
+    await Keyv.set("guilds", db);
 }, 30000);
