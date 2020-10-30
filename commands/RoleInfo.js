@@ -5,7 +5,7 @@ module.exports = {
     params: ["[role]"],
     guildOnly: true,
     async execute(Libs, message, args) {
-        const {Config, Util, canvas} = Libs;
+        const {Config, Util, Canvas} = Libs;
         const {guild, channel, author} = message;
 
         let role = Util.findRole(args.join(" "), guild);
@@ -14,7 +14,7 @@ module.exports = {
             return;
         }
         const desc = "**Role Position:** " + role.position + "\n**Name:** " + role.name + "\n**ID:** `<@&" + role.id + ">`" + "\n**Members:** " + role.members.map(m => m.user.tag).length + "\n**Created at:** " + role.createdAt.toLocalFormat() + "\n**Hoistable:** " + role.hoist + "\n**Mentionable:** " + role.mentionable + "\n**Menitoned:** " + role.toString() + "\n**Color:** `" + role.hexColor + "`";
-        const canvas = canvas.createCanvas(64, 64);
+        const canvas = Canvas.createCanvas(64, 64);
         const ctx = canvas.getContext("2d");
         ctx.fillStyle = role.hexColor;
         ctx.fillRect(0, 0, canvas.width, canvas.height);

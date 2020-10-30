@@ -3,7 +3,7 @@ module.exports = {
     description: "Takes a color from any format and displays it in multiple other formats.",
     params: ["[color]"],
     async execute(Libs, message, args) {
-        const {Config, Util, colorConvert, canvas} = Libs;
+        const {Config, Util, colorConvert, Canvas} = Libs;
         const {channel, author} = message;
 
         const color = args.join("");
@@ -19,7 +19,7 @@ module.exports = {
         const [h, s, l] = colorConvert.hex.hsl(finalColor);
         const hsl = h + "°, " + s + "%, " + l + "%";
 
-        const canvas = canvas.createCanvas(200, 200);
+        const canvas = Canvas.createCanvas(200, 200);
         const ctx = canvas.getContext("2d");
         ctx.fillStyle = "#" + finalColor;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
