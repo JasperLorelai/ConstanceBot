@@ -74,8 +74,7 @@ Client.setInterval(async () => {
     const db = await Keyv.get("guilds");
     if (!db) return;
     let edited;
-    for (const guild in Client.guilds) {
-        if (!Client.guilds.hasOwnProperty(guild)) continue;
+    for (const guild of Client.guilds) {
         if (!db[guild.id]) continue;
         const mutedRole = Util.findRole("Muted", guild);
         if (!(mutedRole && db && db[guild.id] && db[guild.id].muted)) continue;
