@@ -10,13 +10,6 @@ module.exports = {
         const channels = guild.channels.cache.array();
         const tc = channels.filter(c => c.type === "text");
         const vc = channels.filter(c => c.type === "voice");
-        const verificationLevels = {
-            NONE: "None",
-            LOW: "Low",
-            MEDIUM: "Medium",
-            HIGH: "(╯°□°）╯︵ ┻━┻",
-            VERY_HIGH: "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻",
-        };
         const desc = "**Name:** " + guild.name + " `(" + guild.nameAcronym + ")`" +
             "\n**Guild ID:** `" + guild.id + "`" +
             "\n**Max members:** " + (await guild.fetch()).maximumMembers +
@@ -25,7 +18,7 @@ module.exports = {
             "\n**Guild owner:** " + guild.owner.toString() +
             "\n**Region:** `" + guild.region + "`" +
             "\n**Default Message Notifications:** " + guild.defaultMessageNotifications.toFormalCase() +
-            "\n**Moderation Verification Level:** " + verificationLevels[guild.verificationLevel] +
+            "\n**Moderation Verification Level:** " + guild.verificationLevel.replace(/_/g, " ").toFormalCase() +
             "\n**Explicit Content Filter (Scan media from):** " + guild.explicitContentFilter.replace(/_/g, " ").toFormalCase() +
             (guild.features.length > 0 ? "\n**Features:** " + guild.features.map(f => "`" + f.toFormalCase() + "`").join(", ") : "") +
             (guild.premiumTier ? "\n**Boost Level:** Tier " + guild.premiumTier + " (boosts: " + guild.premiumSubscriptionCount + ")" : "") +
