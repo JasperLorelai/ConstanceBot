@@ -51,9 +51,8 @@ module.exports = {
         const infoText = infoData.getText();
 
         // Check if embeds are similar.
-        let embed = infoMsg.getEmbeds();
+        let embed = infoMsg.getFirstEmbed();
         if (embed) {
-            embed = embed[0];
             if (embed.description === infoText.description && embed.fields === infoText.fields) {
                 exit("`no change`");
                 return;
