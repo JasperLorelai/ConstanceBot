@@ -82,7 +82,7 @@ Promise.prototype.catchError = function(channel) {
     const red = Config.color.red;
     this.catch(async error => {
         if (error instanceof ConditionException) await channel.send(error.author.toString(), Util.embed(error.title, error.description, error.color || red));
-        else await channel.send(Config.author.toString(), Util.embed("Exception thrown at execution", error, red));
+        else await channel.send(Config.author.toString(), Util.embed("Exception thrown at execution", error.stack, red));
     });
 }
 
