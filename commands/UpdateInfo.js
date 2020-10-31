@@ -4,59 +4,31 @@ module.exports = {
     guildOnly: true,
     perm: "author",
     async execute(Libs, message) {
-        const {Util, Config} = Libs;
+        const {Util, Config, ConditionException} = Libs;
         const {channel, author, guild} = message;
         const Client = message.client;
 
-        function exit(code) {
-            channel.send(author.toString(), Util.embed("Info Updater", "Info was not set up for this guild. (code: " + code + ")", Config.color.red));
-        }
-
         const data = Config.getGuildData(guild.id);
-        if (!data) {
-            exit("`no guild data`");
-            return;
-        }
-
+        if (!data) throw new ConditionException(author, "Info Updater", "There is no guild data defined for this guild.");
         const infoChannelID = data.channels.info;
-        if (!infoChannelID) {
-            exit("`no info channel in config`");
-            return;
-        }
-
+        if (!infoChannelID) throw new ConditionException(author, "Info Updater", "This guild has no info channel defined in its data.");
         const infoChannel = guild.channels.resolve(infoChannelID);
-        if (!infoChannel) {
-            exit("`no info channel`");
-            return;
-        }
-
+        if (!infoChannel) throw new ConditionException(author, "Info Updater", "The info channel defined for this guild does not exist in this guild.");
         let infoMsgID = data.messages.info;
         if (!infoMsgID) {
             infoMsgID = (await infoChannel.send("Setting up info...")).id;
             Config.botLog().send(Client.author.toString() +", guild `" + guild.id + "` **" + guild.name + "** just created an Info message. Please add its ID to its configuration.");
         }
-
         const infoMsg = await infoChannel.messages.fetch(infoMsgID);
-        if (!infoMsg) {
-            exit("`no info message`");
-            return;
-        }
-
+        if (!infoMsg) throw new ConditionException(author, "Info Updater", "The defined info message was not found in the info channel.");
         const infoData = data.info;
-        if (!infoData) {
-            exit("`no info data`");
-            return;
-        }
-
+        if (!infoData) throw new ConditionException(author, "Info Updater", "This guild has no info message defined.");
         const infoText = infoData.getText();
 
         // Check if embeds are similar.
         let embed = infoMsg.getFirstEmbed();
-        if (embed) {
-            if (embed.description === infoText.description && embed.fields === infoText.fields) {
-                exit("`no change`");
-                return;
-            }
+        if (embed && embed.description === infoText.description && embed.fields === infoText.fields) {
+            throw new ConditionException(author, "Info Updater", "Nothing was updated.");
         }
 
         await infoMsg.edit("", infoText);
