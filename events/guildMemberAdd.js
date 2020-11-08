@@ -25,7 +25,7 @@ Client.on("guildMemberAdd", async member => {
                 (server.version ? "\n" + "**Version:** `" + server.version + "`" : "") +
                 "\n" + "**Discord Invite:** " + mhapData.invite)
                 .setThumbnailPermanent(guild.iconURL())
-            );
+            ).catch(() => {});
             break;
         }
         case Config.guildData.nl.id: {
@@ -37,7 +37,7 @@ Client.on("guildMemberAdd", async member => {
                 (server.version ? "\n" + "**Version:** `" + server.version + "`" : "") +
                 "\n" + "**Discord Invite:** " + nlData.invite)
                 .setThumbnailPermanent(guild.iconURL())
-            );
+            ).catch(() => {});
 
             // Send join message in guild.
             const channel = guild.channels.resolve(nlData.channels.general);
@@ -68,7 +68,7 @@ Client.on("guildMemberAdd", async member => {
                 "**Webnovel:** " + urls.webnovel
                 )
                 .setThumbnailPermanent(guild.iconURL())
-            );
+            ).catch(() => {});
 
             const channel = guild.channels.resolve(cctwcData.channels.pedestal);
             if (!channel) return;
