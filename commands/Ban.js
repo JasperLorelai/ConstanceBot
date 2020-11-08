@@ -50,9 +50,9 @@ module.exports = {
                 days: days < 0 ? 0 : days,
                 reason: member.user.username + " has been banned from the server by user: " + author.username + (args[0] ? "(reason: " + args.join(" ") + ")" : "")
             });
-            message.delete({reason: "botIntent"});
+            await message.deleteBot();
         });
-        coll.on("end", async () => await msg.delete({reason: "botIntent"}));
+        coll.on("end", () => msg.deleteBot());
         try {
             await msg.react("❌");
             await msg.react(EmojiMap["1"]);

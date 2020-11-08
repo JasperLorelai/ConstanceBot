@@ -64,7 +64,7 @@ module.exports = async message => {
             await webhook.send("", final);
         }
         else await webhook.send(content);
-        await webhook.delete({reason: "botIntent"});
+        await webhook.delete();
         return;
     }
 
@@ -77,7 +77,7 @@ module.exports = async message => {
     // Handle To-Do in main guild.
     if (channel.id === Config.guildData.main.channels.toDoList) {
         if (author.id === Client.user.id || author.bot) return;
-        message.delete({reason: "botIntent"});
+        message.deleteBot();
         const msg = await channel.send(new Discord.MessageEmbed().setDescription(content).setColorRandom().setAuthor(author.tag).setAuthorIcon(author.displayAvatarURL()));
         await msg.react("❌");
         await msg.react("✅");
@@ -92,7 +92,7 @@ module.exports = async message => {
         if (message.webhookID) return;
         const user = Client.users.resolve(channel.name);
         if (user) await user.send(content.isJSON() ? JSON.parse(content) : content); else {
-            await channel.delete({reason: "botIntent"});
+            await channel.delete();
             Config.botLog().send(author.toString(), Util.embed("DM Channel Deleted", "User you tried to DM could not be found. (`" + channel.name + "`)", Config.color.red));
         }
         return;
@@ -195,7 +195,7 @@ module.exports = async message => {
                 .setDescription("A form failed to be submitted due to an invalid user ID.\n**Entered Value:** " + embed.title + "\n\n```" + embed.description + "```")
             );
         }
-        message.delete({reason: "botIntent"});
+        await message.deleteBot();
         return;
     }
 

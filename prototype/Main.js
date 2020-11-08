@@ -1,5 +1,5 @@
 const {colorConvert, Discord, Config, Util, ConditionException} = require("../Libs");
-const {MessageEmbed} = Discord;
+const {MessageEmbed, Message, Webhook} = Discord;
 
 String.prototype.toFormalCase = function() {
     return this.charAt(0).toUpperCase() + this.substr(1).toLowerCase();
@@ -90,4 +90,10 @@ Promise.prototype.catchError = function(channel) {
 
 MessageEmbed.prototype.setColorRandom = function() {
     return this.setColor(Math.floor(Math.random()*16777215));
+}
+
+
+Message.prototype.deleteBot = async function(timeout) {
+    if (this.deleted) return;
+    await this.delete({reason: "botIntent", timeout: timeout || 0});
 }

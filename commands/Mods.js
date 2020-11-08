@@ -43,11 +43,9 @@ module.exports = {
                     if (find) found = ["users", find.id];
                 }
                 if (!found) {
-                    m.channel.send(author.toString(), Util.embed(null, "Role or User not found!", Config.color.red)).then(notFound => {
-                        notFound.delete({timeout: 3000, reason: "botIntent"})
-                    });
+                    m.channel.send(author.toString(), Util.embed(null, "Role or User not found!", Config.color.red)).then(notFound => notFound.deleteBot(3000));
                     collMod.stop();
-                    await m.delete({reason: "botIntent"});
+                    await m.deleteBot();
                     return;
                 }
                 let db = await Keyv.get("guilds");
@@ -73,11 +71,11 @@ module.exports = {
                         break;
                 }
                 collMod.stop();
-                await m.delete({reason: "botIntent"});
+                await m.deleteBot();
             });
             collMod.on("end", async () => {
                 await msg.edit(author.toString(), Util.embed("Configure Server Mods", await getList() + "\n\n" + instr));
-                await msgInput.delete({reason: "botIntent"});
+                await msgInput.deleteBot();
                 await r.users.remove(u);
             });
         });

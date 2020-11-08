@@ -9,7 +9,7 @@ module.exports = {
         const pack = message.attachments ? message.attachments.find(a => a.name.endsWith(".zip")) : null;
         if (!pack) throw new ConditionException(author, "Sha1 Checksum Failed", "No attachment provided (must end with `zip` file extension).");
         const buffer = await fetch(pack.url).then(y => y.buffer());
-        message.delete({reason: "botIntent"});
+        await message.deleteBot();
         const hash = sha1(buffer);
         channel.send({
             embed: Util.embed("Sha1 Checksum Generated", "`" + hash + "`"),

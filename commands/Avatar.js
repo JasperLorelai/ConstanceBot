@@ -46,7 +46,7 @@ module.exports = {
             coll.stop();
         });
         coll.on("end", async () => {
-            if (!msg.deleted) await msg.delete({reason: "botIntent"});
+            await msg.deleteBot();
             await channel.send(author.toString(), Util.embed("**" + user.username + "**'s Avatar").setImagePermanent(user.displayAvatarURL({format: "png", size: size})));
         });
     }

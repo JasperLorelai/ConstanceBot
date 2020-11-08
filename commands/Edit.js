@@ -22,6 +22,6 @@ module.exports = {
         msg = msg.isJSON() ? JSON.parse(msg) : msg;
         await editMsg.edit(msg);
         channel.send(author.toString(), Util.embed("", "Message edited. [\(Jump\)](" + editMsg.url + ")"));
-        message.delete({reason: "botIntent"});
+        await message.deleteBot();
     }
 };
