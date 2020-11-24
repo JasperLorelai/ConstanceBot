@@ -5,7 +5,7 @@ const {MessageEmbed} = Discord;
 
 function attachFile(resource, embed, func = () => {}) {
     let attachment;
-    if (resource instanceof String && resource.isURL()) {
+    if (typeof(resource) === "string" && resource.isURL()) {
         let name = resource.substr(resource.lastIndexOf("/") + 1);
         if (name.includes("?")) name = name.substr(0, name.indexOf("?"));
         if (name.includes("&")) name = name.substr(0, name.indexOf("&"));
