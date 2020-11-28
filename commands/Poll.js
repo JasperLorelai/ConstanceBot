@@ -5,7 +5,7 @@ module.exports = {
     perm: "mod",
     aliases: ["polls"],
     async execute(Libs, message) {
-        const {Config, Util, Keyv} = Libs;
+        const {Config, Util, Keyv, EmojiMap} = Libs;
         const {channel, author, guild} = message;
         const Client = message.client;
 
@@ -18,7 +18,7 @@ module.exports = {
                 "\n➕ - Add react option." +
                 "\n🚫 - Reset reactions." +
                 (pollrole ? "\n💟 - Ping everyone with the Polls role. (`" + poll.rolePing + "`)" : "") +
-                "\n" + Client.EmojiMap["1"] + " - Unique reactions only. (`" + poll.unique + "`)" +
+                "\n" + EmojiMap["1"] + " - Unique reactions only. (`" + poll.unique + "`)" +
                 "\n✅ - Send poll." +
                 "\n❌ - Cancel poll.";
         }
@@ -58,7 +58,7 @@ module.exports = {
             await msg.react("➕");
             await msg.react("🚫");
             if (pollrole) await msg.react("💟");
-            await msg.react(Client.EmojiMap["1"]);
+            await msg.react(EmojiMap["1"]);
             await msg.react("✅");
             await msg.react("❌");
             const created = Date.now();
@@ -108,7 +108,7 @@ module.exports = {
                     case "💟":
                         if (pollrole) poll.rolePing = !poll.rolePing;
                         break;
-                    case Client.EmojiMap["1"]:
+                    case EmojiMap["1"]:
                         poll.unique = !poll.unique;
                         break;
                     case "✅":

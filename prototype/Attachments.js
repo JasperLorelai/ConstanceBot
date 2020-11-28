@@ -21,8 +21,7 @@ function attachFile(resource, embed, func = () => {}) {
         };
     }
     if (!attachment) return embed;
-    embed = func(embed.attachFiles([attachment]), "attachment://" + attachment.name);
-    return embed;
+    return func(embed.attachFiles([attachment]), "attachment://" + attachment.name);
 }
 
 MessageEmbed.prototype.setImagePermanent = function(resource) {
