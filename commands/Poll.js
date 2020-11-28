@@ -9,7 +9,8 @@ module.exports = {
         const {channel, author, guild} = message;
         const Client = message.client;
 
-        const pollrole = Util.findRole("Polls", guild);
+        const pollRoleID = Config.getGuildData(guild.id)?.roles?.polls;
+        const pollRole = pollRoleID ? guild.roles.resolve(pollRoleID) : Util.findRole("Polls", guild);
         let db;
 
         function getHelp(poll) {
@@ -17,7 +18,7 @@ module.exports = {
                 "\n💬 - Set text." +
                 "\n➕ - Add react option." +
                 "\n🚫 - Reset reactions." +
-                (pollrole ? "\n💟 - Ping everyone with the Polls role. (`" + poll.rolePing + "`)" : "") +
+                (pollRole ? "\n💟 - Ping everyone with the " + pollRole.toString() + " role. (`" + poll.rolePing + "`)" : "") +
                 "\n" + EmojiMap["1"] + " - Unique reactions only. (`" + poll.unique + "`)" +
                 "\n✅ - Send poll." +
                 "\n❌ - Cancel poll.";
@@ -57,7 +58,7 @@ module.exports = {
             await msg.react("💬");
             await msg.react("➕");
             await msg.react("🚫");
-            if (pollrole) await msg.react("💟");
+            if (pollRole) await msg.react("💟");
             await msg.react(EmojiMap["1"]);
             await msg.react("✅");
             await msg.react("❌");
@@ -106,7 +107,7 @@ module.exports = {
                         }
                         break;
                     case "💟":
-                        if (pollrole) poll.rolePing = !poll.rolePing;
+                        if (pollRole) poll.rolePing = !poll.rolePing;
                         break;
                     case EmojiMap["1"]:
                         poll.unique = !poll.unique;
@@ -123,7 +124,7 @@ module.exports = {
                                     .setAuthorIcon(author.displayAvatarURL())
                                     .setFooter("Unique reactions | " + embed.footer.text)
                                     .setColor(Config.color.poll);
-                                const created = await ch.send(poll.rolePing && pollrole ? "<@&" + pollrole.id + ">" : "", embed);
+                                const created = await ch.send(poll.rolePing && pollRole ? "<@&" + pollRole.id + ">" : "", embed);
                                 for (let emoji of poll.emoji) await created.react(emoji);
                                 await msg.deleteBot();
                                 msgColl.stop();

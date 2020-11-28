@@ -101,7 +101,8 @@ module.exports = {
             invite: "https://discord.gg/Z9R4j7g",
             roles: {
                 player: "704906830425620531",
-                notify: "707080930728083508"
+                notify: "707080930728083508",
+                polls: "707080930728083508"
             },
             channels: {
                 logs: "716811006801608819",
