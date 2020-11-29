@@ -131,8 +131,9 @@ module.exports = {
                                 collector.stop("done");
                             }
                             else {
-                                const embed = msg2.getFirstEmbed();
-                                await msg2.edit(embed.setDescription(embed.description + "\n\n**Channel not found!**").setColor(Config.color.red));
+                                msgColl.stop();
+                                channel.send(author.toString(), Util.embed("Poll Creator - Sender", "**Channel not found!***", Config.color.red)).then(m => m.deleteBot(10000));
+                                return;
                             }
                             await m.deleteBot();
                         });
