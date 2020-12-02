@@ -30,7 +30,7 @@ module.exports = {
         if (Config.guildData.mhap.id === guild.id) {
             let uuid = linkedDB && linkedDB[member.id] ? linkedDB[member.id] : null;
             embed.description += "\n**Linked MC UUID:** `" + (uuid ? uuid : "Not linked") + "`";
-            if (uuid) embed.setImagePermanent("https://visage.surgeplay.com/bust/128/" + uuid);
+            if (uuid) embed = embed.setImagePermanent("https://visage.surgeplay.com/bust/128/" + uuid);
         }
         await channel.send(author.toString(), embed);
     }
