@@ -26,7 +26,7 @@ module.exports = {
             (activity ? "\n**Presence:** " + activity.name : "") +
             (flags.length ? "\n**Flags:** " + flags.join(", ") : "") +
             (roles && roles.size ? "\n**Roles (" + roles.size + "):** " + roles.array().join(", ") : "");
-        const embed = Util.embed("User info for: " + user.username, desc).setThumbnailPermanent(user.displayAvatarURL({format: "png"}));
+        let embed = Util.embed("User info for: " + user.username, desc).setThumbnailPermanent(user.displayAvatarURL({format: "png"}));
         if (Config.guildData.mhap.id === guild.id) {
             let uuid = linkedDB && linkedDB[member.id] ? linkedDB[member.id] : null;
             embed.description += "\n**Linked MC UUID:** `" + (uuid ? uuid : "Not linked") + "`";
