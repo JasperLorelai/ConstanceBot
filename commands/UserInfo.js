@@ -26,7 +26,12 @@ module.exports = {
             (activity ? "\n**Presence:** " + activity.name : "") +
             (flags.length ? "\n**Flags:** " + flags.join(", ") : "") +
             (roles && roles.size ? "\n**Roles (" + roles.size + "):** " + roles.array().join(", ") : "");
-        if (Config.guildData.mhap.id === guild.id) desc += "\n**Linked MC UUID:** `" + (linkedDB && linkedDB[member.id] ? linkedDB[member.id] : "Not linked") + "`";
-        await channel.send(author.toString(), Util.embed("User info for: " + user.username, desc).setThumbnailPermanent(user.displayAvatarURL({format: "png"})));
+        const embed = Util.embed("User info for: " + user.username, desc).setThumbnailPermanent(user.displayAvatarURL({format: "png"}));
+        if (Config.guildData.mhap.id === guild.id) {
+            let uuid = linkedDB && linkedDB[member.id] ? linkedDB[member.id] : null;
+            embed.description += "\n**Linked MC UUID:** `" + (uuid ? uuid : "Not linked") + "`";
+            if (uuid) embed.setImagePermanent("https://visage.surgeplay.com/bust/128/" + uuid);
+        }
+        await channel.send(author.toString(), embed);
     }
 };
