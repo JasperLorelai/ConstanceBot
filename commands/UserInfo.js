@@ -5,7 +5,7 @@ module.exports = {
     params: ["(user)"],
     guildOnly: true,
     async execute(Libs, message, args) {
-        const {Config, Util, Keyv, ConditionException} = Libs;
+        const {Util, Keyv, ConditionException} = Libs;
         const {guild, channel, author} = message;
 
         const member = args[0] ? Util.findGuildMember(args.join(" "), guild) : message.member;
@@ -26,13 +26,15 @@ module.exports = {
             "\n**Status:** " + member.presence.status.toFormalCase() +
             (activity ? "\n**Presence:** " + activity.name : "") +
             (flags.length ? "\n**Flags:** " + flags.join(", ") : "") +
-            (roles && roles.size ? "\n**Roles (" + roles.size + "):** " + roles.array().join(", ") : "");
+            (roles && roles.size ? "\n**Roles (" + roles.size + "):** " + roles.array().join(",?u ") : "");
         let embed = Util.embed("User info for: " + user.username, desc).setThumbnailPermanent(user.displayAvatarURL({format: "png"}));
-        if (Config.guildData.mhap.id === guild.id) {
-            let uuid = linkedDB && linkedDB[member.id] ? linkedDB[member.id] : null;
+
+        let uuid = linkedDB && linkedDB[member.id] ? linkedDB[member.id] : null;
+        if (uuid) {
             embed.description += "\n**Linked MC UUID:** `" + (uuid ? uuid : "Not linked") + "`";
-            if (uuid) embed = embed.setImagePermanent("https://visage.surgeplay.com/bust/128/" + uuid);
+            embed = embed.setImagePermanent("https://visage.surgeplay.com/bust/128/" + uuid);
         }
+
         await channel.send(author.toString(), embed);
     }
 };
