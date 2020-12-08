@@ -9,6 +9,7 @@ function attachFile(resource, embed, func = () => {}) {
         let name = resource.substr(resource.lastIndexOf("/") + 1);
         if (name.includes("?")) name = name.substr(0, name.indexOf("?"));
         if (name.includes("&")) name = name.substr(0, name.indexOf("&"));
+        if (!name.includes(".")) name += ".png";
         attachment = {
             attachment: resource,
             name: name

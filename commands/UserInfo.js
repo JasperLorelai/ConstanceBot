@@ -12,7 +12,7 @@ module.exports = {
         if (!member) throw new ConditionException(author, "User Info", "User not found!");
         const activity = member.presence && member.presence.activity ? member.presence.activity : null;
         const {user} = member;
-        const flags = user.flags.toArray().map(flag => "`" + flag.replace(/_/g, " ").toTitleCase() + "`");
+        const flags = user.flags ? user.flags.toArray().map(flag => "`" + flag.replace(/_/g, " ").toTitleCase() + "`") : [];
         const roles = member.roles && member.roles.cache ? member.roles.cache.filter(r => r.id !== guild.id) : null;
         const linkedDB = await Keyv.get("minecraft") || {};
         let desc = (user.bot ? "**Is BOT:** true" : "") +
@@ -21,6 +21,7 @@ module.exports = {
             "\n**Joined at:** `" + member.joinedAt.toLocalFormat() + "`" +
             "\n**Join Position:** " + Util.getJoinPosition(member) +
             "\n**Registered at:** `" + user.createdAt.toLocalFormat() + "`" +
+            "\n**Tag:** `" + user.tag + "`" +
             (member.nickname ? "\n**Nickname:** " + member.nickname : "") +
             "\n**Status:** " + member.presence.status.toFormalCase() +
             (activity ? "\n**Presence:** " + activity.name : "") +
