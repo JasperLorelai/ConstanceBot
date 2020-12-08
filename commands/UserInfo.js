@@ -23,7 +23,7 @@ module.exports = {
             "\n> **Join Position:** " + Util.getJoinPosition(member) +
             "\n> **Registered at:** `" + user.createdAt.toLocalFormat() + "`" +
             "\n> **Tag:** `" + user.tag + "`" +
-            (member.nickname ? "\n**> Nickname:** " + member.nickname : "") +
+            (member.nickname ? "\n> **Nickname:** `" + member.nickname + "`" : "") +
             //"\n> **Status:** " + member.presence.status.toFormalCase() +
             //(activity ? "\n> **Presence:** " + activity.name : "") +
             (flags.length ? "\n> **Flags:** " + flags.join(", ") : "") +
