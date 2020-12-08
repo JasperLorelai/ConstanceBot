@@ -17,7 +17,7 @@ module.exports = {
         if (!copyMsg) return;
         const archive = Client.channels.resolve(args[2]);
         if (!archive) throw new ConditionException(author, "Message Copy", "Specified channel where the fetched message should be copied to was not found. Confirm the channel with this ID exists and is visible to the bot client.");
-        const wb = await archive.createWebhook(copyMsg.author.username, {avatar: copyMsg.author.displayAvatarURL(), reason: "Message Copy - initiated by " + author.username + "(" + author.id + ")"});
+        const wb = await archive.createWebhook(copyMsg.author.username, {avatar: copyMsg.author.getAvatar(), reason: "Message Copy - initiated by " + author.username + "(" + author.id + ")"});
         const newMsg = await wb.send(copyMsg);
         await wb.delete();
         channel.send(author.toString(), Util.embed("", "Message copied. [\(Jump\)](" + newMsg.url + ")"));

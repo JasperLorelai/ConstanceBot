@@ -33,7 +33,7 @@ module.exports = {
         ctx.arc(width * .1, height * .5, 20, 0, Math.PI * 2, true);
         ctx.closePath();
         ctx.clip();
-        const image = await fetch.default(author.displayAvatarURL({format: "png"}) + "?size=40").then(y => y.buffer());
+        const image = await fetch.default(author.getAvatar() + "?size=40").then(y => y.buffer());
         ctx.drawImage(await Canvas.loadImage(image), width * .05, height * .25);
         channel.send(author.toString(), Util.embed("Role Color").setImagePermanent(canvasImage.toBuffer())).then(async msg => {
             await Util.handleChange(msg, author, role, null, role => role.setColor(color), {denied: "", accepted: "Role color updated!", newTitle: "Role Color Preview"});

@@ -8,7 +8,7 @@ Client.on("guildMemberRemove", async member => {
     Util.log(guild, embed => embed.setColor(Config.color.logs.guildMemberRemove)
         .setTitle("User Left")
         .setAuthor(user.tag)
-        .setAuthorIcon(user.displayAvatarURL())
+        .setAuthorIcon(user.getAvatar())
         .setFooter("Member ID: " + user.id)
         .setDescription("New member count: **" + guild.memberCount + "**" +
             "\n\n**Mention:** " + member.toString() +

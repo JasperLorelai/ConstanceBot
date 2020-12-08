@@ -21,7 +21,7 @@ Client.on("messageUpdate", async (oldMessage, newMessage) => {
 
         Util.log(guild, embed => embed.setColor(Config.color.logs.messageUpdate)
             .setAuthor("@" + author.tag)
-            .setAuthorIcon(author.displayAvatarURL())
+            .setAuthorIcon(author.getAvatar())
             .setTitle("Message Edited")
             .setDescription(channel.toString() + " [\(Jump\)](" + newMessage.url + ")")
             .addField("Before", oldContent, false)

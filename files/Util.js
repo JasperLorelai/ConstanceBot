@@ -35,7 +35,7 @@ module.exports = {
         return new Discord.MessageEmbed()
             .setColor(Config.color.base)
             .setFooter("Bot made by: " + Config.author.username)
-            .setFooterIcon(Config.author.displayAvatarURL())
+            .setFooterIcon(Config.author.getAvatar())
             .setTimestamp(new Date());
     },
     embed(title, description, color) {

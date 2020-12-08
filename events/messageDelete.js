@@ -22,7 +22,7 @@ Client.on("messageDelete", async message => {
         Util.log(guild, embed => {
             embed.setColor(Config.color.logs.messageDelete)
                 .setAuthor("@" + author.tag)
-                .setAuthorIcon(author.displayAvatarURL())
+                .setAuthorIcon(author.getAvatar())
                 .setTitle("Message Deleted")
                 .setDescription("**Deleted by " + executor.toString() + " from channel** " + channel.toString() + ".")
                 .setFooter("Message ID: " + message.id)

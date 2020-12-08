@@ -10,9 +10,9 @@ module.exports = {
         await msg.edit(msg.getFirstEmbed()
             .setColor(Config.color.base)
             .setDescription(
-                "**Server Ping**: `" + (msg.createdAt - message.createdAt) + " ms`" +
-                "\n**API Ping**: `" + Math.round(Client.ws.ping) + " ms`" +
-                "\n**Uptime**: `" + Util.msToTime(Client.uptime) + "`")
+                "> **Server Ping**: `" + (msg.createdAt - message.createdAt) + " ms`" +
+                "\n> **API Ping**: `" + Math.round(Client.ws.ping) + " ms`" +
+                "\n> **Uptime**: `" + Util.msToTime(Client.uptime) + "`")
         );
     }
 };

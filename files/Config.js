@@ -132,7 +132,7 @@ module.exports = {
                 staff: "769347262069342248"
             },
             messages: {
-                info: "769686788330881034"
+                info: "785891401488400415"
             },
             info: {
                 getText() {
@@ -176,6 +176,7 @@ module.exports = {
         mhap: "https://mhaprodigy.uk/",
         joke: "https://icanhazdadjoke.com/",
         github: "https://api.github.com/",
+        visage: "https://visage.surgeplay.com/",
         cctwc: {
             kofi: "https://ko-fi.com/misterflare",
             webnovel: "https://www.webnovel.com/book/conquest-carnival-two-worlds-collide_18206343405701805"

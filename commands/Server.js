@@ -18,22 +18,22 @@ module.exports = {
         let text = "";
         if (server.debug && server.debug.ping) {
             if (server.online) {
-                text += "**Online:** " + server.online;
+                text += "> **Online:** " + server.online;
                 let ip = server.ip + (server.port ? ":" + server.port : "");
-                text += "\n**Address:** ";
+                text += "\n> **Address:** ";
                 text += server.hostname ? "`" + server.hostname + "` **(**`" + ip + "`**)**" : "`" + ip + "`";
             }
             if (server["players"] && server["players"].list) {
                 let {online, max, list} = server["players"];
-                text += "\n**Players (**" + online + "/" + max + "**):** " + list.map(u => u.escapeMarkdown()).join("**,** ");
+                text += "\n> **Players (**" + online + "/" + max + "**):** " + list.map(u => u.escapeMarkdown()).join("**,** ");
             }
-            if (server.version) text += "\n**Version:** " + server.version;
-            if (server["software"]) text += "\n**Software:** " + server["software"];
-            if (server.map) text += "\n**Map:** " + server.map;
-            if (server.plugins) text += "\n**Plugins (" + server.plugins.raw.length + "):** " + server.plugins.raw.join("**,** ");
-            if (server["mods"]) text += "\n**Mods (" + server["mods"].raw.length + "):** " + server["mods"].names.join("**,** ");
+            if (server.version) text += "\n> **Version:** " + server.version;
+            if (server["software"]) text += "\n> **Software:** " + server["software"];
+            if (server.map) text += "\n> **Map:** " + server.map;
+            if (server.plugins) text += "\n> **Plugins (" + server.plugins.raw.length + "):** " + server.plugins.raw.join("**,** ");
+            if (server["mods"]) text += "\n> **Mods (" + server["mods"].raw.length + "):** " + server["mods"].names.join("**,** ");
         }
-        else text = "**Server was not found.**";
+        else text = "> **Server was not found.**";
         let embed = Util.embed("Minecraft Server Info", (text.length >= 2000 ? "" : text)).setColor(server.online ? Config.color.green : Config.color.red);
         if (server.icon) embed = embed.setThumbnailPermanent(server.icon.getBufferFromString());
         msg.delete();

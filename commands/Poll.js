@@ -121,7 +121,7 @@ module.exports = {
                             if (ch) {
                                 let embed = Util.embed(null, poll.text)
                                     .setAuthor(author.username)
-                                    .setAuthorIcon(author.displayAvatarURL())
+                                    .setAuthorIcon(author.getAvatar())
                                     .setColor(Config.color.poll);
                                 embed = embed.setFooter("Unique reactions | " + embed.footer.text);
                                 const created = await ch.send(poll.rolePing && pollRole ? "<@&" + pollRole.id + ">" : "", embed);

@@ -47,7 +47,7 @@ module.exports = {
         });
         coll.on("end", async () => {
             await msg.deleteBot();
-            await channel.send(author.toString(), Util.embed("**" + user.username + "**'s Avatar").setImagePermanent(user.displayAvatarURL({format: "png", size: size})));
+            await channel.send(author.toString(), Util.embed("**" + user.username + "**'s Avatar").setImagePermanent(user.getAvatar(size)));
         });
     }
 };

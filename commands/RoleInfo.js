@@ -10,7 +10,15 @@ module.exports = {
 
         let role = Util.findRole(args.join(" "), guild);
         if (!role) throw new ConditionException(author, "Role Info", "Role not found!");
-        const desc = "**Role Position:** " + role.position + "\n**Name:** " + role.name + "\n**ID:** `<@&" + role.id + ">`" + "\n**Members:** " + role.members.map(m => m.user.tag).length + "\n**Created at:** " + role.createdAt.toLocalFormat() + "\n**Hoistable:** " + role.hoist + "\n**Mentionable:** " + role.mentionable + "\n**Menitoned:** " + role.toString() + "\n**Color:** `" + role.hexColor + "`";
+        const desc = "> **Role Position:** " + role.position +
+            "\n> **Menitoned:** " + role.toString() +
+            "\n> **ID:** `" + role.toString() + "`" +
+            "\n> **Name:** " + role.name +
+            "\n> **Members:** " + role.members.map(m => m.user.tag).length +
+            "\n> **Created at:** " + role.createdAt.toLocalFormat() +
+            "\n> **Mentionable:** " + role.mentionable +
+            "\n> **Hoistable:** " + role.hoist +
+            "\n> **Color:** `" + role.hexColor + "`";
         const canvas = Canvas.createCanvas(64, 64);
         const ctx = canvas.getContext("2d");
         ctx.fillStyle = role.hexColor;

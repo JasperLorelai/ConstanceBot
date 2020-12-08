@@ -6,7 +6,6 @@ module.exports = {
     async execute(Libs, message) {
         const {Util, Config, ConditionException} = Libs;
         const {channel, author, guild} = message;
-        const Client = message.client;
 
         const data = Config.getGuildData(guild.id);
         if (!data) throw new ConditionException(author, "Info Updater", "There is no guild data defined for this guild.");
@@ -17,7 +16,7 @@ module.exports = {
         let infoMsgID = data.messages.info;
         if (!infoMsgID) {
             infoMsgID = (await infoChannel.send("Setting up info...")).id;
-            Config.botLog().send(Client.author.toString() +", guild `" + guild.id + "` **" + guild.name + "** just created an Info message. Please add its ID to its configuration.");
+            Config.botLog().send(Config.author.toString() +", guild `" + guild.id + "` **" + guild.name + "** just created an Info message. Please add its ID to its configuration.");
         }
         const infoMsg = await infoChannel.messages.fetch(infoMsgID);
         if (!infoMsg) throw new ConditionException(author, "Info Updater", "The defined info message was not found in the info channel.");

@@ -16,5 +16,6 @@ Message.prototype.getEmbeds = function() {
     });
 }
 Message.prototype.getFirstEmbed = function() {
-    return this.getEmbeds()[0];
+    const embeds = this.getEmbeds();
+    return embeds == null ? null : embeds[0];
 }
