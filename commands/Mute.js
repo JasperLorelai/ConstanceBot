@@ -38,13 +38,13 @@ module.exports = {
 
         // Mute function.
         const member = Util.findGuildMember(args[0], guild);
-        args.shift();
+        await args.shift();
         if (!member) throw new ConditionException(author, "Mute", "User not found!");
 
         let time;
         try {
             time = ms(args[0]);
-            args.shift();
+            await args.shift();
             if (!Number.isInteger(time)) time = ms(time);
         }
         catch (e) {

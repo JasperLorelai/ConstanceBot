@@ -44,7 +44,7 @@ module.exports = {
                     days = 7;
                     break;
             }
-            args.shift();
+            await args.shift();
             await channel.send(author.toString(), Util.embed("Banned Member", "**" + member.user.username + "** has been banned from the server by user: " + author.toString() + (days > 0 ? "\n**Days:** " + days : "") + (args[0] ? "\n**For reason:** " + args.join(" ") : "")));
             await member.ban({
                 days: days < 0 ? 0 : days,

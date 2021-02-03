@@ -10,7 +10,7 @@ module.exports = {
 
         const member = Util.findGuildMember(args[0], guild);
         if (!member) throw new ConditionException(author, "Warn", "User not found!");
-        args.shift();
+        await args.shift();
         const reason = args.length ? args.join(" ") : null;
         let db = await Keyv.get("guilds");
         if (!db) db = {};

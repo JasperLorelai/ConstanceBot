@@ -170,7 +170,7 @@ module.exports = async message => {
                     break;
                 case "rawStaffApp":
                     const appFragments = message.getEmbeds();
-                    appFragments.shift();
+                    await appFragments.shift();
                     const lastFragment = appFragments[appFragments.length -1];
                     appFragments.splice(appFragments.length-1);
                     const staffApp = await handlePost("Staff Applications", "staffapp", "Would you like to apply? Use this form here: " + Config.urls.mhap + "apply");

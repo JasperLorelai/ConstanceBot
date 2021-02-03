@@ -9,7 +9,7 @@ module.exports = {
 
         // Check if the first argument is a channel id and set it as target.
         let channel = Client.channels.resolve(args[0]);
-        if (channel) args.shift();
+        if (channel) await args.shift();
         // If not, assume the target channel to be the source channel.
         else channel = message.channel;
         let msg = args.join(" ");
