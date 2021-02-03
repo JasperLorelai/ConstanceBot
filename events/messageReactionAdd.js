@@ -77,7 +77,8 @@ Client.on("messageReactionAdd", async (r, u) => {
                 const closedTicket = embeds.find(e => e.title === "Closed");
                 if (closedTicket) {
                     await r.users.remove(u.id);
-                    if (member && await Util.hasPerm(u, guild, "admin")) {
+                    if (await Util.hasPerm(u, guild, "admin")) {
+                        console.log("hiding");
                         await channel.overwritePermissions([{id: guild.id, deny: "VIEW_CHANNEL"}]);
                         await r.message.reactions.removeAll();
                         await r.message.deleteBot();
