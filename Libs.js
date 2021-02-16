@@ -21,6 +21,7 @@ const sha1 = require("sha1");
 const md5 = require("md5");
 
 module.exports = {
+    KeyvClass: KeyvClass,
     Keyv: Keyv,
     Discord: Discord,
     fs: fs,
