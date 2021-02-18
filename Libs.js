@@ -1,5 +1,4 @@
 const KeyvClass = require("keyv");
-const Keyv = new KeyvClass(process.env.DATABASE);
 const Discord = require("discordjs");
 const fs = require("fs");
 const fetch = require("node-fetch");
@@ -9,6 +8,8 @@ const FormData = require("form-data");
 const EmojiMap = require("./files/EmojiMap");
 const Config = require("./files/Config");
 const Util = require("./files/Util");
+
+let Keyv = new KeyvClass(process.env.DATABASE);
 
 const ConditionException = require("./files/ConditionException");
 
@@ -20,8 +21,16 @@ const ms = require("ms");
 const sha1 = require("sha1");
 const md5 = require("md5");
 
+Keyv.on("error", err => {
+    if (!err.includes("closed state")) {
+        console.error("Keyv connection error:\n", err);
+        return;
+    }
+    Keyv = new KeyvClass(process.env.DATABASE);
+    console.log("Reconnected Keyv connection.");
+});
+
 module.exports = {
-    KeyvClass: KeyvClass,
     Keyv: Keyv,
     Discord: Discord,
     fs: fs,

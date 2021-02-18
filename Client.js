@@ -15,8 +15,7 @@ app.use(session({
 
 // Creating libraries.
 const Libs = require("./Libs");
-const {fs, Discord, KeyvClass, Util} = Libs;
-let {Keyv} = Libs;
+const {fs, Discord, Keyv, Util} = Libs;
 
 // Add custom prototype methods.
 for (let prototype of fs.readdirSync("./prototype").filter(file => file.endsWith(".js"))) {
@@ -49,16 +48,6 @@ for (let event of fs.readdirSync("./events").filter(file => file.endsWith(".js")
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log("Webserver running on port: " + PORT);
-});
-
-Keyv.on("error", err => {
-    if (!err.includes("closed state")) {
-        console.error("Keyv connection error:\n", err);
-        return;
-    }
-    // noinspection JSValidateTypes
-    Keyv = new KeyvClass(process.env.DATABASE);
-    console.log("Reconnected Keyv connection.");
 });
 
 // Add a handler for all application routes.
