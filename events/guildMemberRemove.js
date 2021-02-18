@@ -1,10 +1,7 @@
 const Client = require("../Client");
-const Libs = require("../Libs");
-const {Config, Util} = Libs;
+const {Config, Util, Keyv} = require("../Libs");
 
 Client.on("guildMemberRemove", async member => {
-    // FIXME Moving this here might not fix DB closed-state issues.
-    const {Keyv} = Libs;
     const {guild, user} = member;
 
     const roles = member.roles ? member.roles.cache.filter(r => r.id !== guild.id) : null;

@@ -1,11 +1,7 @@
 const Client = require("../Client");
-const Libs = require("../Libs");
-const {Config, Util} = Libs;
+const {Config, Util, Keyv} = require("../Libs");
 
 Client.on("messageReactionAdd", async (r, u) => {
-    // FIXME Moving this here might not fix DB closed-state issues.
-    const {Keyv} = Libs;
-
     // Ignore custom reactions.
     if (!r) return;
 
