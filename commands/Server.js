@@ -18,7 +18,7 @@ module.exports = {
         let text = "";
         if (server.debug && server.debug.ping) {
             if (server.online) {
-                text += "> **Online:** " + server.online;
+                text += "> **Status:** `" + (server.online ? "Online" : "Offline") + "`";
                 let ip = server.ip + (server.port ? ":" + server.port : "");
                 text += "\n> **Address:** ";
                 text += server.hostname ? "`" + server.hostname + "` **(**`" + ip + "`**)**" : "`" + ip + "`";
