@@ -7,7 +7,7 @@ const FormData = require("form-data");
 const EmojiMap = require("./files/EmojiMap");
 const Config = require("./files/Config");
 const Util = require("./files/Util");
-const Keyv = require("/files/Database");
+const Keyv = require("./files/Database");
 
 const ConditionException = require("./files/ConditionException");
 
