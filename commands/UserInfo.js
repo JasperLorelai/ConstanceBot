@@ -10,8 +10,6 @@ module.exports = {
 
         const member = args[0] ? Util.findGuildMember(args.join(" "), guild) : message.member;
         if (!member) throw new ConditionException(author, "User Info", "User not found!");
-        // FIXME
-        //const activity = member.presence && member.presence.activity ? member.presence.activity : null;
         const {user} = member;
         const flags = user.flags ? user.flags.toArray().map(flag => "`" + flag.replace(/_/g, " ").toTitleCase() + "`") : [];
         const roles = member.roles && member.roles.cache ? member.roles.cache.filter(r => r.id !== guild.id) : null;
@@ -24,8 +22,6 @@ module.exports = {
             "\n> **Registered at:** `" + user.createdAt.toLocalFormat() + "`" +
             "\n> **Tag:** `" + user.tag + "`" +
             (member.nickname ? "\n> **Nickname:** `" + member.nickname + "`" : "") +
-            //"\n> **Status:** " + member.presence.status.toFormalCase() +
-            //(activity ? "\n> **Presence:** " + activity.name : "") +
             (flags.length ? "\n> **Flags:** " + flags.join(", ") : "") +
             (roles && roles.size ? "\n> **Roles (" + roles.size + "):** " + roles.array().join(", ") : "") +
             (uuid ? "\n> **Linked MC UUID:** `" + uuid + "`" : "");
