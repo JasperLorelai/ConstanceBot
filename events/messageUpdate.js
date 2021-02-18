@@ -1,7 +1,11 @@
 const Client = require("../Client");
-const {Config, Util, Keyv} = require("../Libs");
+const Libs = require("../Libs");
+const {Config, Util} = Libs;
 
 Client.on("messageUpdate", async (oldMessage, newMessage) => {
+    // FIXME Moving this here might not fix DB closed-state issues.
+    const {Keyv} = Libs;
+
     // Ignore if the event was handled externally.
     if (newMessage.deleted) return;
     const {guild, author, channel} = newMessage;

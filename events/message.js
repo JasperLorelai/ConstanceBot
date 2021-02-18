@@ -1,8 +1,11 @@
 const Client = require("../Client");
 const Libs = require("../Libs");
-const {Config, Util, Keyv, handleMsg, ConditionException} = Libs;
+const {Config, Util, handleMsg, ConditionException} = Libs;
 
 Client.on("message", async message => {
+    // FIXME Moving this here might not fix DB closed-state issues.
+    const {Keyv} = Libs;
+
     // Ignore if the event was handled externally.
     if (message.deleted) return;
     const Client = message.client;
