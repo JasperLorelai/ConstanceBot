@@ -26,7 +26,7 @@ for (let prototype of fs.readdirSync("./prototype").filter(file => file.endsWith
 const Client = new Discord.Client({fetchAllMembers: true});
 Client.minecraftChannels = [];
 
-Client.login().catch(e => console.log(e));
+Client.login().catch(console.error);
 module.exports = Client;
 
 // Grabbing handlers
