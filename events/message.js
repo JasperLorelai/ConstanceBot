@@ -1,5 +1,6 @@
 const Client = require("../Client");
-const {Config, Util, handleMsg, ConditionException, Keyv} = require("../Libs");
+const Libs = require("../Libs");
+const {Config, Util, handleMsg, ConditionException, Keyv} = Libs;
 
 Client.on("message", async message => {
     // Ignore if the event was handled externally.
