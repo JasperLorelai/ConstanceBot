@@ -124,14 +124,14 @@ Client.on("messageReactionAdd", async (r, u) => {
     const mhapData = Config.guildData.mhap;
     const nlData = Config.guildData.nl;
     const cctwcData = Config.guildData.cctwc;
-    const member = await guild.members.resolve(u.id);
+    const member = guild.members.resolve(u.id);
     if (u.id === Client.user.id) return;
     switch (r.message.id) {
         // Rule accept.
         case mhapData.messages.rules: {
-            if (r.emoji.toString() !== "✅") return;
+            if (r.emoji.toString() !== "✅") break;
             let roles = mhapData.roles;
-            if (member.roles.cache.has(roles.verified)) return;
+            if (member.roles.cache.has(roles.verified)) break;
             await member.roles.remove(roles.unverified);
             await member.roles.add(roles.verified);
             Util.log(guild, embed => embed.setColor(Config.color.green)

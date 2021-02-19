@@ -89,7 +89,7 @@ Promise.prototype.catchError = function(channel) {
 
 
 MessageEmbed.prototype.setColorRandom = function() {
-    return this.setColor(Math.floor(Math.random()*16777215));
+    return this.setColor(Math.floor(Math.random() * 16777215));
 }
 
 Message.prototype.deleteBot = async function(timeout) {
