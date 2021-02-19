@@ -52,21 +52,34 @@ module.exports = {
                 rules: "550735939257892865"
             },
             info: {
-                getText() {
-                    const {Config, Util} = require("../Libs");
-                    const data = Config.guildData.mhap;
-                    const {roles, hostname} = data;
+                getInfo() {
+                    const {Config} = require("../Libs");
+                    const {hostname} = Config.guildData.mhap;
                     const url = Config.urls.mhap;
-                    return Util.embed("My Hero Academia Prodigy - Information")
-                        .addField("Basic Information:",
-                            "> **IP:** `" + hostname + "`\n" +
+                    return {
+                        name: "Basic Information:",
+                        value: "> **IP:** `" + hostname + "`\n" +
                             "> **Version:** `Release 1.13.2`\n" +
                             "> **Discord Invite:** " + url + "discord\n" +
-                            "> **Trello Board:** " + url + "trello")
-                        .addField("Forms:",
-                            "> Would you like suggest something? [(Click here)](" + url + "suggest)\n" +
+                            "> **Trello Board:** " + url + "trello"
+                    };
+                },
+                getForms() {
+                    const {Config} = require("../Libs");
+                    const url = Config.urls.mhap;
+                    return {
+                        name: "Forms:",
+                        value: "> Would you like suggest something? [(Click here)](" + url + "suggest)\n" +
                             "> Need support? [(Click here)](" + url + "support)\n" +
-                            "> Would you like to apply for staff? [(Click here)](" + url + "apply)")
+                            "> Would you like to apply for staff? [(Click here)](" + url + "apply)"
+                    };
+                },
+                getText() {
+                    const {Config, Util} = require("../Libs");
+                    const {roles} = Config.guildData.mhap;
+                    return Util.embed("My Hero Academia Prodigy - Information")
+                        .addFields(this.getInfo())
+                        .addFields(this.getForms())
                         .addField("🔞 - NSFW Authentication:","> *This authentication is here to warn the recipient to not open the channel at the office or near young children because the channels it will reveal after accepting contain sexual or repulsive content.*\n" +
                             "React with the displayed reaction to toggle access to the NSFW channel section.")
                         .addField("Toggle Pingable Roles:",
