@@ -8,7 +8,7 @@ Client.on("guildMemberAdd", async member => {
         .setTitle("User Joined")
         .setAuthor("@" + user.tag)
         .setAuthorIcon(user.getAvatar())
-        .setFooter("Member ID: " + user.id)
+        .setFooterText("Member ID: " + user.id)
         .setDescription("New member count: **" + guild.memberCount + "**" +
             "\n\n**Mention:** " + member.toString() +
             "\n**Join Position:** " + Util.getJoinPosition(member) +

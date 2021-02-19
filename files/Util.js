@@ -34,7 +34,7 @@ module.exports = {
         const {Config, Discord} = require("../Libs");
         return new Discord.MessageEmbed()
             .setColor(Config.color.base)
-            .setFooter("Bot made by: " + Config.author.username)
+            .setFooterText("Bot made by: " + Config.author.username)
             .setFooterIcon(Config.author.getAvatar())
             .setTimestamp(new Date());
     },

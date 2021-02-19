@@ -123,7 +123,7 @@ module.exports = {
                                     .setAuthor(author.username)
                                     .setAuthorIcon(author.getAvatar())
                                     .setColor(Config.color.poll);
-                                embed = embed.setFooter("Unique reactions | " + embed.footer.text);
+                                embed = embed.setFooterText("Unique reactions | " + embed.footer.text);
                                 const created = await ch.send(poll.rolePing && pollRole ? "<@&" + pollRole.id + ">" : "", embed);
                                 for (let emoji of poll.emoji) await created.react(emoji);
                                 await msg.deleteBot();

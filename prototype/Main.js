@@ -92,6 +92,12 @@ MessageEmbed.prototype.setColorRandom = function() {
     return this.setColor(Math.floor(Math.random() * 16777215));
 }
 
+MessageEmbed.prototype.setFooterText = function(text) {
+    const url = this.footer?.iconURL;
+    if (!url) return this.setFooter(text);
+    return this.setFooter(text, "attachment://" + url.substr(url.lastIndexOf("/") + 1));
+}
+
 Message.prototype.deleteBot = async function(timeout) {
     if (this.deleted) return;
     await this.delete({reason: "botIntent", timeout: timeout || 0});

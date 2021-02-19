@@ -151,7 +151,7 @@ module.exports = async message => {
                         .setAuthor(user.tag)
                         .setAuthorIcon(user.getAvatar())
                         .addField("React Actions", "❌ - Close support ticket. (`Server Admin` or OP)")
-                        .setFooter(user.id);
+                        .setFooterText(user.id);
                     msg = await ticket.send(embed);
                     await msg.react("❌");
                     const restriction = embed.fields[0].value;

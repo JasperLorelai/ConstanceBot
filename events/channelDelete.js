@@ -10,7 +10,7 @@ Client.on("channelDelete", async channel => {
     if (!["FormCategoryEmpty"].includes(log.reason)) {
         Util.log(guild, embed => embed.setColor(Config.color.logs.channelDelete)
             .setTitle("Channel Deleted")
-            .setFooter("Channel ID: " + channel.id)
+            .setFooterText("Channel ID: " + channel.id)
             .setDescription("**Name:** `" + channel["name"] + "`\n**Type:** " + channel.type.toFormalCase() + (channel["parentID"] ? "\n**Parent ID:** `" + channel["parentID"] + "`" : "") + "\n**By User:** " + log.executor.toString() + (log.reason ? "\n**Reason:** " + log.reason : "")));
     }
 

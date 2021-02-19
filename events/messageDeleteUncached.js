@@ -16,9 +16,9 @@ Client.on("messageDeleteUncached", async event => {
             embed = embed.setColor(Config.color.logs.messageDelete)
                 .setTitle("Message Deleted")
                 .setDescription("**Uncached message deleted.**")
-                .setFooter("Message ID: " + messageID);
+                .setFooterText("Message ID: " + messageID);
             if (channel) embed = embed.setDescription(embed.description + "\n" + channel.toString());
-            else embed = embed.setFooter(embed.footer + " | Channel ID: " + channel.id)
+            else embed = embed.setFooterText(embed.footer + " | Channel ID: " + channel.id)
             return embed;
         });
     }

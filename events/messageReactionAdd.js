@@ -137,7 +137,7 @@ Client.on("messageReactionAdd", async (r, u) => {
             await member.roles.add(roles.verified);
             Util.log(guild, embed => embed.setColor(Config.color.green)
                 .setTitle("User " + u.username + " has accepted the rules!")
-                .setFooter("Member ID: " + u.id)
+                .setFooterText("Member ID: " + u.id)
                 .setThumbnailPermanent(u.getAvatar())
                 .setDescription(u.toString() + " has accepted the rules and became a member of ***" + guild.name + "***! Count of people who accepted rules: **" + guild.roles.resolve(mhapData.roles.verified).members.size + "/" + guild.memberCount + "**."));
             let db = await Keyv.get("guilds");

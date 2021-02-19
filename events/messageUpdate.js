@@ -26,7 +26,7 @@ Client.on("messageUpdate", async (oldMessage, newMessage) => {
             .setDescription(channel.toString() + " [\(Jump\)](" + newMessage.url + ")")
             .addField("Before", oldContent, false)
             .addField("Now", newContent, false)
-            .setFooter("Message ID: " + newMessage.id));
+            .setFooterText("Message ID: " + newMessage.id));
     }
 
     // Ignore raw events.
