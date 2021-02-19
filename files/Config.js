@@ -88,7 +88,22 @@ module.exports = {
                             "> 📰 <@&" + roles.changelog + "> - If you have this role, you will be pinged whenever a changelog is released.")
                 },
                 reactions: ["🔞", "📦", "📆", "📰"]
-            }
+            },
+            welcomer: [
+                {text: "Are you interested in notification roles?"},
+                {
+                    text: "Would you like to be mentioned whenever we release a server poll?",
+                    role: "polls"
+                },
+                {
+                    text: "Would you like to be mentioned whenever a server event is hosted?",
+                    role: "events"
+                },
+                {
+                    text: "Would you like to be mentioned whenever a changelog for our server is posted?",
+                    role: "changelog"
+                }
+            ]
         },
         main: {
             id: "575376952517591041",
@@ -127,7 +142,14 @@ module.exports = {
             },
             messages: {
                 notify: "709955815213236225"
-            }
+            },
+            welcomer: [
+                {text: "Are you interested in notification roles?"},
+                {
+                    text: "Would you like to be be notified for polls and various server events?",
+                    role: "notify"
+                }
+            ]
         },
         cctwc: {
             id: "769314080972341268",

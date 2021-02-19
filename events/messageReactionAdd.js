@@ -1,5 +1,5 @@
 const Client = require("../Client");
-const {Config, Util, Keyv} = require("../Libs");
+const {Config, Util} = require("../Libs");
 
 Client.on("messageReactionAdd", async (r, u) => {
     // Ignore custom reactions.
@@ -108,14 +108,69 @@ Client.on("messageReactionAdd", async (r, u) => {
         }
     }
 
-    // Poll - unique reactions.
-    if (r.message.author.id === Client.user.id) {
-        if (u.id === Client.user.id) return;
-        const embed = r.message.getFirstEmbed();
-        if (embed.footer && embed.footer.text.startsWith("Unique reactions | ")) {
-            for (const reaction of r.message.reactions.cache.values()) {
-                if (r.emoji.toString() === reaction.emoji.toString()) continue;
-                await reaction.users.remove(u);
+    if (r.message.author.id === Client.user.id && u.id !== Client.user.id) {
+        let embed = r.message.getFirstEmbed();
+        const emoji = r.emoji.toString();
+        if (embed.footer) {
+            const {text} = embed.footer;
+            // Poll - unique reactions.
+            if (text.startsWith("Unique reactions | ")) {
+                for (const reaction of r.message.reactions.cache.values()) {
+                    if (r.emoji.toString() === reaction.emoji.toString()) continue;
+                    await reaction.users.remove(u);
+                }
+            }
+            // Welcomer.
+            const welcomerKey = "Welcomer | ";
+            if (text.startsWith(welcomerKey) && ["✅", "❌"].includes(emoji)) {
+                const split = text
+                    .substr(welcomerKey.length, text.indexOf(" | " + Util.getBaseFooter()))
+                    .split("_")
+                    .map(e => e.trim());
+                if (split.length !== 2) return;
+
+                const guildID = split[0];
+                const part = parseInt(split[1]);
+
+                let guildName;
+                let guildData;
+
+                // Verify guild name.
+                for (const guildKey of Object.keys(Config.guildData)) {
+                    const guild = Config.guildData[guildKey];
+                    if (guild.id !== guildID) continue;
+                    guildName = guildKey;
+                    guildData = guild;
+                    break;
+                }
+
+                if (!(guildName && guildData.welcomer)) return;
+                const {welcomer} = guildData;
+                if (part + 1 === Object.keys(welcomer).length || (part === 0 && emoji === "❌")) {
+                    r.message.deleteBot();
+                    return;
+                }
+
+                embed = embed.setFooterText(welcomerKey + guildID + "_" + (part + 1) + " | " + Util.getBaseFooter());
+
+                const currentPart = welcomer[part];
+                const nextPart = welcomer[part + 1];
+                if (nextPart.text) embed = embed.setDescription(nextPart.text);
+
+                if (currentPart.role && guildData.roles && emoji === "✅") {
+                    const roleName = currentPart.role;
+                    const roleID = guildData.roles[roleName];
+                    const guild = Client.guilds.resolve(guildID);
+                    if (roleID && guild) {
+                        const member = guild.members.resolve(u.id);
+                        if (member) member.roles.add(roleID);
+                    }
+                }
+
+                await r.message.deleteBot();
+                const msg = await channel.send(embed);
+                await msg.react("✅");
+                await msg.react("❌");
             }
         }
     }
@@ -140,15 +195,16 @@ Client.on("messageReactionAdd", async (r, u) => {
                 .setFooterText("Member ID: " + u.id)
                 .setThumbnailPermanent(u.getAvatar())
                 .setDescription(u.toString() + " has accepted the rules and became a member of ***" + guild.name + "***! Count of people who accepted rules: **" + guild.roles.resolve(mhapData.roles.verified).members.size + "/" + guild.memberCount + "**."));
-            let db = await Keyv.get("guilds");
-            // Start of the welcomer process. Everything else is handled in "handleMsg.js".
-            if (!db) db = {};
-            const {mhap} = Config.guildData;
-            if (!db[mhap]) db[mhap] = {};
-            if (!db[mhap].welcomer) db[mhap].welcomer = {};
-            const msg = await u.send(Util.embed("Roles - Poll (Stage 1)", "Would you like to be mentioned whenever we release a server poll?\nPlease reply with `yes` or `no`.", Config.color.yellow));
-            db[mhap].welcomer[u.id] = msg.id;
-            await Keyv.set("guilds", db);
+
+            // Start of the welcomer process.
+            if (!mhapData.welcomer || !mhapData.welcomer.length) return;
+            const first = mhapData.welcomer[0];
+            if (!first || !first.text) return;
+            let embed = Util.embed("Notification Roles", first.text);
+            embed = embed.setFooterText("Welcomer | " + mhapData.id + "_0 | " + embed.footer.text);
+            const msg = await author.send(embed);
+            await msg.react("✅");
+            await msg.react("❌");
             break;
         }
 

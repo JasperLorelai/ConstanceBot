@@ -44,16 +44,15 @@ Client.on("guildMemberAdd", async member => {
             if (!channel) return;
             channel.send(Util.embed(member.user.username + " Joined", "Welcome " + member.toString() + " to **" + guild.name + "**. We hope you enjoy your stay.").setColorRandom().setThumbnailPermanent(member.user.getAvatar()));
 
-            // Start of the welcomer process. Everything else is handled in "handleMsg.js".
-            /*
-            if (!db) db = {};
-            const {nlGuild} = config.guilds;
-            if (!db[nlGuild]) db[nlGuild] = {};
-            if (!db[nlGuild].welcomer) db[nlGuild].welcomer = {};
-            const msg = await user.send(util.embed("Roles - Poll (Stage 1)", "Would you like to be mentioned whenever we release a server poll?\nPlease reply with `yes` or `no`.", config.color.yellow));
-            db[nlGuild].welcomer[user.id] = msg.id;
-            await keyv.set("guilds", db);
-             */
+            // Start of the welcomer process.
+            if (!nlData.welcomer || !nlData.welcomer.length) return;
+            const first = nlData.welcomer[0];
+            if (!first || !first.text) return;
+            let embed = Util.embed("Notification Roles", first.text);
+            embed = embed.setFooterText("Welcomer | " + nlData.id + "_0 | " + embed.footer.text);
+            const msg = await member.send(embed);
+            await msg.react("✅");
+            await msg.react("❌");
             break;
         }
         case Config.guildData.cctwc.id: {
