@@ -30,11 +30,15 @@ module.exports = {
     getJoinPosition(member) {
         return member.guild.members.cache.sort((a, b) => a.joinedAt - b.joinedAt).array().findIndex(m => m.id === member.id);
     },
+    getBaseFooter() {
+        const {Config} = require("../Libs");
+        return "Bot made by: " + Config.author.username;
+    },
     getBaseEmbed() {
         const {Config, Discord} = require("../Libs");
         return new Discord.MessageEmbed()
             .setColor(Config.color.base)
-            .setFooterText("Bot made by: " + Config.author.username)
+            .setFooterText(this.getBaseFooter())
             .setFooterIcon(Config.author.getAvatar())
             .setTimestamp(new Date());
     },
