@@ -121,6 +121,7 @@ Client.on("messageReactionAdd", async (r, u) => {
     }
 
     // Per message handling.
+    if (!guild) return;
     const mhapData = Config.guildData.mhap;
     const nlData = Config.guildData.nl;
     const cctwcData = Config.guildData.cctwc;

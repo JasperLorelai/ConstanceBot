@@ -36,5 +36,5 @@ MessageEmbed.prototype.setAuthorIcon = function(resource) {
     return attachFile(resource, this, (embed, attachment) => embed.setAuthor(author.name, attachment, author.user));
 }
 MessageEmbed.prototype.setFooterIcon = function(resource) {
-    return attachFile(resource, this, (embed, attachment) => embed.setFooter(embed.footer.text, attachment));
+    return attachFile(resource, this, (embed, attachment) => embed.setFooter(embed.footer?.text, attachment));
 }

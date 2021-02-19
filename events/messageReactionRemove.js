@@ -7,7 +7,7 @@ Client.on("messageReactionRemove", async (r, u) => {
 
     const {guild} = r.message;
     // Ignore if the event was handled externally.
-    if (r.message.deleted) return;
+    if (r.message.deleted || !guild) return;
 
     // Per message handling.
     if (u.id === Client.user.id) return;

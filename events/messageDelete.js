@@ -3,6 +3,7 @@ const {Config, Util} = require("../Libs");
 
 Client.on("messageDelete", async message => {
     const {guild, author, channel} = message;
+    if (!guild) return;
     const log = (await guild.fetchAuditLogs({type: "MESSAGE_DELETE", limit: 1})).entries.first();
 
     const nl = Config.guildData.nl.channels;
@@ -25,7 +26,7 @@ Client.on("messageDelete", async message => {
                 .setAuthorIcon(author.getAvatar())
                 .setTitle("Message Deleted")
                 .setDescription("**Deleted by " + executor.toString() + " from channel** " + channel.toString() + ".")
-                .setFooter("Message ID: " + message.id)
+                .setFooterText("Message ID: " + message.id)
                 .addField("Content", message.content ? message.content : "**No content.**");
             if (message.attachments.size) embed = embed.setImagePermanent(message.attachments.first().attachment);
             return embed;
