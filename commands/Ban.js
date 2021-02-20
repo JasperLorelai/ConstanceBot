@@ -10,8 +10,8 @@ module.exports = {
         const {guild, author} = message;
 
         let member = Util.findGuildMember(args[0], guild);
-        if (!member) throw new ConditionException(author, "Ban Member", "User not found.");
-        if (!member.bannable) throw new ConditionException(author, "Ban Member", "Cannot modify that user.");
+        if (!member) throw new ConditionException(message, "Ban Member", "User not found.");
+        if (!member.bannable) throw new ConditionException(message, "Ban Member", "Cannot modify that user.");
         const msg = await message.reply(Util.embed("Ban Member", "Purge messages of how many days?"));
         const coll = msg.createReactionCollector((r, u) => u.id !== msg.client.user.id, {time: 10000});
         coll.on("collect", async (r, u) => {

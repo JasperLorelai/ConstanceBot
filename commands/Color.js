@@ -4,12 +4,11 @@ module.exports = {
     params: ["[color]"],
     async execute(Libs, message, args) {
         const {Util, colorConvert, Canvas, ConditionException} = Libs;
-        const {author} = message;
 
         const color = args.join("");
         let finalColor = color.getColorFromString();
 
-        if (!finalColor) throw new ConditionException(author, "Colors", "Invalid color! The only color types supported are: `keyword`, `hex` (starts with #), `rgb(r, g, b)` and `hsl(h, s, l)`.");
+        if (!finalColor) throw new ConditionException(message, "Colors", "Invalid color! The only color types supported are: `keyword`, `hex` (starts with #), `rgb(r, g, b)` and `hsl(h, s, l)`.");
 
         const keyword = colorConvert.hex.keyword(finalColor);
         const rgb = colorConvert.hex.rgb(finalColor).map(h => (h / 255 * 100).toFixed(1) + "%").join(", ");

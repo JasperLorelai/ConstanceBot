@@ -8,7 +8,7 @@ module.exports = {
         const {author} = message;
 
         let db = await Keyv.get("minecraft") || {};
-        if (!db[author.id]) throw new ConditionException(author, "Discord Unlink", "Your account isn't linked.");
+        if (!db[author.id]) throw new ConditionException(message, "Discord Unlink", "Your account isn't linked.");
         delete db[author.id];
         await Keyv.set("minecraft", db);
         message.reply(Util.embed("Discord Unlink", "Your account was successfully unlinked.", Config.color.green));

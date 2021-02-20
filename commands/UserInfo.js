@@ -6,10 +6,10 @@ module.exports = {
     guildOnly: true,
     async execute(Libs, message, args) {
         const {Util, Config, Keyv, ConditionException} = Libs;
-        const {guild, author} = message;
+        const {guild} = message;
 
         const member = args[0] ? Util.findGuildMember(args.join(" "), guild) : message.member;
-        if (!member) throw new ConditionException(author, "User Info", "User not found!");
+        if (!member) throw new ConditionException(message, "User Info", "User not found!");
         const {user} = member;
         const flags = user.flags ? user.flags.toArray().map(flag => "`" + flag.replace(/_/g, " ").toTitleCase() + "`") : [];
         const roles = member.roles && member.roles.cache ? member.roles.cache.filter(r => r.id !== guild.id) : null;

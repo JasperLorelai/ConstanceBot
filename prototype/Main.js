@@ -78,11 +78,13 @@ Date.prototype.toLocalFormat = function() {
 
 
 
-Promise.prototype.catchError = function(channel) {
+Promise.prototype.catchError = function(message) {
     const red = Config.color.red;
     this.catch(async error => {
-        if (error instanceof ConditionException) await channel.send(error.author.toString(), Util.embed(error.title, error.description, error.color || red));
-        else await channel.send(Config.author.toString(), Util.embed("Exception thrown at execution", error.stack, red));
+        let embed;
+        if (error instanceof ConditionException) embed = Util.embed(error.title, error.description, error.color || red);
+        else embed = Util.embed("Exception thrown at execution", error.stack, red);
+        message.reply(embed);
     });
 }
 

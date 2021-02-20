@@ -57,11 +57,11 @@ Client.on("message", async message => {
     if (Client.minecraftChannels.includes(channel.id)) return;
 
     if (!await Util.hasPerm(author, guild, command.perm)) {
-        ConditionException.throwSafe(channel, author,"No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + command.perm + "`");
+        ConditionException.throwSafe(message,"No Permission", "You do not have the required permission to execute this command.\n**Required permission:** `" + command.perm + "`");
         return;
     }
     // Run command if all required args are specified.
-    if (!command.params || args.length >= command.params.filter(p => p.startsWith("[")).length) command.execute(Libs, message, args).catchError(channel);
+    if (!command.params || args.length >= command.params.filter(p => p.startsWith("[")).length) command.execute(Libs, message, args).catchError(message);
     // Execute help command for command if not.
-    else commands.get("help").execute(Libs, message, [commandName]).catchError(channel);
+    else commands.get("help").execute(Libs, message, [commandName]).catchError(message);
 });

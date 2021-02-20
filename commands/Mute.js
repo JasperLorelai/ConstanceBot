@@ -6,7 +6,7 @@ module.exports = {
     perm: "mod",
     async execute(Libs, message, args) {
         const {Util, Keyv, ms, ConditionException} = Libs;
-        const {guild, channel, author} = message;
+        const {guild} = message;
         const Client = message.client;
 
         // Setup mute.
@@ -39,7 +39,7 @@ module.exports = {
         // Mute function.
         const member = Util.findGuildMember(args[0], guild);
         await args.shift();
-        if (!member) throw new ConditionException(author, "Mute", "User not found!");
+        if (!member) throw new ConditionException(message, "Mute", "User not found!");
 
         let time;
         try {
@@ -48,14 +48,14 @@ module.exports = {
             if (!Number.isInteger(time)) time = ms(time);
         }
         catch (e) {
-            throw new ConditionException(author, "Mute", "Time format is invalid.");
+            throw new ConditionException(message, "Mute", "Time format is invalid.");
         }
 
         const reason = args.join(" ");
 
         // Manage mute time.
         member.roles.add(muteRole);
-        channel.send(Util.embed("Mute", "User " + member.toString() + " has been muted for **" + ms(time) + "** by " + author.toString() + (reason ? " for: **" + reason + "**" : "") + "."));
+        message.reply(Util.embed("Mute", "User " + member.toString() + " has been muted for **" + ms(time) + "** by " + message.author.toString() + (reason ? " for: **" + reason + "**" : "") + "."));
         if (Math.pow(2,32) - 1 > time) {
             Client.setTimeout(() => {
                 member.roles.remove(muteRole);

@@ -10,9 +10,9 @@ module.exports = {
         const {guild, author} = message;
 
         const role = Util.findRole(args.shift(), guild);
-        if (!role) throw new ConditionException(author, "Role Color", "Role not found!");
+        if (!role) throw new ConditionException(message, "Role Color", "Role not found!");
         let color = args.join("").replace(/\s/g, "").getColorFromString();
-        if (!color) throw new ConditionException(author, "Role Color", "Invalid color! The only color types supported are: `keyword`, `hex` (starts with #), `rgb(r, g, b)` and `hsl(h, s, l)`.");
+        if (!color) throw new ConditionException(message, "Role Color", "Invalid color! The only color types supported are: `keyword`, `hex` (starts with #), `rgb(r, g, b)` and `hsl(h, s, l)`.");
         const canvasImage = Canvas.createCanvas(380, 84);
         const ctx = canvasImage.getContext("2d");
         ctx.fillStyle = "#36393F";

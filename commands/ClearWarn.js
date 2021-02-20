@@ -6,18 +6,18 @@ module.exports = {
     perm: "mod",
     async execute(Libs, message, args) {
         const {Util, Keyv, ConditionException} = Libs;
-        const {guild, author} = message;
+        const {guild} = message;
 
         let member = Util.findUser(args[0]) || args[0];
         if (typeof member !== "string") member = member.id;
         let db = await Keyv.get("guilds");
         if (!db || !db[guild.id] || !db[guild.id].warns || !db[guild.id].warns[member]) {
-            throw new ConditionException(author, "Clearing Warns", "This user has no warnings to be cleared.");
+            throw new ConditionException(message, "Clearing Warns", "This user has no warnings to be cleared.");
         }
         if (args[1]) {
             const warnCase = parseInt(args[1]);
-            if (isNaN(warnCase)) throw new ConditionException(author, "Clearing Warns", "Second command parameter, if specified, must be the case number.");
-            if (!db[guild.id].warns[member][warnCase]) throw new ConditionException(author, "Clearing Warns", "This user has no warn with this case index.");
+            if (isNaN(warnCase)) throw new ConditionException(message, "Clearing Warns", "Second command parameter, if specified, must be the case number.");
+            if (!db[guild.id].warns[member][warnCase]) throw new ConditionException(message, "Clearing Warns", "This user has no warn with this case index.");
             delete db[guild.id].warns[member][warnCase];
             db[guild.id].warns[member] = db[guild.id].warns[member].filter(e => e);
             await Keyv.set("guilds", db);

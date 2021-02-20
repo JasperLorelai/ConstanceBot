@@ -8,7 +8,7 @@ module.exports = {
         const data = Config.getGuildData(message.guild.id);
         let invite;
         if (data) invite = data.invite;
-        else throw new ConditionException(message.author, "Invite Fetch", "No saved invite was configured for this guild.");
+        else throw new ConditionException(message, "Invite Fetch", "No saved invite was configured for this guild.");
         await message.reply(invite);
     }
 };

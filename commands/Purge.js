@@ -12,7 +12,7 @@ module.exports = {
         const apiLimit = 98;
 
         let num = parseInt(args[0]);
-        if (!num || num < 1) throw new ConditionException(author, "Channel Purge", "Parameter `number` is not a number or is less than 1!");
+        if (!num || num < 1) throw new ConditionException(message, "Channel Purge", "Parameter `number` is not a number or is less than 1!");
         num = num > apiLimit ? apiLimit : num;
         let messages = await channel.messages.fetch({limit: num + 1});
         messages.delete(message.id, "botIntent");

@@ -6,11 +6,11 @@ module.exports = {
     perm: "admin",
     async execute(Libs, message, args) {
         const {Util, ConditionException} = Libs;
-        const {guild, author} = message;
+        const {guild} = message;
 
         const member = Util.findGuildMember(args.shift(), guild);
-        if (!member) throw new ConditionException(author, "Role Management", "User not found!");
-        if (!member.manageable) throw new ConditionException(author, "Role Management", "User is lower in the permission hierarchy than the bot!");
+        if (!member) throw new ConditionException(message, "Role Management", "User not found!");
+        if (!member.manageable) throw new ConditionException(message, "Role Management", "User is lower in the permission hierarchy than the bot!");
         let text = "Log:";
         let role;
         for (let r of args.join(" ").split(",").map(r => r.trim())) {

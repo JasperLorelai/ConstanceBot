@@ -1,15 +1,17 @@
 class ConditionException extends Error {
-    constructor(author, title, description, color) {
+
+    constructor(message, title, description, color) {
         super();
-        this.author = author;
+        this.message = message;
         this.title = title;
         this.description = description;
         this.color = color;
     }
 
-    static throwSafe(channel, author, title, description, color) {
-        Promise.reject(new ConditionException(author, title, description, color)).catchError(channel);
+    static throwSafe(message, title, description, color) {
+        Promise.reject(new ConditionException(message, title, description, color)).catchError(message);
     }
+
 }
 
 module.exports = ConditionException;

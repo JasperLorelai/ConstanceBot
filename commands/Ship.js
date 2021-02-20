@@ -10,26 +10,25 @@ module.exports = {
         const Client = message.client;
 
         const target1 = Util.findUser(args[0]);
-        if (!target1) throw new ConditionException(author, "Love Calculator", "User \"" + args[0] + "\" not found!");
+        if (!target1) throw new ConditionException(message, "Love Calculator", "User \"" + args[0] + "\" not found!");
         let target2 = null;
         // If target2 was specified, check if they exist.
         if (args[1]) {
             target2 = Util.findUser(args[1]);
-            if (!target2) throw new ConditionException(author, "Love Calculator", "User \"" + args[1] + "\" not found!");
+            if (!target2) throw new ConditionException(message, "Love Calculator", "User \"" + args[1] + "\" not found!");
         }
         else target2 = author;
 
         function ship(msg, embedToSend) {
-            const c = author.toString();
             const embed = msg.getFirstEmbed();
             Client.setTimeout(() => {
-                msg.edit(c, embed.setDescription("**.**"));
+                msg.edit(embed.setDescription("**.**"));
                 Client.setTimeout(() => {
-                    msg.edit(c, embed.setDescription("**.**   **.**"));
+                    msg.edit(embed.setDescription("**.**   **.**"));
                     Client.setTimeout(() => {
-                        msg.edit(c, embed.setDescription("**.**   **.**   **.**"));
+                        msg.edit(embed.setDescription("**.**   **.**   **.**"));
                         Client.setTimeout(() => {
-                            msg.edit(c, embedToSend.setColor(embed.color).setTitle(":revolving_hearts::hearts::two_hearts: Shipped :two_hearts::hearts::revolving_hearts:"));
+                            msg.edit(embedToSend.setColor(embed.color).setTitle(":revolving_hearts::hearts::two_hearts: Shipped :two_hearts::hearts::revolving_hearts:"));
                         }, 1000);
                     }, 1000);
                 }, 1000);

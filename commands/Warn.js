@@ -6,10 +6,10 @@ module.exports = {
     perm: "mod",
     async execute(Libs, message, args) {
         const {Config, Util, Keyv, ConditionException} = Libs;
-        const {guild, channel, author} = message;
+        const {guild, author} = message;
 
         const member = Util.findGuildMember(args[0], guild);
-        if (!member) throw new ConditionException(author, "Warn", "User not found!");
+        if (!member) throw new ConditionException(message, "Warn", "User not found!");
         await args.shift();
         const reason = args.length ? args.join(" ") : null;
         let db = await Keyv.get("guilds");
@@ -19,7 +19,7 @@ module.exports = {
         if (!db[guild.id].warns[member.id]) db[guild.id].warns[member.id] = [];
         db[guild.id].warns[member.id].push({date: new Date().toLocalFormat(), mod: author.id, reason: reason});
         await Keyv.set("guilds", db);
-        channel.send(Util.embed("Warn", "**User " + member.toString() + " has been warned by " + author.toString() + (reason ? " for:** " + reason : ".**")));
+        message.reply(Util.embed("Warn", "**User " + member.toString() + " has been warned by " + author.toString() + (reason ? " for:** " + reason : ".**")));
         member.send(Util.embed(guild.name + " - Warn", "**You have been warned by " + author.toString() + (reason ? " for:** " + reason : ".**"), Config.color.red));
     }
 };

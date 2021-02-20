@@ -6,11 +6,10 @@ module.exports = {
     perm: "author",
     async execute(Libs, message, args) {
         const {Config, Util, ConditionException} = Libs;
-        const {author} = message;
         const Client = message.client;
 
         const originChannel = Client.channels.resolve(args[0]);
-        if (!originChannel) throw new ConditionException(author, "Message Edit", "Origin channel not found. Confirm the channel with this ID exists and is visible to the bot client.");
+        if (!originChannel) throw new ConditionException(message, "Message Edit", "Origin channel not found. Confirm the channel with this ID exists and is visible to the bot client.");
         await args.shift();
         const editMsg = await originChannel.messages.fetch(args[0]).catch(() => {
             message.reply(Util.embed("Message Edit", "Message with that ID was not found in channel " + originChannel.toString() + ".", Config.color.red));

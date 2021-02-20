@@ -6,10 +6,10 @@ module.exports = {
     guildOnly: true,
     async execute(Libs, message, args) {
         const {Util, Canvas, ConditionException} = Libs;
-        const {guild, author} = message;
+        const {guild} = message;
 
         let role = Util.findRole(args.join(" "), guild);
-        if (!role) throw new ConditionException(author, "Role Info", "Role not found!");
+        if (!role) throw new ConditionException(message, "Role Info", "Role not found!");
         const desc = "> **Role Position:** " + role.position +
             "\n> **Menitoned:** " + role.toString() +
             "\n> **ID:** `" + role.toString() + "`" +

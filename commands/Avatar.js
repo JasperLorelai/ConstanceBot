@@ -5,11 +5,10 @@ module.exports = {
     params: ["(user)"],
     async execute(Libs, message, args) {
         const {Config, Util, EmojiMap, ConditionException} = Libs;
-        const {author} = message;
         const Client = message.client;
 
-        const user = args[0] ? Util.findUser(args[0]) : author;
-        if (!user) throw new ConditionException(author, "Avatar", "User not found!");
+        const user = args[0] ? Util.findUser(args[0]) : message.author;
+        if (!user) throw new ConditionException(message, "Avatar", "User not found!");
         const msg = await message.reply(Util.embed("**" + user.username + "**'s Avatar", "Pick avatar size:\n" +
             EmojiMap["1"] + " - `128`\n" +
             EmojiMap["2"] + " - `256`\n" +

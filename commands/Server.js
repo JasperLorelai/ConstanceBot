@@ -5,14 +5,13 @@ module.exports = {
     params: ["(ip)"],
     async execute(Libs, message, args) {
         const {Config, Util, ConditionException} = Libs;
-        const {guild, author} = message;
 
         let ip = args[0];
         if (!ip) {
-            ip = Config.getGuildData(guild.id);
+            ip = Config.getGuildData(message.guild.id);
             if (ip) ip = ip.hostname;
         }
-        if (!ip) throw new ConditionException(author, "Minecraft Server Info", "Please provide an IP parameter.");
+        if (!ip) throw new ConditionException(message, "Minecraft Server Info", "Please provide an IP parameter.");
         const msg = await message.reply(Util.embed("Minecraft Server Info", "Pending information...", Config.color.yellow));
         const server = await Util.getServer(ip);
         let text = "";
