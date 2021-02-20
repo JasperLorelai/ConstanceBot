@@ -202,7 +202,7 @@ Client.on("messageReactionAdd", async (r, u) => {
             if (!first || !first.text) return;
             let embed = Util.embed("Notification Roles", first.text);
             embed = embed.setFooterText("Welcomer | " + mhapData.id + "_0 | " + embed.footer.text);
-            const msg = await author.send(embed);
+            const msg = await member.send(embed);
             await msg.react("✅");
             await msg.react("❌");
             break;
