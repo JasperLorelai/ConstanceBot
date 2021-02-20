@@ -23,7 +23,7 @@ for (let prototype of fs.readdirSync("./prototype").filter(file => file.endsWith
 }
 
 // Create client.
-const Client = new Discord.Client({fetchAllMembers: true, allowedMentions: {repliedUser: false}});
+const Client = new Discord.Client({allowedMentions: {repliedUser: false}});
 Client.minecraftChannels = [];
 
 Client.login().catch(console.error);
