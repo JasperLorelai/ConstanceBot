@@ -5,6 +5,7 @@ module.exports = {
     params: ["(user)"],
     async execute(Libs, message, args) {
         const {Config, Util, EmojiMap, ConditionException} = Libs;
+        const {author} = message;
         const Client = message.client;
 
         const user = args[0] ? Util.findUser(args[0]) : message.author;
@@ -45,7 +46,7 @@ module.exports = {
             coll.stop();
         });
         coll.on("end", async () => {
-            await msg.delete();
+            if (!msg.deleted) await msg.delete();
             await message.reply(Util.embed("**" + user.username + "**'s Avatar").setImagePermanent(user.getAvatar(size)));
         });
     }
