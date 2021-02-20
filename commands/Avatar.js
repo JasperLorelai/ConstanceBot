@@ -45,7 +45,7 @@ module.exports = {
             coll.stop();
         });
         coll.on("end", async () => {
-            await msg.deleteBot();
+            await msg.delete();
             await message.reply(Util.embed("**" + user.username + "**'s Avatar").setImagePermanent(user.getAvatar(size)));
         });
     }

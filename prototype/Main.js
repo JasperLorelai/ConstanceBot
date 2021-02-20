@@ -100,9 +100,9 @@ MessageEmbed.prototype.setFooterText = function(text) {
     return this.setFooter(text, "attachment://" + url.substr(url.lastIndexOf("/") + 1));
 }
 
-Message.prototype.deleteBot = async function(timeout) {
+Message.prototype.deleteLater = async function(timeout) {
     if (this.deleted) return;
-    await this.delete({reason: "botIntent", timeout: timeout || 0});
+    setTimeout(this.delete, timeout);
 }
 
 User.prototype.getAvatar = function (size) {

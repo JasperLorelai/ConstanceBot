@@ -42,7 +42,7 @@ module.exports = async message => {
     // Handle To-Do in main guild.
     if (channel.id === Config.guildData.main.channels.toDoList) {
         if (author.id === Client.user.id || author.bot) return;
-        message.deleteBot();
+        message.delete();
         const msg = await channel.send(new Discord.MessageEmbed().setDescription(content).setColorRandom().setAuthor(author.tag).setAuthorIcon(author.getAvatar()));
         await msg.react("❌");
         await msg.react("✅");
@@ -165,7 +165,7 @@ module.exports = async message => {
                 .setDescription("A form failed to be submitted due to an invalid user ID.\n**Entered Value:** " + embed.title + "\n\n```" + embed.description + "```")
             );
         }
-        await message.deleteBot();
+        await message.delete();
         return;
     }
 

@@ -16,14 +16,14 @@ Client.on("messageReactionAdd", async (r, u) => {
         switch (r.emoji.toString()) {
             case "❌":
                 Config.botLog().send(embed.setColor(Config.color.red).setTitle("To Do List Item - Declined"));
-                await r.message.deleteBot();
+                await r.message.delete();
                 break;
             case "✅":
                 Config.botLog().send(embed.setColor(Config.color.green).setTitle("To Do List Item - Completed"));
-                await r.message.deleteBot();
+                await r.message.delete();
                 break;
             case "🗑":
-                await r.message.deleteBot();
+                await r.message.delete();
                 break;
         }
     }
@@ -81,7 +81,7 @@ Client.on("messageReactionAdd", async (r, u) => {
                         console.log("hiding");
                         await channel.overwritePermissions([{id: guild.id, deny: "VIEW_CHANNEL"}]);
                         await r.message.reactions.removeAll();
-                        await r.message.deleteBot();
+                        await r.message.delete();
                     }
                 }
                 break;
@@ -147,7 +147,7 @@ Client.on("messageReactionAdd", async (r, u) => {
                 if (!(guildName && guildData.welcomer)) return;
                 const {welcomer} = guildData;
                 if (part + 1 === Object.keys(welcomer).length || (part === 0 && emoji === "❌")) {
-                    r.message.deleteBot();
+                    r.message.delete();
                     return;
                 }
 
@@ -167,7 +167,7 @@ Client.on("messageReactionAdd", async (r, u) => {
                     }
                 }
 
-                await r.message.deleteBot();
+                await r.message.delete();
                 const msg = await channel.send(embed);
                 await msg.react("✅");
                 await msg.react("❌");

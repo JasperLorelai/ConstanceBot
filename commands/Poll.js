@@ -78,10 +78,10 @@ module.exports = {
                                 poll.text = m.content;
                                 refresh(msg, poll);
                             }
-                            m.deleteBot();
+                            m.delete();
                             msgColl.stop();
                         });
-                        msgColl.on("end", () => msg2.deleteBot());
+                        msgColl.on("end", () => msg2.delete());
                         break;
                     case "➕":
                         msg2 = await message.reply(Util.embed("Poll Creator - Reaction Manager", "Type a message that includes reactions.", Config.color.yellow));
@@ -96,9 +96,9 @@ module.exports = {
                                 msg.edit(embed);
                                 msgColl.stop();
                             }
-                            m.deleteBot();
+                            m.delete();
                         });
-                        msgColl.on("end", () => msg2.deleteBot());
+                        msgColl.on("end", () => msg2.delete());
                         break;
                     case "🚫":
                         if (poll.emoji.length > 0) {
@@ -126,18 +126,18 @@ module.exports = {
                                 embed = embed.setFooterText("Unique reactions | " + embed.footer.text);
                                 const created = await ch.send(poll.rolePing && pollRole ? "<@&" + pollRole.id + ">" : "", embed);
                                 for (let emoji of poll.emoji) await created.react(emoji);
-                                await msg.deleteBot();
+                                await msg.delete();
                                 msgColl.stop();
                                 collector.stop("done");
                             }
                             else {
                                 msgColl.stop();
-                                message.reply(Util.embed("Poll Creator - Sender", "**Channel not found!***", Config.color.red)).then(m => m.deleteBot(10000));
+                                message.reply(Util.embed("Poll Creator - Sender", "**Channel not found!***", Config.color.red)).then(m => m.deleteLater(10000));
                                 return;
                             }
-                            await m.deleteBot();
+                            await m.delete();
                         });
-                        msgColl.on("end", () => msg2.deleteBot());
+                        msgColl.on("end", () => msg2.delete());
                         break;
                     case "❌":
                         poll = null;
@@ -148,12 +148,12 @@ module.exports = {
             });
             collector.on("end", async (coll, reason) => {
                 if (reason === "done") {
-                    await message.deleteBot();
+                    await message.delete();
                     return;
                 }
                 await msg.reactions.removeAll();
                 await msg.edit(Util.embed("PollCreator Cancelled", reason === "end" ? "Cancelled poll." : "Timeout.", reason === "end" ? Config.color.red : Config.color.gray));
-                await message.deleteBot();
+                await message.delete();
                 if (poll) {
                     db = await Keyv.get("users");
                     if (!db) db = {};
@@ -175,7 +175,7 @@ module.exports = {
             const collector = channel.createMessageCollector(m => m.author.id !== Client.user.id, {time: 10000});
             collector.on("collect", async m => {
                 const index = parseInt(m.content);
-                await m.deleteBot();
+                await m.delete();
                 if (index) {
                     if (polls.length >= index) {
                         collector.stop("end");

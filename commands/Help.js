@@ -22,6 +22,6 @@ module.exports = {
         else text = "Command not found!";
 
         const msg = await message.reply(Util.embed("Command Help For: " + args[0], text));
-        if (!command) await msg.deleteBot(5000);
+        if (!command) await msg.deleteLater(5000);
     }
 };

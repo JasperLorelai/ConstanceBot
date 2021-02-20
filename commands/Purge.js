@@ -15,7 +15,7 @@ module.exports = {
         if (!num || num < 1) throw new ConditionException(message, "Channel Purge", "Parameter `number` is not a number or is less than 1!");
         num = num > apiLimit ? apiLimit : num;
         let messages = await channel.messages.fetch({limit: num + 1});
-        messages.delete(message.id, "botIntent");
+        messages.delete(message.id);
         const msg = await message.reply(Util.embed("Channel Purge", "**Messages found:** " + (num > apiLimit ? "limited to `" + apiLimit + "`" : "`" + num + "`") + "\n\n**React with:\n🗑 - to delete currently selected.\n😃 - to apply user filter.**", Config.color.yellow));
         await msg.react("🗑");
         await msg.react("😃");
@@ -40,11 +40,11 @@ module.exports = {
                         case "✅":
                             coll.stop();
                             if (messages[0]) await messages[0].channel.bulkDelete(messages, true);
-                            messages.filter(e => !e.deleted).each(m => m.deleteBot());
+                            messages.filter(e => !e.deleted).each(m => m.delete());
                             break;
                     }
                 });
-                coll.on("end", async () => await msg.deleteBot());
+                coll.on("end", async () => await msg.delete());
             }
 
             switch (r.emoji.toString()) {
@@ -58,12 +58,12 @@ module.exports = {
                     let member;
                     collUser.on("collect", mUser => {
                         member = Util.findGuildMember(mUser.content, guild);
-                        mUser.deleteBot();
-                        if (!member) msg.reply(Util.embed("Channel Purge - By User", "User not found!", Config.color.red)).then(tempMsg => tempMsg.deleteBot(3000));
+                        mUser.delete();
+                        if (!member) msg.reply(Util.embed("Channel Purge - By User", "User not found!", Config.color.red)).then(tempMsg => tempMsg.deleteLater(3000));
                         else collUser.stop("found");
                     });
                     collUser.on("end", async (c, reason) => {
-                        await msgUser.deleteBot();
+                        await msgUser.delete();
                         coll.stop("chosen");
                         if (reason === "found") await handleDeletePrompt(message, messages.filter(m => m.author.id === member.id));
                     });
@@ -72,8 +72,8 @@ module.exports = {
         });
         coll.on("end", async (c, reason) => {
             if (reason === "chosen") {
-                await msg.deleteBot();
-                await message.deleteBot();
+                await msg.delete();
+                await message.delete();
             }
             else {
                 if (msg.deleted) return;
