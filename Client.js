@@ -23,7 +23,21 @@ for (let prototype of fs.readdirSync("./prototype").filter(file => file.endsWith
 }
 
 // Create client.
-const Client = new Discord.Client({allowedMentions: {repliedUser: false}});
+const Client = new Discord.Client({
+    intents: [
+        "GUILDS",
+        "GUILD_MEMBERS",
+        "GUILD_VOICE_STATES",
+        "GUILD_MESSAGES",
+        "GUILD_MESSAGE_REACTIONS",
+        "DIRECT_MESSAGES",
+        "DIRECT_MESSAGE_REACTIONS"
+    ],
+    allowedMentions: {
+        repliedUser: false
+    }
+});
+
 Client.minecraftChannels = [];
 
 Client.login().catch(console.error);
