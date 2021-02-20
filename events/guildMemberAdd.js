@@ -72,6 +72,16 @@ Client.on("guildMemberAdd", async member => {
             const channel = guild.channels.resolve(cctwcData.channels.pedestal);
             if (!channel) return;
             channel.send(Util.embed(member.user.username + " Joined", "Welcome " + member.toString() + " to **" + guild.name + "**. We hope you enjoy your stay.").setColorRandom().setThumbnailPermanent(member.user.getAvatar()));
+
+            // Start of the welcomer process.
+            if (!cctwcData.welcomer || !cctwcData.welcomer.length) return;
+            const first = cctwcData.welcomer[0];
+            if (!first || !first.text) return;
+            let embed = Util.embed("Notification Roles", first.text);
+            embed = embed.setFooterText("Welcomer | " + cctwcData.id + "_0 | " + embed.footer.text);
+            const msg = await member.send(embed);
+            await msg.react("✅");
+            await msg.react("❌");
             break;
         }
 

@@ -184,7 +184,14 @@ module.exports = {
                         );
                 },
                 reactions: ["📦"]
-            }
+            },
+            welcomer: [
+                {text: "Are you interested in notification roles?"},
+                {
+                    text: "Would you like to be be notified about polls?",
+                    role: "polls"
+                }
+            ]
         }
     },
     trello: {
