@@ -3,11 +3,12 @@ const fs = require("fs");
 const fetch = require("node-fetch");
 const Canvas = require("canvas");
 const FormData = require("form-data");
+const KeyvLib = require("keyv");
 
 const EmojiMap = require("./files/EmojiMap");
 const Config = require("./files/Config");
 const Util = require("./files/Util");
-const Keyv = require("./files/Database");
+const Keyv = new KeyvLib(process.env.DATABASE);
 
 const ConditionException = require("./files/ConditionException");
 
