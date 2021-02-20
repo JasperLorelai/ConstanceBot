@@ -13,41 +13,6 @@ module.exports = async message => {
         // Ignore bot.
         if (author.id === Client.user.id) return;
 
-        // Handle Welcomer for MHAP.
-        const mhapGuild = Config.guildData.mhap;
-        if (db && db[mhapGuild.id] && db[mhapGuild.id].welcomer && db[mhapGuild.id].welcomer[author.id] && (content.toLowerCase().includes("yes") || content.toLowerCase().includes("no"))) {
-            function processRole(role) {
-                if (content.toLowerCase().includes("yes")) {
-                    Client.guilds.resolve(mhapGuild.id).members.resolve(author.id).roles.add(mhapGuild.roles[role]);
-                    embed.setColor(Config.color.green).setDescription("Role added.");
-                }
-                else embed.setColor(Config.color.red).setDescription("Role dismissed.");
-            }
-
-            const msg = await channel.messages.fetch(db[mhapGuild.id].welcomer[author.id]);
-            const embed = msg.getFirstEmbed();
-            let newMsg;
-            switch (embed.title) {
-                case "Roles - Poll (Stage 1)":
-                    processRole("polls");
-                    newMsg = await channel.send(Util.embed("Roles - Events (Stage 2)", "Would you like to be mentioned whenever a server event is hosted?\nPlease reply with `yes` or `no`.", Config.color.yellow));
-                    db[mhapGuild.id].welcomer[author.id] = newMsg.id;
-                    break;
-                case "Roles - Events (Stage 2)":
-                    processRole("events");
-                    newMsg = await channel.send(Util.embed("Roles - Changelog (Stage 3)", "Would you like to be mentioned whenever a changelog for our server is posted?\nPlease reply with `yes` or `no`.", Config.color.yellow));
-                    db[mhapGuild.id].welcomer[author.id] = newMsg.id;
-                    break;
-                case "Roles - Changelog (Stage 3)":
-                    processRole("changelog");
-                    delete db[mhapGuild.id].welcomer[author.id];
-                    break;
-            }
-            await msg.edit(embed);
-            await Keyv.set("guilds", db);
-            return;
-        }
-
         // Redirect messages to it's respective DM channel.
         let dmChannel = main.channels.cache.filter(c => c.name === author.id).array()[0];
         if (!dmChannel) {
