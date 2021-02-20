@@ -17,7 +17,7 @@
   "author": "JasperLorelai",
   "license": "ISC",
   "dependencies": {
-    "@keyv/mysql": "1.1.4",
+    "@keyv/mysql": "github:Ryanika-Coder/keyv-mysql#50d73a548a776d8454744bf9037ae6a68a6a8843",
     "@types/express": "4.17.2",
     "atob": "2.1.2",
     "btoa": "1.2.1",
