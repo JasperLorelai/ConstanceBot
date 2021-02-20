@@ -4,7 +4,7 @@ module.exports = {
     params: ["[color]"],
     async execute(Libs, message, args) {
         const {Util, colorConvert, Canvas, ConditionException} = Libs;
-        const {channel, author} = message;
+        const {author} = message;
 
         const color = args.join("");
         let finalColor = color.getColorFromString();
@@ -21,7 +21,7 @@ module.exports = {
         ctx.fillStyle = "#" + finalColor;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        channel.send(author.toString(), Util.embed("Colors",
+        message.reply(Util.embed("Colors",
             (keyword ? "\n**Keyword:** " + keyword.toFormalCase() : "") +
             "\n**Hex:** `" + finalColor + "`" +
             "\n**RGB:** `" + rgb + "`" +

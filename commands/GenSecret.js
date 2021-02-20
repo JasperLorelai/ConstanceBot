@@ -11,6 +11,6 @@ module.exports = {
         const uuidFormat = md5(args.join(" ")).replace(/([a-zA-Z0-9]{8})([a-zA-Z0-9]{4})([a-zA-Z0-9]{4})([a-zA-Z0-9]{4})([a-zA-Z0-9]+)/, "$1-$2-$3-$4-$5");
         // Change cases for last dash
         const secret = uuidFormat.substr(0, 24).toLowerCase() + uuidFormat.substr(24).toUpperCase();
-        await message.channel.send(Util.embed("Secret Generator", "**Generated:** `" + secret + "`"));
+        await message.reply(Util.embed("Secret Generator", "**Generated:** `" + secret + "`"));
     }
 };

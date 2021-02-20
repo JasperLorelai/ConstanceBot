@@ -75,14 +75,14 @@ module.exports = async message => {
             const embed = Util.embed(null, msgID.content, Config.color.yellow).setAuthor("Sent by: " + msgID.author.tag).setAuthorIcon(msgID.author.getAvatar());
             embed.addField("Want to jump to the message?", "[\(Jump\)](" + msgID.url + ")");
             if (msgID.attachments.size) embed.setImagePermanent(msgID.attachments.first().attachment);
-            channel.send(embed.setTitle("Quoted by: " + author.tag));
+            message.reply(embed.setTitle("Quoted by: " + author.tag));
         }
     }
 
     // Clean prefix query.
     if (mentions && mentions.users && mentions.users && mentions.users.has(Client.user.id) && content.replace(MessageMentions.USERS_PATTERN, "").trim() === "") {
         if (author.id === Client.user.id) return;
-        await channel.send(author.toString(), Util.embed("Guild Prefix", "My prefix is: **" + (db && guild && db[guild.id] && db[guild.id].prefix ? db[guild.id].prefix : Config.defaultPrefix) + "**"));
+        await message.reply(Util.embed("Guild Prefix", "My prefix is: **" + (db && guild && db[guild.id] && db[guild.id].prefix ? db[guild.id].prefix : Config.defaultPrefix) + "**"));
         return;
     }
 
@@ -112,14 +112,14 @@ module.exports = async message => {
             switch (type) {
                 case "rawSupportTicket":
                     const ticket = await handlePost("Support Tickets", "ticket", "Need support? Open a support ticket here: " + Config.urls.mhap + "support");
-                    const embed = Util.embed("Problem:", embed.description)
+                    const extraEmbed = Util.embed("Problem:", embed.description)
                         .setAuthor(user.tag)
                         .setAuthorIcon(user.getAvatar())
                         .addField("React Actions", "❌ - Close support ticket. (`Server Admin` or OP)")
                         .setFooterText(user.id);
-                    msg = await ticket.send(embed);
+                    msg = await ticket.send(extraEmbed);
                     await msg.react("❌");
-                    const restriction = embed.fields[0].value;
+                    const restriction = extraEmbed.fields[0].value;
                     if (restriction && restriction !== "EVERYONE!") {
                         let permissions = [
                             {id: guild.id, deny: ["VIEW_CHANNEL"]},
@@ -177,7 +177,7 @@ module.exports = async message => {
             if (!/^\/.*\/[a-zA-Z]*$/g.test(trigger)) trigger = "/" + trigger + "/";
             const [ignore, regex, flags] = /\/(.*)\/([\w]*)/g.exec(trigger);
             if (!new RegExp(regex, flags).test(content)) continue;
-            await channel.send(r.reply);
+            await message.reply(r.reply);
             return;
         }
     }

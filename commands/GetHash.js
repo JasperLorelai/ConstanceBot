@@ -4,16 +4,15 @@ module.exports = {
     guildOnly: false,
     async execute(Libs, message) {
         const {Util, fetch, sha1, ConditionException} = Libs;
-        const {author, channel} = message;
+        const {author} = message;
 
         const pack = message.attachments ? message.attachments.find(a => a.name.endsWith(".zip")) : null;
         if (!pack) throw new ConditionException(author, "Sha1 Checksum Failed", "No attachment provided (must end with `zip` file extension).");
         const buffer = await fetch(pack.url).then(y => y.buffer());
         await message.deleteBot();
         const hash = sha1(buffer);
-        channel.send({
+        message.reply("", {
             embed: Util.embed("Sha1 Checksum Generated", "`" + hash + "`"),
-            content: author.toString(),
             files: [{
                 attachment: buffer,
                 name: hash + ".zip"

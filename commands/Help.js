@@ -5,7 +5,6 @@ module.exports = {
     params: ["[command]"],
     async execute(Libs, message, args) {
         const {Util} = Libs;
-        const {channel, author} = message;
         const Client = message.client;
 
         let text;
@@ -21,8 +20,8 @@ module.exports = {
         }
         // + "\nYou can edit the message to execute again.");
         else text = "Command not found!";
-        channel.send(author.toString(), Util.embed("Command Help For: " + args[0], text)).then(async m => {
-            if (!command) await m.deleteBot(5000);
-        });
+
+        const msg = await message.reply(Util.embed("Command Help For: " + args[0], text));
+        if (!command) await msg.deleteBot(5000);
     }
 };

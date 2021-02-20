@@ -6,7 +6,7 @@ module.exports = {
     guildOnly: true,
     async execute(Libs, message, args) {
         const {Util, Keyv, ConditionException} = Libs;
-        const {guild, channel, author} = message;
+        const {guild, author} = message;
         const Client = message.client;
 
         let member = null;
@@ -34,12 +34,12 @@ module.exports = {
         // Did the caller ask for member specific warns?
         if (member) {
             const theirWarns = warns[member];
-            const msg = await channel.send(author.toString(), Util.embed("Warnings", (theirWarns.length >= 2000 ? "" : theirWarns)));
+            const msg = await message.reply(Util.embed("Warnings", (theirWarns.length >= 2000 ? "" : theirWarns)));
             if (theirWarns.length >= 2000) await Util.handlePrompt(msg, theirWarns, null, "\n\n");
         }
         else {
             const allWarns = Object.values(warns).join("\n\n");
-            const msg = await channel.send(author.toString(), Util.embed("Warnings", (allWarns.length >= 2000 ? "" : allWarns)));
+            const msg = await message.reply(Util.embed("Warnings", (allWarns.length >= 2000 ? "" : allWarns)));
             if (allWarns.length >= 2000) await Util.handlePrompt(msg, allWarns, null, "\n\n");
         }
     }

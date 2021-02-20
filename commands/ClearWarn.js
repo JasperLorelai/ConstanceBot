@@ -6,7 +6,7 @@ module.exports = {
     perm: "mod",
     async execute(Libs, message, args) {
         const {Util, Keyv, ConditionException} = Libs;
-        const {guild, channel, author} = message;
+        const {guild, author} = message;
 
         let member = Util.findUser(args[0]) || args[0];
         if (typeof member !== "string") member = member.id;
@@ -21,13 +21,13 @@ module.exports = {
             delete db[guild.id].warns[member][warnCase];
             db[guild.id].warns[member] = db[guild.id].warns[member].filter(e => e);
             await Keyv.set("guilds", db);
-            channel.send(author.toString(), Util.embed("Clearing Warns", "Cleared warn case **" + warnCase + "**  for user <@" + member + ">."));
+            message.reply(Util.embed("Clearing Warns", "Cleared warn case **" + warnCase + "**  for user <@" + member + ">."));
         }
         else {
             const count = db[guild.id].warns[member].length;
             delete db[guild.id].warns[member];
             await Keyv.set("guilds", db);
-            channel.send(author.toString(), Util.embed("Clearing Warns", "Cleared **" + count + "** warnings for user <@" + member + ">."));
+            message.reply(Util.embed("Clearing Warns", "Cleared **" + count + "** warnings for user <@" + member + ">."));
         }
     }
 };

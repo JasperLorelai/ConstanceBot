@@ -5,7 +5,7 @@ module.exports = {
     perm: "author",
     async execute(Libs, message) {
         const {Util, Config, ConditionException} = Libs;
-        const {channel, author, guild} = message;
+        const {author, guild} = message;
 
         const data = Config.getGuildData(guild.id);
         if (!data) throw new ConditionException(author, "Info Updater", "There is no guild data defined for this guild.");
@@ -35,6 +35,6 @@ module.exports = {
             await infoMsg.react(r);
         }
 
-        channel.send(author.toString(), Util.embed("Info Updater", "Info was updated."));
+        message.reply(Util.embed("Info Updater", "Info was updated."));
     }
 };

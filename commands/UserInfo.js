@@ -6,7 +6,7 @@ module.exports = {
     guildOnly: true,
     async execute(Libs, message, args) {
         const {Util, Config, Keyv, ConditionException} = Libs;
-        const {guild, channel, author} = message;
+        const {guild, author} = message;
 
         const member = args[0] ? Util.findGuildMember(args.join(" "), guild) : message.member;
         if (!member) throw new ConditionException(author, "User Info", "User not found!");
@@ -28,6 +28,6 @@ module.exports = {
         let embed = Util.embed("User info for: " + user.username, desc).setThumbnailPermanent(user.getAvatar());
         if (uuid) embed = embed.setImagePermanent(Config.urls.visage + "full/512/" + uuid);
 
-        await channel.send(author.toString(), embed);
+        await message.reply(embed);
     }
 };

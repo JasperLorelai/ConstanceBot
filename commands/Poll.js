@@ -52,7 +52,7 @@ module.exports = {
 
             const embed = Util.embed("Poll Creator", poll.text, Config.color.yellow).addField("Help", getHelp(poll));
             if (poll.emoji && poll.emoji.length > 0) embed.addField("Emoji", poll.emoji.join(", "));
-            if (!msg) msg = await channel.send(embed);
+            if (!msg) msg = await msg.reply(embed);
             else await msg.edit(embed);
 
             await msg.react("💬");
@@ -70,7 +70,7 @@ module.exports = {
                 let msg2, msgColl;
                 switch (r.emoji.toString()) {
                     case "💬":
-                        msg2 = await channel.send(author.toString(), Util.embed("Poll Creator - Text Manager", "Type a message to be used for the poll text. Type `cancel` to cancel.", Config.color.yellow));
+                        msg2 = await message.reply(Util.embed("Poll Creator - Text Manager", "Type a message to be used for the poll text. Type `cancel` to cancel.", Config.color.yellow));
                         msgColl = channel.createMessageCollector(m => m.author.id !== Client.user.id, {time: Util.collTtl(collector, created)});
                         msgColl.on("collect", m => {
                             if (!poll) return;
@@ -84,7 +84,7 @@ module.exports = {
                         msgColl.on("end", () => msg2.deleteBot());
                         break;
                     case "➕":
-                        msg2 = await channel.send(author.toString(), Util.embed("Poll Creator - Reaction Manager", "Type a message that includes reactions.", Config.color.yellow));
+                        msg2 = await message.reply(Util.embed("Poll Creator - Reaction Manager", "Type a message that includes reactions.", Config.color.yellow));
                         msgColl = channel.createMessageCollector(m => m.author.id !== Client.user.id, {time: Util.collTtl(collector, created)});
                         msgColl.on("collect", m => {
                             if (!poll) return;
@@ -113,7 +113,7 @@ module.exports = {
                         poll.unique = !poll.unique;
                         break;
                     case "✅":
-                        msg2 = await channel.send(author.toString(), Util.embed("Poll Creator - Sender", "Type the channel you'd like to send this poll to.", Config.color.yellow));
+                        msg2 = await message.reply(Util.embed("Poll Creator - Sender", "Type the channel you'd like to send this poll to.", Config.color.yellow));
                         msgColl = channel.createMessageCollector(m => m.author.id !== Client.user.id, {time: Util.collTtl(collector, created)});
                         msgColl.on("collect", async m => {
                             if (!poll) return;
@@ -132,7 +132,7 @@ module.exports = {
                             }
                             else {
                                 msgColl.stop();
-                                channel.send(author.toString(), Util.embed("Poll Creator - Sender", "**Channel not found!***", Config.color.red)).then(m => m.deleteBot(10000));
+                                message.reply(Util.embed("Poll Creator - Sender", "**Channel not found!***", Config.color.red)).then(m => m.deleteBot(10000));
                                 return;
                             }
                             await m.deleteBot();
@@ -171,7 +171,7 @@ module.exports = {
         let msg;
         if (polls && polls.length > 0) {
             await Keyv.set("polls." + author.id, polls);
-            msg = await channel.send(author.toString(), Util.embed("Poll Drafts", "**0**. New poll.\n" + polls.map((poll, i) => "**" + (i + 1) + "**. `" + new Date(poll.draftID).toLocalFormat() + "`").join("\n"), Config.color.yellow));
+            msg = await message.reply(Util.embed("Poll Drafts", "**0**. New poll.\n" + polls.map((poll, i) => "**" + (i + 1) + "**. `" + new Date(poll.draftID).toLocalFormat() + "`").join("\n"), Config.color.yellow));
             const collector = channel.createMessageCollector(m => m.author.id !== Client.user.id, {time: 10000});
             collector.on("collect", async m => {
                 const index = parseInt(m.content);

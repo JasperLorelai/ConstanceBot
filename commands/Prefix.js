@@ -6,13 +6,13 @@ module.exports = {
     perm: "admin",
     async execute(Libs, message, args) {
         const {Keyv, Util} = Libs;
-        const {channel, guild, author} = message;
+        const guildID = message.guild.id;
 
         let db = await Keyv.get("guilds");
         if (!db) db = {};
-        if (!db[guild.id]) db[guild.id] = {};
-        db[guild.id].prefix = args[0];
+        if (!db[guildID]) db[guildID] = {};
+        db[guildID].prefix = args[0];
         await Keyv.set("guilds", db);
-        await channel.send(author.toString(), Util.embed("Command Prefix", "**Prefix set to:** " + args[0]));
+        await message.reply(Util.embed("Command Prefix", "**Prefix set to:** " + args[0]));
     }
 };

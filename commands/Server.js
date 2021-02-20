@@ -5,7 +5,7 @@ module.exports = {
     params: ["(ip)"],
     async execute(Libs, message, args) {
         const {Config, Util, ConditionException} = Libs;
-        const {channel, guild, author} = message;
+        const {guild, author} = message;
 
         let ip = args[0];
         if (!ip) {
@@ -13,7 +13,7 @@ module.exports = {
             if (ip) ip = ip.hostname;
         }
         if (!ip) throw new ConditionException(author, "Minecraft Server Info", "Please provide an IP parameter.");
-        const msg = await channel.send(Util.embed("Minecraft Server Info", "Pending information...", Config.color.yellow));
+        const msg = await message.reply(Util.embed("Minecraft Server Info", "Pending information...", Config.color.yellow));
         const server = await Util.getServer(ip);
         let text = "";
         if (server.debug && server.debug.ping) {
@@ -37,7 +37,7 @@ module.exports = {
         let embed = Util.embed("Minecraft Server Info", (text.length >= 2000 ? "" : text)).setColor(server.online ? Config.color.green : Config.color.red);
         if (server.icon) embed = embed.setThumbnailPermanent(server.icon.getBufferFromString());
         msg.delete();
-        const newMsg = await channel.send(embed);
+        const newMsg = await message.reply(embed);
         if (text.length >= 2000) await Util.handlePrompt(newMsg, text);
     }
 };

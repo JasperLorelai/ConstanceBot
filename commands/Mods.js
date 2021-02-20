@@ -6,7 +6,7 @@ module.exports = {
     aliases: ["mods"],
     async execute(Libs, message) {
         const {Config, Util, Keyv} = Libs;
-        const {guild, channel, author} = message;
+        const {guild, author} = message;
         const Client = message.client;
 
         const instr = "**React with:**\n➕ - to add Mods.\n➖ - to remove Mods.";
@@ -25,7 +25,7 @@ module.exports = {
             return ("**Current mods:**\n- **users:** " + (users ? users.map(u => "<@" + u + ">").join(", ") : "*empty*") + "\n- **roles:** " + (roles ? roles.map(r => "<@&" + r + ">").join(", ") : "*empty*"));
         }
 
-        const msg = await channel.send(author.toString(), Util.embed("Server Mods", await getList() + "\n\n" + instr));
+        const msg = await message.reply(Util.embed("Server Mods", await getList() + "\n\n" + instr));
         await msg.react("➕");
         await msg.react("➖");
         const collector = msg.createReactionCollector((r, u) => u.id !== Client.user.id, {time: 90000});
@@ -33,7 +33,7 @@ module.exports = {
             await r.users.remove(u);
             if (!["➕", "➖"].includes(r.emoji.toString())) return;
             if (u.id !== author.id) return;
-            const msgInput = await msg.channel.send(author.toString(), Util.embed("Configure Server Mods", "Please specify a role or a user. Timeout of this prompt is **10s**.", Config.color.yellow));
+            const msgInput = await msg.reply(Util.embed("Configure Server Mods", "Please specify a role or a user. Timeout of this prompt is **10s**.", Config.color.yellow));
             const collMod = msg.channel.createMessageCollector(m => m.author.id === author.id, {time: 10000});
             collMod.on("collect", async m => {
                 let find = Util.findRole(m.content, m.guild);
@@ -74,7 +74,7 @@ module.exports = {
                 await m.deleteBot();
             });
             collMod.on("end", async () => {
-                await msg.edit(author.toString(), Util.embed("Configure Server Mods", await getList() + "\n\n" + instr));
+                await msg.edit(Util.embed("Configure Server Mods", await getList() + "\n\n" + instr));
                 await msgInput.deleteBot();
                 await r.users.remove(u);
             });
@@ -82,7 +82,7 @@ module.exports = {
         collector.on("end", async () => {
             if (msg.deleted) return;
             await msg.reactions.removeAll();
-            await msg.edit(author.toString(), Util.embed("Configure Server Mods", await getList() + "\n\nPrompt timed out."));
+            await msg.edit(Util.embed("Configure Server Mods", await getList() + "\n\nPrompt timed out."));
         });
     }
 };

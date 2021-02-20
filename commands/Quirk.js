@@ -9,7 +9,7 @@ module.exports = {
         const {channel, author} = message;
 
         if (!args.length) {
-            channel.send(author.toString(), Util.embed("Quirks", (await Util.getTrello("cards/" + Config.trello.cards.quirksRoster)).desc.discordMKD()).setURL("https://trello.com/c/" + Config.trello.cards.quirksRoster));
+            message.reply(Util.embed("Quirks", (await Util.getTrello("cards/" + Config.trello.cards.quirksRoster)).desc.discordMKD()).setURL("https://trello.com/c/" + Config.trello.cards.quirksRoster));
             return;
         }
 
@@ -30,7 +30,7 @@ module.exports = {
         if (!quirk) throw new ConditionException(author, "Quirk " + quirkName.toFormalCase(), "Quirk not found. Please look through the list using the `quirks` command.");
 
         const text = quirk.desc.discordMKD();
-        const msg = await channel.send(author.toString(), Util.embed("Quirk - " + quirk.name, (text.length >= 2000 ? "" : text)).setURL("https://trello.com/c/" + quirk.id));
+        const msg = await message.reply(Util.embed("Quirk - " + quirk.name, (text.length >= 2000 ? "" : text)).setURL("https://trello.com/c/" + quirk.id));
         if (text.length >= 2000) await Util.handlePrompt(msg, text);
     }
 };

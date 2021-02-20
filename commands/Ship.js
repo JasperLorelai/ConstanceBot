@@ -6,7 +6,7 @@ module.exports = {
     guildOnly: true,
     async execute(Libs, message, args) {
         const {Config, Util, ConditionException} = Libs;
-        const {channel, author} = message;
+        const {author} = message;
         const Client = message.client;
 
         const target1 = Util.findUser(args[0]);
@@ -37,7 +37,7 @@ module.exports = {
         }
 
         if ((!target2 && target1.id === author.id) || (target2 && target1.id === target2.id)) {
-            const msg = await channel.send(author.toString(), Util.embed("Shipping...").setColorRandom());
+            const msg = await message.reply(Util.embed("Shipping...").setColorRandom());
             const randomMsg = ["This soul is very poor.", "Missing parameter: ❤", "This heart is too cold to calculate.",
                 "Maybe a 🍔 could warm up this cold heart?", "I don't know.", "Blue?"];
             // Pick a random message to display.
@@ -85,7 +85,7 @@ module.exports = {
             }
         }
 
-        const msg = await channel.send(author.toString(), Util.embed("Shipping...", "I solemnly swear I am up to no good.").setColorRandom());
+        const msg = await message.reply(Util.embed("Shipping...", "I solemnly swear I am up to no good.").setColorRandom());
         ship(msg, Util.embed("", "Love between **" + target1.username + "** and **" + target2.username + "** is: ***" + temp + "***"));
     }
 };

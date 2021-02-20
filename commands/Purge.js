@@ -16,7 +16,7 @@ module.exports = {
         num = num > apiLimit ? apiLimit : num;
         let messages = await channel.messages.fetch({limit: num + 1});
         messages.delete(message.id, "botIntent");
-        const msg = await channel.send(author.toString(), Util.embed("Channel Purge", "**Messages found:** " + (num > apiLimit ? "limited to `" + apiLimit + "`" : "`" + num + "`") + "\n\n**React with:\n🗑 - to delete currently selected.\n😃 - to apply user filter.**", Config.color.yellow));
+        const msg = await message.reply(Util.embed("Channel Purge", "**Messages found:** " + (num > apiLimit ? "limited to `" + apiLimit + "`" : "`" + num + "`") + "\n\n**React with:\n🗑 - to delete currently selected.\n😃 - to apply user filter.**", Config.color.yellow));
         await msg.react("🗑");
         await msg.react("😃");
         const created = Date.now();
@@ -26,7 +26,7 @@ module.exports = {
             if (u.id !== author.id) return;
 
             async function handleDeletePrompt(message, messages) {
-                const msg = await message.channel.send(author.toString(), Util.embed("Delete Confirmation", "**Messages found by filter:** `" + messages.size + "`\n\n**React with:\n❌ - to cancel delete.\n✅ - to confirm delete.**", Config.color.yellow));
+                const msg = await message.reply(Util.embed("Delete Confirmation", "**Messages found by filter:** `" + messages.size + "`\n\n**React with:\n❌ - to cancel delete.\n✅ - to confirm delete.**", Config.color.yellow));
                 await msg.react("❌");
                 await msg.react("✅");
                 const coll = msg.createReactionCollector((r, u) => u.id !== Client.user.id, {time: 10000});
@@ -53,15 +53,13 @@ module.exports = {
                     await handleDeletePrompt(message, messages);
                     break;
                 case "😃":
-                    const msgUser = await msg.channel.send(author.toString(), Util.embed("Channel Purge - By User", "Please specify a user who's messages would be deleted.", Config.color.yellow));
+                    const msgUser = await msg.reply(Util.embed("Channel Purge - By User", "Please specify a user who's messages would be deleted.", Config.color.yellow));
                     const collUser = msgUser.channel.createMessageCollector(m => m.author.id === author.id, {time: Util.collTtl(coll, created)});
                     let member;
                     collUser.on("collect", mUser => {
                         member = Util.findGuildMember(mUser.content, guild);
                         mUser.deleteBot();
-                        if (!member) {
-                            msg.channel.send(author.toString(), Util.embed("Channel Purge - By User", "User not found!", Config.color.red)).then(tempMsg => tempMsg.deleteBot(3000));
-                        }
+                        if (!member) msg.reply(Util.embed("Channel Purge - By User", "User not found!", Config.color.red)).then(tempMsg => tempMsg.deleteBot(3000));
                         else collUser.stop("found");
                     });
                     collUser.on("end", async (c, reason) => {

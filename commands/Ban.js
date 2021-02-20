@@ -7,12 +7,12 @@ module.exports = {
     perm: "mod",
     async execute(Libs, message, args) {
         const {Util, EmojiMap, ConditionException} = Libs;
-        const {guild, channel, author} = message;
+        const {guild, author} = message;
 
         let member = Util.findGuildMember(args[0], guild);
         if (!member) throw new ConditionException(author, "Ban Member", "User not found.");
         if (!member.bannable) throw new ConditionException(author, "Ban Member", "Cannot modify that user.");
-        const msg = await channel.send(author.toString(), Util.embed("Ban Member", "Purge messages of how many days?"));
+        const msg = await message.reply(Util.embed("Ban Member", "Purge messages of how many days?"));
         const coll = msg.createReactionCollector((r, u) => u.id !== msg.client.user.id, {time: 10000});
         coll.on("collect", async (r, u) => {
             await r.users.remove(u);
@@ -45,7 +45,7 @@ module.exports = {
                     break;
             }
             await args.shift();
-            await channel.send(author.toString(), Util.embed("Banned Member", "**" + member.user.username + "** has been banned from the server by user: " + author.toString() + (days > 0 ? "\n**Days:** " + days : "") + (args[0] ? "\n**For reason:** " + args.join(" ") : "")));
+            await message.reply(Util.embed("Banned Member", "**" + member.user.username + "** has been banned from the server by user: " + author.toString() + (days > 0 ? "\n**Days:** " + days : "") + (args[0] ? "\n**For reason:** " + args.join(" ") : "")));
             await member.ban({
                 days: days < 0 ? 0 : days,
                 reason: member.user.username + " has been banned from the server by user: " + author.username + (args[0] ? "(reason: " + args.join(" ") + ")" : "")

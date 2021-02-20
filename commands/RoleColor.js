@@ -7,7 +7,7 @@ module.exports = {
     perm: "admin",
     async execute(Libs, message, args) {
         const {Util, Canvas, fetch, ConditionException} = Libs;
-        const {guild, channel, author} = message;
+        const {guild, author} = message;
 
         const role = Util.findRole(args.shift(), guild);
         if (!role) throw new ConditionException(author, "Role Color", "Role not found!");
@@ -35,8 +35,8 @@ module.exports = {
         ctx.clip();
         const image = await fetch.default(author.getAvatar() + "?size=40").then(y => y.buffer());
         ctx.drawImage(await Canvas.loadImage(image), width * .05, height * .25);
-        channel.send(author.toString(), Util.embed("Role Color").setImagePermanent(canvasImage.toBuffer())).then(async msg => {
-            await Util.handleChange(msg, author, role, null, role => role.setColor(color), {denied: "", accepted: "Role color updated!", newTitle: "Role Color Preview"});
-        });
+
+        const msg = message.reply(Util.embed("Role Color").setImagePermanent(canvasImage.toBuffer()));
+        await Util.handleChange(msg, author, role, null, role => role.setColor(color), {denied: "", accepted: "Role color updated!", newTitle: "Role Color Preview"});
     }
 };

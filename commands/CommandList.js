@@ -4,7 +4,7 @@ module.exports = {
     aliases: ["commands"],
     async execute(Libs, message) {
         const {Util} = Libs;
-        const {guild, channel, author} = message;
+        const {guild} = message;
         const Client = message.client;
 
         let perm;
@@ -16,6 +16,6 @@ module.exports = {
             if (perm === "mod") perm = "**Server Moderator**";
             return "\* `" + c.name + (c.params ? " " + c.params.join(" ") : "") + "` " + (perm ? " (" + perm + ")" : "")
         }).join("\n") + (!guild ? "\n\nUse the `dmcmds` command to only list commands that can be executed in DMs." : "");
-        await channel.send(author.toString(), Util.embed("Command List", text));
+        message.reply(Util.embed("Command List", text));
     }
 };

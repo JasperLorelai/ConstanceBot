@@ -7,11 +7,11 @@ module.exports = {
     perm: "admin",
     async execute(Libs, message, args) {
         const {Util, ConditionException} = Libs;
-        const {guild, channel, author} = message;
+        const {guild, author} = message;
 
         const role = Util.findRole(args.join(" "), guild);
         if (!role) throw new ConditionException(author, "Role Deleter", "Role could not be found.");
-        await channel.send(author.toString(), Util.embed("Role Deleter", "Role **" + role.name + "** was successfully deleted."));
+        await message.reply(Util.embed("Role Deleter", "Role **" + role.name + "** was successfully deleted."));
         role.delete();
     }
 };

@@ -3,10 +3,9 @@ module.exports = {
     description: "Displays bot status.",
     async execute(Libs, message) {
         const {Util, Config} = require("../Libs");
-        const {channel, author} = message;
         const Client = message.client;
 
-        const msg = await channel.send(author.toString(), Util.embed("Bot Status", "Pinging...", Config.color.yellow));
+        const msg = await message.reply(Util.embed("Bot Status", "Pinging...", Config.color.yellow));
         await msg.edit(msg.getFirstEmbed()
             .setColor(Config.color.base)
             .setDescription(

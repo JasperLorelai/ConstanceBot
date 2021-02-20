@@ -9,6 +9,6 @@ module.exports = {
         let invite;
         if (data) invite = data.invite;
         else throw new ConditionException(message.author, "Invite Fetch", "No saved invite was configured for this guild.");
-        await message.channel.send(message.author.toString() + "\n" + invite);
+        await message.reply(invite);
     }
 };

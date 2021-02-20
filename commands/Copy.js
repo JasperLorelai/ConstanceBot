@@ -6,13 +6,13 @@ module.exports = {
     perm: "mod",
     async execute(Libs, message, args) {
         const {Config, Util, ConditionException} = Libs;
-        const {channel, author} = message;
+        const {author} = message;
         const Client = message.client;
 
         const originChannel = Client.channels.resolve(args[0]);
         if (!originChannel) throw new ConditionException(author, "Message Copy", "Origin channel not found. Confirm the channel with this ID exists and is visible to the bot client.");
         const copyMsg = await originChannel.messages.fetch(args[1]).catch(() => {
-            channel.send(author.toString(), Util.embed("Message Copy", "Message with that ID was not found in channel " + originChannel.toString() + ".", Config.color.red));
+            message.reply(Util.embed("Message Copy", "Message with that ID was not found in channel " + originChannel.toString() + ".", Config.color.red));
         });
         if (!copyMsg) return;
         const archive = Client.channels.resolve(args[2]);
@@ -20,6 +20,6 @@ module.exports = {
         const wb = await archive.createWebhook(copyMsg.author.username, {avatar: copyMsg.author.getAvatar(), reason: "Message Copy - initiated by " + author.username + "(" + author.id + ")"});
         const newMsg = await wb.send(copyMsg);
         await wb.delete();
-        channel.send(author.toString(), Util.embed("", "Message copied. [\(Jump\)](" + newMsg.url + ")"));
+        message.reply(Util.embed("", "Message copied. [\(Jump\)](" + newMsg.url + ")"));
     }
 };

@@ -6,7 +6,7 @@ module.exports = {
     perm: "admin",
     async execute(Libs, message, args) {
         const {Util, ConditionException} = Libs;
-        const {guild, channel, author} = message;
+        const {guild, author} = message;
 
         const member = Util.findGuildMember(args.shift(), guild);
         if (!member) throw new ConditionException(author, "Role Management", "User not found!");
@@ -37,6 +37,6 @@ module.exports = {
                 member.roles.add(role);
             }
         }
-        await channel.send(author.toString(), Util.embed("Role Management", text));
+        await message.reply(Util.embed("Role Management", text));
     }
 };
