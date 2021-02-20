@@ -8,9 +8,8 @@ Client.on("messageDelete", async message => {
 
     const nl = Config.guildData.nl.channels;
     if (!log) return;
-    if (/*log.reason !== "botIntent" && */
-        // Handle blacklists.
-        ![Config.guildData.mhap.categories.olympus, Config.guildData.mhap.categories.archive].includes(channel["parentID"]) &&
+    // Handle blacklists.
+    if (![Config.guildData.mhap.categories.olympus, Config.guildData.mhap.categories.archive].includes(channel["parentID"]) &&
         ![Config.guildData.main.channels.bot, nl.triumvirate, nl.leadership, nl.interview2, nl.interview].includes(channel.id)
     ) {
         const executor = log.extra["channel"].id === message.channel.id
