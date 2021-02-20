@@ -10,6 +10,7 @@ module.exports = {
 
         let role = Util.findRole(args.join(" "), guild);
         if (!role) throw new ConditionException(message, "Role Info", "Role not found!");
+        const {tags} = role;
         const desc = "> **Role Position:** " + role.position +
             "\n> **Menitoned:** " + role.toString() +
             "\n> **ID:** `" + role.toString() + "`" +
@@ -18,7 +19,12 @@ module.exports = {
             "\n> **Created at:** " + role.createdAt.toLocalFormat() +
             "\n> **Mentionable:** " + role.mentionable +
             "\n> **Hoistable:** " + role.hoist +
-            "\n> **Color:** `" + role.hexColor + "`";
+            "\n> **Color:** `" + role.hexColor + "`" +
+            (tags ? (
+                (tags.botID ? "\n> **Belongs to bot:** <@" + tags.botID + ">" : "") +
+                (tags.integrationID ? "\n> **Belongs to integration:** `" + tags.integrationID + "`" : "") +
+                (tags.premiumSubscriberRole ? "\n> **Is booster role:** `true`" : "")
+            ) : "");
         const canvas = Canvas.createCanvas(64, 64);
         const ctx = canvas.getContext("2d");
         ctx.fillStyle = role.hexColor;
