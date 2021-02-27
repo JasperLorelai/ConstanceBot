@@ -22,6 +22,8 @@ for (let prototype of fs.readdirSync("./prototype").filter(file => file.endsWith
     require("./prototype/" + prototype);
 }
 
+require("./files/errorHandling.js");
+
 // Create client.
 const Client = new Discord.Client({
     intents: [
