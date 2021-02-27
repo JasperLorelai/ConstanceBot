@@ -1,23 +1,24 @@
-const {fetch, Util, Config} = require("../Libs");
-const Client = require("../Client");
+const {fetch, Discord, Config} = require("../Libs");
+const {MessageEmbed} = Discord;
 
-function handle(error, code = 0) {
-    if (error && error instanceof Error) {
-        const embedObject = Util.embed(error.message, ">>> " + error.stack, Config.color.red).toJSON();
-        fetch(process.env.WEBHOOK_ERROR, {
+async function handle(error, code = 0) {
+    if (error instanceof Error) {
+        const embed = new MessageEmbed()
+            .setTitle(error.message)
+            .setDescription(">>> " + error.stack)
+            .setColor(Config.color.red)
+            .toJSON();
+        await fetch(process.env.WEBHOOK_ERROR, {
             method: "POST",
-            contentType: "application/json",
-            payload: JSON.stringify({embeds: [embedObject]})
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({embeds: [embed]})
         });
     }
 
-    setTimeout(() => {
-        Client.destroy();
-        process.exit(code);
-    }, 500);
+    setTimeout(() => process.exit(code), 1000);
 }
 
-process.on("uncaughtException", error => handle(error, 1));
-process.on("unhandledRejection", error => handle(error,1));
-process.on("SIGTERM", handle);
-process.on("SIGINT", handle);
+process.on("uncaughtException", async error => await handle(error, 1));
+process.on("unhandledRejection", async error => await handle(error,1));
+process.on("SIGTERM", async () => await handle());
+process.on("SIGINT", async () => await handle());
