@@ -1,6 +1,9 @@
 module.exports = {
     userAgent: "https://github.com/JasperLorelai",
     defaultPrefix: "&",
+    errorBlacklist: [
+      "This socket has been ended by the other party"
+    ],
     ship: [
         // Pingu
         {any: "303184895629459458", calc: c => c + " (Brexit approved)"},

@@ -6,6 +6,7 @@ async function handle(error, code = 0) {
 
     // Send msg to webhook log.
     if (!(error instanceof Error)) return;
+    if (Config.errorBlacklist.includes(error.message)) return;
     const embed = new MessageEmbed()
         .setTitle(error.message)
         .setDescription(">>> " + error.stack)
