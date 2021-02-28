@@ -2,7 +2,8 @@ module.exports = {
     userAgent: "https://github.com/JasperLorelai",
     defaultPrefix: "&",
     errorBlacklist: [
-      "This socket has been ended by the other party"
+        "This socket has been ended by the other party",
+        "Can't add new command when connection is in closed state"
     ],
     ship: [
         // Pingu
