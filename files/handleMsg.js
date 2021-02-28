@@ -66,16 +66,21 @@ module.exports = async message => {
     // Message quoting.
     if (/https:\/\/.*?discord(app)?.com\/channels\//g.test(content)) {
         // Extract components of the url and search for them.
-        let [msgGuild, msgChannel, msgID] = content.substring(content.indexOf("channels")+9).split("/");
-        msgGuild = msgGuild ? Client.guilds.resolve(msgGuild) : null;
-        msgChannel = msgChannel ? msgGuild.channels.resolve(msgChannel) : null;
-        msgID = msgID ? await msgChannel.messages.fetch(msgID) : null;
-        // If the msg was truly found, quote it.
-        if (msgID) {
-            const embed = Util.embed(null, msgID.content, Config.color.yellow).setAuthor("Sent by: " + msgID.author.tag).setAuthorIcon(msgID.author.getAvatar());
-            embed.addField("Want to jump to the message?", "[\(Jump\)](" + msgID.url + ")");
-            if (msgID.attachments.size) embed.setImagePermanent(msgID.attachments.first().attachment);
-            message.reply(embed.setTitle("Quoted by: " + author.tag));
+        let [msgGuildID, msgChannelID, msgID] = content.substring(content.indexOf("channels")+9).split("/");
+        if (msgGuildID && msgChannelID && msgID) {
+            const msgGuild = Client.guilds.resolve(msgGuildID);
+            if (msgGuild) {
+                const msgChannel = msgGuild.channels.resolve(msgChannelID);
+                if (msgChannel) {
+                    const msg = await msgChannel.messages.fetch(msgID);
+                    if (msg) {
+                        const embed = Util.embed(null, msgID.content, Config.color.yellow).setAuthor("Sent by: " + msgID.author.tag).setAuthorIcon(msgID.author.getAvatar());
+                        embed.addField("Want to jump to the message?", "[\(Jump\)](" + msgID.url + ")");
+                        if (msgID.attachments.size) embed.setImagePermanent(msgID.attachments.first().attachment);
+                        message.reply(embed.setTitle("Quoted by: " + author.tag));
+                    }
+                }
+            }
         }
     }
 
