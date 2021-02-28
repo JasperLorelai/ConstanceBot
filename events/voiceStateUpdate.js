@@ -1,24 +1,28 @@
 const Client = require("../Client");
 const {Config} = require("../Libs");
 
-async function handleConnect(state) {
+async function handleBase(state, func) {
     let shouldSee = Config.vcText.find(bundle => bundle.voice.includes(state.channelID));
     shouldSee = shouldSee ? shouldSee.text : [];
+    const {guild} = state;
     for (const ch of shouldSee) {
-        const vc = Client.channels.resolve(ch);
+        const vc = guild.channels.resolve(ch);
         if (!vc) Config.botLog().send(Config.embed("Voice-Text Handler", "Array `" + state.channelID + "` contains non-existent channel `" + ch + "`.", Config.color.yellow));
-        else await vc.updateOverwrite(state.id, {VIEW_CHANNEL: true});
+        else await func(vc);
     }
+
+}
+
+async function handleConnect(state) {
+    await handleBase(state, async vc => {
+        await vc.updateOverwrite(state.id, {VIEW_CHANNEL: true})
+    });
 }
 
 async function handleDisconnect(state) {
-    let shouldNotSee = Config.vcText.find(bundle => bundle.voice.includes(state.channelID));
-    shouldNotSee = shouldNotSee ? shouldNotSee.text : [];
-    for (const ch of shouldNotSee) {
-        const vc = Client.channels.resolve(ch);
-        if (!vc) Config.botLog().send(Config.embed("Voice-Text Handler", "Array `" + state.channelID + "` contains non-existent channel `" + ch + "`.", Config.color.yellow));
-        else await vc.overwritePermissions(vc.permissionOverwrites.filter(o => o.id !== state.id));
-    }
+    await handleBase(state, async vc => {
+        await vc.overwritePermissions(vc.permissionOverwrites.filter(o => o.id !== state.id));
+    });
 }
 
 Client.on("voiceStateUpdate", async (oldState, newState) => {
