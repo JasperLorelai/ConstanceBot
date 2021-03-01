@@ -72,7 +72,7 @@ module.exports = async message => {
             if (msgGuild) {
                 const msgChannel = msgGuild.channels.resolve(msgChannelID);
                 if (msgChannel) {
-                    const msg = await msgChannel.messages.fetch(msgID);
+                    const msg = await msgChannel.messages.fetch(msgID).catch(() => {});
                     if (msg) {
                         const embed = Util.embed(null, msgID.content, Config.color.yellow).setAuthor("Sent by: " + msgID.author.tag).setAuthorIcon(msgID.author.getAvatar());
                         embed.addField("Want to jump to the message?", "[\(Jump\)](" + msgID.url + ")");
