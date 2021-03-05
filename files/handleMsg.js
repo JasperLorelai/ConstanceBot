@@ -145,22 +145,37 @@ module.exports = async message => {
                     break;
                 case "rawStaffApp":
                     const appFragments = message.getEmbeds();
-                    await appFragments.shift();
-                    const lastFragment = appFragments[appFragments.length -1];
-                    appFragments.splice(appFragments.length-1);
                     const staffApp = await handlePost("Staff Applications", "staffapp", "Would you like to apply? Use this form here: " + Config.urls.mhap + "apply");
-                    const firstFragment = await staffApp.send(new MessageEmbed()
-                        .setTitle("Staff Application")
-                        .setColor(Config.color.base)
-                        .setThumbnailPermanent(user.getAvatar())
-                        .setDescription(embed.description)
-                        .setAuthor("Issued by: " + user.tag)
-                    );
-                    for (const fragment of appFragments) await staffApp.send(new MessageEmbed().setColor(Config.color.base).setDescription(fragment.description));
-                    msg = await staffApp.send(Util.embed("", lastFragment.description).addField("Staff Application Actions", "❌ - Deny application. (`Server Admin`)\n✅ - Accept application. (`Server Admin`)"));
-                    await msg.react("✅");
-                    await msg.react("❌");
-                    await firstFragment.pin();
+
+                    for (let i = 0; i < appFragments.length; i++) {
+                        const fragment = appFragments[i];
+                        const isLast = appFragments.length >= i + 1;
+                        let embed = new MessageEmbed()
+                            .setColor(Config.color.base)
+                            .setDescription(fragment.description);
+
+                        if (i === 0) {
+                            // First fragment.
+                            embed = embed.setTitle("Staff Application")
+                                .setThumbnailPermanent(user.getAvatar())
+                                .setAuthor("Issued by: " + user.tag);
+                        }
+                        if (isLast) {
+                            // Last fragment.
+                            embed = embed
+                                .setFooterText(Util.getBaseFooter())
+                                .setFooterIcon(Config.author.getAvatar())
+                                .setTimestamp(new Date())
+                                .addField("Staff Application Actions", "❌ - Deny application. (`Server Admin`)\n✅ - Accept application. (`Server Admin`)");
+                        }
+
+                        const msg = await staffApp.send(embed);
+                        if (!isLast) continue;
+
+                        await msg.react("✅");
+                        await msg.react("❌");
+                        await msg.pin();
+                    }
                     break;
             }
         }

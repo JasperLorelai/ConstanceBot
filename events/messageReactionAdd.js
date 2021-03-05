@@ -1,5 +1,5 @@
 const Client = require("../Client");
-const {Config, Util} = require("../Libs");
+const {Config, Util,} = require("../Libs");
 
 Client.on("messageReactionAdd", async (r, u) => {
     // Ignore custom reactions.
@@ -30,7 +30,8 @@ Client.on("messageReactionAdd", async (r, u) => {
 
     if (guild && channel["parent"] && embeds && embeds.length) {
         if (u.id === Client.user.id) return;
-        let embed, member, pass;
+        const member = guild.members.resolve(u.id);
+        let embed, pass;
         switch (channel["parent"].name) {
             // Handle Suggestion admin reactions.
             case "Suggestions":
@@ -92,15 +93,16 @@ Client.on("messageReactionAdd", async (r, u) => {
                 if (embed && ["✅", "❌"].includes(r.emoji.toString()) && !["accepted", "denied"].includes(channel["name"]) && pass) {
                     await r.message.reactions.removeAll();
                     const firstComponent = (await channel.messages.fetchPinned()).first();
-                    if (r.emoji.toString() === "✅") {
-                        await r.message.edit(embed.setColor(Config.color.green));
-                        await firstComponent.edit(firstComponent.setColor(Config.color.green).setTitle("Accepted Staff Application:"));
-                        await channel.setName("accepted-" + channel["name"]);
-                    }
-                    if (r.emoji.toString() === "❌") {
-                        await r.message.edit(embed.setColor(Config.color.red));
-                        await firstComponent.edit(firstComponent.setColor(Config.color.red).setTitle("Denied Staff Application:"));
-                        await channel.setName("denied-" + channel["name"]);
+                    if (firstComponent) {
+                        const firstEmbed = firstComponent.getFirstEmbed();
+                        if (r.emoji.toString() === "✅") {
+                            if (firstEmbed) await firstComponent.edit(firstEmbed.setColor(Config.color.green).setTitle("Accepted Staff Application:"));
+                            await channel.setName("accepted-" + channel["name"]);
+                        }
+                        if (r.emoji.toString() === "❌") {
+                            if (firstEmbed) await firstComponent.edit(firstEmbed.setColor(Config.color.red).setTitle("Denied Staff Application:"));
+                            await channel.setName("denied-" + channel["name"]);
+                        }
                     }
                     await channel.overwritePermissions([{id: guild.id, deny: "SEND_MESSAGES"}]);
                 }
