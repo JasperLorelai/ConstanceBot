@@ -1,6 +1,6 @@
 module.exports = async message => {
     const {Config, Util, Keyv, Discord} = require("../Libs");
-    const {MessageMentions} = Discord;
+    const {MessageMentions, MessageEmbed} = Discord;
     const Client = message.client;
     const {author, content, channel, guild, mentions} = message;
 
@@ -43,7 +43,7 @@ module.exports = async message => {
     if (channel.id === Config.guildData.main.channels.toDoList) {
         if (author.id === Client.user.id || author.bot) return;
         message.delete();
-        const msg = await channel.send(new Discord.MessageEmbed().setDescription(content).setColorRandom().setAuthor(author.tag).setAuthorIcon(author.getAvatar()));
+        const msg = await channel.send(new MessageEmbed().setDescription(content).setColorRandom().setAuthor(author.tag).setAuthorIcon(author.getAvatar()));
         await msg.react("❌");
         await msg.react("✅");
         await msg.react("🗑");
@@ -149,14 +149,14 @@ module.exports = async message => {
                     const lastFragment = appFragments[appFragments.length -1];
                     appFragments.splice(appFragments.length-1);
                     const staffApp = await handlePost("Staff Applications", "staffapp", "Would you like to apply? Use this form here: " + Config.urls.mhap + "apply");
-                    const firstFragment = await staffApp.send(new Discord.MessageEmbed()
+                    const firstFragment = await staffApp.send(new MessageEmbed()
                         .setTitle("Staff Application")
                         .setColor(Config.color.base)
                         .setThumbnailPermanent(user.getAvatar())
                         .setDescription(embed.description)
                         .setAuthor("Issued by: " + user.tag)
                     );
-                    for (const fragment of appFragments) await staffApp.send(new Discord.MessageEmbed().setColor(Config.color.base).setDescription(fragment.description));
+                    for (const fragment of appFragments) await staffApp.send(new MessageEmbed().setColor(Config.color.base).setDescription(fragment.description));
                     msg = await staffApp.send(Util.embed("", lastFragment.description).addField("Staff Application Actions", "❌ - Deny application. (`Server Admin`)\n✅ - Accept application. (`Server Admin`)"));
                     await msg.react("✅");
                     await msg.react("❌");
