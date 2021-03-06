@@ -171,7 +171,7 @@ module.exports = {
         if (!guild) return true;
         const member = guild.members.resolve(user);
         if (!member) return true;
-        const isAdmin = member.permission.has("ADMINISTRATOR");
+        const isAdmin = member.permissions.has("ADMINISTRATOR");
         if (isAdmin) return true;
         if (perm === "admin") return isAdmin;
         if (perm === "mod") {
