@@ -74,7 +74,7 @@ module.exports = {
 
         // Check cache in case this should be a fake ship.
         for (let s of Config.ship) {
-            if (s["target1"] && s["target2"] && s["target1"] === target1.id && s["target2"] === target2.id) {
+            if (s["target1"] && s["target2"] && ((s["target1"] === target1.id && s["target2"] === target2.id) || (s["target1"] === target2.id && s["target2"] === target1.id))) {
                 temp = s.calc(temp);
                 break;
             }
