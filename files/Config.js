@@ -8,6 +8,8 @@ module.exports = {
     ship: [
         // Pingu
         {any: "303184895629459458", calc: c => c + " (Brexit approved)"},
+        // Ray and Jasper
+        {target1: "462712474353926174", target2: "192710597106728960", calc: c => "-" + c},
         // Constance
         {any: "579759958556672011", calc: () => "0%"}
     ],
